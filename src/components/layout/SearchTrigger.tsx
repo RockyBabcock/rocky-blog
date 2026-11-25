@@ -2,8 +2,12 @@ import { useTranslation } from '@hooks/useTranslation';
 import { Icon } from '@iconify/react';
 import { openSearch } from '@store/modal';
 
-export function SearchTrigger() {
-  const { t } = useTranslation();
+interface SearchTriggerProps {
+  locale?: string;
+}
+
+export function SearchTrigger({ locale }: SearchTriggerProps) {
+  const { t } = useTranslation(locale);
 
   return (
     <button

@@ -13,7 +13,7 @@ import Popover from '@components/ui/popover';
 import { Icon } from '@iconify/react';
 import { cn } from '@lib/utils';
 import { memo, useCallback, useSyncExternalStore } from 'react';
-import { getAlternateUrl, getLocaleFromUrl, localeEntries } from '@/i18n';
+import { defaultLocale, getAlternateUrl, getLocaleFromUrl, localeEntries } from '@/i18n';
 import { NavMenu } from './NavMenu';
 
 /** Subscribe to pathname changes via Astro's `astro:page-load` event. */
@@ -26,10 +26,6 @@ function getPathname() {
   return window.location.pathname;
 }
 
-function getServerPathname() {
-  return '/';
-}
-
 interface LanguageSwitcherProps {
   /** Initial locale code from SSR (e.g., 'zh', 'en') */
   locale: string;
@@ -39,10 +35,12 @@ interface LanguageSwitcherProps {
 }
 
 const LanguageSwitcherComponent = ({ locale: _ssrLocale, className, open, onOpenChange }: LanguageSwitcherProps) => {
-  const currentPath = useSyncExternalStore(subscribePathname, getPathname, getServerPathname);
+  const ssrPath = _ssrLocale && _ssrLocale !== defaultLocale ? `/${_ssrLocale}` : '/';
+  const getServerSnapshot = useCallback(() => ssrPath, [ssrPath]);
+  const currentPath = useSyncExternalStore(subscribePathname, getPathname, getServerSnapshot);
 
-  // Derive locale from live URL so it stays in sync after View Transition navigations
-  const locale = typeof window !== 'undefined' ? getLocaleFromUrl(currentPath) : _ssrLocale;
+  // Derive locale from currentPath (matches _ssrLocale during SSR & hydration, tracks live URL afterwards)
+  const locale = getLocaleFromUrl(currentPath);
 
   // Find current locale label
   const currentLabel = localeEntries.find((l) => l.code === locale)?.label ?? locale;
