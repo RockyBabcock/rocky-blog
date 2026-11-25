@@ -28,7 +28,6 @@ export { abortMerge, abortRebase } from './git-porcelain';
 export { applyContentMigration, type ContentMigrationPlan, planContentMigration } from './migration-operations';
 // New operations
 export {
-  appendFriend,
   createPost,
   formatDate,
   generatePostFrontmatter,

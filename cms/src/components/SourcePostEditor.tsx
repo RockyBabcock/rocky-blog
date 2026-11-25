@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { DEV_SERVER_URL } from '@/lib/ports';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
   postId: string;
@@ -7,153 +6,217 @@ interface Props {
   onSaved?: () => void;
 }
 
-/** The CMS owns file access; the shared public editor owns source editing and preview. */
+/**
+ * Self-contained Markdown source editor for the local CMS.
+ * Reads and writes directly via `/api/cms/source` with optimistic concurrency,
+ * decoupled from the removed public `/editor` writing room.
+ */
 export function SourcePostEditor({ postId, onClose, onSaved }: Props) {
-  const frame = useRef<HTMLIFrameElement>(null);
-  const baseline = useRef<string | null>(null);
-  const sessionDraftId = useRef<string | null>(null);
+  const baselineRef = useRef<string | null>(null);
   const onSavedRef = useRef(onSaved);
   onSavedRef.current = onSaved;
+
+  const [source, setSource] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [ready, setReady] = useState(false);
+  const [conflict, setConflict] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [confirmClose, setConfirmClose] = useState(false);
+
+  const isDirty = !loading && baselineRef.current !== null && source !== baselineRef.current;
+
+  const loadSource = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    setConflict(false);
+    setStatusMessage('');
+    try {
+      const response = await fetch(`/api/cms/source?postId=${encodeURIComponent(postId)}`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || '无法读取文章');
+      baselineRef.current = data.source;
+      setSource(data.source);
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : '无法读取文章');
+    } finally {
+      setLoading(false);
+    }
+  }, [postId]);
 
   useEffect(() => {
-    baseline.current = null;
-    sessionDraftId.current = null;
-    let cancelled = false;
-    let opening = false;
-    let detached = false;
-    let saving = false;
-    const editorOrigin = new URL(DEV_SERVER_URL).origin;
-    const send = (data: object) => {
-      // WebKit must keep the caller frame for the editor to validate the message source.
-      frame.current?.contentWindow?.postMessage(data, editorOrigin);
-    };
-    const open = async () => {
-      if (opening || detached) return;
-      if (baseline.current !== null) {
-        send({ type: 'koharu-cms-open', postId, source: baseline.current, restoreDraftId: sessionDraftId.current });
-        return;
+    void loadSource();
+  }, [loadSource]);
+
+  const handleSave = useCallback(async () => {
+    if (saving || loading || baselineRef.current === null) return;
+    setSaving(true);
+    setError('');
+    setConflict(false);
+    setStatusMessage('');
+    try {
+      const response = await fetch('/api/cms/source', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postId, source, expectedSource: baselineRef.current }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        if (response.status === 409) {
+          setConflict(true);
+          throw new Error('这篇文章已被其他工具修改。请先复制或下载当前原文，再重新加载文件进行合并。');
+        }
+        throw new Error(data.error || '保存失败，请复制或下载当前原文。');
       }
-      opening = true;
-      try {
-        const response = await fetch(`/api/cms/source?postId=${encodeURIComponent(postId)}`);
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || '无法读取文章');
-        if (cancelled) return;
-        baseline.current = data.source;
-        send({ type: 'koharu-cms-open', postId, source: data.source });
-      } catch (failure) {
-        if (!cancelled) setError(failure instanceof Error ? failure.message : '无法读取文章');
-      } finally {
-        opening = false;
-      }
-    };
-    const receive = async (event: MessageEvent) => {
-      if (event.origin !== editorOrigin || event.source !== frame.current?.contentWindow) return;
-      if (event.data?.type === 'koharu-editor-ready') {
-        await open();
-        return;
-      }
-      if (event.data?.type === 'koharu-cms-detach' && event.data.postId === postId) {
-        detached = true;
-        sessionDraftId.current = null;
-        return;
-      }
-      if (
-        !detached &&
-        event.data?.type === 'koharu-cms-opened' &&
-        event.data.postId === postId &&
-        typeof event.data.draftId === 'string'
-      ) {
-        sessionDraftId.current = event.data.draftId;
-        setError('');
-        setReady(true);
-        return;
-      }
-      if (
-        event.data?.type !== 'koharu-cms-save' ||
-        event.data.postId !== postId ||
-        typeof event.data.source !== 'string' ||
-        typeof event.data.requestId !== 'string' ||
-        !event.data.requestId ||
-        baseline.current === null ||
-        detached
-      )
-        return;
-      const { requestId } = event.data;
-      if (saving) {
-        send({ type: 'koharu-cms-result', postId, requestId, error: '上一版本仍在保存，请稍后再次保存当前修改。' });
-        return;
-      }
-      saving = true;
-      try {
-        const response = await fetch('/api/cms/source', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ postId, source: event.data.source, expectedSource: baseline.current }),
-        });
-        const data = await response.json();
-        if (!response.ok)
-          throw new Error(
-            response.status === 409
-              ? '这篇文章已被其他工具修改。请先复制或下载当前原文，再重新打开文件进行合并。'
-              : data.error || '保存失败，请复制或下载当前原文。',
-          );
-        if (cancelled) return;
-        baseline.current = data.source;
-        send({ type: 'koharu-cms-result', postId, requestId });
-        onSavedRef.current?.();
-      } catch (failure) {
-        if (!cancelled)
-          send({
-            type: 'koharu-cms-result',
-            postId,
-            requestId,
-            error: failure instanceof Error ? failure.message : '保存失败',
-          });
-      } finally {
-        saving = false;
+      baselineRef.current = data.source;
+      setSource(data.source);
+      setStatusMessage('已保存到本地文件');
+      setConfirmClose(false);
+      onSavedRef.current?.();
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : '保存失败');
+    } finally {
+      setSaving(false);
+    }
+  }, [loading, postId, saving, source]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+        event.preventDefault();
+        void handleSave();
       }
     };
-    window.addEventListener('message', receive);
-    const timeout = window.setTimeout(() => {
-      if (baseline.current === null)
-        setError(
-          `请同时启动博客开发服务（npm run dev / pnpm dev，默认地址 ${DEV_SERVER_URL}）。编辑器与实际博客预览共用该服务。`,
-        );
-    }, 8000);
-    return () => {
-      cancelled = true;
-      clearTimeout(timeout);
-      window.removeEventListener('message', receive);
-    };
-  }, [postId]);
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [handleSave]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(source);
+      setStatusMessage('已复制 Markdown 原文');
+    } catch {
+      setError('复制失败，请手动选中复制或点击下载。');
+    }
+  };
+
+  const handleDownload = () => {
+    const filename = `${postId.split('/').filter(Boolean).at(-1) || 'post'}.md`;
+    const url = URL.createObjectURL(new Blob([source], { type: 'text/markdown;charset=utf-8' }));
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = filename;
+    anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  };
+
+  const handleClose = () => {
+    if (isDirty && !confirmClose) {
+      setConfirmClose(true);
+      return;
+    }
+    onClose();
+  };
 
   return (
     <div className="bg-background fixed inset-0 z-50 flex flex-col">
-      <div className="flex items-center justify-between gap-4 border-b px-4 py-2 text-sm">
-        <button type="button" className="shrink-0" onClick={onClose}>
-          ← 返回文章列表
-        </button>
-        <span className="text-muted-foreground min-w-0 truncate" title={postId}>
-          CMS · {postId}
-        </span>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-2 text-sm">
+        <div className="flex min-w-0 items-center gap-3">
+          <button type="button" className="hover:text-primary shrink-0 cursor-pointer font-medium" onClick={handleClose}>
+            ← 返回文章列表
+          </button>
+          <span className="text-muted-foreground min-w-0 truncate" title={postId}>
+            CMS · {postId}
+          </span>
+          {isDirty && <span className="rounded bg-amber-500/15 px-2 py-0.5 text-xs text-amber-600">未保存</span>}
+          {!isDirty && statusMessage && (
+            <span className="rounded bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-600">{statusMessage}</span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleCopy}
+            disabled={loading}
+            className="border-input hover:bg-accent cursor-pointer rounded-md border px-2.5 py-1 text-xs disabled:opacity-50"
+          >
+            复制原文
+          </button>
+          <button
+            type="button"
+            onClick={handleDownload}
+            disabled={loading}
+            className="border-input hover:bg-accent cursor-pointer rounded-md border px-2.5 py-1 text-xs disabled:opacity-50"
+          >
+            下载 .md
+          </button>
+          <button
+            type="button"
+            onClick={() => void handleSave()}
+            disabled={loading || saving || !isDirty}
+            className="bg-primary text-primary-foreground cursor-pointer rounded-md px-3 py-1 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {saving ? '保存中…' : '保存 (Ctrl/⌘+S)'}
+          </button>
+        </div>
       </div>
-      {error && (
-        <div className="bg-destructive/10 text-destructive border-b p-4 text-sm" role="alert">
-          {error}
+
+      {confirmClose && isDirty && (
+        <div className="flex items-center justify-between gap-4 border-b bg-amber-500/10 px-4 py-2 text-xs text-amber-800 dark:text-amber-300">
+          <span>当前文件有未保存的修改，确定放弃修改并返回列表吗？</span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setConfirmClose(false)}
+              className="border-input bg-background cursor-pointer rounded border px-2.5 py-1"
+            >
+              继续编辑
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-destructive text-destructive-foreground cursor-pointer rounded px-2.5 py-1"
+            >
+              放弃修改并返回
+            </button>
+          </div>
         </div>
       )}
-      {!ready && !error && <output className="text-muted-foreground p-4 text-sm">正在连接写作室…</output>}
-      <iframe
-        ref={frame}
-        src={`${DEV_SERVER_URL}/editor`}
-        title="Koharu 写作室"
-        allow="clipboard-write"
-        className="min-h-0 w-full flex-1 border-0"
-        sandbox="allow-scripts allow-same-origin allow-downloads allow-popups allow-modals"
-      />
+
+      {error && (
+        <div
+          className="bg-destructive/10 text-destructive flex items-center justify-between gap-4 border-b px-4 py-3 text-sm"
+          role="alert"
+        >
+          <span>{error}</span>
+          {conflict && (
+            <button
+              type="button"
+              onClick={() => void loadSource()}
+              className="border-destructive/40 hover:bg-destructive/10 shrink-0 cursor-pointer rounded border px-2.5 py-1 text-xs"
+            >
+              重新加载磁盘版本
+            </button>
+          )}
+        </div>
+      )}
+
+      {loading ? (
+        <output className="text-muted-foreground p-4 text-sm">正在读取文章源文件…</output>
+      ) : (
+        <textarea
+          value={source}
+          onChange={(event) => {
+            setSource(event.target.value);
+            setStatusMessage('');
+            setConfirmClose(false);
+          }}
+          aria-label={`编辑文章 ${postId}`}
+          spellCheck={false}
+          className="bg-background text-foreground min-h-0 w-full flex-1 resize-none border-0 p-4 font-mono text-sm leading-relaxed outline-none"
+        />
+      )}
     </div>
   );
 }

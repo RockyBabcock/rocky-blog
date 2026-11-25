@@ -10,17 +10,7 @@ import { extractLanguage, isInfographicBlock, wrapElement } from './content-enha
 
 export interface ToolbarEntry {
   id: string;
-  type:
-    | 'code'
-    | 'mermaid'
-    | 'infographic'
-    | 'quiz'
-    | 'friend-links'
-    | 'audio'
-    | 'video'
-    | 'note'
-    | 'encrypted'
-    | 'encrypted-post';
+  type: 'code' | 'mermaid' | 'infographic' | 'quiz' | 'audio' | 'video' | 'note' | 'encrypted' | 'encrypted-post';
   mountPoint: HTMLElement;
   preElement: HTMLElement;
 }
@@ -94,26 +84,6 @@ export function scanQuizElements(container: Element): ToolbarEntry[] {
     quizLi.classList.add('quiz-enhanced');
     quizLi.dataset.reactEnhanced = 'true';
     entries.push({ id: `quiz-${qIndex}`, type: 'quiz', mountPoint: mount, preElement: quizLi });
-  });
-
-  return entries;
-}
-
-/** Scan friend links grids */
-export function scanFriendLinks(container: Element): ToolbarEntry[] {
-  const entries: ToolbarEntry[] = [];
-  const friendGrids = container.querySelectorAll<HTMLElement>('.friend-links-grid[data-links]');
-
-  friendGrids.forEach((grid, fIndex) => {
-    if (grid.dataset.reactEnhanced === 'true') return;
-    for (const child of Array.from(grid.children)) {
-      (child as HTMLElement).style.display = 'none';
-    }
-    grid.style.display = 'block';
-    const mount = document.createElement('div');
-    grid.appendChild(mount);
-    grid.dataset.reactEnhanced = 'true';
-    entries.push({ id: `friend-links-${fIndex}`, type: 'friend-links', mountPoint: mount, preElement: grid });
   });
 
   return entries;

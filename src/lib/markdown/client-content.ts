@@ -7,7 +7,7 @@ declare module 'astro' {
 }
 
 const DEFAULT_CONTENT_SELECTOR =
-  'pre, li.quiz, .friend-links-grid[data-links], [data-audio-player], [data-video-player], .note-block:not(.no-icon), .encrypted-post[data-cipher], .encrypted-block[data-cipher], details.collapse-block';
+  'pre, li.quiz, [data-audio-player], [data-video-player], .note-block:not(.no-icon), .encrypted-post[data-cipher], .encrypted-block[data-cipher], details.collapse-block';
 
 /** Hydrate the portal owner when any of its content needs controls, including anchor jumps. */
 const contentDirective: ClientDirective = (load, options, island) => {

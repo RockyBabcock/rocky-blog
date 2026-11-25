@@ -10,10 +10,8 @@ export enum Routes {
   About = '/about',
   Categories = '/categories',
   Tags = '/tags',
-  Friends = '/friends',
   Post = '/post',
   Archives = '/archives',
-  Bangumi = '/bangumi',
 }
 
 /**

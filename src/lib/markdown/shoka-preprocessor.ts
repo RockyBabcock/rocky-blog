@@ -7,7 +7,7 @@
  *
  * - `+++style Title` would be parsed as thematicBreak
  * - `~sub~` would be parsed as GFM strikethrough (~~ is delete)
- * - `{% links %}...{% endlinks %}` YAML content would be parsed as lists
+ * - `{% media audio/video %}...{% endmedia %}` YAML content would be parsed as lists
  * - `:::style` is fine (remark sees it as paragraph text) but nested content
  *   with lists would be problematic
  *
@@ -16,14 +16,7 @@
  * is handled by remark plugins since those don't conflict with Markdown.
  */
 import YAML from 'js-yaml';
-import {
-  escapeHtml,
-  type FriendLinkData,
-  type MediaItem,
-  renderAudioMedia,
-  renderFriendLinks,
-  renderVideoMedia,
-} from './shoka-renderers';
+import { escapeHtml, type MediaItem, renderAudioMedia, renderVideoMedia } from './shoka-renderers';
 import { SHOKA_RUBY_PATTERN } from './shoka-ruby-pattern';
 
 interface ContainerOptions {
@@ -219,30 +212,6 @@ function processContainers(text: string, opts: ContainerOptions = {}, _depth = 0
         flushTabs();
         pendingTabId = tabId;
         pendingTabs = [{ name: tabName, lines: innerLines }];
-      }
-      continue;
-    }
-
-    // {% links %} ... {% endlinks %}
-    if (hexoTags && line.trim() === '{% links %}') {
-      flushTabs();
-      const yamlLines: string[] = [];
-      i++;
-      while (i < lines.length && lines[i].trim() !== '{% endlinks %}') {
-        yamlLines.push(lines[i]);
-        i++;
-      }
-      if (i < lines.length) i++; // skip endlinks
-
-      try {
-        const data = YAML.load(yamlLines.join('\n')) as FriendLinkData[];
-        if (Array.isArray(data)) {
-          output.push('');
-          output.push(renderFriendLinks(data));
-          output.push('');
-        }
-      } catch {
-        output.push(`<!-- Failed to parse links YAML -->`);
       }
       continue;
     }

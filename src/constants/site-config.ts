@@ -6,11 +6,9 @@
  * may import this module — depend on `@lib/config/*` instead.
  */
 
-import { resolveEditorNavigation } from '@lib/config/editor';
 import { normalizeMomentsConfig, resolveMomentsNavigation } from '@lib/config/moments';
 import {
   contentConfig,
-  editorConfig,
   enabledLocaleCodes,
   enabledSeriesSlugList,
   featuredSeriesList,
@@ -18,22 +16,13 @@ import {
   motionConfig,
   siteConfig,
 } from '@lib/config/site';
-import type {
-  AnalyticsConfig,
-  BangumiConfig,
-  BgmAudioGroup,
-  ChristmasConfig,
-  CommentConfig,
-  DevConfig,
-  RouterItem,
-  SocialConfig,
-} from '@lib/config/types';
+import type { AnalyticsConfig, ChristmasConfig, CommentConfig, DevConfig, RouterItem, SocialConfig } from '@lib/config/types';
 import { createUmamiStatsConfig } from '@lib/umami-stats';
 import type { UmamiStatsConfig } from '@/types/umami-stats';
 import yamlConfig from '../../config/site.yaml';
 import { DEFAULT_ROUTERS, RESERVED_ROUTES } from './router';
 
-export { contentConfig, editorConfig, i18nConfig, motionConfig, siteConfig };
+export { contentConfig, i18nConfig, motionConfig, siteConfig };
 
 export const socialConfig: SocialConfig = yamlConfig.social ?? {};
 
@@ -99,16 +88,6 @@ export const christmasConfig: ChristmasConfig = yamlConfig.christmas || {
   },
 };
 
-// Map YAML bgm config
-export const bgmConfig: { enabled: boolean; metingApi?: string; audio: BgmAudioGroup[] } = {
-  enabled: yamlConfig.bgm?.enabled ?? (yamlConfig.bgm?.audio?.length ?? 0) > 0,
-  metingApi: yamlConfig.bgm?.metingApi,
-  audio: yamlConfig.bgm?.audio ?? [],
-};
-
-// Bangumi media tracking config — null when disabled (section commented out in YAML)
-export const bangumiConfig: BangumiConfig | null = yamlConfig.bangumi ?? null;
-
 /** Validated opt-in moments configuration. Disabled when the YAML section is absent. */
 export const momentsConfig = normalizeMomentsConfig(yamlConfig.moments, {
   reservedRoutes: RESERVED_ROUTES,
@@ -116,23 +95,8 @@ export const momentsConfig = normalizeMomentsConfig(yamlConfig.moments, {
   seriesSlugs: enabledSeriesSlugList,
 });
 
-const momentsRouters = resolveMomentsNavigation(
-  resolveEditorNavigation(yamlConfig.navigation ?? DEFAULT_ROUTERS, editorConfig),
-  momentsConfig,
-);
-
-// Navigation routers with resolved feature placeholders and auto-injected bangumi entry
-export const routers: RouterItem[] = bangumiConfig
-  ? [
-      ...momentsRouters,
-      {
-        name: bangumiConfig.label,
-        nameKey: bangumiConfig.label ? undefined : 'nav.bangumi',
-        path: '/bangumi',
-        icon: bangumiConfig.icon ?? 'ri:bilibili-fill',
-      },
-    ]
-  : momentsRouters;
+// Navigation routers with resolved feature placeholders
+export const routers: RouterItem[] = resolveMomentsNavigation(yamlConfig.navigation ?? DEFAULT_ROUTERS, momentsConfig);
 
 // Map YAML dev tools config with defaults (dev only)
 export const devConfig: DevConfig = {

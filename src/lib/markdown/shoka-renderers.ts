@@ -1,7 +1,7 @@
 /**
  * HTML renderers for Shoka preprocessor output.
  *
- * Generates HTML strings for friend links, audio players, and video embeds.
+ * Generates HTML strings for audio players and video embeds.
  * Separated from the preprocessor to keep parsing and rendering concerns distinct.
  */
 
@@ -9,50 +9,24 @@ export function escapeHtml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-/** Validate and sanitize a CSS color value (hex, named, hsl, rgb only) */
-export function sanitizeCssColor(color: string): string | null {
-  const trimmed = color.trim();
-  if (/^#[0-9a-fA-F]{3,8}$/.test(trimmed)) return trimmed;
-  if (/^(rgb|hsl)a?\([\d\s,%./]+\)$/.test(trimmed)) return trimmed;
-  if (/^[a-zA-Z]+$/.test(trimmed)) return trimmed;
-  return null;
-}
-
-export interface FriendLinkData {
-  site: string;
-  url: string;
-  owner?: string;
-  desc?: string;
-  image?: string;
-  color?: string;
-}
-
 export interface MediaItem {
   name?: string;
+  artist?: string;
   url?: string;
+  pic?: string;
+  lrc?: string;
   title?: string;
-  list?: string[];
+  list?: unknown[];
 }
 
 interface AudioGroup {
   title?: string;
-  list: string[];
-}
-
-export function renderFriendLinks(items: FriendLinkData[]): string {
-  const jsonData = escapeHtml(JSON.stringify(items));
-  const cards = items
-    .map((item) => {
-      const safeColor = item.color ? sanitizeCssColor(item.color) : null;
-      const colorStyle = safeColor ? ` style="border-color: ${escapeHtml(safeColor)}"` : '';
-      const image = item.image
-        ? `<img class="avatar" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.site)}" loading="lazy" />`
-        : '';
-      const desc = item.desc ? `<div class="desc">${escapeHtml(item.desc)}</div>` : '';
-      return `<a class="friend-link-card" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer"${colorStyle}>${image}<div class="info"><div class="name">${escapeHtml(item.site)}</div>${desc}</div></a>`;
-    })
-    .join('\n');
-  return `<div class="friend-links-grid" data-links="${jsonData}">\n${cards}\n</div>`;
+  list?: unknown[];
+  name?: string;
+  artist?: string;
+  url?: string;
+  pic?: string;
+  lrc?: string;
 }
 
 export function renderAudioMedia(items: MediaItem[]): string {
@@ -62,7 +36,14 @@ export function renderAudioMedia(items: MediaItem[]): string {
     if (item.list && Array.isArray(item.list)) {
       groups.push({ title: item.title, list: item.list });
     } else if (item.url) {
-      groups.push({ list: [item.url] });
+      groups.push({
+        ...(item.title ? { title: item.title } : {}),
+        ...(item.name ? { name: item.name } : {}),
+        ...(item.artist ? { artist: item.artist } : {}),
+        url: item.url,
+        ...(item.pic ? { pic: item.pic } : {}),
+        ...(item.lrc ? { lrc: item.lrc } : {}),
+      });
     }
   }
 

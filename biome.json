@@ -19,7 +19,7 @@
       "!**/*.yaml",
       "!**/*.yml",
       "!**/*.svg",
-      "!**/docs/design/**"
+      "!**/docs/design"
     ]
   },
   "formatter": {

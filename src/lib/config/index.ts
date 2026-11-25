@@ -14,9 +14,6 @@ export type {
   FeaturedCategory,
   FeaturedSeries,
   FeaturedSeriesLinks,
-  FriendLink,
-  FriendsConfig,
-  FriendsIntro,
   MomentsChannelConfig,
   MomentsConfig,
   RouterItem,
@@ -25,5 +22,4 @@ export type {
   SnowfallConfig,
   SocialConfig,
   SocialPlatform,
-  WritingRoomConfig,
 } from './types';

@@ -13,8 +13,7 @@ import { CONTENT_PADDING } from '@constants/layout';
 import { devConfig, siteConfig } from '@constants/site-config';
 import Layout from '@layouts/Layout.astro';
 import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
-import { isOpenInEditorAvailable } from '@lib/config/post-actions';
-import { editorConfig, postActionsConfig } from '@lib/config/site';
+import { postActionsConfig } from '@lib/config/site';
 import {
   buildCategoryPath,
   getCategoryArr,
@@ -150,9 +149,6 @@ const colophonItems = getPostColophon(post, locale);
 const bannerMarks = colophonItemsAt(colophonItems, 'banner');
 const sealMarks = colophonItemsAt(colophonItems, 'seal');
 const postSourcePath = getPostSourcePath(localizedPath(`/post/${encodeSlug(postSlug)}`, locale));
-const postEditorHref = isOpenInEditorAvailable(postActionsConfig, editorConfig.enabled, import.meta.env.DEV)
-  ? `${localizedPath('/editor/')}?from=${encodeURIComponent(postSourcePath)}`
-  : undefined;
 const localEditors =
   import.meta.env.DEV && devConfig.localProjectPath && postRelativePath
     ? devConfig.editors.map(({ id, name, icon, urlTemplate }) => ({
@@ -236,7 +232,6 @@ if (post.data.description) {
               filename={getPostSourceFilename(postSlug)}
               copy={postActionsConfig.copyMarkdown}
               download={postActionsConfig.downloadMarkdown}
-              editorHref={postEditorHref}
               localEditors={localEditors}
             />
           )

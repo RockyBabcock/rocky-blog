@@ -12,7 +12,6 @@ interface Props {
 }
 
 import AnnouncementProvider from '@components/announcement/AnnouncementProvider.astro';
-import GlobalBGMPlayer from '@components/bgm/GlobalBGMPlayer';
 import ChristmasEffects from '@components/christmas/ChristmasEffects.astro';
 import CodePenEmbed from '@components/embed/CodePenEmbed.astro';
 import FloatingGroup from '@components/layout/FloatingGroup';
@@ -23,7 +22,6 @@ import SearchPortal from '@components/layout/SearchPortal.astro';
 import ArticleViewers from '@components/markdown/ArticleViewers';
 import SettingsPanel from '@components/settings/SettingsPanel';
 import { Toaster } from '@components/ui/sonner';
-import { bgmConfig } from '@constants/site-config';
 
 const { post, siderType, isPostPage, articleTools = true } = Astro.props;
 ---
@@ -34,11 +32,6 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
   <main class="relative flex grow flex-col gap-4">
     {(<slot />)}
   </main>
-  {bgmConfig.enabled && bgmConfig.audio.length > 0 && (
-    <div transition:persist="global-bgm">
-      <GlobalBGMPlayer client:panel="bgm" audioGroups={bgmConfig.audio} metingApi={bgmConfig.metingApi} />
-    </div>
-  )}
   <FloatingGroup client:only="react" />
   <SettingsPanel client:idle />
   <MobileDrawer type={siderType} post={post} />

@@ -1,9 +1,9 @@
 /**
  * Raw Markdown source of a post, served at `<post url>.md` for the post page's
- * copy / download / open-in-writing-room actions.
+ * copy / download actions.
  */
 
-import { isOpenInEditorAvailable, type ResolvedPostActionsConfig } from '../config/post-actions';
+import type { ResolvedPostActionsConfig } from '../config/post-actions';
 import type { DevConfig, EditorConfig } from '../config/types';
 
 interface PostSourceVisibility {
@@ -12,8 +12,8 @@ interface PostSourceVisibility {
 }
 
 /** Whether any post action consumes the `.md` endpoint in this build. */
-export function isPostSourceEnabled(config: ResolvedPostActionsConfig, editorEnabled: boolean, isDev: boolean): boolean {
-  return config.copyMarkdown || config.downloadMarkdown || isOpenInEditorAvailable(config, editorEnabled, isDev);
+export function isPostSourceEnabled(config: ResolvedPostActionsConfig): boolean {
+  return config.copyMarkdown || config.downloadMarkdown;
 }
 
 const ENCRYPTED_BLOCK = /^[ \t]*:{3,}[ \t]*encrypted\b/m;

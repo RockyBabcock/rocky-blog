@@ -25,7 +25,6 @@ export const READER_FONT_FAMILY_MAX_LENGTH = 128;
 
 export const GENERAL_DEFAULTS = {
   scrollProgress: true,
-  bgmWidget: true,
   wave: true,
 };
 
@@ -39,7 +38,6 @@ export const STORAGE_KEYS = {
   measure: 'reader-measure',
   justify: 'reader-justify',
   scrollProgress: 'site-scroll-progress',
-  bgmWidget: 'site-bgm-widget',
   motionLevel: 'site-motion-level',
   /** Boolean switch replaced by `motionLevel`; a stored `'true'` still maps to the reduced level. */
   legacyMasterMotion: 'site-master-motion',

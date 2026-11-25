@@ -53,16 +53,3 @@ export interface PostData {
   colophon?: string[];
   draft: boolean;
 }
-
-/**
- * Friend link data
- */
-export interface FriendData {
-  site: string;
-  url: string;
-  owner: string;
-  desc: string;
-  image: string;
-  color?: string;
-  group?: string;
-}

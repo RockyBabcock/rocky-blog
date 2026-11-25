@@ -10,7 +10,6 @@ import { isMotionLevel } from '@lib/config/motion';
 import type { MotionLevel } from '@lib/config/types';
 import { quoteCssString } from '@lib/css-string';
 import { atom } from 'nanostores';
-import { closeBgmPanel } from './bgm';
 import {
   FONT_PRESETS,
   type FontPreset,
@@ -35,7 +34,6 @@ export const readerJustify = atom<boolean>(READER_DEFAULTS.justify);
 
 // General preferences
 export const scrollProgressEnabled = atom<boolean>(GENERAL_DEFAULTS.scrollProgress);
-export const bgmWidgetEnabled = atom<boolean>(GENERAL_DEFAULTS.bgmWidget);
 /** The visitor's chosen level; islands read the effective level (OS-capped) via useMotionLevel. */
 export const motionLevel = atom<MotionLevel>('lively');
 export const waveEnabled = atom<boolean>(GENERAL_DEFAULTS.wave);
@@ -175,12 +173,6 @@ export function setScrollProgressEnabled(enabled: boolean): void {
   persist(STORAGE_KEYS.scrollProgress, String(enabled));
 }
 
-export function setBgmWidgetEnabled(enabled: boolean): void {
-  bgmWidgetEnabled.set(enabled);
-  persist(STORAGE_KEYS.bgmWidget, String(enabled));
-  if (!enabled) closeBgmPanel();
-}
-
 export function setMotionLevel(level: MotionLevel): void {
   motionLevel.set(level);
   persist(STORAGE_KEYS.motionLevel, level);
@@ -241,7 +233,6 @@ export function initSettings(): void {
   readerJustify.set(readBoolean(STORAGE_KEYS.justify, READER_DEFAULTS.justify));
 
   scrollProgressEnabled.set(readBoolean(STORAGE_KEYS.scrollProgress, GENERAL_DEFAULTS.scrollProgress));
-  bgmWidgetEnabled.set(readBoolean(STORAGE_KEYS.bgmWidget, GENERAL_DEFAULTS.bgmWidget));
   motionLevel.set(readStoredMotionLevel());
   waveEnabled.set(readBoolean(STORAGE_KEYS.wave, GENERAL_DEFAULTS.wave));
 

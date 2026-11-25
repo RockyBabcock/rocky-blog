@@ -114,7 +114,7 @@ featuredCategories:
 # =============================================================================
 # 字段说明：
 #   slug: URL 路径（必填），如 'weekly' 对应 /weekly 路径
-#         注意：不能与保留路由冲突，包括：about, categories, tags, friends, posts, archives, api, _astro, rss.xml, sitemap.xml, robots.txt, favicon.ico 等
+#         注意：不能与保留路由冲突，包括：about, categories, tags, posts, archives, api, _astro, rss.xml, sitemap.xml, robots.txt, favicon.ico 等
 #   categoryName: 对应的分类名称（必填，需在 categoryMap 中存在）
 #   label: 侧边栏/导航中显示的简短名称（可选）
 #   fullName: 系列页面标题显示的完整名称（可选）
@@ -197,109 +197,6 @@ social:
   #   icon: ri:netease-cloud-music-line
   #   color: '#e60026'
 
-# =============================================================================
-# Friends Links
-# 友情链接页面配置 - 展示友链列表和申请说明
-# =============================================================================
-# intro: 页面介绍文字配置
-#   title: 页面标题
-#   subtitle: 页面副标题
-#   applyTitle: 申请区块标题
-#   applyDesc: 申请说明文字
-#   exampleYaml: 申请格式示例（YAML 格式）
-# data: 友链列表数组
-#   - site: 站点名称
-#   - url: 站点地址
-#   - owner: 站长昵称
-#   - desc: 站点描述/简介
-#   - image: 头像图片 URL
-#   - color: (可选) 主题色，十六进制格式；显示在头像外圈和悬停效果上
-#   - group: (可选) 所属分组的 id；未填写或找不到分组时归入「未分组」
-# groups: (可选) 友链分组，按配置顺序展示；不配置则为平铺列表
-#   - id: 分组标识，供友链的 group 引用（唯一）
-#   - title: 分组标题
-#   - description: (可选) 分组说明
-# -----------------------------------------------------------------------------
-friends:
-  groups:
-    - id: familiar
-      title: 熟人
-      description: 常有交流、彼此熟悉的朋友。
-    - id: community
-      title: 友链小伙伴
-      description: 通过博客结识、交换友链的小伙伴。
-    - id: following
-      title: 单向关注
-      description: 喜欢阅读、推荐给大家的博客。
-  intro:
-    title: 友情链接 # 页面标题
-    subtitle: 欢迎交换友链！ # 页面副标题
-    applyTitle: 申请友链 # 申请区块标题
-    applyDesc: 请在本页留言，格式如下 # 申请说明
-    exampleYaml: | # 申请格式示例，会显示在页面上
-      - site: 你的博客名称 # 站点名称
-        url: https://your-blog.com/ # 站点网址
-        owner: 你的昵称 # 昵称
-        desc: 站点简介 # 站点简介
-        image: https://your-blog.com/avatar.jpg # 头像链接
-        color: "#ffc0cb" # 主题色（可选）
-  data: # 友链列表；同组内按这里的顺序展示
-    - site: 余弦の博客
-      url: https://blog.cosine.ren
-      owner: cos
-      desc: FE / ACG / 手工 / 深色模式强迫症 / INFP / 兴趣广泛养两只猫的老宅女 / remote
-      image: https://blog.cosine.ren/img/avatar.webp
-      color: '#ed788b'
-      group: familiar
-    - site: 示例博客 A
-      url: https://example-a.com
-      owner: Alice
-      desc: 一个热爱技术的开发者
-      image: https://api.dicebear.com/7.x/avataaars/svg?seed=Alice
-      color: '#BEDCFF'
-      group: familiar
-    - site: 示例博客 B
-      url: https://example-b.com
-      owner: Bob
-      desc: 分享生活与技术的小站
-      image: https://api.dicebear.com/7.x/avataaars/svg?seed=Bob
-      color: '#FBC1CC'
-      group: community
-    - site: 示例博客 C
-      url: https://example-c.com
-      owner: Carol
-      desc: 记录学习与成长的地方
-      image: https://api.dicebear.com/7.x/avataaars/svg?seed=Carol
-      color: '#ABDCFF'
-      group: community
-    - site: 示例博客 D
-      url: https://example-d.com
-      owner: Dave
-      desc: 喜欢折腾键盘和终端
-      image: https://api.dicebear.com/7.x/avataaars/svg?seed=Dave
-      color: '#C8E6C9'
-      group: community
-    - site: 示例博客 E
-      url: https://example-e.com
-      owner: Eve
-      desc: 设计、插画与日常碎碎念
-      image: https://api.dicebear.com/7.x/avataaars/svg?seed=Eve
-      color: '#E1BEE7'
-      group: following
-    - site: 示例博客 F
-      url: https://example-f.com
-      owner: Frank
-      desc: 长文写作与阅读笔记
-      image: https://api.dicebear.com/7.x/avataaars/svg?seed=Frank
-      color: '#FFE0B2'
-      group: following
-    # 不写 group（或写了不存在的分组 id）的友链会归入最后的「未分组」
-    - site: 示例博客 G
-      url: https://example-g.com
-      owner: Grace
-      desc: 还没想好放在哪一组的新朋友
-      image: https://api.dicebear.com/7.x/avataaars/svg?seed=Grace
-      color: '#B2EBF2'
 
 # =============================================================================
 # Announcements
@@ -399,7 +296,7 @@ content:
   enableShokaEffects: true      # ++下划线++ ==高亮== ~下标~ ^上标^
   enableShokaSpoiler: true      # !!隐藏文字!!
   enableShokaRuby: true         # {文字^注音} 注音标注
-  enableShokaHexoTags: true     # {% links %} {% media %} Hexo标签
+  enableShokaHexoTags: true     # {% media %} Hexo 媒体标签
   enableMath: true              # $数学公式$ KaTeX渲染
   enableCodeMeta: true          # 代码块增强 (title, mark, command)
   enableQuiz: true              # 练习题交互功能
@@ -445,13 +342,6 @@ moments:
   #     aliases:
   #       - old-daily
 
-# =============================================================================
-# Writing Room
-# 写作室 - 默认关闭，开启后生成 /editor/ 和 /editor/preview/，并显示已有导航入口
-# 使用本地 CMS 编辑文章时也需要开启；修改后重启开发服务器或重新构建
-# =============================================================================
-editor:
-  enabled: true
 
 # =============================================================================
 # Colophon (落款)
@@ -547,16 +437,11 @@ colophon:
 # 字段说明：
 #   copyMarkdown: 复制全文 Markdown（含 frontmatter）
 #   downloadMarkdown: 下载 .md 文件
-#   openInEditor: 在写作室打开，需要 editor.enabled
-#     off      不显示
-#     dev      仅本地开发服务器显示
-#     everyone 所有访客可见，访客打开的是一份浏览器草稿副本，不会改动博客
 # 加密文章（password）不提供原文，也不显示这些按钮
 # -----------------------------------------------------------------------------
 postActions:
   copyMarkdown: true
   downloadMarkdown: true
-  openInEditor: everyone
 
 # =============================================================================
 # Navigation Routes
@@ -602,22 +487,10 @@ navigation:
         nameKey: nav.archives
         path: /archives
         icon: ri:archive-2-fill
-  - name: 友链
-    nameKey: nav.friends
-    path: /friends
-    icon: ri:links-line
   - name: 关于
     nameKey: nav.about
     path: /about
     icon: fa6-regular:circle-user
-  - name: 歌单
-    nameKey: nav.music
-    path: /music
-    icon: ri:music-2-fill
-  - name: 写作室
-    path: /editor
-    localeIndependent: true
-    icon: ri:edit-box-line
 
 # =============================================================================
 # Christmas/Seasonal Features
@@ -805,16 +678,6 @@ seo:
 # =============================================================================
 # Christmas/Seasonal Features
 # =============================================================================
-bgm:
-  enabled: true  # (有 audio 时自动启用，显式 false 可禁用)
-  # metingApi: https://163.hyc.moe/  # Meting API 地址，默认为 https://163.hyc.moe/，推荐自部署
-  audio:
-    - title: 最爱山山
-      list:
-        - https://music.163.com/playlist?id=8676645748
-    - title: Love Vocaloid
-      list:
-        - https://music.163.com/playlist?id=8882890045
 
 christmas:
   enabled: false # 总开关
@@ -833,19 +696,6 @@ christmas:
   #   mobileMaxLayers: 4 # 移动端最大层数
   #   mobileMaxIterations: 6 # 移动端最大迭代次数
 
-# =============================================================================
-# Bangumi (Media Tracking)
-# 追番页面 - 注释掉整个 bangumi 段即可关闭（页面 + 导航自动隐藏）
-# =============================================================================
-# 字段说明：
-#   userId: Bangumi 用户名或数字 ID（必填）
-#   label: 导航显示名称（可选，默认：追番）
-#   icon: 导航图标，Iconify 格式（可选，默认：ri:bilibili-fill）
-# -----------------------------------------------------------------------------
-bangumi:
-  userId: cosine
-  # label: 追番
-  # icon: ri:bilibili-fill
 
 # =============================================================================
 # Development Tools (Dev Only)

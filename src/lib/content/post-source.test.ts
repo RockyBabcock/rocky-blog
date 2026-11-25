@@ -31,12 +31,10 @@ test('drafts are public only outside production', () => {
 });
 
 test('the endpoint exists only when some action reads it', () => {
-  const off = { copyMarkdown: false, downloadMarkdown: false, openInEditor: 'off' } as const;
-  assert.equal(isPostSourceEnabled(POST_ACTIONS_DEFAULTS, false, false), true);
-  assert.equal(isPostSourceEnabled(off, true, true), false);
-  assert.equal(isPostSourceEnabled({ ...off, openInEditor: 'dev' }, true, true), true);
-  assert.equal(isPostSourceEnabled({ ...off, openInEditor: 'dev' }, true, false), false);
-  assert.equal(isPostSourceEnabled({ ...off, openInEditor: 'everyone' }, false, false), false);
+  assert.equal(isPostSourceEnabled(POST_ACTIONS_DEFAULTS), true);
+  assert.equal(isPostSourceEnabled({ copyMarkdown: false, downloadMarkdown: false }), false);
+  assert.equal(isPostSourceEnabled({ copyMarkdown: true, downloadMarkdown: false }), true);
+  assert.equal(isPostSourceEnabled({ copyMarkdown: false, downloadMarkdown: true }), true);
 });
 
 test('source path appends .md to the post path', () => {

@@ -5,7 +5,7 @@
  * Add settings here and implement their application logic in src/store/settings.ts.
  */
 
-import { bgmConfig, christmasConfig } from '@constants/site-config';
+import { christmasConfig } from '@constants/site-config';
 import type { TranslationKey } from '@/i18n/types';
 
 export type SettingSection = 'reader' | 'general';
@@ -29,7 +29,7 @@ export interface SettingItem {
   /** Options for segmented controls. */
   options?: SettingOption[];
   /** Build-time feature gate that hides unavailable settings. */
-  gatedBy?: 'christmas' | 'bgm';
+  gatedBy?: 'christmas';
   /** Disable this setting while the motion level is `reduced`. */
   disabledByReducedMotion?: boolean;
 }
@@ -94,13 +94,6 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     gatedBy: 'christmas',
   },
   {
-    key: 'bgmWidget',
-    section: 'general',
-    type: 'switch',
-    i18nKey: 'settings.bgmWidget',
-    gatedBy: 'bgm',
-  },
-  {
     key: 'motionLevel',
     section: 'general',
     type: 'segmented',
@@ -125,6 +118,5 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
  */
 export function isSettingVisible(item: SettingItem): boolean {
   if (item.gatedBy === 'christmas') return christmasConfig.enabled;
-  if (item.gatedBy === 'bgm') return bgmConfig.enabled && bgmConfig.audio.length > 0;
   return true;
 }

@@ -10,13 +10,9 @@ export const RESERVED_ROUTES = new Set([
   'about',
   'categories',
   'tags',
-  'friends',
   'post',
   'posts',
   'archives',
-  'bangumi',
-  'music',
-  'editor',
   '404',
   // Special files
   'rss.xml',

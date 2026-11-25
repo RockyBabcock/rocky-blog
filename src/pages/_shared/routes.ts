@@ -6,7 +6,7 @@
  */
 
 import { PAGINATION } from '@constants/layout';
-import { editorConfig, postActionsConfig } from '@lib/config/site';
+import { postActionsConfig } from '@lib/config/site';
 import {
   getCategoryLinks,
   getCategoryList,
@@ -31,7 +31,7 @@ export const postRoute = localePaths(async ({ locale }) => {
 
 /** Same param space as `postRoute`, minus posts with encrypted content (and drafts in production). */
 export const postSourceRoute = localePaths(async ({ locale }) => {
-  if (!isPostSourceEnabled(postActionsConfig, editorConfig.enabled, import.meta.env.DEV)) return [];
+  if (!isPostSourceEnabled(postActionsConfig)) return [];
   const posts = await getSortedPosts(locale);
   return posts.flatMap((post) =>
     post.filePath && isPostSourcePublic(post.data, post.body, import.meta.env.PROD)

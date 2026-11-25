@@ -4,7 +4,7 @@
  * Problem: Some Shoka syntax conflicts with standard Markdown/GFM parsing:
  * - `+++style Title` → parsed as thematicBreak before any remark plugin runs
  * - `~sub~` → parsed as GFM strikethrough (~~ is delete)
- * - `{% links %}` YAML content → parsed as Markdown lists
+ * - `{% media %}` YAML content → parsed as Markdown lists
  *
  * Solution: This remark plugin runs as the FIRST plugin in the pipeline.
  * It reads `file.value` (the original raw text preserved in VFile), applies

@@ -5,16 +5,10 @@
 
 import { useTranslation } from '@hooks/useTranslation';
 import { Icon } from '@iconify/react';
+import { copyText } from '@lib/clipboard';
 import { cn } from '@lib/utils';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
-import {
-  RiArrowDownSLine,
-  RiCheckLine,
-  RiDownload2Line,
-  RiErrorWarningLine,
-  RiFileCopyLine,
-  RiQuillPenLine,
-} from 'react-icons/ri';
+import { RiArrowDownSLine, RiCheckLine, RiDownload2Line, RiErrorWarningLine, RiFileCopyLine } from 'react-icons/ri';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +17,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { copyMarkdown } from '@/features/editor/clipboard';
 
 interface LocalEditorLink {
   id: string;
@@ -39,8 +32,6 @@ interface PostMarkdownActionsProps {
   filename: string;
   copy: boolean;
   download: boolean;
-  /** Writing room link; omitted when the entry is unavailable. */
-  editorHref?: string;
   /** Dev-only deep links into local editors. */
   localEditors?: LocalEditorLink[];
 }
@@ -80,7 +71,7 @@ async function copySource(path: string, filename: string): Promise<'copied' | 'd
     }
   }
   const source = await text;
-  if (await copyMarkdown(source)) return 'copied';
+  if (await copyText(source)) return 'copied';
   saveText(source, filename);
   return 'downloaded';
 }
@@ -91,7 +82,6 @@ export default function PostMarkdownActions({
   filename,
   copy,
   download,
-  editorHref,
   localEditors = [],
 }: PostMarkdownActionsProps) {
   const { t } = useTranslation(locale);
@@ -118,7 +108,6 @@ export default function PostMarkdownActions({
 
   const copyLabel = t('post.markdown.copy');
   const downloadLabel = t('post.markdown.download');
-  const editorLabel = t('post.markdown.openInEditor');
   const announcement = {
     idle: '',
     busy: '',
@@ -128,8 +117,7 @@ export default function PostMarkdownActions({
   }[status];
 
   const menuDownload = copy && download;
-  const menuEditor = Boolean((copy || download) && editorHref);
-  const hasMenu = menuDownload || menuEditor || localEditors.length > 0;
+  const hasMenu = menuDownload || localEditors.length > 0;
   const primaryClass = cn(capsule, focusRing, hasMenu ? 'rounded-l-full' : 'rounded-full');
   const iconClass = 'size-3.5 shrink-0';
 
@@ -154,13 +142,6 @@ export default function PostMarkdownActions({
       <a href={sourcePath} download={filename} aria-label={downloadLabel} title={downloadLabel} className={primaryClass}>
         <RiDownload2Line aria-hidden="true" className={iconClass} />
         <span className="hidden sm:inline">{downloadLabel}</span>
-      </a>
-    );
-  } else if (editorHref) {
-    primary = (
-      <a href={editorHref} aria-label={editorLabel} title={editorLabel} className={primaryClass}>
-        <RiQuillPenLine aria-hidden="true" className={iconClass} />
-        <span className="hidden sm:inline">{editorLabel}</span>
       </a>
     );
   }
@@ -195,17 +176,9 @@ export default function PostMarkdownActions({
                   </a>
                 </DropdownMenuItem>
               )}
-              {menuEditor && (
-                <DropdownMenuItem asChild className="cursor-pointer">
-                  <a href={editorHref}>
-                    <RiQuillPenLine aria-hidden="true" />
-                    {editorLabel}
-                  </a>
-                </DropdownMenuItem>
-              )}
               {localEditors.length > 0 && (
                 <>
-                  {(menuDownload || menuEditor) && <DropdownMenuSeparator />}
+                  {menuDownload && <DropdownMenuSeparator />}
                   <DropdownMenuLabel className="text-muted-foreground text-xs">
                     {t('post.markdown.localEditors')}
                   </DropdownMenuLabel>

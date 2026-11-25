@@ -21,7 +21,6 @@ import { useStore } from '@nanostores/react';
 import { christmasEnabled, toggleChristmas } from '@store/christmas';
 import { $isSettingsOpen, closeModal } from '@store/modal';
 import {
-  bgmWidgetEnabled,
   type FontPreset,
   motionLevel,
   readerFontFamily,
@@ -32,7 +31,6 @@ import {
   readerMeasure,
   resetReaderPreferences,
   scrollProgressEnabled,
-  setBgmWidgetEnabled,
   setFontPreset,
   setFontSize,
   setJustify,
@@ -85,7 +83,6 @@ export default function SettingsPanelContent() {
   const measure = useStore(readerMeasure);
   const justify = useStore(readerJustify);
   const scrollProgress = useStore(scrollProgressEnabled);
-  const bgmWidget = useStore(bgmWidgetEnabled);
   const level = useStore(motionLevel);
   const wave = useStore(waveEnabled);
   const isChristmasEnabled = useStore(christmasEnabled);
@@ -104,7 +101,6 @@ export default function SettingsPanelContent() {
     justify: { checked: justify, onChange: setJustify },
     scrollProgress: { checked: scrollProgress, onChange: setScrollProgressEnabled },
     christmas: { checked: isChristmasEnabled, onChange: () => toggleChristmas() },
-    bgmWidget: { checked: bgmWidget, onChange: setBgmWidgetEnabled },
     wave: { checked: wave, onChange: setWaveEnabled },
   };
 

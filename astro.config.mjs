@@ -20,10 +20,8 @@ import Sonda from 'sonda/vite';
 import { loadEnv } from 'vite';
 import svgr from 'vite-plugin-svgr';
 import YAML from 'yaml';
-import { editorIntegration } from './src/features/editor/integration.ts';
 import { momentsRoutes } from './src/features/moments/integration/momentsRoutes.ts';
 import { normalizeContentConfig } from './src/lib/config/content.ts';
-import { normalizeEditorConfig } from './src/lib/config/editor.ts';
 import { enabledFeaturedSeriesSlugs, normalizeFeaturedSeries } from './src/lib/config/featured-series.ts';
 import { BUNDLED_ICON_SETS } from './src/lib/config/icon-sets.ts';
 import { normalizeMomentsConfig } from './src/lib/config/moments.ts';
@@ -54,7 +52,6 @@ function loadConfigForAstro() {
 }
 
 const yamlConfig = loadConfigForAstro();
-const editorConfig = normalizeEditorConfig(yamlConfig.editor);
 
 // Bundle analysis mode: ANALYZE=true pnpm build
 // Use loadEnv to read .env file (astro.config.mjs runs before Vite loads .env)
@@ -201,7 +198,7 @@ const markdownEntities = markdownRequire.resolve('decode-named-character-referen
 
 // Remark plugins — order matters
 // remarkShokaPreprocess MUST be first: it re-parses raw text to fix GFM/remark conflicts
-// (+++, ~sub~, {% links %} YAML etc.) before any AST-level plugin runs.
+// (+++, ~sub~, {% media %} YAML etc.) before any AST-level plugin runs.
 const remarkPlugins = [];
 if (contentConfig.enableShokaContainers || contentConfig.enableShokaHexoTags || contentConfig.enableShokaEffects) {
   remarkPlugins.push([
@@ -272,7 +269,6 @@ if (contentConfig.enableCodeMeta) shikiTransformers.push(shokaMetaTransformer())
 if (contentConfig.enhanceCodeBlock) shikiTransformers.push(collapsibleCodeTransformer());
 
 const blogPort = Number.parseInt(env.BLOG_PORT || '', 10);
-const cmsPort = env.CMS_PORT || '4322';
 
 // https://astro.build/config
 export default defineConfig({
@@ -299,7 +295,6 @@ export default defineConfig({
     },
   },
   integrations: [
-    ...(editorConfig.enabled ? [editorIntegration()] : []),
     {
       name: 'content-hydration',
       hooks: {
@@ -365,9 +360,6 @@ export default defineConfig({
       // targets; it then folds `animation-timeline` into the `animation` shorthand, which browsers
       // reject, dropping every scroll-driven animation. Minify for Tailwind v4's browser floor.
       cssTarget: ['chrome111', 'edge111', 'firefox128', 'safari16.4'],
-    },
-    define: {
-      'import.meta.env.PUBLIC_CMS_PORT': JSON.stringify(cmsPort),
     },
     plugins: [
       ...(isAnalyze ? [Sonda({ open: false })] : []),

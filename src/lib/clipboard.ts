@@ -36,7 +36,7 @@ function copyWithSelection(source: string): boolean {
   }
 }
 
-export async function copyMarkdown(source: string): Promise<boolean> {
+export async function copyText(source: string): Promise<boolean> {
   try {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(source);

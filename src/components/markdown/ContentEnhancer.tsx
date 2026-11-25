@@ -12,7 +12,6 @@ import {
   scanAudioPlayers,
   scanEncryptedBlocks,
   scanEncryptedPosts,
-  scanFriendLinks,
   scanNoteBlocks,
   scanPreElements,
   scanQuizElements,
@@ -25,7 +24,6 @@ import { AudioPlayer } from './AudioPlayer';
 import { CodeBlockToolbar } from './CodeBlockToolbar';
 import { EncryptedBlock } from './EncryptedBlock';
 import { EncryptedPost } from './EncryptedPost';
-import { FriendLinksGrid } from './FriendLinksGrid';
 import { InfographicToolbar } from './InfographicToolbar';
 import { MermaidToolbar } from './MermaidToolbar';
 import { extractNoteType, NoteBlockIcon } from './NoteBlockIcon';
@@ -59,7 +57,6 @@ export default function ContentEnhancer({
       ...(enableEncryptedBlock ? scanEncryptedPosts(container) : []),
       ...scanPreElements(container),
       ...(enableQuiz ? scanQuizElements(container) : []),
-      ...scanFriendLinks(container),
       ...scanAudioPlayers(container),
       ...scanVideoPlayers(container),
       ...scanNoteBlocks(container),
@@ -125,8 +122,6 @@ export default function ContentEnhancer({
             return createPortal(<InfographicToolbar key={entry.id} preElement={entry.preElement} />, entry.mountPoint);
           case 'quiz':
             return createPortal(<QuizBlock key={entry.id} element={entry.preElement} />, entry.mountPoint);
-          case 'friend-links':
-            return createPortal(<FriendLinksGrid key={entry.id} gridElement={entry.preElement} />, entry.mountPoint);
           case 'audio':
             return createPortal(<AudioPlayer key={entry.id} element={entry.preElement} />, entry.mountPoint);
           case 'video':

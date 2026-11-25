@@ -14,9 +14,9 @@ function setup(t: TestContext, load: Parameters<ClientDirective>[0]) {
   Object.defineProperty(globalThis, 'window', { value: windowTarget, configurable: true });
   t.after(() => Reflect.deleteProperty(globalThis, 'window'));
   const island = new Island();
-  const options = { name: 'panel', value: 'bgm' } as Parameters<ClientDirective>[1];
+  const options = { name: 'panel', value: 'announcement' } as Parameters<ClientDirective>[1];
   const start = () => panelDirective(load, options, island as unknown as HTMLElement);
-  const open = () => windowTarget.dispatchEvent(new Event('koharu:bgm-open'));
+  const open = () => windowTarget.dispatchEvent(new Event('koharu:announcement-open'));
   return { windowTarget, island, start, open };
 }
 
@@ -44,7 +44,7 @@ test('ready handshake catches a panel which opened before the directive register
   const { windowTarget, start, open } = setup(t, async () => async () => {
     mounts += 1;
   });
-  windowTarget.addEventListener('koharu:bgm-ready', open);
+  windowTarget.addEventListener('koharu:announcement-ready', open);
   start();
   await settle();
   assert.equal(mounts, 1);
@@ -74,7 +74,7 @@ test('unmount cancels a pending hydration and removes the old intent listener', 
   assert.equal(mounts, 0);
 });
 
-test('a persisted music island finishes its pending load after reconnection', async (t) => {
+test('a persisted panel island finishes its pending load after reconnection', async (t) => {
   let resolve!: (mount: () => Promise<void>) => void;
   let mounts = 0;
   const loading = new Promise<() => Promise<void>>((done) => {
