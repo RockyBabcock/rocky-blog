@@ -1,29 +1,59 @@
 ---
-import CategoryPostList from '@components/category/CategoryPostList.astro';
-import HomeSider from '@components/layout/HomeSider.astro';
-import Cover from '@components/ui/cover/Cover.astro';
-import { seoConfig } from '@constants/site-config';
-import { Layout, TwoColumnLayout } from '@layouts/index';
-import { type Category, getSortedPosts, translateCategoryName } from '@lib/content';
-import { t } from '@/i18n';
-import { categoryRoute } from '../_shared/routes';
+import PostList from '@components/post/PostList.astro';
+import { HomeSiderType } from '@constants/enum';
+import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
+import { getCategoryList, getSortedPosts } from '@lib/content';
+import { getCategorySlug, translateCategoryName } from '@lib/content/categories';
+import { getPostsByCategory } from '@lib/content/posts';
+import type { Category } from 'types/blog';
+import { defaultLocale, localizedPath, t } from '@/i18n';
 
-export const getStaticPaths = categoryRoute.root;
+export async function getStaticPaths() {
+  const { categories } = await getCategoryList(defaultLocale);
+  const paths: Array<{ params: { slug: string }; props: { categoryName: string; locale: string } }> = [];
 
-interface Props {
-  category: Category | null;
-  path: string[];
-  locale: string;
+  function walk(nodes: Category[], prefix = '') {
+    for (const node of nodes) {
+      const segment = getCategorySlug(node.name);
+      const fullSlug = prefix ? `${prefix}/${segment}` : segment;
+      paths.push({
+        params: { slug: fullSlug },
+        props: { categoryName: node.name, locale: defaultLocale },
+      });
+      if (node.children?.length) {
+        walk(node.children, fullSlug);
+      }
+    }
+  }
+
+  walk(categories);
+  return paths;
 }
 
-const { category, path, locale } = Astro.props;
+interface Props {
+  categoryName: string;
+  locale?: string;
+}
+
+const { categoryName, locale = defaultLocale } = Astro.props;
 const allPosts = await getSortedPosts(locale);
+const posts = getPostsByCategory(allPosts, categoryName);
+const displayName = translateCategoryName(categoryName, locale);
 ---
 
-<Layout articleTools={false} locale={locale} title={`${t(locale, 'category.postsInCategory', { name: translateCategoryName(category?.name ?? '', locale) })} | ${seoConfig.title}`}>
-  <TwoColumnLayout showPostFooter={false}>
-    <Cover compact slot="cover" title={t(locale, 'category.postsInCategory', { name: translateCategoryName(category?.name ?? '', locale) })} />
-    <HomeSider slot="sider" />
-    <CategoryPostList category={category} path={path} allPosts={allPosts} locale={locale} />
-  </TwoColumnLayout>
-</Layout>
+<TwoColumnLayout
+  title={`${displayName} - ${t(locale, 'nav.categories')}`}
+  coverTitle={displayName}
+  coverSubtitle={t(locale, 'stats.articles', { count: posts.length })}
+  siderType={HomeSiderType.HOME}
+  locale={locale}
+  compactHero={true}
+>
+  <div class="mb-4 flex items-center justify-between text-xs text-muted-foreground">
+    <a href={localizedPath('/categories', locale)} class="hover:text-primary">
+      ← {t(locale, 'nav.categories')}
+    </a>
+    <span>{t(locale, 'stats.articles', { count: posts.length })}</span>
+  </div>
+  <PostList posts={posts} locale={locale} />
+</TwoColumnLayout>

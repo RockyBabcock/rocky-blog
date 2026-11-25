@@ -1,12 +1,18 @@
-import type { Transition } from 'motion/react';
-
 export const microDampingPreset = {
-  type: 'spring',
-  damping: 24,
-} satisfies Transition;
+  type: 'spring' as const,
+  stiffness: 350,
+  damping: 26,
+  mass: 0.8,
+};
 
-export const microReboundPreset = {
-  type: 'spring',
-  stiffness: 300,
+export const gentleSpringPreset = {
+  type: 'spring' as const,
+  stiffness: 240,
   damping: 24,
-} satisfies Transition;
+};
+
+export const snappySpringPreset = {
+  type: 'spring' as const,
+  stiffness: 420,
+  damping: 30,
+};

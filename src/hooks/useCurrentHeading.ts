@@ -1,39 +1,57 @@
-/**
- * useCurrentHeading Hook
- *
- * Tracks the current article H2/H3 heading for the mobile post header. Thin
- * projection over the shared heading observer store.
- *
- * @example
- * ```tsx
- * const heading = useCurrentHeading({ offsetTop: 80 });
- * ```
- */
-
-import type { ObservedHeading } from '@lib/toc';
 import { useSyncExternalStore } from 'react';
-import { getHeadingObserverStore } from './headingObserverStore';
 
-/** Article H2/H3 only, excluding link preview cards */
-const ARTICLE_SECTION_SELECTOR = 'h2:not(.link-preview-block h2), h3:not(.link-preview-block h3)';
-
-export type CurrentHeading = ObservedHeading;
-
-export interface UseCurrentHeadingOptions {
-  /** Offset from top of viewport for detecting active heading (default: 80px) */
-  offsetTop?: number;
+export interface CurrentHeading {
+  id: string;
+  text: string;
+  level: number;
 }
 
-/**
- * @param options - Options for heading detection
- * @returns Current heading info, or null when no heading has been scrolled past
- */
-export function useCurrentHeading({ offsetTop = 80 }: UseCurrentHeadingOptions = {}): CurrentHeading | null {
-  const store = getHeadingObserverStore({
-    selector: ARTICLE_SECTION_SELECTOR,
-    scopeSelector: 'article',
-    offsetTop,
-  });
+function getHeadingSnapshot(offsetTop: number): CurrentHeading | null {
+  if (typeof document === 'undefined') return null;
+  const elements = Array.from(
+    document.querySelectorAll<HTMLElement>('.custom-content h1[id], .custom-content h2[id], .custom-content h3[id], .custom-content h4[id]'),
+  );
+  if (elements.length === 0) return null;
 
-  return useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot);
+  let current = elements[0];
+  for (const el of elements) {
+    const rect = el.getBoundingClientRect();
+    if (rect.top <= offsetTop) {
+      current = el;
+    } else {
+      break;
+    }
+  }
+
+  return {
+    id: current.id,
+    text: current.textContent?.replace(/^#\s*/, '').trim() ?? '',
+    level: Number(current.tagName.slice(1)) || 2,
+  };
+}
+
+export function useCurrentHeading(offsetTop = 100): CurrentHeading | null {
+  let cached: CurrentHeading | null = null;
+  return useSyncExternalStore(
+    (callback) => {
+      if (typeof window === 'undefined') return () => {};
+      window.addEventListener('scroll', callback, { passive: true });
+      window.addEventListener('resize', callback, { passive: true });
+      document.addEventListener('astro:page-load', callback);
+      return () => {
+        window.removeEventListener('scroll', callback);
+        window.removeEventListener('resize', callback);
+        document.removeEventListener('astro:page-load', callback);
+      };
+    },
+    () => {
+      const next = getHeadingSnapshot(offsetTop);
+      if (cached && next && cached.id === next.id && cached.text === next.text && cached.level === next.level) {
+        return cached;
+      }
+      cached = next;
+      return next;
+    },
+    () => null,
+  );
 }

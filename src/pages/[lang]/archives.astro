@@ -1,12 +1,12 @@
 ---
-import { getLocaleStaticPaths } from '../_shared/utils';
+import { getLocaleStaticPaths } from '@/i18n';
 import ArchivesPage from '../archives.astro';
-export const getStaticPaths = getLocaleStaticPaths;
 
-interface Props {
-  locale: string;
+export function getStaticPaths() {
+  return getLocaleStaticPaths();
 }
 
-const { locale } = Astro.props;
+const { lang } = Astro.params;
 ---
-<ArchivesPage locale={locale} />
+
+<ArchivesPage locale={lang} />

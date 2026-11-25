@@ -1,24 +1,15 @@
 import { atom } from 'nanostores';
 
-/**
- * BGM panel uses a separate store (not $activeModal) because music playback
- * should persist when other modals open — hiding the panel UI while keeping
- * audio playing is intentional.
- */
-export const $bgmPanelOpen = atom(false);
+export const $bgmPanelOpen = atom<boolean>(false);
 
-if (typeof window !== 'undefined') {
-  const notifyPanel = () => {
-    if ($bgmPanelOpen.get()) window.dispatchEvent(new Event('koharu:bgm-open'));
-  };
-  $bgmPanelOpen.listen(notifyPanel);
-  window.addEventListener('koharu:bgm-ready', notifyPanel);
-}
-
-export function toggleBgmPanel() {
-  $bgmPanelOpen.set(!$bgmPanelOpen.get());
+export function openBgmPanel() {
+  $bgmPanelOpen.set(true);
 }
 
 export function closeBgmPanel() {
   $bgmPanelOpen.set(false);
+}
+
+export function toggleBgmPanel() {
+  $bgmPanelOpen.set(!$bgmPanelOpen.get());
 }

@@ -1,0 +1,15 @@
+---
+interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<div class={`section-divider ${className}`}>
+  <span class="section-divider-line" aria-hidden="true"></span>
+  <h2 class="section-divider-title">
+    <slot />
+  </h2>
+  <span class="section-divider-line" aria-hidden="true"></span>
+</div>

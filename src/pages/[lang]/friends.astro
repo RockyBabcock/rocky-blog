@@ -1,12 +1,12 @@
 ---
-import { getLocaleStaticPaths } from '../_shared/utils';
+import { getLocaleStaticPaths } from '@/i18n';
 import FriendsPage from '../friends.astro';
-export const getStaticPaths = getLocaleStaticPaths;
 
-interface Props {
-  locale: string;
+export function getStaticPaths() {
+  return getLocaleStaticPaths();
 }
 
-const { locale } = Astro.props;
+const { lang } = Astro.params;
 ---
-<FriendsPage locale={locale} />
+
+<FriendsPage locale={lang} />

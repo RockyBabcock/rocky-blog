@@ -1,155 +1,56 @@
-/**
- * ContentEnhancer - Portal-based React orchestrator for markdown content toolbars.
- *
- * Replaces vanilla DOM enhancers with a single React component that scans the DOM
- * and renders toolbars via createPortal. Scanning logic lives in content-scanner.ts.
- *
- * Strategy: One React root → many portals (avoids creating separate React roots per block).
- */
-
-import { setupCollapseAnimations } from '@lib/collapse-animation';
-import {
-  scanAudioPlayers,
-  scanEncryptedBlocks,
-  scanEncryptedPosts,
-  scanFriendLinks,
-  scanNoteBlocks,
-  scanPreElements,
-  scanQuizElements,
-  scanVideoPlayers,
-  type ToolbarEntry,
-} from '@lib/content-scanner';
-import { type RefObject, useCallback, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { AudioPlayer } from './AudioPlayer';
-import { CodeBlockToolbar } from './CodeBlockToolbar';
-import { EncryptedBlock } from './EncryptedBlock';
-import { EncryptedPost } from './EncryptedPost';
-import { FriendLinksGrid } from './FriendLinksGrid';
-import { InfographicToolbar } from './InfographicToolbar';
-import { MermaidToolbar } from './MermaidToolbar';
-import { extractNoteType, NoteBlockIcon } from './NoteBlockIcon';
-import { QuizBlock } from './QuizBlock';
-import { VideoPlayer } from './VideoPlayer';
+import { useTranslation } from '@hooks/useTranslation';
+import { useEffect } from 'react';
 
 interface ContentEnhancerProps {
-  containerRef?: RefObject<HTMLElement | null>;
-  sanitizeDecryptedHtml?: (html: string) => string;
   enableCopy?: boolean;
   enableFullscreen?: boolean;
   enableQuiz?: boolean;
   enableEncryptedBlock?: boolean;
 }
 
-export default function ContentEnhancer({
-  containerRef,
-  sanitizeDecryptedHtml,
-  enableCopy = true,
-  enableFullscreen = true,
-  enableQuiz = true,
-  enableEncryptedBlock = false,
-}: ContentEnhancerProps) {
-  const [entries, setEntries] = useState<ToolbarEntry[]>([]);
-
-  const scan = useCallback(() => {
-    const container = containerRef?.current ?? document.querySelector('.custom-content');
-    if (!container) return;
-
-    const newEntries: ToolbarEntry[] = [
-      ...(enableEncryptedBlock ? scanEncryptedPosts(container) : []),
-      ...scanPreElements(container),
-      ...(enableQuiz ? scanQuizElements(container) : []),
-      ...scanFriendLinks(container),
-      ...scanAudioPlayers(container),
-      ...scanVideoPlayers(container),
-      ...scanNoteBlocks(container),
-      ...(enableEncryptedBlock ? scanEncryptedBlocks(container) : []),
-    ];
-
-    setupCollapseAnimations(container);
-
-    if (newEntries.length > 0) {
-      setEntries((prev) => [...prev, ...newEntries]);
-    }
-  }, [containerRef, enableQuiz, enableEncryptedBlock]);
+export default function ContentEnhancer({ enableCopy = true }: ContentEnhancerProps) {
+  const { t } = useTranslation();
 
   useEffect(() => {
-    scan();
+    if (!enableCopy || typeof document === 'undefined') return;
 
-    // Re-scan on Astro page transitions (skip first fire which overlaps with initial scan)
-    let skipFirst = true;
-    const handlePageLoad = () => {
-      if (skipFirst) {
-        skipFirst = false;
-        return;
-      }
-      requestAnimationFrame(() => {
-        setEntries([]);
-        scan();
+    const attachCopyButtons = () => {
+      const blocks = document.querySelectorAll<HTMLElement>('.custom-content pre');
+      blocks.forEach((pre) => {
+        if (pre.dataset.copyEnhanced === 'true') return;
+        pre.dataset.copyEnhanced = 'true';
+        pre.classList.add('relative', 'group');
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className =
+          'code-copy-btn absolute top-2.5 right-2.5 rounded-md border border-border/60 bg-background/85 px-2 py-1 text-[11px] font-medium text-muted-foreground opacity-0 backdrop-blur-sm transition-all hover:text-primary group-hover:opacity-100 focus:opacity-100';
+        button.textContent = t('common.copy');
+        button.setAttribute('aria-label', t('common.copy'));
+
+        button.addEventListener('click', async () => {
+          const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
+          try {
+            await navigator.clipboard.writeText(code);
+            button.textContent = t('common.copied');
+            window.setTimeout(() => {
+              button.textContent = t('common.copy');
+            }, 1600);
+          } catch {
+            // Clipboard may be unavailable in restricted contexts
+          }
+        });
+
+        pre.appendChild(button);
       });
     };
 
-    // Re-scan after encrypted post is decrypted (new DOM content needs enhancement)
-    const handleDecrypted = () => {
-      requestAnimationFrame(() => {
-        setEntries([]);
-        scan();
-      });
-    };
-
-    document.addEventListener('astro:page-load', handlePageLoad);
-    document.addEventListener('content:decrypted', handleDecrypted);
+    attachCopyButtons();
+    document.addEventListener('astro:page-load', attachCopyButtons);
     return () => {
-      document.removeEventListener('astro:page-load', handlePageLoad);
-      document.removeEventListener('content:decrypted', handleDecrypted);
+      document.removeEventListener('astro:page-load', attachCopyButtons);
     };
-  }, [scan]);
+  }, [enableCopy, t]);
 
-  return (
-    <>
-      {entries.map((entry) => {
-        switch (entry.type) {
-          case 'code':
-            return createPortal(
-              <CodeBlockToolbar
-                key={entry.id}
-                preElement={entry.preElement}
-                enableCopy={enableCopy}
-                enableFullscreen={enableFullscreen}
-              />,
-              entry.mountPoint,
-            );
-          case 'mermaid':
-            return createPortal(<MermaidToolbar key={entry.id} preElement={entry.preElement} />, entry.mountPoint);
-          case 'infographic':
-            return createPortal(<InfographicToolbar key={entry.id} preElement={entry.preElement} />, entry.mountPoint);
-          case 'quiz':
-            return createPortal(<QuizBlock key={entry.id} element={entry.preElement} />, entry.mountPoint);
-          case 'friend-links':
-            return createPortal(<FriendLinksGrid key={entry.id} gridElement={entry.preElement} />, entry.mountPoint);
-          case 'audio':
-            return createPortal(<AudioPlayer key={entry.id} element={entry.preElement} />, entry.mountPoint);
-          case 'video':
-            return createPortal(<VideoPlayer key={entry.id} element={entry.preElement} />, entry.mountPoint);
-          case 'note':
-            return createPortal(
-              <NoteBlockIcon key={entry.id} noteType={extractNoteType(entry.preElement)} />,
-              entry.mountPoint,
-            );
-          case 'encrypted':
-            return createPortal(
-              <EncryptedBlock key={entry.id} element={entry.preElement} sanitizeHtml={sanitizeDecryptedHtml} />,
-              entry.mountPoint,
-            );
-          case 'encrypted-post':
-            return createPortal(
-              <EncryptedPost key={entry.id} element={entry.preElement} sanitizeHtml={sanitizeDecryptedHtml} />,
-              entry.mountPoint,
-            );
-          default:
-            return null;
-        }
-      })}
-    </>
-  );
+  return null;
 }

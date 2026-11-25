@@ -1,52 +1,39 @@
 ---
-import PageIntro from '@components/common/PageIntro.astro';
-import HomeSider from '@components/layout/HomeSider.astro';
-import SeriesIssues from '@components/series/SeriesIssues.astro';
-import SeriesCover from '@components/ui/cover/SeriesCover.astro';
-import { siteConfig } from '@constants/site-config';
-import { Layout, TwoColumnLayout } from '@layouts/index';
-import { siteTimezone } from '@lib/config/site';
+import PostList from '@components/post/PostList.astro';
+import { HomeSiderType } from '@constants/enum';
+import { featuredSeriesList } from '@constants/site-config';
+import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
 import type { FeaturedSeriesItem } from '@lib/config/types';
-import { getPostsByCategory, translateSeriesField } from '@lib/content';
-import { toPostCardDataList } from '@lib/content/transforms';
-import { formatInTimeZone } from 'date-fns-tz';
-import { t } from '@/i18n';
-import { seriesRoute } from './_shared/routes';
+import { getSeriesPostsByCategory } from '@lib/content/posts';
+import { defaultLocale } from '@/i18n';
 
-export const getStaticPaths = seriesRoute.root;
+export async function getStaticPaths() {
+  return featuredSeriesList
+    .filter((s) => s.enabled)
+    .map((series) => ({
+      params: { seriesSlug: series.slug },
+      props: { series, locale: defaultLocale },
+    }));
+}
 
 interface Props {
   series: FeaturedSeriesItem;
-  locale: string;
+  locale?: string;
 }
 
-const { series, locale } = Astro.props;
-
-// Get all posts for this series (transform to card data)
-const seriesPosts = series.categoryName
-  ? toPostCardDataList(await getPostsByCategory(series.categoryName, locale), locale)
-  : [];
-
-const seriesFullName = translateSeriesField(series.slug, 'fullName', series.fullName, locale);
-const seriesLabel = translateSeriesField(series.slug, 'label', series.label, locale);
-const pageTitle = `${seriesFullName || seriesLabel || series.categoryName} | ${siteConfig.title}`;
-// Oldest–newest year of the run; one year when the series has not crossed a new year yet.
-const span = [
-  ...new Set([seriesPosts.at(-1), seriesPosts[0]].map((post) => post && formatInTimeZone(post.date, siteTimezone, 'yyyy'))),
-];
-const stats = [
-  { value: seriesPosts.length, label: t(locale, 'series.issues') },
-  ...(span[0] ? [{ value: span.join('–'), label: t(locale, 'index.years') }] : []),
-];
+const { series, locale = defaultLocale } = Astro.props;
+const posts = await getSeriesPostsByCategory(series.categoryName, locale);
 ---
 
-<Layout articleTools={false} locale={locale} title={pageTitle} description={series.description?.slice(0, 160)} heroImage={series.cover ?? null}>
-  <TwoColumnLayout showPostFooter={false}>
-    <SeriesCover slot="cover" series={series} />
-    <HomeSider slot="sider" />
-    <div class="index-surface shadow-box">
-      <PageIntro stats={stats} />
-      <SeriesIssues posts={seriesPosts} locale={locale} />
-    </div>
-  </TwoColumnLayout>
-</Layout>
+<TwoColumnLayout
+  title={series.fullName}
+  description={series.description}
+  cover={series.cover}
+  coverTitle={series.fullName}
+  coverSubtitle={series.description}
+  siderType={HomeSiderType.HOME}
+  locale={locale}
+  compactHero={true}
+>
+  <PostList posts={posts} locale={locale} />
+</TwoColumnLayout>

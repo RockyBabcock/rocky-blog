@@ -1,0 +1,19 @@
+---
+import WritingRoom from '@components/editor/WritingRoom';
+import { MAX_WIDTH } from '@constants/layout';
+import Layout from '@layouts/Layout.astro';
+import { defaultLocale, t } from '@/i18n';
+
+const locale = defaultLocale;
+---
+
+<Layout
+  title={t(locale, 'editor.title')}
+  coverTitle={t(locale, 'editor.title')}
+  locale={locale}
+  compactHero={true}
+>
+  <div class:list={['mx-auto mt-6 w-full px-4 md:px-3', MAX_WIDTH.content]}>
+    <WritingRoom client:only="react" />
+  </div>
+</Layout>

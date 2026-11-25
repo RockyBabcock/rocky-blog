@@ -1,6 +1,12 @@
 ---
-import { getLocaleStaticPaths } from '../_shared/utils';
-import MusicPage from '../music.md';
-export const getStaticPaths = getLocaleStaticPaths;
+import { getLocaleStaticPaths } from '@/i18n';
+import MusicPage from '../music.astro';
+
+export function getStaticPaths() {
+  return getLocaleStaticPaths();
+}
+
+const { lang } = Astro.params;
 ---
-<MusicPage />
+
+<MusicPage locale={lang} />
