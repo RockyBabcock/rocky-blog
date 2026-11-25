@@ -8,7 +8,7 @@ import PostFooter from '@/components/post/PostFooter.astro';
 interface Props {
   className?: string;
   post?: BlogPost;
-  /** Moments and other utility pages do not need article-only related/random content. */
+  /** Utility pages can omit article-only related/random footer content. */
   showPostFooter?: boolean;
 }
 

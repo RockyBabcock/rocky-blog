@@ -5,16 +5,16 @@
  * all playback logic to the shared useMediaPlayer hook.
  */
 
-import type { AudioTrack } from '@lib/audio-tracks';
+import type { MetingSong } from '@lib/meting';
 import { useCallback, useEffect, useRef } from 'react';
 import { getStoredVolume } from '../store/player';
 import { useMediaPlayer } from './useMediaPlayer';
 
-function getTrackUrl(track: AudioTrack): string {
+function getTrackUrl(track: MetingSong): string {
   return track.url;
 }
 
-export function useAudioPlayer(tracks: AudioTrack[]) {
+export function useAudioPlayer(tracks: MetingSong[]) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Create Audio element once

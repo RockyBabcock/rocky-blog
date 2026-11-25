@@ -5,7 +5,6 @@
  * Add settings here and implement their application logic in src/store/settings.ts.
  */
 
-import { christmasConfig } from '@constants/site-config';
 import type { TranslationKey } from '@/i18n/types';
 
 export type SettingSection = 'reader' | 'general';
@@ -28,8 +27,6 @@ export interface SettingItem {
   step?: number;
   /** Options for segmented controls. */
   options?: SettingOption[];
-  /** Build-time feature gate that hides unavailable settings. */
-  gatedBy?: 'christmas';
   /** Disable this setting while the motion level is `reduced`. */
   disabledByReducedMotion?: boolean;
 }
@@ -87,13 +84,6 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     i18nKey: 'settings.scrollProgress',
   },
   {
-    key: 'christmas',
-    section: 'general',
-    type: 'switch',
-    i18nKey: 'settings.christmas',
-    gatedBy: 'christmas',
-  },
-  {
     key: 'motionLevel',
     section: 'general',
     type: 'segmented',
@@ -116,7 +106,6 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
 /**
  * Hide settings whose build-time feature is unavailable.
  */
-export function isSettingVisible(item: SettingItem): boolean {
-  if (item.gatedBy === 'christmas') return christmasConfig.enabled;
+export function isSettingVisible(_item: SettingItem): boolean {
   return true;
 }

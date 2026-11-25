@@ -2,12 +2,11 @@ import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { unified } from '@astrojs/markdown-remark';
-import node from '@astrojs/node';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import yaml from '@rollup/plugin-yaml';
 import tailwindcss from '@tailwindcss/vite';
-import { defineConfig, memoryCache } from 'astro/config';
+import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
 import pagefind from 'astro-pagefind';
 import robotsTxt from 'astro-robots-txt';
@@ -20,12 +19,8 @@ import Sonda from 'sonda/vite';
 import { loadEnv } from 'vite';
 import svgr from 'vite-plugin-svgr';
 import YAML from 'yaml';
-import { momentsRoutes } from './src/features/moments/integration/momentsRoutes.ts';
 import { normalizeContentConfig } from './src/lib/config/content.ts';
-import { enabledFeaturedSeriesSlugs, normalizeFeaturedSeries } from './src/lib/config/featured-series.ts';
 import { BUNDLED_ICON_SETS } from './src/lib/config/icon-sets.ts';
-import { normalizeMomentsConfig } from './src/lib/config/moments.ts';
-import { RESERVED_ROUTES } from './src/lib/config/reserved-routes.ts';
 import { lazyMermaid } from './src/lib/markdown/lazy-mermaid.ts';
 import { mermaidThemeCSS } from './src/lib/markdown/mermaid-theme.ts';
 import { rehypeEncryptedBlock } from './src/lib/markdown/rehype-encrypted-block.ts';
@@ -66,125 +61,6 @@ const i18nYaml = yamlConfig.i18n;
 const i18nDefaultLocale = i18nYaml?.defaultLocale ?? 'zh';
 const i18nLocales = (i18nYaml?.locales ?? [{ code: 'zh' }]).map((l) => l.code);
 const hasMultipleLocales = i18nLocales.length > 1;
-const enabledI18nLocales = (i18nYaml?.locales ?? [{ code: 'zh' }])
-  .filter((locale) => locale.enabled !== false)
-  .map((locale) => locale.code);
-
-const featuredSeries = normalizeFeaturedSeries(yamlConfig.featuredSeries, {
-  categoryMap: yamlConfig.categoryMap,
-  reservedRoutes: RESERVED_ROUTES,
-});
-const momentsConfig = normalizeMomentsConfig(yamlConfig.moments, {
-  reservedRoutes: RESERVED_ROUTES,
-  localeCodes: enabledI18nLocales,
-  seriesSlugs: enabledFeaturedSeriesSlugs(featuredSeries),
-});
-
-function assertMomentsOgImage(image, field) {
-  if (!image?.startsWith('/')) return;
-  const publicFile = path.join(process.cwd(), 'public', image.slice(1));
-  if (!fs.existsSync(publicFile) || !fs.statSync(publicFile).isFile()) {
-    throw new Error(`Moments configuration error: "${field}" does not exist in public: ${image}`);
-  }
-}
-
-if (momentsConfig.enabled) {
-  assertMomentsOgImage(momentsConfig.ogImage, 'ogImage');
-  for (const [index, channel] of momentsConfig.channels.entries()) {
-    assertMomentsOgImage(channel.ogImage, `channels[${index}].ogImage`);
-  }
-  const suiteUrl = env.KOHARU_SUITE_URL;
-  if (!suiteUrl) throw new Error('KOHARU_SUITE_URL is required when moments.enabled is true.');
-  const parsedSuiteUrl = new URL(suiteUrl);
-  if (
-    !['http:', 'https:'].includes(parsedSuiteUrl.protocol) ||
-    parsedSuiteUrl.username ||
-    parsedSuiteUrl.password ||
-    parsedSuiteUrl.pathname !== '/' ||
-    parsedSuiteUrl.search ||
-    parsedSuiteUrl.hash
-  ) {
-    throw new Error('KOHARU_SUITE_URL must be an HTTP(S) origin without credentials, query, or fragment.');
-  }
-}
-
-/**
- * Vite plugin for conditional Three.js bundling
- * When christmas snowfall is disabled, replaces SnowfallCanvas with a noop component
- * This saves ~879KB from the bundle
- */
-function conditionalSnowfall() {
-  const VIRTUAL_ID = 'virtual:snowfall-canvas';
-  const RESOLVED_ID = `\0${VIRTUAL_ID}`;
-  const christmas = yamlConfig.christmas || { enabled: false, features: {} };
-  const isEnabled = christmas.enabled && christmas.features?.snowfall;
-
-  return {
-    name: 'conditional-snowfall',
-    resolveId(id) {
-      if (id === VIRTUAL_ID) return RESOLVED_ID;
-      // Redirect the alias import to virtual module when disabled
-      if (!isEnabled && id === '@components/christmas/SnowfallCanvas') {
-        return RESOLVED_ID;
-      }
-    },
-    load(id) {
-      if (id === RESOLVED_ID) {
-        // Return noop component when christmas is disabled
-        return 'export function SnowfallCanvas() { return null; }';
-      }
-    },
-  };
-}
-
-/**
- * Vite plugin for conditional comment SDK bundling
- * Replaces unused comment provider modules (Twikoo ~970KB, Waline ~263KB, Giscus)
- * with a virtual noop component so only the configured provider is emitted.
- */
-function conditionalComment() {
-  const VIRTUAL_ID = 'virtual:noop-comment-provider';
-  const RESOLVED_ID = `\0${VIRTUAL_ID}`;
-  const activeProvider = yamlConfig.comment?.provider ?? 'none';
-  const providerModules = {
-    './Waline': 'waline',
-    './Twikoo': 'twikoo',
-    './Giscus': 'giscus',
-  };
-  const providerFiles = {
-    'src/components/comment/providers/Waline.tsx': 'waline',
-    'src/components/comment/providers/Twikoo.tsx': 'twikoo',
-    'src/components/comment/providers/Giscus.tsx': 'giscus',
-  };
-
-  return {
-    name: 'conditional-comment',
-    enforce: 'pre',
-    resolveId(id, importer) {
-      if (id === VIRTUAL_ID) return RESOLVED_ID;
-      const cleanImporter = importer?.split('?')[0].replaceAll('\\', '/');
-      if (cleanImporter?.endsWith('src/components/comment/providers/DeferredComment.tsx')) {
-        const providerName = providerModules[id];
-        if (providerName && providerName !== activeProvider) {
-          return RESOLVED_ID;
-        }
-      }
-      return undefined;
-    },
-    load(id) {
-      if (id === RESOLVED_ID) {
-        return 'export default function NoopCommentProvider() { return null; }';
-      }
-      const cleanId = id.split('?')[0].replaceAll('\\', '/');
-      for (const [suffix, providerName] of Object.entries(providerFiles)) {
-        if (cleanId.endsWith(suffix) && providerName !== activeProvider) {
-          return 'export default function NoopCommentProvider() { return null; }';
-        }
-      }
-      return undefined;
-    },
-  };
-}
 
 // Build conditional plugin lists based on content config
 const contentConfig = normalizeContentConfig(yamlConfig.content);
@@ -315,14 +191,7 @@ export default defineConfig({
       mermaidConfig: { themeCSS: mermaidThemeCSS },
     }),
     robotsTxt(robotsConfig || {}),
-    ...(momentsConfig.enabled ? [momentsRoutes(momentsConfig)] : []),
   ],
-  ...(momentsConfig.enabled
-    ? {
-        adapter: node({ mode: 'standalone' }),
-        cache: { provider: memoryCache({ max: 1000 }) },
-      }
-    : {}),
   devToolbar: {
     enabled: true,
   },
@@ -364,8 +233,6 @@ export default defineConfig({
     plugins: [
       ...(isAnalyze ? [Sonda({ open: false })] : []),
       yaml(),
-      conditionalSnowfall(),
-      conditionalComment(),
       svgr(),
       tailwindcss(),
     ],

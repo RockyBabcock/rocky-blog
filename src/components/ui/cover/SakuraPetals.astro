@@ -64,20 +64,9 @@
       window.addEventListener('pointermove', onPointerMove, { passive: true });
       const unsubscribe = subscribeMotionLevel(() => this.sync());
 
-      let christmas = document.documentElement.classList.contains('christmas');
-      const effectsObserver = new MutationObserver(() => {
-        const next = document.documentElement.classList.contains('christmas');
-        if (next !== christmas) {
-          christmas = next;
-          this.sync();
-        }
-      });
-      effectsObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
       this.cleanups = [
         () => resizeObserver.disconnect(),
         () => intersectionObserver.disconnect(),
-        () => effectsObserver.disconnect(),
         () => document.removeEventListener('visibilitychange', onVisibilityChange),
         () => window.removeEventListener('pointermove', onPointerMove),
         unsubscribe,
@@ -110,7 +99,7 @@
       if (!field || !this.isConnected) return;
       const onScreen = this.visible && document.visibilityState === 'visible';
       const level = readMotionLevel();
-      const allowed = this.ready && level === 'lively' && !document.documentElement.classList.contains('christmas');
+      const allowed = this.ready && level === 'lively';
       this.classList.toggle('is-active', allowed);
       window.clearTimeout(this.stopTimer);
       if (allowed && onScreen) {

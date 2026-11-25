@@ -3,14 +3,15 @@
  */
 
 import { usePlaybackLrcIndex } from '@hooks/usePlaybackTime';
-import type { AudioTrack } from '@lib/audio-tracks';
+import type { MetingSong } from '@lib/meting';
+import { resolveMusicCoverUrl } from '@lib/music-cover';
 import type { PlaybackTimeStore } from '@lib/playback-time-store';
 import { cn } from '@lib/utils';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { parseLrc } from './LrcParser';
 
 interface PlayerPreviewProps {
-  track: AudioTrack | null;
+  track: MetingSong | null;
   playing: boolean;
   timeStore: PlaybackTimeStore;
   /** Line height in px — must match CSS `.audio-player-lrc p` height. @default 32 */
@@ -60,7 +61,7 @@ export const PlayerPreview = memo(function PlayerPreview({
   lrcContainerHeight = DEFAULT_LRC_CONTAINER_HEIGHT,
   reserveLyrics = false,
 }: PlayerPreviewProps) {
-  const coverUrl = track?.pic ?? '';
+  const coverUrl = resolveMusicCoverUrl(track?.pic);
   const lrcText = useLrcText(track?.lrc);
   const lrcLines = useMemo(() => parseLrc(lrcText), [lrcText]);
   const currentLrcIndex = usePlaybackLrcIndex(timeStore, lrcLines);

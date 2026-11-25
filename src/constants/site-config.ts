@@ -6,21 +6,17 @@
  * may import this module — depend on `@lib/config/*` instead.
  */
 
-import { normalizeMomentsConfig, resolveMomentsNavigation } from '@lib/config/moments';
 import {
   contentConfig,
-  enabledLocaleCodes,
   enabledSeriesSlugList,
   featuredSeriesList,
   i18nConfig,
   motionConfig,
   siteConfig,
 } from '@lib/config/site';
-import type { AnalyticsConfig, ChristmasConfig, CommentConfig, DevConfig, RouterItem, SocialConfig } from '@lib/config/types';
-import { createUmamiStatsConfig } from '@lib/umami-stats';
-import type { UmamiStatsConfig } from '@/types/umami-stats';
+import type { DevConfig, RouterItem, SocialConfig } from '@lib/config/types';
 import yamlConfig from '../../config/site.yaml';
-import { DEFAULT_ROUTERS, RESERVED_ROUTES } from './router';
+import { DEFAULT_ROUTERS } from './router';
 
 export { contentConfig, i18nConfig, motionConfig, siteConfig };
 
@@ -46,57 +42,8 @@ export const seoConfig = {
 const BUILT_IN_COVERS = Array.from({ length: 21 }, (_, i) => `/img/cover/${i + 1}.webp`);
 export const defaultCoverList = yamlConfig?.defaultCoverList?.length ? yamlConfig.defaultCoverList : BUILT_IN_COVERS;
 
-// Map YAML comment config
-export const commentConfig: CommentConfig = yamlConfig.comment || {};
-
-// Map YAML analytics config
-export const analyticsConfig: AnalyticsConfig = yamlConfig.analytics || {};
-
-const _umami = analyticsConfig?.umami;
-
-/** Pre-computed site-wide pageview stats config. null when disabled or token missing. */
-export const umamiSiteStatsConfig: UmamiStatsConfig | null =
-  _umami?.enabled && _umami.statistics_display?.token && _umami.statistics_display?.footer_site_stats
-    ? createUmamiStatsConfig(_umami)
-    : null;
-
-/** Create per-page article stats config. Returns null when disabled or token missing. */
-export function createArticleStatsConfig(href: string): UmamiStatsConfig | null {
-  return _umami?.enabled && _umami.statistics_display?.token && _umami.statistics_display?.article_page_views
-    ? createUmamiStatsConfig(_umami, href)
-    : null;
-}
-
-// Map YAML christmas config with defaults
-export const christmasConfig: ChristmasConfig = yamlConfig.christmas || {
-  enabled: false,
-  features: {
-    snowfall: true,
-    christmasColorScheme: true,
-    christmasCoverDecoration: true,
-    christmasHat: true,
-    readingTimeSnow: true,
-  },
-  snowfall: {
-    speed: 0.5,
-    intensity: 0.7,
-    mobileIntensity: 0.4,
-    maxLayers: 6,
-    maxIterations: 8,
-    mobileMaxLayers: 4,
-    mobileMaxIterations: 6,
-  },
-};
-
-/** Validated opt-in moments configuration. Disabled when the YAML section is absent. */
-export const momentsConfig = normalizeMomentsConfig(yamlConfig.moments, {
-  reservedRoutes: RESERVED_ROUTES,
-  localeCodes: enabledLocaleCodes,
-  seriesSlugs: enabledSeriesSlugList,
-});
-
-// Navigation routers with resolved feature placeholders
-export const routers: RouterItem[] = resolveMomentsNavigation(yamlConfig.navigation ?? DEFAULT_ROUTERS, momentsConfig);
+// Navigation routers
+export const routers: RouterItem[] = yamlConfig.navigation ?? DEFAULT_ROUTERS;
 
 // Map YAML dev tools config with defaults (dev only)
 export const devConfig: DevConfig = {

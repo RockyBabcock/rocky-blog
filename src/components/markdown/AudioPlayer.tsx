@@ -1,14 +1,14 @@
 /**
  * AudioPlayer — Shoka-style inline audio player for articles.
  *
- * Uses direct HTML5 audio URLs parsed from `data-src` without any
- * third-party playlist API (Meting / NetEase / QQ Music) dependency.
+ * Resolves both Meting music links (NetEase / QQ Music songs & playlists)
+ * and direct HTML5 audio URLs from `data-src`.
  */
 
 import { useAudioPlayer } from '@hooks/useAudioPlayer';
 import { useTranslation } from '@hooks/useTranslation';
-import { parseAudioTracksFromJson } from '@lib/audio-tracks';
-import { useEffect, useMemo, useState } from 'react';
+import { type AudioPlaylistGroup, type MetingSong, resolveAudioPlaylist } from '@lib/meting';
+import { useCallback, useEffect, useState } from 'react';
 import { PlayerPlaylist } from './audio-player/PlayerPlaylist';
 import { PlayerPreview } from './audio-player/PlayerPreview';
 import { MediaControls } from './shared/MediaControls';
@@ -19,8 +19,39 @@ interface AudioPlayerProps {
 
 export function AudioPlayer({ element }: AudioPlayerProps) {
   const { t } = useTranslation();
-  const { tracks, groups } = useMemo(() => parseAudioTracksFromJson(element.dataset.src), [element]);
+  const rawSrc = element.dataset.src;
+
+  const [tracks, setTracks] = useState<MetingSong[]>([]);
+  const [groups, setGroups] = useState<AudioPlaylistGroup[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadToken, setReloadToken] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
+
+  const retry = useCallback(() => {
+    setReloadToken((n) => n + 1);
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setLoading(true);
+    setError(null);
+
+    resolveAudioPlaylist(rawSrc, { signal: controller.signal })
+      .then((resolved) => {
+        if (controller.signal.aborted) return;
+        setTracks(resolved.songs);
+        setGroups(resolved.groups);
+        setLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (controller.signal.aborted) return;
+        setError(err instanceof Error ? err.message : String(err));
+        setLoading(false);
+      });
+
+    return () => controller.abort();
+  }, [rawSrc, reloadToken]);
 
   const player = useAudioPlayer(tracks);
   const currentTrack = tracks[player.state.currentIndex] ?? null;
@@ -32,6 +63,30 @@ export function AudioPlayer({ element }: AudioPlayerProps) {
     );
     if (idx >= 0) setActiveTab(idx);
   }, [player.state.currentIndex, groups]);
+
+  if (loading) {
+    return (
+      <div className="audio-player not-prose">
+        <div className="audio-player-loading">
+          <span className="audio-player-spinner" aria-hidden="true" />
+          <span>{t('audio.loading')}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="audio-player not-prose">
+        <div className="audio-player-error">
+          <span>{t('audio.loadError', { error })}</span>
+          <button type="button" className="audio-player-retry" onClick={retry}>
+            {t('audio.retry')}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (tracks.length === 0) {
     return (

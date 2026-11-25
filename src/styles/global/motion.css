@@ -131,7 +131,6 @@ html.motion-off
     .rainbow,
     .typewriter-cursor,
     .audio-player-disc,
-    .lightrope li,
     .animate-ping,
     .sider-slot.entering,
     .cat-404 *
@@ -141,11 +140,6 @@ html.motion-off
 
 html.motion-off .cat-404 :is(.face-features, .digit-0-bg) {
   opacity: 0;
-}
-
-html.motion-off [data-moments-entering] {
-  opacity: 1;
-  transform: none;
 }
 
 html.motion-off::view-transition-group(*),
@@ -176,7 +170,6 @@ html.motion-off [data-astro-transition-scope] {
     .rainbow,
     .typewriter-cursor,
     .audio-player-disc,
-    .lightrope li,
     .animate-ping,
     .sider-slot.entering,
     .cat-404 *

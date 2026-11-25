@@ -4,7 +4,6 @@ import HomeSider from '@components/layout/HomeSider.astro';
 import Cover from '@components/ui/cover/Cover.astro';
 import { CONTENT_PADDING } from '@constants/layout';
 import { seoConfig } from '@constants/site-config';
-import { Comment } from '@/components/comment';
 import Layout from './Layout.astro';
 import TwoColumnLayout from './TwoColumnLayout.astro';
 
@@ -13,12 +12,10 @@ export interface Props {
     title: string;
     description?: string;
     coverTitle?: string;
-    comments?: boolean;
   };
 }
 
 const { frontmatter } = Astro.props;
-const showComments = frontmatter.comments ?? true;
 ---
 
 <Layout title={`${frontmatter.title} | ${seoConfig.title}`}>
@@ -33,7 +30,6 @@ const showComments = frontmatter.comments ?? true;
           <slot />
         </CustomContent>
       </div>
-      {showComments && <Comment />}
     </div>
   </TwoColumnLayout>
 </Layout>

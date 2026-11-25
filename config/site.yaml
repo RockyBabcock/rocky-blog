@@ -4,7 +4,7 @@
 # =============================================================================
 # This file contains all site-specific configurations.
 # Modify this file to customize your blog.
-# After changes, rebuild the site: docker compose up -d --build
+# After changes, restart the dev server or rebuild: pnpm build
 # =============================================================================
 
 # =============================================================================
@@ -34,7 +34,7 @@ site:
   #   text: "粤ICP备xxxxxxxxxx号"
   #   link: "https://beian.miit.gov.cn/"
   # Enable slug transliteration (converts CJK characters to pinyin/romaji)
-  # Note: enabling this will break existing CJK URLs. Run `pnpm save-slugs` first to save old slugs into frontmatter.link
+  # Note: enabling this will change existing CJK URLs unless frontmatter.link is set.
   # enableSlugTransliteration: true
 
 # =============================================================================
@@ -321,29 +321,6 @@ motion:
   clickBurst: true
 
 # =============================================================================
-# Moments Archive (optional)
-# 碎碎念动态归档 - 默认关闭；启用时还需配置 KOHARU_SUITE_URL 和 dynamic Docker target
-# =============================================================================
-moments:
-  enabled: false
-  path: moments # 支持嵌套路径，例如 life/moments；不要添加首尾斜线
-  title: 碎碎念
-  description: 记录频道中的日常消息
-  # ogImage: /img/moments-og.png
-  # pathAliases:
-  #   - telegram
-  # channels: # 可省略；省略时按 suite 返回结果展示所有公开频道
-  #   - id: 550e8400-e29b-41d4-a716-446655440000
-  #     slug: daily
-  #     title: 日常
-  #     primary: true
-  #     hidden: false
-  #     ogImage: /img/daily-og.png
-  #     aliases:
-  #       - old-daily
-
-
-# =============================================================================
 # Colophon (落款)
 # 文章落款 - 为文章标注创作方式、阅读提示等，字典在这里定义，文章 frontmatter 引用
 # =============================================================================
@@ -468,9 +445,6 @@ navigation:
     nameKey: nav.weekly
     path: /weekly
     icon: ri:newspaper-line
-  # Optional explicit Moments position. When omitted, enabled Moments is inserted after Archives.
-  # - feature: moments
-  #   icon: ri:chat-smile-3-fill
   - name: 文章 # 有子菜单时，path 可省略
     nameKey: nav.posts
     icon: ri:quill-pen-ai-fill
@@ -493,169 +467,6 @@ navigation:
     icon: fa6-regular:circle-user
 
 # =============================================================================
-# Christmas/Seasonal Features
-# 圣诞/季节性装饰功能 - 节日期间的特殊视觉效果 后续考虑新增 theme.yaml 来管理
-# =============================================================================
-# enabled: 总开关，设为 false 关闭所有节日效果
-# features: 各功能独立开关
-#   snowfall: 飘雪动画效果
-#   christmasColorScheme: 圣诞主题配色
-#   christmasCoverDecoration: 封面圣诞装饰
-#   christmasHat: 头像添加圣诞帽
-#   readingTimeSnow: 阅读时间旁显示雪花图标
-# snowfall: 飘雪效果参数（影响性能，移动端建议降低）
-#   speed: 下落速度 (0-1)，越大越快
-#   intensity: 雪花密度 (0-1)，越大越密
-#   mobileIntensity: 移动端密度，建议低于桌面端
-#   maxLayers: 最大层数，影响立体感
-#   maxIterations: 最大迭代次数，影响雪花数量
-#   mobileMaxLayers: 移动端最大层数
-#   mobileMaxIterations: 移动端最大迭代次数
-
-
-# =============================================================================
-# Comment System
-# =============================================================================
-# provider: 评论系统提供商 ('remark42' | 'giscus' | 'waline' | 'twikoo' | 'none')
-#           设为 'none' 或不设置时禁用评论系统
-# 各提供商配置：
-# -----------------------------------------------------------------------------
-#   remark42: 自托管轻量级评论系统 (https://remark42.com/docs/getting-started/installation/)
-#     host: https://comment.example.com/ # Remark42 服务器地址
-#     siteId: your-site-id # 站点 ID
-#   giscus: 基于 GitHub Discussions 的评论系统 (https://giscus.app)（介绍文章 https://zhuanlan.zhihu.com/p/693434928）
-#     repo: GitHub 仓库名 (owner/repo 格式)
-#     repoId: 仓库 ID (从 giscus.app 获取)
-#     category: Discussion 分类名称
-#     categoryId: 分类 ID (从 giscus.app 获取)
-#     mapping: 映射方式 ('pathname' | 'url' | 'title' | 'og:title'……)
-#     reactionsEnabled: 启用 reactions (默认: '1') # 仅支持 '0' | '1'
-#     emitMetadata: 发送元数据 (默认: '0') # 仅支持 '0' | '1'
-#     inputPosition: 输入框位置 ('top' | 'bottom', 默认: 'top')
-#     lang: 语言 (默认: 'zh-CN')
-#     host: 自定义 giscus 主机 (可选) 'https://giscus.app' | '...'
-#     theme: 主题 (可选) 'light' | 'dark' | '...'
-#     loading: 加载方式 (可选) 'lazy' | 'eager';
-#   waline: 简洁安全的评论系统 (https://waline.js.org)
-#     serverURL: Waline 服务端地址 (必填)
-#     lang: 语言 (默认: 'zh-CN')
-#     dark: 暗黑模式支持 (默认: 'html.dark')
-#           - 字符串: CSS 选择器，当该选择器生效时启用暗黑模式
-#           - true: 根据设备自适应
-#           - false: 禁用暗黑模式
-#     meta: 评论者信息字段 (默认: ['nick', 'mail', 'link'])
-#     requiredMeta: 必填字段 (默认: [])
-#     login: 登录模式 ('enable' | 'disable' | 'force', 默认: 'enable')
-#     wordLimit: 评论字数限制
-#           - 单个数字: 最大字数限制
-#           - 数组 [min, max]: 最小和最大字数限制
-#           - 0: 无限制 (默认: 0)
-#     pageSize: 每页评论数 (默认: 10)
-#     imageUploader: 图片上传功能 (默认: false)
-#     highlighter: 代码高亮 (默认: true)
-#     texRenderer: LaTeX 渲染 (默认: false)
-#     search: 搜索功能 (默认: false)
-#     reaction: 文章反应功能
-#           - false: 禁用 (默认)
-#           - true: 启用默认反应
-#           - 数组: 自定义反应图标 URL 列表
-#     emoji: 表情包配置
-#           - false: 禁用表情包
-#           - true: 使用默认表情包
-#           - 数组: 自定义表情包列表 (默认: ['//unpkg.com/@waline/emojis@1.2.0/weibo'])
-#     commentSorting: 评论排序方式 ('latest' | 'oldest' | 'hottest', 默认: 'latest')
-#     noCopyright: 隐藏页脚版权信息 (默认: false)
-#     comment: 评论数统计 (默认: true)
-#     pageview: 页面访问量统计 (默认: true)
-#     recaptchaV3Key: reCAPTCHA v3 Key (可选)
-#     turnstileKey: Cloudflare Turnstile Key (可选)
-#     locale: 自定义语言显示 (可选)
-  # twikoo:
-    # envId: # Twikoo 环境 ID (腾讯云) 或 Vercel 环境地址 (必填)
-    # region: # 环境地域，默认为 ap-shanghai
-    # path: # 用于区分不同文章的自定义 js 路径，如果您的文章路径不是 location.pathname，需传此参数
-    # lang: # 语言 (默认: 'zh-CN')
-comment:
-  provider: none  # 'remark42' | 'giscus' | 'waline' | 'twikoo' | 'none'
-  # remark42:
-  #   host: https://comment.example.com/
-  #   siteId: your-site-id
-  # giscus:
-  #   repo: username/repo              # GitHub 仓库名 (owner/repo 格式)
-  #   repoId: R_kgDOxxxxxx             # 仓库 ID (从 giscus.app 获取)
-  #   category: Announcements          # Discussion 分类名称
-  #   categoryId: DIC_kwDOxxxxxx       # 分类 ID (从 giscus.app 获取)
-  #   mapping: pathname                # 映射方式
-  #   reactionsEnabled: '1'            # 启用 reactions ('0' | '1')
-  #   emitMetadata: '0'                # 发送元数据 ('0' | '1')
-  #   inputPosition: top               # 输入框位置 ('top' | 'bottom')
-  #   lang: zh-CN                      # 语言
-
-  # waline:
-  #   serverURL: https://your-waline.vercel.app  # Waline 服务端地址 (必填)
-  #   lang: zh-CN                      # 语言 (默认: 'zh-CN')
-  #   dark: html.dark                  # 暗黑模式 (默认: 'html.dark')
-  #                                    # 可选: true (自适应) | false (禁用) | CSS选择器字符串
-  #   meta:                            # 评论者信息字段 (默认: ['nick', 'mail', 'link'])
-  #     - nick
-  #     - mail
-  #     - link
-  #   requiredMeta:                    # 必填字段 (默认: [])
-  #     - nick
-  #   login: enable                    # 登录模式 ('enable' | 'disable' | 'force', 默认: 'enable')
-  #   wordLimit: 0                     # 评论字数限制 (0 = 无限制, 默认: 0)
-  #                                    # 可选: 单个数字 | [min, max] 数组
-  #   pageSize: 10                     # 每页评论数 (默认: 10)
-  #   imageUploader: false             # 图片上传功能 (默认: false)
-  #   highlighter: true                # 代码高亮 (默认: true)
-  #   texRenderer: false               # LaTeX 渲染 (默认: false)
-  #   search: false                    # 搜索功能 (默认: false)
-  #   reaction: false                  # 文章反应功能 (默认: false)
-  #                                    # 可选: true | false | 字符串数组 (自定义反应图标)
-  #   emoji: true                      # 表情包配置 (默认: ['//unpkg.com/@waline/emojis@1.2.0/weibo'])
-  #                                    # 可选: true | false | 字符串/对象数组
-  #                                    # 预设表情包: '//unpkg.com/@waline/emojis@1.2.0/weibo'
-  #                                    #           '//unpkg.com/@waline/emojis@1.2.0/alus'
-  #                                    #           '//unpkg.com/@waline/emojis@1.2.0/bilibili'
-  #                                    #           '//unpkg.com/@waline/emojis@1.2.0/qq'
-  #                                    #           '//unpkg.com/@waline/emojis@1.2.0/tieba'
-  #                                    #           '//unpkg.com/@waline/emojis@1.2.0/tw-emoji'
-  #   commentSorting: latest           # 评论排序 ('latest' | 'oldest' | 'hottest', 默认: 'latest')
-  #   noCopyright: false               # 隐藏页脚版权信息 (默认: false)
-  #   comment: true                    # 评论数统计 (默认: true)
-  #   pageview: true                   # 页面访问量统计 (默认: true)
-  #   # recaptchaV3Key: ''             # reCAPTCHA v3 Key (可选)
-  #   # turnstileKey: ''               # Cloudflare Turnstile Key (可选)
-  #   # locale:                        # 自定义语言显示 (可选)
-  #   #   placeholder: '请留言...'      # 自定义输入框占位文本
-  twikoo:
-    envId: https://your-twikoo.vercel.app  # Twikoo 环境 ID (腾讯云) 或 Vercel 环境地址 (必填)
-    # region: ap-shanghai              # 环境地域，默认为 ap-shanghai
-    # path: location.pathname          # 用于区分不同文章的自定义 js 路径
-    # lang: zh-CN                     # 语言 (默认: 'zh-CN')
-
-# =============================================================================
-# Analytics (Umami)
-# =============================================================================
-# id: Umami 网站 ID
-# endpoint: Umami 服务器地址
-# enabled: 是否启用统计
-# statistics_display: 统计信息显示配置
-#   token: Umami 分享链接令牌（只读，可安全暴露到客户端）
-#   article_page_views: 在文章详情页显示访问量
-#   footer_site_stats: 在页脚 Site Stats 中显示全站访问量
-# -----------------------------------------------------------------------------
-analytics:
-  umami:
-    enabled: true
-    id: your-umami-id
-    endpoint: https://stats.example.com
-    # statistics_display:
-    #   token: your-umami-share-token
-    #   article_page_views: true
-    #   footer_site_stats: true
-
-# =============================================================================
 # SEO Configuration
 # =============================================================================
 # https://github.com/alextim/astro-lib/tree/main/packages/astro-robots-txt#readme
@@ -674,28 +485,6 @@ seo:
     #     disallow:
     #       - '/api/'
     # host: true                       # 可选：添加 Host 指令（Yandex）
-
-# =============================================================================
-# Christmas/Seasonal Features
-# =============================================================================
-
-christmas:
-  enabled: false # 总开关
-  # features: # 各功能独立开关
-  #   snowfall: true # 飘雪效果
-  #   christmasColorScheme: true # 圣诞配色
-  #   christmasCoverDecoration: true # 封面装饰
-  #   christmasHat: true # 头像圣诞帽
-  #   readingTimeSnow: true # 阅读时间雪花图标
-  # snowfall: # 飘雪参数配置
-  #   speed: 0.5 # 下落速度 (0-1)
-  #   intensity: 0.7 # 雪花密度 (0-1)
-  #   mobileIntensity: 0.4 # 移动端密度（建议较低）
-  #   maxLayers: 6 # 最大层数
-  #   maxIterations: 8 # 最大迭代次数
-  #   mobileMaxLayers: 4 # 移动端最大层数
-  #   mobileMaxIterations: 6 # 移动端最大迭代次数
-
 
 # =============================================================================
 # Development Tools (Dev Only)

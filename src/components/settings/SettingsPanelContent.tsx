@@ -18,7 +18,6 @@ import { Icon } from '@iconify/react';
 import type { MotionLevel } from '@lib/config/types';
 import { cn } from '@lib/utils';
 import { useStore } from '@nanostores/react';
-import { christmasEnabled, toggleChristmas } from '@store/christmas';
 import { $isSettingsOpen, closeModal } from '@store/modal';
 import {
   type FontPreset,
@@ -85,7 +84,6 @@ export default function SettingsPanelContent() {
   const scrollProgress = useStore(scrollProgressEnabled);
   const level = useStore(motionLevel);
   const wave = useStore(waveEnabled);
-  const isChristmasEnabled = useStore(christmasEnabled);
   const [fontPickerLoaded, setFontPickerLoaded] = useState(false);
   const [fontPickerOpen, setFontPickerOpen] = useState(false);
   const fontPickerTriggerRef = useRef<HTMLButtonElement>(null);
@@ -100,7 +98,6 @@ export default function SettingsPanelContent() {
   const switchBindings: Record<string, { checked: boolean; onChange: (checked: boolean) => void }> = {
     justify: { checked: justify, onChange: setJustify },
     scrollProgress: { checked: scrollProgress, onChange: setScrollProgressEnabled },
-    christmas: { checked: isChristmasEnabled, onChange: () => toggleChristmas() },
     wave: { checked: wave, onChange: setWaveEnabled },
   };
 

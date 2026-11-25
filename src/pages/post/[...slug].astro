@@ -33,7 +33,6 @@ import { formatForSeo } from '@lib/date';
 import { encodeSlug } from '@lib/route';
 import { getOgImageUrl } from '@lib/seo/og-image';
 import { Icon } from 'astro-icon/components';
-import { Comment } from '@/components/comment';
 import PostMarkdownActions from '@/components/post/PostMarkdownActions';
 import { defaultLocale, getLocaleLabel, localizedPath, t } from '@/i18n';
 import { extractTextFromMarkdown } from '@/lib/sanitize';
@@ -254,7 +253,6 @@ if (post.data.description) {
       </article>
       {sealMarks.length > 0 && <ColophonSeal items={sealMarks} date={post.data.date} locale={locale} />}
       <PostPagination prevPost={prevPost} nextPost={nextPost} locale={locale} />
-      <Comment />
     </div>
   </TwoColumnLayout>
 </Layout>

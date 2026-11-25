@@ -9,7 +9,7 @@
 import { usePlaybackFormattedTime, usePlaybackProgress } from '@hooks/usePlaybackTime';
 import { useTranslation } from '@hooks/useTranslation';
 import { Icon } from '@iconify/react';
-import type { AudioPlaylistGroup, AudioTrack } from '@lib/audio-tracks';
+import type { AudioPlaylistGroup, MetingSong } from '@lib/meting';
 import type { PlaybackTimeStore } from '@lib/playback-time-store';
 import { cn } from '@lib/utils';
 import { memo, useRef } from 'react';
@@ -17,7 +17,7 @@ import { memo, useRef } from 'react';
 export type PlaylistGroup = AudioPlaylistGroup;
 
 interface PlayerPlaylistProps {
-  tracks: AudioTrack[];
+  tracks: MetingSong[];
   groups: PlaylistGroup[];
   currentIndex: number;
   timeStore: PlaybackTimeStore;

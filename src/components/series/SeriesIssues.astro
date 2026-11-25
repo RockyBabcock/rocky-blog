@@ -1,7 +1,6 @@
 ---
 import SakuraSVG from '@components/svg/SakuraSvg';
 import { Routes } from '@constants/router';
-import { createArticleStatsConfig } from '@constants/site-config';
 import { siteTimezone } from '@lib/config/site';
 import { groupPostsByYear } from '@lib/content/index-groups';
 import { parseIssueTitle } from '@lib/content/series-issue';
@@ -9,7 +8,6 @@ import { displayDate } from '@lib/date';
 import { routeBuilder } from '@lib/route';
 import { PETAL_MASK } from '@lib/sakura/petal';
 import { Icon } from 'astro-icon/components';
-import UmamiPVSpan from '@/components/umami/UmamiPVSpan';
 import { localizedPath, t } from '@/i18n';
 import type { PostCardData } from '@/types/blog';
 
@@ -31,7 +29,6 @@ const issues = posts.map((post) => {
   };
 });
 const [latest, ...rest] = issues;
-const latestStats = latest && createArticleStatsConfig(latest.href);
 const years = groupPostsByYear(rest, siteTimezone);
 ---
 {latest ? <div class="series-issues" style={{ '--petal-mask': PETAL_MASK }}>
@@ -52,7 +49,6 @@ const years = groupPostsByYear(rest, siteTimezone);
       <p class="issue-meta">
         <span>{t(locale, 'post.wordCount', { count: latest.post.wordCount })}</span>
         <span>{latest.post.readingTime}</span>
-        {latestStats && <span><Icon name="ri:eye-line" aria-hidden="true" /><UmamiPVSpan client:visible statsConfig={latestStats} /></span>}
       </p>
       <span class="issue-latest-cta" aria-hidden="true">{t(locale, 'series.readIssue')}<Icon name="ri:arrow-right-line" /></span>
     </div>

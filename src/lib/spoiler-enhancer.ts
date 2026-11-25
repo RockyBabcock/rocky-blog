@@ -120,7 +120,7 @@ export function __createSpoilerEnhancer(dependencies: SpoilerEnhancerDependencie
 
     // spoilerjs currently ships an English-only accessible name. Keep using its
     // native interaction while supplying the locale owned by the surrounding
-    // article or Moments card.
+    // article container.
     if (control.hasAttribute('aria-label')) {
       control.setAttribute('aria-label', revealLabelFor(spoiler));
     }
@@ -311,7 +311,7 @@ function restoreSpoilerFocus(spoiler: HTMLElement, previous: HTMLElement, attemp
   }
 }
 
-/** Lazily enhance Shoka and Telegram spoiler elements within a rendered subtree. */
+/** Lazily enhance Shoka spoiler elements within a rendered subtree. */
 export function enhanceSpoilers(root: ParentNode = document) {
   if (!observingMotion) {
     observingMotion = true;

@@ -3,14 +3,12 @@
  *
  * Floating action buttons for navigation and utilities.
  * - Scroll to top/bottom
- * - Christmas effects toggle
  * - Expand/collapse toggle, ringed with the reading progress
  */
 
 import { LazyMotionProvider } from '@components/common/LazyMotionProvider';
 import { preloadSettingsPanel } from '@components/settings/SettingsPanel';
 import { animation } from '@constants/design-tokens';
-import { christmasConfig } from '@constants/site-config';
 import { useIsMounted } from '@hooks/useIsMounted';
 import { useMotionLevel } from '@hooks/useMotionLevel';
 import { useTranslation } from '@hooks/useTranslation';
@@ -18,7 +16,6 @@ import { Icon } from '@iconify/react';
 import { getScrollBehavior } from '@lib/motion-level';
 import { cn } from '@lib/utils';
 import { useStore } from '@nanostores/react';
-import { christmasEnabled, disableChristmasCompletely, enableChristmas, initChristmasState } from '@store/christmas';
 import { $isDrawerOpen, $isSettingsOpen, toggleSettings } from '@store/modal';
 import { initSettings, scrollProgressEnabled } from '@store/settings';
 import { AnimatePresence, type MotionValue, m, useScroll, useSpring, type Variants } from 'motion/react';
@@ -65,14 +62,6 @@ function scrollToTop() {
 
 function scrollToBottom() {
   window.scrollTo({ top: document.documentElement.scrollHeight, behavior: getScrollBehavior() });
-}
-
-function toggleChristmas() {
-  if (christmasEnabled.get()) {
-    disableChristmasCompletely();
-  } else {
-    enableChristmas();
-  }
 }
 
 function FloatingButton({
@@ -144,14 +133,12 @@ export default function FloatingGroup() {
   // Phones and tablets start folded so the stack does not cover the text being read.
   const [isExpanded, setIsExpanded] = useState(() => !window.matchMedia('(max-width: 992px)').matches);
   const isDrawerOpen = useStore($isDrawerOpen);
-  const isChristmasEnabled = useStore(christmasEnabled);
   const isSettingsOpen = useStore($isSettingsOpen);
   const showProgress = useStore(scrollProgressEnabled);
   const reduced = useMotionLevel() === 'reduced';
 
-  // Initialize christmas & settings state on mount
+  // Initialize settings state on mount
   useEffect(() => {
-    initChristmasState();
     initSettings();
   }, []);
 
@@ -180,13 +167,6 @@ export default function FloatingGroup() {
               animate="open"
               exit="closed"
             >
-              {christmasConfig.enabled && (
-                <m.div variants={reduced ? staticVariants : itemVariants}>
-                  <FloatingButton onClick={toggleChristmas} ariaLabel={t('floating.christmas')} title={t('floating.christmas')}>
-                    <Icon icon={isChristmasEnabled ? 'ri:snowy-fill' : 'ri:snowy-line'} className="size-5" />
-                  </FloatingButton>
-                </m.div>
-              )}
               <m.div variants={reduced ? staticVariants : itemVariants}>
                 <FloatingButton
                   onClick={toggleSettings}
