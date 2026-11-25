@@ -55,12 +55,12 @@ function AppContent() {
 
       <div className="flex min-h-screen flex-col">
         {/* Header */}
-        <header className="border-border border-b bg-card">
+        <header className="border-border bg-card border-b">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
             <div className="flex items-center gap-2">
               <Icon icon="ri:dashboard-3-line" className="size-6" />
-              <h1 className="font-semibold text-xl">Koharu CMS</h1>
-              <span className="rounded bg-primary/10 px-2 py-0.5 font-medium text-primary text-xs">DEV</span>
+              <h1 className="text-xl font-semibold">Koharu CMS</h1>
+              <span className="bg-primary/10 text-primary rounded px-2 py-0.5 text-xs font-medium">DEV</span>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={fetchData} disabled={isLoading}>
@@ -79,7 +79,7 @@ function AppContent() {
         </header>
 
         {/* Tabs */}
-        <div className="border-border border-b bg-card">
+        <div className="border-border bg-card border-b">
           <div className="mx-auto max-w-7xl px-6">
             <div className="flex gap-4">
               {(['overview', 'posts'] as const).map((tab) => (
@@ -88,10 +88,10 @@ function AppContent() {
                   type="button"
                   onClick={() => setActiveTab(tab)}
                   className={cn(
-                    'border-b-2 px-1 py-3 font-medium text-sm capitalize transition-colors',
+                    'border-b-2 px-1 py-3 text-sm font-medium capitalize transition-colors',
                     activeTab === tab
                       ? 'border-primary text-primary'
-                      : 'border-transparent text-muted-foreground hover:text-foreground',
+                      : 'text-muted-foreground hover:text-foreground border-transparent',
                   )}
                 >
                   {tab}
@@ -102,15 +102,15 @@ function AppContent() {
         </div>
 
         {/* Content */}
-        <main className="flex-1 bg-background">
+        <main className="bg-background flex-1">
           <div className="mx-auto max-w-7xl p-6">
             {isLoading ? (
               <div className="flex h-64 items-center justify-center">
-                <Icon icon="ri:loader-4-line" className="size-8 animate-spin text-muted-foreground" />
+                <Icon icon="ri:loader-4-line" className="text-muted-foreground size-8 animate-spin" />
               </div>
             ) : error ? (
               <div className="flex h-64 flex-col items-center justify-center gap-4">
-                <Icon icon="ri:error-warning-line" className="size-12 text-destructive" />
+                <Icon icon="ri:error-warning-line" className="text-destructive size-12" />
                 <p className="text-destructive">{error}</p>
                 <Button variant="outline" onClick={fetchData}>
                   Retry
@@ -141,26 +141,26 @@ function AppContent() {
                       <div className="relative">
                         <Icon
                           icon="ri:search-line"
-                          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+                          className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
                         />
                         <input
                           type="text"
                           placeholder="Search posts..."
                           value={search}
                           onChange={(e) => setSearch(e.target.value)}
-                          className="rounded-lg border border-input bg-background py-2 pr-3 pl-9 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                          className="border-input bg-background focus:ring-ring rounded-lg border py-2 pr-3 pl-9 text-sm focus:ring-2 focus:outline-none"
                         />
                       </div>
                       <div className="relative">
                         <Icon
                           icon="ri:folder-line"
-                          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+                          className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
                         />
                         <select
                           aria-label="Filter by category"
                           value={category}
                           onChange={(e) => setCategory(e.target.value)}
-                          className="appearance-none rounded-lg border border-input bg-background py-2 pr-8 pl-9 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                          className="border-input bg-background focus:ring-ring appearance-none rounded-lg border py-2 pr-8 pl-9 text-sm focus:ring-2 focus:outline-none"
                         >
                           <option value="">All Categories</option>
                           {data.categories.map((cat) => (
@@ -171,19 +171,19 @@ function AppContent() {
                         </select>
                         <Icon
                           icon="ri:arrow-down-s-line"
-                          className="pointer-events-none absolute top-1/2 right-2 size-4 -translate-y-1/2 text-muted-foreground"
+                          className="text-muted-foreground pointer-events-none absolute top-1/2 right-2 size-4 -translate-y-1/2"
                         />
                       </div>
                       <div className="relative">
                         <Icon
                           icon="ri:filter-line"
-                          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+                          className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
                         />
                         <select
                           aria-label="Filter by status"
                           value={status}
                           onChange={(e) => setStatus(e.target.value as StatusFilter)}
-                          className="appearance-none rounded-lg border border-input bg-background py-2 pr-8 pl-9 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                          className="border-input bg-background focus:ring-ring appearance-none rounded-lg border py-2 pr-8 pl-9 text-sm focus:ring-2 focus:outline-none"
                         >
                           <option value="all">All Status</option>
                           <option value="published">Published</option>
@@ -191,7 +191,7 @@ function AppContent() {
                         </select>
                         <Icon
                           icon="ri:arrow-down-s-line"
-                          className="pointer-events-none absolute top-1/2 right-2 size-4 -translate-y-1/2 text-muted-foreground"
+                          className="text-muted-foreground pointer-events-none absolute top-1/2 right-2 size-4 -translate-y-1/2"
                         />
                       </div>
                     </div>

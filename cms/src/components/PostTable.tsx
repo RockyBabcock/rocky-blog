@@ -24,7 +24,7 @@ function SortableHeader({ label, field, sortField, sortOrder, onSort }: Sortable
     <button
       type="button"
       onClick={() => onSort(field)}
-      className={cn('flex items-center gap-1 font-medium text-xs uppercase tracking-wide', isActive && 'text-primary')}
+      className={cn('flex items-center gap-1 text-xs font-medium tracking-wide uppercase', isActive && 'text-primary')}
     >
       {label}
       <Icon
@@ -58,42 +58,42 @@ export function PostTable({
 }: PostTableProps) {
   if (posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed p-8 text-center">
-        <Icon icon="ri:file-list-3-line" className="size-12 text-muted-foreground" />
-        <p className="mt-2 font-medium text-muted-foreground">No posts found</p>
+      <div className="border-border flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+        <Icon icon="ri:file-list-3-line" className="text-muted-foreground size-12" />
+        <p className="text-muted-foreground mt-2 font-medium">No posts found</p>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-border">
+    <div className="border-border overflow-hidden rounded-lg border">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="border-border border-b bg-muted/50">
+          <thead className="border-border bg-muted/50 border-b">
             <tr>
               <th className="px-4 py-3 text-left">
                 <SortableHeader label="Title" field="title" sortField={sortField} sortOrder={sortOrder} onSort={onSort} />
               </th>
               <th className="hidden px-4 py-3 text-left md:table-cell">
-                <span className="font-medium text-muted-foreground text-xs uppercase tracking-wide">Category</span>
+                <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Category</span>
               </th>
               <th className="hidden px-4 py-3 text-left lg:table-cell">
-                <span className="font-medium text-muted-foreground text-xs uppercase tracking-wide">Tags</span>
+                <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Tags</span>
               </th>
               <th className="px-4 py-3 text-left">
                 <SortableHeader label="Date" field="date" sortField={sortField} sortOrder={sortOrder} onSort={onSort} />
               </th>
               <th className="px-4 py-3 text-left">
-                <span className="font-medium text-muted-foreground text-xs uppercase tracking-wide">Status</span>
+                <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Status</span>
               </th>
               <th className="px-4 py-3 text-right">
-                <span className="font-medium text-muted-foreground text-xs uppercase tracking-wide">Actions</span>
+                <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Actions</span>
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-border divide-y">
             {posts.map((post) => (
-              <tr key={post.id} className="transition-colors hover:bg-muted/30">
+              <tr key={post.id} className="hover:bg-muted/30 transition-colors">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     {post.sticky && (
@@ -101,7 +101,7 @@ export function PostTable({
                         <Icon icon="ri:pushpin-fill" className="size-4 shrink-0 text-orange-500" />
                       </span>
                     )}
-                    <span className="line-clamp-1 font-medium text-sm">{post.title}</span>
+                    <span className="line-clamp-1 text-sm font-medium">{post.title}</span>
                   </div>
                 </td>
                 <td className="hidden px-4 py-3 md:table-cell">
@@ -110,12 +110,12 @@ export function PostTable({
                 <td className="hidden px-4 py-3 lg:table-cell">
                   <div className="flex flex-wrap gap-1">
                     {post.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="rounded-md bg-muted px-2 py-0.5 text-xs">
+                      <span key={tag} className="bg-muted rounded-md px-2 py-0.5 text-xs">
                         {tag}
                       </span>
                     ))}
                     {post.tags.length > 3 && (
-                      <span className="rounded-md bg-muted px-2 py-0.5 text-muted-foreground text-xs">
+                      <span className="bg-muted text-muted-foreground rounded-md px-2 py-0.5 text-xs">
                         +{post.tags.length - 3}
                       </span>
                     )}
@@ -141,7 +141,7 @@ export function PostTable({
                       <button
                         type="button"
                         onClick={() => onEdit(post.id)}
-                        className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                        className="text-muted-foreground hover:bg-accent hover:text-foreground rounded-md p-1.5 transition-colors"
                         title="Edit post"
                       >
                         <Icon icon="ri:edit-line" className="size-4" />
@@ -151,7 +151,7 @@ export function PostTable({
                       <button
                         type="button"
                         onClick={() => onOpenInEditor(post.id)}
-                        className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                        className="text-muted-foreground hover:bg-accent hover:text-foreground rounded-md p-1.5 transition-colors"
                         title="Open in VS Code"
                       >
                         <Icon icon="ri:vscode-line" className="size-4" />
@@ -162,7 +162,7 @@ export function PostTable({
                         type="button"
                         onClick={() => onToggleSticky(post.id)}
                         className={cn(
-                          'rounded-md p-1.5 transition-colors hover:bg-accent hover:text-foreground',
+                          'hover:bg-accent hover:text-foreground rounded-md p-1.5 transition-colors',
                           post.sticky ? 'text-orange-500' : 'text-muted-foreground',
                         )}
                         title={post.sticky ? 'Unpin post' : 'Pin post'}
@@ -173,7 +173,7 @@ export function PostTable({
                     <button
                       type="button"
                       onClick={() => onToggleDraft(post.id)}
-                      className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                      className="text-muted-foreground hover:bg-accent hover:text-foreground rounded-md p-1.5 transition-colors"
                       title={post.draft ? 'Publish' : 'Mark as draft'}
                     >
                       <Icon icon={post.draft ? 'ri:check-line' : 'ri:draft-line'} className="size-4" />

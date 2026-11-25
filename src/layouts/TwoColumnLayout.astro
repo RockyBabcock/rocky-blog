@@ -1,70 +1,43 @@
 ---
-import HomeSider from '@components/layout/HomeSider.astro';
-import { HomeSiderType } from '@constants/enum';
 import { MAX_WIDTH } from '@constants/layout';
+import { cn } from '@lib/utils';
 import type { BlogPost } from 'types/blog';
-import Layout from './Layout.astro';
+import Footer from '@/components/layout/Footer.astro';
+import PostFooter from '@/components/post/PostFooter.astro';
 
 interface Props {
-  title?: string;
-  description?: string;
-  cover?: string;
-  coverTitle?: string;
-  coverSubtitle?: string;
-  isPostPage?: boolean;
-  tocNumbering?: boolean;
-  siderType?: HomeSiderType;
+  className?: string;
   post?: BlogPost;
-  locale?: string;
-  compactHero?: boolean;
+  /** Moments and other utility pages do not need article-only related/random content. */
+  showPostFooter?: boolean;
 }
 
-const {
-  title,
-  description,
-  cover,
-  coverTitle,
-  coverSubtitle,
-  isPostPage = false,
-  tocNumbering = true,
-  siderType = HomeSiderType.HOME,
-  post,
-  locale,
-  compactHero = false,
-} = Astro.props;
+const { className, post, showPostFooter = true } = Astro.props;
 ---
 
-<Layout
-  title={title}
-  description={description}
-  cover={cover}
-  coverTitle={coverTitle}
-  coverSubtitle={coverSubtitle}
-  isPostPage={isPostPage}
-  tocNumbering={tocNumbering}
-  siderType={siderType}
-  post={post}
-  locale={locale}
-  compactHero={compactHero}
->
-  <slot name="hero" slot="hero">
-    {coverTitle && (
-      <h1 class="shadow-text font-extrabold text-4xl tracking-tight text-white md:text-2xl">
-        {coverTitle}
-      </h1>
+<div class="flex flex-col">
+  <slot name="cover" />
+  <div
+    class={cn(
+      'two-column-content mx-auto md:mx-0 flex w-full items-start justify-center md:w-full',
+      MAX_WIDTH.content,
+      className,
     )}
-    {coverSubtitle && (
-      <p class="shadow-text max-w-2xl text-base text-white/90 md:text-sm">
-        {coverSubtitle}
-      </p>
-    )}
-  </slot>
-
-  <div class:list={['mx-auto mt-6 flex w-full items-start gap-6 px-4 md:mt-4 md:px-3', MAX_WIDTH.content]}>
-    <HomeSider type={siderType} post={post} />
-
-    <div class="min-w-0 flex-1">
+  >
+    <slot name="sider" />
+    <div class="flex min-w-0 grow flex-col gap-8 md:w-full">
       <slot />
+      {showPostFooter && <PostFooter post={post} />}
+      <Footer />
     </div>
   </div>
-</Layout>
+</div>
+
+<style>
+  @media (width > 992px) {
+    /* Reserve the sidebar's full height so its header-following motion cannot shrink a short page. */
+    .two-column-content:global(:has(> .page-home-sider)) {
+      min-height: 100vh;
+    }
+  }
+</style>

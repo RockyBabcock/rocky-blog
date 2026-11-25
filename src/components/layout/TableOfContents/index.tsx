@@ -1,40 +1,79 @@
+/**
+ * TableOfContents Component (Refactored with Sub-components)
+ *
+ * Displays a hierarchical table of contents with active heading detection and accordion behavior.
+ * Uses custom hooks for state management and sub-components for better organization.
+ */
+
+import { useIsMounted } from '@hooks/useIsMounted';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 import { useTocController } from '@hooks/useTocController';
 import { useTranslation } from '@hooks/useTranslation';
 import { cn } from '@lib/utils';
+import { useStore } from '@nanostores/react';
+import { $isDrawerOpen } from '@store/modal';
 import { HeadingList } from './HeadingList';
 import { TocProvider } from './TocContext';
 import { TocGlide } from './TocGlide';
 
+// Constants
+const SCROLL_OFFSET_TOP = 120; // Offset for header height when detecting active heading
+
 interface TableOfContentsProps {
+  /** Drawer navigation tracks only while it is open on a narrow viewport. */
   isDrawer?: boolean;
+  /** Whether headings should be expanded by default */
+  defaultExpanded?: boolean;
+  /** Whether to enable heading numbering (default: true) */
   enableNumbering?: boolean;
 }
 
-export function TableOfContents({ isDrawer = false, enableNumbering = true }: TableOfContentsProps) {
+/**
+ * TableOfContents Component
+ *
+ * Main container for the table of contents. Manages heading state and
+ * delegates rendering to HeadingList sub-component.
+ */
+export function TableOfContents({
+  isDrawer = false,
+  defaultExpanded = false,
+  enableNumbering = true,
+}: TableOfContentsProps = {}) {
   const { t } = useTranslation();
-  const { headings, toc, subscribeFrame } = useTocController({ offsetTop: 110, enabled: true });
+  const mounted = useIsMounted();
+  const isMobile = useMediaQuery('(max-width: 992px)');
+  const drawerOpen = useStore($isDrawerOpen);
+  const { headings, toc, subscribeFrame } = useTocController({
+    offsetTop: SCROLL_OFFSET_TOP,
+    defaultExpanded,
+    enabled: isDrawer ? isMobile && drawerOpen : !isMobile,
+  });
 
+  // A measurable placeholder lets the hidden drawer hydrate when it first opens.
+  if (!mounted) return <div className="min-h-24" aria-hidden="true" />;
+
+  // Empty state
   if (headings.length === 0) {
     return (
-      <div className="px-3 py-6 text-center text-xs text-muted-foreground">
-        {t('toc.empty')}
+      <div className="text-muted-foreground py-6 text-center">
+        <div className="text-sm">{t('toc.empty')}</div>
       </div>
     );
   }
 
   return (
-    <div className={cn('relative px-1 py-2', isDrawer ? 'max-h-[60vh] overflow-y-auto' : 'h-full overflow-y-auto')}>
-      <nav
-        className={cn('toc-container relative flex flex-col gap-1 pl-2', !enableNumbering && 'toc-no-numbering')}
-        aria-label={t('toc.title')}
-      >
-        <TocProvider value={toc}>
-          <TocGlide headings={headings} subscribeFrame={subscribeFrame} />
-          <HeadingList headings={headings} numbered={enableNumbering} />
-        </TocProvider>
-      </nav>
-    </div>
+    <nav
+      className={cn(
+        'toc-container toc-silk-container toc-scroll-fade scrollbar-hidden flex h-full flex-col gap-1 overflow-x-hidden overflow-y-auto md:pb-3 md:pl-1',
+        { 'toc-no-numbering': !enableNumbering },
+      )}
+      aria-label={t('toc.title')}
+      data-toc-scroller
+    >
+      <TocProvider value={toc}>
+        <TocGlide headings={headings} subscribeFrame={subscribeFrame} />
+        <HeadingList headings={headings} numbered={enableNumbering} />
+      </TocProvider>
+    </nav>
   );
 }
-
-export default TableOfContents;

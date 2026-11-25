@@ -48,7 +48,7 @@ function AnnouncementToastContent({ announcement }: { announcement: Announcement
       {/* Header */}
       <div className="flex items-center gap-2">
         <Icon icon={icon} className="h-4 w-4 shrink-0 opacity-70" />
-        <span className="font-semibold text-sm">{announcement.title}</span>
+        <span className="text-sm font-semibold">{announcement.title}</span>
       </div>
 
       {/* Content */}
@@ -60,7 +60,7 @@ function AnnouncementToastContent({ announcement }: { announcement: Announcement
           href={announcement.link.url}
           target={announcement.link.external ? '_blank' : undefined}
           rel={announcement.link.external ? 'noopener noreferrer' : undefined}
-          className="inline-flex items-center gap-1 text-primary text-sm hover:underline"
+          className="text-primary inline-flex items-center gap-1 text-sm hover:underline"
         >
           {announcement.link.text ?? 'Learn more'}
           {announcement.link.external && <Icon icon="ri:external-link-line" className="h-3 w-3" />}
@@ -86,14 +86,14 @@ function AnnouncementToast({ announcement, toastId }: { announcement: Announceme
 
   return (
     <output
-      className={`block w-full min-w-50 rounded-lg border border-border/50 bg-card/95 p-4 shadow-lg backdrop-blur-md transition-all duration-200 ${
+      className={`border-border/50 bg-card/95 block w-full min-w-50 rounded-lg border p-4 shadow-lg backdrop-blur-md transition-all duration-200 ${
         isHovered ? 'scale-[1.02] shadow-xl' : ''
       }`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <AnnouncementToastContent announcement={announcement} />
-      <div className="mt-3 flex items-center justify-between border-border/50 border-t pt-2 text-muted-foreground text-xs">
+      <div className="border-border/50 text-muted-foreground mt-3 flex items-center justify-between border-t pt-2 text-xs">
         <button onClick={openAnnouncementList} className="text-primary hover:underline" type="button">
           View all
         </button>

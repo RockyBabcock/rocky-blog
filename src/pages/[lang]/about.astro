@@ -1,12 +1,6 @@
 ---
-import { getLocaleStaticPaths } from '@/i18n';
-import AboutPage from '../about.astro';
-
-export function getStaticPaths() {
-  return getLocaleStaticPaths();
-}
-
-const { lang } = Astro.params;
+import { getLocaleStaticPaths } from '../_shared/utils';
+import AboutPage from '../about.md';
+export const getStaticPaths = getLocaleStaticPaths;
 ---
-
-<AboutPage locale={lang} />
+<AboutPage />

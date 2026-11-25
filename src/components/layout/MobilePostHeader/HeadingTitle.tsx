@@ -32,7 +32,7 @@ export function HeadingTitle({ heading, direction = 1, className }: HeadingTitle
       {heading && (
         <m.span
           key={heading.id}
-          className={`block truncate font-medium text-sm ${className || ''}`}
+          className={`block truncate text-sm font-medium ${className || ''}`}
           custom={direction}
           variants={rolling}
           initial={shouldReduceMotion ? false : 'enter'}

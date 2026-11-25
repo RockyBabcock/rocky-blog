@@ -160,7 +160,7 @@ export default function ImageLightbox() {
         <div
           ref={containerRef}
           data-lightbox-viewport=""
-          className="absolute inset-0 flex touch-none select-none items-center justify-center"
+          className="absolute inset-0 flex touch-none items-center justify-center select-none"
         >
           {fitSize.width > 0 && (
             <m.div
@@ -223,7 +223,7 @@ export default function ImageLightbox() {
                 <button
                   type="button"
                   data-lightbox-controls=""
-                  className="pointer-events-auto min-h-11 rounded-full bg-white/10 px-5 text-white hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                  className="pointer-events-auto min-h-11 rounded-full bg-white/10 px-5 text-white hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   onClick={() => {
                     setImage({ src: '', width: 0, height: 0, failed: false });
                     setRetry((value) => value + 1);
@@ -282,7 +282,7 @@ export default function ImageLightbox() {
           <m.button
             type="button"
             onClick={handleReset}
-            className="flex h-11 min-w-16 items-center justify-center rounded-full px-2 text-sm text-white/80 tabular-nums transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+            className="flex h-11 min-w-16 items-center justify-center rounded-full px-2 text-sm text-white/80 tabular-nums transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             whileTap={motionDisabled ? undefined : { scale: 0.96 }}
             aria-label={t('image.resetZoomRotate')}
             title={t('image.resetZoomRotate')}
@@ -321,7 +321,7 @@ function ToolbarButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex size-11 shrink-0 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2 disabled:cursor-default disabled:opacity-30"
+      className="flex size-11 shrink-0 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-default disabled:opacity-30"
       whileTap={motionDisabled || disabled ? undefined : { scale: 0.96 }}
       aria-label={label}
       title={label}
@@ -342,7 +342,7 @@ function ZoomHint({ multiple }: { multiple: boolean }) {
   }, []);
   return (
     <m.p
-      className="pointer-events-none absolute right-4 bottom-[calc(80px+env(safe-area-inset-bottom))] left-4 text-center text-white/65 text-xs [@media(max-height:520px)]:hidden"
+      className="pointer-events-none absolute right-4 bottom-[calc(80px+env(safe-area-inset-bottom))] left-4 text-center text-xs text-white/65 [@media(max-height:520px)]:hidden"
       initial={false}
       animate={{ opacity: visible ? 1 : 0 }}
       exit={{ opacity: 0, transition: { duration: motionDisabled ? 0 : 0.12 } }}

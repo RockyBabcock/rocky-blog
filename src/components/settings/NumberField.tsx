@@ -107,7 +107,7 @@ export function NumberField({ label, value, step, unit, emptyValue, onApply }: N
     <div className="flex items-center gap-1" title={invalid ? t('settings.invalidNumber') : undefined}>
       <button
         type="button"
-        className="size-7 flex-center rounded-md text-muted-foreground transition-[background-color,color,transform] hover:bg-accent hover:text-foreground active:scale-[0.96]"
+        className="flex-center text-muted-foreground hover:bg-accent hover:text-foreground size-7 rounded-md transition-[background-color,color,transform] active:scale-[0.96]"
         onClick={() => stepBy(-1)}
         aria-label={`${label} -${step}`}
       >
@@ -121,8 +121,8 @@ export function NumberField({ label, value, step, unit, emptyValue, onApply }: N
           aria-label={label}
           aria-invalid={invalid || undefined}
           className={cn(
-            'w-20 rounded-md border border-input bg-background px-2 py-1 text-center text-sm tabular-nums outline-hidden transition-colors',
-            'focus-visible:ring-2 focus-visible:ring-ring',
+            'border-input bg-background w-20 rounded-md border px-2 py-1 text-center text-sm tabular-nums outline-hidden transition-colors',
+            'focus-visible:ring-ring focus-visible:ring-2',
             invalid && 'border-destructive text-destructive focus-visible:ring-destructive',
           )}
           {...register('value', {
@@ -130,14 +130,14 @@ export function NumberField({ label, value, step, unit, emptyValue, onApply }: N
           })}
         />
         {unit && inputValue !== null && (
-          <span className="pointer-events-none absolute top-1/2 right-1.5 -translate-y-1/2 text-muted-foreground text-xs">
+          <span className="text-muted-foreground pointer-events-none absolute top-1/2 right-1.5 -translate-y-1/2 text-xs">
             {unit}
           </span>
         )}
       </div>
       <button
         type="button"
-        className="size-7 flex-center rounded-md text-muted-foreground transition-[background-color,color,transform] hover:bg-accent hover:text-foreground active:scale-[0.96]"
+        className="flex-center text-muted-foreground hover:bg-accent hover:text-foreground size-7 rounded-md transition-[background-color,color,transform] active:scale-[0.96]"
         onClick={() => stepBy(1)}
         aria-label={`${label} +${step}`}
       >

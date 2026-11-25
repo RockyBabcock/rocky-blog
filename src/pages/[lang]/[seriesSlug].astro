@@ -1,30 +1,15 @@
 ---
-import { featuredSeriesList } from '@constants/site-config';
 import type { FeaturedSeriesItem } from '@lib/config/types';
-import { getLocaleStaticPaths } from '@/i18n';
+import { seriesRoute } from '../_shared/routes';
 import SeriesPage from '../[seriesSlug].astro';
 
-export function getStaticPaths() {
-  const locales = getLocaleStaticPaths();
-  const enabledSeries = featuredSeriesList.filter((s) => s.enabled);
-  const paths: Array<{
-    params: { lang: string; seriesSlug: string };
-    props: { series: FeaturedSeriesItem; locale: string };
-  }> = [];
+export const getStaticPaths = seriesRoute.mirror;
 
-  for (const { params: { lang } } of locales) {
-    for (const series of enabledSeries) {
-      paths.push({
-        params: { lang, seriesSlug: series.slug },
-        props: { series, locale: lang },
-      });
-    }
-  }
-
-  return paths;
+interface Props {
+  series: FeaturedSeriesItem;
+  locale: string;
 }
 
-const props = Astro.props;
+const { series, locale } = Astro.props;
 ---
-
-<SeriesPage {...props} />
+<SeriesPage series={series} locale={locale} />

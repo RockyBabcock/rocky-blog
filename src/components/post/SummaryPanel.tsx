@@ -36,7 +36,7 @@ const SummaryPanelContent = memo(
         style={{ gridTemplateRows: isExpanded ? '1fr' : '0fr' }}
       >
         <div className="overflow-hidden">
-          <div className="rounded-b-lg bg-foreground/5 px-4 py-4 text-muted-foreground text-sm leading-relaxed">
+          <div className="bg-foreground/5 text-muted-foreground rounded-b-lg px-4 py-4 text-sm leading-relaxed">
             {/* 屏幕阅读器专用 */}
             <span className="sr-only">{summary}</span>
 
@@ -66,14 +66,14 @@ export interface SummaryPanelProps {
 }
 
 const SOURCE_ICONS: Record<SummarySource, ReactNode> = {
-  description: <RiBook2Fill className="size-4 text-primary" />,
-  ai: <MingcuteAiFillSvg className="size-4 text-primary" />,
+  description: <RiBook2Fill className="text-primary size-4" />,
+  ai: <MingcuteAiFillSvg className="text-primary size-4" />,
   auto: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="size-4 text-primary"
+      className="text-primary size-4"
       aria-hidden="true"
     >
       <path d="M20 22H4C3.45 22 3 21.55 3 21V3C3 2.45 3.45 2 4 2H20C20.55 2 21 2.45 21 3V21C21 21.55 20.55 22 20 22ZM19 20V4H5V20H19ZM7 6H11V10H7V6ZM7 12H17V14H7V12ZM7 16H17V18H7V16ZM13 7H17V9H13V7Z" />
@@ -182,15 +182,15 @@ function SummaryPanel({ summary, source = 'ai', typingSpeed = 25, className, loc
           type="button"
           onClick={handleToggle}
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between bg-foreground/5 px-4 py-3 transition-all duration-250',
+            'bg-foreground/5 flex w-full cursor-pointer items-center justify-between px-4 py-3 transition-all duration-250',
             'hover:bg-foreground/10',
-            isExpanded && 'rounded-t-lg bg-foreground/10',
+            isExpanded && 'bg-foreground/10 rounded-t-lg',
             !isExpanded && 'rounded-lg',
           )}
           aria-expanded={isExpanded}
           aria-controls="summary-panel-content"
         >
-          <div className="flex items-center gap-1.5 font-medium text-muted-foreground text-sm">
+          <div className="text-muted-foreground flex items-center gap-1.5 text-sm font-medium">
             <span className={cn('transition-transform duration-300', isExpanded && source === 'ai' && 'rotate-10')}>
               {icon}
             </span>
@@ -200,7 +200,7 @@ function SummaryPanel({ summary, source = 'ai', typingSpeed = 25, className, loc
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className={cn('size-4 text-muted-foreground transition-transform duration-300', isExpanded && 'rotate-180')}
+            className={cn('text-muted-foreground size-4 transition-transform duration-300', isExpanded && 'rotate-180')}
             aria-hidden="true"
           >
             <path d="M12 16L6 10H18L12 16Z" />

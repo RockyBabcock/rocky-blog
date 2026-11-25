@@ -16,7 +16,7 @@ export function QuizOption({ index, html, isCorrect, isSelected, revealed, disab
       type="button"
       className={cn(
         'flex w-full items-start gap-2 rounded-lg border px-3 py-2 text-left transition-all',
-        !revealed && !disabled && 'cursor-pointer hover:border-primary/30 hover:bg-primary/5',
+        !revealed && !disabled && 'hover:border-primary/30 hover:bg-primary/5 cursor-pointer',
         !revealed && isSelected && 'border-primary/50 bg-primary/10',
         revealed && isCorrect && 'border-green-500/60 bg-green-50 dark:bg-green-950/30',
         revealed && isSelected && !isCorrect && 'border-red-500/60 bg-red-50 dark:bg-red-950/30',
@@ -30,7 +30,7 @@ export function QuizOption({ index, html, isCorrect, isSelected, revealed, disab
     >
       <span
         className={cn(
-          'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full font-semibold text-xs',
+          'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold',
           !revealed && !isSelected && 'bg-muted text-muted-foreground',
           !revealed && isSelected && 'bg-primary text-primary-foreground',
           revealed && isCorrect && 'bg-green-500 text-white',

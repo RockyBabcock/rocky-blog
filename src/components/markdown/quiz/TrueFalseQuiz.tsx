@@ -75,7 +75,7 @@ export function TrueFalseQuiz({ quiz }: { quiz: ParsedQuiz }) {
       <output
         aria-live="polite"
         className={cn(
-          'block rounded-lg px-3 py-2 font-medium text-sm',
+          'block rounded-lg px-3 py-2 text-sm font-medium',
           !revealed && 'hidden',
           isCorrect
             ? 'bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300'

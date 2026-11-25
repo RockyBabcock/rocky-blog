@@ -118,7 +118,7 @@ export function MobilePostHeader({
                 trigger={
                   <button
                     type="button"
-                    className="flex w-[calc(100vw-14rem)] items-center gap-2.5 rounded-full bg-foreground/10 py-1 pr-3 pl-1.5 backdrop-blur-sm transition-colors hover:bg-foreground/20"
+                    className="bg-foreground/10 hover:bg-foreground/20 flex w-[calc(100vw-14rem)] items-center gap-2.5 rounded-full py-1 pr-3 pl-1.5 backdrop-blur-sm transition-colors"
                     aria-label={t('toc.expand')}
                   >
                     {/* Progress circle - fixed size container, with the current chapter number inside */}
@@ -127,7 +127,7 @@ export function MobilePostHeader({
                       {enableNumbering && chapter > 0 && (
                         <span
                           aria-hidden="true"
-                          className="absolute inset-0 flex-center font-semibold text-[0.625rem] text-primary tabular-nums"
+                          className="flex-center text-primary absolute inset-0 text-[0.625rem] font-semibold tabular-nums"
                         >
                           {chapter}
                         </span>

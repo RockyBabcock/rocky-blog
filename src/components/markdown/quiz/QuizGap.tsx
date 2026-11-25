@@ -39,7 +39,7 @@ export function QuizGap({ answer, revealed, onClick, isMistake }: QuizGapProps) 
             exit={{ opacity: 0, scale: 0.8 }}
             transition={shouldReduceMotion ? { duration: 0 } : undefined}
             onClick={onClick}
-            className="inline-block cursor-pointer border-primary/50 border-b-2 border-dashed px-4 py-0.5 text-transparent transition-colors hover:border-primary hover:bg-primary/5"
+            className="border-primary/50 hover:border-primary hover:bg-primary/5 inline-block cursor-pointer border-b-2 border-dashed px-4 py-0.5 text-transparent transition-colors"
             aria-label={t('quiz.clickToReveal')}
           >
             {answer}

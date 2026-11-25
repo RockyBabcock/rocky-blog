@@ -28,7 +28,7 @@ export function RecentUpdates({ posts, maxDisplay = 5, onEdit }: RecentUpdatesPr
   const displayPosts = posts.slice(0, maxDisplay);
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className="border-border bg-card rounded-lg border p-4">
       <h2 className="mb-4 font-semibold">Recent Updates</h2>
       <div className="space-y-2">
         {displayPosts.map((post) => (
@@ -45,16 +45,16 @@ export function RecentUpdates({ posts, maxDisplay = 5, onEdit }: RecentUpdatesPr
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <span className="line-clamp-1 text-sm">{post.title}</span>
               {post.draft && (
-                <span className="shrink-0 rounded-md bg-orange-500/10 px-1.5 py-0.5 text-orange-500 text-xs">Draft</span>
+                <span className="shrink-0 rounded-md bg-orange-500/10 px-1.5 py-0.5 text-xs text-orange-500">Draft</span>
               )}
             </div>
-            <span className="ml-2 shrink-0 text-muted-foreground text-xs">{formatRelativeTime(post.date)}</span>
+            <span className="text-muted-foreground ml-2 shrink-0 text-xs">{formatRelativeTime(post.date)}</span>
           </button>
         ))}
         {posts.length === 0 && (
           <div className="flex flex-col items-center justify-center py-8 text-center">
-            <Icon icon="ri:file-list-3-line" className="size-8 text-muted-foreground" />
-            <p className="mt-2 text-muted-foreground text-sm">No posts yet</p>
+            <Icon icon="ri:file-list-3-line" className="text-muted-foreground size-8" />
+            <p className="text-muted-foreground mt-2 text-sm">No posts yet</p>
           </div>
         )}
       </div>

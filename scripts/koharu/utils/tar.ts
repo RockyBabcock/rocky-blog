@@ -70,7 +70,15 @@ function listTarEntries(archivePath: string): string[] {
  * 从 tar.gz 中提取 manifest.json 内容（不解压整个文件）
  */
 export function tarExtractManifest(archivePath: string): string | null {
-  const result = spawnSync('tar', ['-xzf', archivePath, '-O', 'manifest.json'], {
+  const entries = listTarEntries(archivePath);
+  const manifestEntry = entries.find((entry) => {
+    const normalized = entry.replace(/^\.\//, '');
+    return normalized === 'manifest.json';
+  });
+  if (!manifestEntry) {
+    return null;
+  }
+  const result = spawnSync('tar', ['-xzf', archivePath, '-O', manifestEntry], {
     encoding: 'utf-8',
     cwd: PROJECT_ROOT,
     stdio: ['pipe', 'pipe', 'pipe'],

@@ -112,15 +112,15 @@ export function BangumiCollection({ userId }: BangumiCollectionProps) {
         <div className="flex gap-5">
           {Array.from({ length: 3 }, (_, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders have no stable id
-            <div key={i} className="h-5 w-14 animate-pulse rounded bg-muted" />
+            <div key={i} className="bg-muted h-5 w-14 animate-pulse rounded" />
           ))}
         </div>
         <div className="bangumi-grid">
           {Array.from({ length: 10 }, (_, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders have no stable id
             <div key={i} className="animate-pulse">
-              <div className="aspect-[2/3] rounded-xl bg-muted" />
-              <div className="mt-2 h-3.5 w-3/4 rounded bg-muted" />
+              <div className="bg-muted aspect-[2/3] rounded-xl" />
+              <div className="bg-muted mt-2 h-3.5 w-3/4 rounded" />
             </div>
           ))}
         </div>
@@ -135,7 +135,7 @@ export function BangumiCollection({ userId }: BangumiCollectionProps) {
         <button
           type="button"
           onClick={retry}
-          className="rounded-md bg-primary px-4 py-2 text-primary-foreground text-sm transition-colors hover:bg-primary/90"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm transition-colors"
         >
           {t('bangumi.retry')}
         </button>
@@ -204,7 +204,7 @@ export function BangumiCollection({ userId }: BangumiCollectionProps) {
               onClick={() => goToPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
               aria-label={t('pagination.prev')}
-              className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+              className="text-muted-foreground hover:bg-muted hover:text-foreground flex size-8 items-center justify-center rounded-md transition-colors disabled:pointer-events-none disabled:opacity-40"
             >
               <Icon icon="ri:arrow-left-s-line" className="size-4" />
             </button>
@@ -214,7 +214,7 @@ export function BangumiCollection({ userId }: BangumiCollectionProps) {
                 const showEllipsis = previousPage !== undefined && page - previousPage > 1;
                 return (
                   <span key={page} className="flex items-center">
-                    {showEllipsis && <span className="px-1 text-muted-foreground">…</span>}
+                    {showEllipsis && <span className="text-muted-foreground px-1">…</span>}
                     <button
                       type="button"
                       onClick={() => goToPage(page)}
@@ -237,7 +237,7 @@ export function BangumiCollection({ userId }: BangumiCollectionProps) {
               onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
               aria-label={t('pagination.next')}
-              className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+              className="text-muted-foreground hover:bg-muted hover:text-foreground flex size-8 items-center justify-center rounded-md transition-colors disabled:pointer-events-none disabled:opacity-40"
             >
               <Icon icon="ri:arrow-right-s-line" className="size-4" />
             </button>

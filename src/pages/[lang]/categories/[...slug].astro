@@ -1,36 +1,16 @@
 ---
-import { getCategoryList } from '@lib/content';
-import { getCategorySlug } from '@lib/content/categories';
-import type { Category } from 'types/blog';
-import { getLocaleStaticPaths } from '@/i18n';
+import type { Category } from '@lib/content';
+import { categoryRoute } from '../../_shared/routes';
 import CategoryPage from '../../categories/[...slug].astro';
 
-export async function getStaticPaths() {
-  const locales = getLocaleStaticPaths();
-  const paths: Array<{ params: { lang: string; slug: string }; props: { categoryName: string; locale: string } }> = [];
+export const getStaticPaths = categoryRoute.mirror;
 
-  for (const { params: { lang } } of locales) {
-    const { categories } = await getCategoryList(lang);
-    function walk(nodes: Category[], prefix = '') {
-      for (const node of nodes) {
-        const segment = getCategorySlug(node.name);
-        const fullSlug = prefix ? `${prefix}/${segment}` : segment;
-        paths.push({
-          params: { lang, slug: fullSlug },
-          props: { categoryName: node.name, locale: lang },
-        });
-        if (node.children?.length) {
-          walk(node.children, fullSlug);
-        }
-      }
-    }
-    walk(categories);
-  }
-
-  return paths;
+interface Props {
+  category: Category | null;
+  path: string[];
+  locale: string;
 }
 
-const props = Astro.props;
+const { category, path, locale } = Astro.props;
 ---
-
-<CategoryPage {...props} />
+<CategoryPage category={category} path={path} locale={locale} />

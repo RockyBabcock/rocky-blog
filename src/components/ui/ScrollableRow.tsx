@@ -64,7 +64,7 @@ export function ScrollableRow({ children, className, innerClassName, fadeWidth =
           type="button"
           onClick={() => scroll('left')}
           aria-label="Scroll left"
-          className="absolute -left-1 z-10 flex h-5 w-5 items-center justify-center rounded-md bg-muted/80 text-muted-foreground opacity-0 backdrop-blur-sm transition-opacity group-hover/scroll:opacity-100"
+          className="bg-muted/80 text-muted-foreground absolute -left-1 z-10 flex h-5 w-5 items-center justify-center rounded-md opacity-0 backdrop-blur-sm transition-opacity group-hover/scroll:opacity-100"
         >
           <Icon icon="ri:arrow-left-s-line" className="h-3 w-3" />
         </button>
@@ -81,7 +81,7 @@ export function ScrollableRow({ children, className, innerClassName, fadeWidth =
           type="button"
           onClick={() => scroll('right')}
           aria-label="Scroll right"
-          className="absolute -right-1 z-10 flex h-5 w-5 items-center justify-center rounded-md bg-muted/80 text-muted-foreground opacity-0 backdrop-blur-sm transition-opacity group-hover/scroll:opacity-100"
+          className="bg-muted/80 text-muted-foreground absolute -right-1 z-10 flex h-5 w-5 items-center justify-center rounded-md opacity-0 backdrop-blur-sm transition-opacity group-hover/scroll:opacity-100"
         >
           <Icon icon="ri:arrow-right-s-line" className="h-3 w-3" />
         </button>

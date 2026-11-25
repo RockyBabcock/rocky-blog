@@ -8,7 +8,20 @@ import test from 'node:test';
 const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const workspaceYaml = readFileSync(new URL('../pnpm-workspace.yaml', import.meta.url), 'utf8');
 
-test('cms:install honors workspace build approvals and shares the root lockfile', () => {
+function isPnpmAvailable() {
+  try {
+    execFileSync('pnpm', ['--version'], { stdio: 'ignore', timeout: 5_000 });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+test('cms:install honors workspace build approvals and shares the root lockfile', (t) => {
+  if (!isPnpmAvailable()) {
+    t.skip('pnpm binary is not installed in this environment');
+    return;
+  }
   const root = mkdtempSync(path.join(os.tmpdir(), 'koharu-workspace-'));
   const packageName = 'koharu-cms-build-fixture';
 

@@ -140,10 +140,10 @@ export default function LocalFontPicker({ open, currentFont, returnFocusRef, onO
 
         {view === 'intro' && (
           <div className="flex flex-col items-center px-6 py-10 text-center">
-            <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <div className="bg-primary/10 text-primary mb-4 flex size-12 items-center justify-center rounded-full">
               <Icon icon="ri:font-family" className="size-6" />
             </div>
-            <p className="max-w-sm text-muted-foreground text-sm leading-relaxed">{t('settings.localFont.permission')}</p>
+            <p className="text-muted-foreground max-w-sm text-sm leading-relaxed">{t('settings.localFont.permission')}</p>
             <Button type="button" className="mt-6" onClick={requestFonts}>
               {t('settings.localFont.requestAccess')}
             </Button>
@@ -151,7 +151,7 @@ export default function LocalFontPicker({ open, currentFont, returnFocusRef, onO
         )}
 
         {view === 'loading' && (
-          <output aria-live="polite" className="flex min-h-64 flex-col items-center justify-center gap-3 text-muted-foreground">
+          <output aria-live="polite" className="text-muted-foreground flex min-h-64 flex-col items-center justify-center gap-3">
             <Icon icon="ri:loader-4-line" className="size-6 animate-spin" />
             <p className="text-sm">{t('settings.localFont.loading')}</p>
           </output>
@@ -162,7 +162,7 @@ export default function LocalFontPicker({ open, currentFont, returnFocusRef, onO
             <div className="relative mb-3">
               <Icon
                 icon="ri:search-line"
-                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+                className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
               />
               <Input
                 value={search}
@@ -178,7 +178,7 @@ export default function LocalFontPicker({ open, currentFont, returnFocusRef, onO
             </div>
 
             {filteredFamilies.length > 0 ? (
-              <div ref={scrollRef} className="h-72 overflow-y-auto overscroll-contain rounded-lg border border-border">
+              <div ref={scrollRef} className="border-border h-72 overflow-y-auto overscroll-contain rounded-lg border">
                 <div className="relative w-full" style={{ height: rowVirtualizer.getTotalSize() }}>
                   {rowVirtualizer.getVirtualItems().map((virtualRow) => {
                     const family = filteredFamilies[virtualRow.index];
@@ -200,7 +200,7 @@ export default function LocalFontPicker({ open, currentFont, returnFocusRef, onO
                         >
                           <span className="min-w-0 flex-1 truncate text-sm">{family}</span>
                           <span
-                            className="hidden shrink-0 text-muted-foreground text-sm sm:block"
+                            className="text-muted-foreground hidden shrink-0 text-sm sm:block"
                             style={{ fontFamily: toCssFontFamily(family) }}
                           >
                             {t('settings.localFont.preview')}
@@ -213,7 +213,7 @@ export default function LocalFontPicker({ open, currentFont, returnFocusRef, onO
                 </div>
               </div>
             ) : (
-              <div className="flex h-72 items-center justify-center rounded-lg border border-border border-dashed text-muted-foreground text-sm">
+              <div className="border-border text-muted-foreground flex h-72 items-center justify-center rounded-lg border border-dashed text-sm">
                 {t('settings.localFont.empty')}
               </div>
             )}
@@ -222,10 +222,10 @@ export default function LocalFontPicker({ open, currentFont, returnFocusRef, onO
 
         {view === 'manual' && (
           <form className="p-5" onSubmit={submitManualFont}>
-            <div className="mb-5 rounded-lg bg-muted/60 p-3 text-muted-foreground text-sm leading-relaxed">
+            <div className="bg-muted/60 text-muted-foreground mb-5 rounded-lg p-3 text-sm leading-relaxed">
               {failureMessage}
             </div>
-            <label htmlFor="local-font-family" className="mb-2 block font-medium text-sm">
+            <label htmlFor="local-font-family" className="mb-2 block text-sm font-medium">
               {t('settings.localFont.manualLabel')}
             </label>
             <div className="flex gap-2">

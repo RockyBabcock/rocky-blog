@@ -30,7 +30,7 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
 }) => {
   return (
     <div className="flex w-full flex-col items-center gap-4 rounded-lg border border-red-200 bg-red-50 p-6 dark:border-red-900/50 dark:bg-red-950/20">
-      <div className="flex-center gap-2 font-medium text-lg text-red-700 dark:text-red-400">
+      <div className="flex-center gap-2 text-lg font-medium text-red-700 dark:text-red-400">
         <svg className="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path
             fillRule="evenodd"
@@ -42,10 +42,10 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
       </div>
 
       {showDetails && error?.message && (
-        <div className="w-full rounded-md bg-red-100 p-3 font-mono text-red-800 text-sm dark:bg-red-900/30 dark:text-red-300">
+        <div className="w-full rounded-md bg-red-100 p-3 font-mono text-sm text-red-800 dark:bg-red-900/30 dark:text-red-300">
           <p className="font-semibold">Error: {error.message}</p>
           {import.meta.env.DEV && error?.stack && (
-            <pre className="mt-2 max-h-32 overflow-auto whitespace-pre-wrap text-xs opacity-70">{error.stack}</pre>
+            <pre className="mt-2 max-h-32 overflow-auto text-xs whitespace-pre-wrap opacity-70">{error.stack}</pre>
           )}
         </div>
       )}
@@ -54,7 +54,7 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
         <a
           href={sourceUrl}
           target="_blank"
-          className="flex max-w-full items-center gap-2 rounded-md border border-red-200/80 bg-background/60 px-3 py-2 text-red-700 text-sm transition-colors hover:border-red-300 hover:bg-background dark:border-red-900/60 dark:text-red-300 dark:hover:border-red-800"
+          className="bg-background/60 hover:bg-background flex max-w-full items-center gap-2 rounded-md border border-red-200/80 px-3 py-2 text-sm text-red-700 transition-colors hover:border-red-300 dark:border-red-900/60 dark:text-red-300 dark:hover:border-red-800"
           rel="noopener noreferrer"
           title={sourceUrl}
         >
@@ -74,7 +74,7 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
             <a
               href="https://github.com/cosZone/astro-koharu/issues/new"
               target="_blank"
-              className="flex-center gap-1.5 text-blue-600 text-sm transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              className="flex-center gap-1.5 text-sm text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
               rel="noopener noreferrer"
             >
               <HiChat className="size-4" />
@@ -102,7 +102,7 @@ export const InlineErrorFallback: FC<FallbackProps> = ({ error, resetErrorBounda
         <a
           href="https://github.com/cosZone/astro-koharu/issues/new"
           target="_blank"
-          className="flex-center-y gap-1.5 text-blue-600 text-sm transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          className="flex-center-y gap-1.5 text-sm text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
           rel="noopener noreferrer"
         >
           <HiChat className="size-4" />

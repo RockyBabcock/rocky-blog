@@ -54,7 +54,7 @@ export default function FooterAnnouncementEntry() {
                 'flex items-center justify-center',
                 'h-4 min-w-[1rem] px-1',
                 'bg-destructive text-destructive-foreground',
-                'rounded-full font-medium text-xs',
+                'rounded-full text-xs font-medium',
               )}
             >
               {count > 9 ? '9+' : count}

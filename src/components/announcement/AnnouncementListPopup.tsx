@@ -62,11 +62,11 @@ function TimelineItem({
       {/* Timeline column - fixed width */}
       <div className="relative flex w-10 shrink-0 flex-col items-center md:w-14">
         {/* Date */}
-        <div className="mb-1.5 font-medium text-[10px] text-muted-foreground md:mb-2 md:text-xs">{dateStr}</div>
+        <div className="text-muted-foreground mb-1.5 text-[10px] font-medium md:mb-2 md:text-xs">{dateStr}</div>
 
         {/* Dot */}
         <div
-          className="relative z-10 h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-card md:h-3 md:w-3 md:ring-[3px]"
+          className="ring-card relative z-10 h-2.5 w-2.5 shrink-0 rounded-full ring-2 md:h-3 md:w-3 md:ring-[3px]"
           style={{ backgroundColor: color }}
         >
           {!isRead && (
@@ -90,7 +90,7 @@ function TimelineItem({
       <button
         type="button"
         className={cn(
-          'relative mb-3 flex-1 cursor-pointer overflow-hidden rounded-lg border border-border text-left transition-shadow md:mb-5 md:rounded-xl',
+          'border-border relative mb-3 flex-1 cursor-pointer overflow-hidden rounded-lg border text-left transition-shadow md:mb-5 md:rounded-xl',
           isRead ? 'bg-muted/20 opacity-60' : 'bg-card shadow-sm hover:shadow-md',
         )}
         onClick={handleClick}
@@ -103,11 +103,11 @@ function TimelineItem({
           <div className="flex items-start justify-between gap-1.5 md:gap-2">
             <div className="flex items-center gap-1.5 md:gap-2">
               <Icon icon={icon} className="h-3.5 w-3.5 shrink-0 md:h-4 md:w-4" style={{ color }} />
-              <h4 className="font-semibold text-xs md:text-sm">{announcement.title}</h4>
+              <h4 className="text-xs font-semibold md:text-sm">{announcement.title}</h4>
             </div>
             {!isRead && (
               <span
-                className="shrink-0 rounded px-1 py-0.5 font-medium text-[10px] text-white md:px-1.5 md:text-xs"
+                className="shrink-0 rounded px-1 py-0.5 text-[10px] font-medium text-white md:px-1.5 md:text-xs"
                 style={{ backgroundColor: color }}
               >
                 {t('announcement.new')}
@@ -116,7 +116,7 @@ function TimelineItem({
           </div>
 
           {/* Content */}
-          <p className="mt-1.5 text-muted-foreground text-xs leading-relaxed md:mt-2 md:text-sm">{announcement.content}</p>
+          <p className="text-muted-foreground mt-1.5 text-xs leading-relaxed md:mt-2 md:text-sm">{announcement.content}</p>
 
           {/* Link */}
           {announcement.link && (
@@ -167,7 +167,7 @@ export default function AnnouncementListPopup() {
 
             {/* Popup */}
             <m.div
-              className="fixed inset-x-3 top-1/2 mx-auto max-w-lg overflow-hidden rounded-xl bg-card shadow-2xl md:inset-x-4 md:rounded-2xl"
+              className="bg-card fixed inset-x-3 top-1/2 mx-auto max-w-lg overflow-hidden rounded-xl shadow-2xl md:inset-x-4 md:rounded-2xl"
               style={{ zIndex: zIndex.modal }}
               initial={shouldReduceMotion ? false : { opacity: 0, y: '-45%', scale: 0.95 }}
               animate={{ opacity: 1, y: '-50%', scale: 1 }}
@@ -175,14 +175,14 @@ export default function AnnouncementListPopup() {
               transition={shouldReduceMotion ? { duration: 0 } : animation.spring.default}
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-border border-b bg-linear-to-r from-primary/5 to-transparent p-3 md:p-4">
+              <div className="border-border from-primary/5 flex items-center justify-between border-b bg-linear-to-r to-transparent p-3 md:p-4">
                 <div className="flex items-center gap-2 md:gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 md:h-10 md:w-10 md:rounded-xl">
-                    <Icon icon="ri:notification-3-line" className="h-4 w-4 text-primary md:h-5 md:w-5" />
+                  <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-lg md:h-10 md:w-10 md:rounded-xl">
+                    <Icon icon="ri:notification-3-line" className="text-primary h-4 w-4 md:h-5 md:w-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-sm md:text-base">{t('announcement.title')}</h3>
-                    <p className="text-[10px] text-muted-foreground md:text-xs">
+                    <h3 className="text-sm font-semibold md:text-base">{t('announcement.title')}</h3>
+                    <p className="text-muted-foreground text-[10px] md:text-xs">
                       {t('announcement.count', { count: String(announcements.length) })}
                       {hasUnread && (
                         <span className="text-primary"> · {t('announcement.unreadCount', { count: String(unreadCount) })}</span>
@@ -194,7 +194,7 @@ export default function AnnouncementListPopup() {
                   {hasUnread && (
                     <button
                       onClick={markAllAsRead}
-                      className="rounded-md bg-primary/10 px-2 py-1 text-[10px] text-primary transition-colors hover:bg-primary/20 md:rounded-lg md:px-3 md:py-1.5 md:text-xs"
+                      className="bg-primary/10 text-primary hover:bg-primary/20 rounded-md px-2 py-1 text-[10px] transition-colors md:rounded-lg md:px-3 md:py-1.5 md:text-xs"
                       type="button"
                     >
                       {t('announcement.markAllRead')}
@@ -214,12 +214,12 @@ export default function AnnouncementListPopup() {
               {/* Content */}
               <div className="max-h-[60vh] overflow-y-auto p-3 md:p-4">
                 {announcements.length === 0 ? (
-                  <div className="py-8 text-center text-muted-foreground md:py-12">
+                  <div className="text-muted-foreground py-8 text-center md:py-12">
                     <Icon
                       icon="ri:notification-off-line"
                       className="mx-auto mb-2 h-12 w-12 opacity-20 md:mb-3 md:h-16 md:w-16"
                     />
-                    <p className="font-medium text-sm md:text-base">{t('announcement.empty')}</p>
+                    <p className="text-sm font-medium md:text-base">{t('announcement.empty')}</p>
                     <p className="mt-1 text-xs opacity-70 md:text-sm">{t('announcement.emptyHint')}</p>
                   </div>
                 ) : (

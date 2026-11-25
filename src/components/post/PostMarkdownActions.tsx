@@ -168,7 +168,7 @@ export default function PostMarkdownActions({
 
   return (
     <div className="flex shrink-0 items-center">
-      <div className="flex items-stretch rounded-full bg-primary/10 text-primary">
+      <div className="bg-primary/10 text-primary flex items-stretch rounded-full">
         {primary}
         {hasMenu && (
           <DropdownMenu modal={false}>
@@ -180,7 +180,7 @@ export default function PostMarkdownActions({
                 className={cn(
                   capsule,
                   focusRing,
-                  'rounded-r-full border-primary/20 border-l px-1.5 data-[state=open]:bg-primary/20',
+                  'border-primary/20 data-[state=open]:bg-primary/20 rounded-r-full border-l px-1.5',
                 )}
               >
                 <RiArrowDownSLine aria-hidden="true" className={iconClass} />

@@ -25,31 +25,31 @@ export function MacToolbar({ language, title, url, linkText, className, children
   return (
     <div
       className={cn(
-        'flex shrink-0 flex-col rounded-t-xl border border-(--code-border) border-b-0 bg-(--code-toolbar)',
+        'flex shrink-0 flex-col rounded-t-xl border border-b-0 border-(--code-border) bg-(--code-toolbar)',
         onClose && 'tablet:rounded-none',
         className,
       )}
     >
-      <div className="flex min-h-13 min-w-0 items-center justify-between pr-2 pl-4 tablet:pl-3">
+      <div className="tablet:pl-3 flex min-h-13 min-w-0 items-center justify-between pr-2 pl-4">
         <div className="flex min-w-0 items-center gap-3 py-2">
           <div className="tablet:hidden shrink-0">
             <TrafficLights onFullscreen={onFullscreen} />
           </div>
           <span
-            className="truncate font-mono text-[0.6875rem] text-muted-foreground/80 uppercase tracking-[0.08em]"
+            className="text-muted-foreground/80 truncate font-mono text-[0.6875rem] tracking-[0.08em] uppercase"
             title={language}
           >
             {language}
           </span>
         </div>
         {(children || onClose) && (
-          <div className="ml-auto flex shrink-0 items-center py-1 tablet:[&_button]:min-h-11 tablet:[&_button]:min-w-11">
+          <div className="tablet:[&_button]:min-h-11 tablet:[&_button]:min-w-11 ml-auto flex shrink-0 items-center py-1">
             {children}
             {onClose && (
               <button
                 type="button"
                 onClick={onClose}
-                className="flex size-11 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:scale-95"
+                className="text-muted-foreground hover:bg-accent hover:text-accent-foreground flex size-11 shrink-0 items-center justify-center rounded-md transition-colors active:scale-95"
                 aria-label={t('common.close')}
                 title={t('common.close')}
               >

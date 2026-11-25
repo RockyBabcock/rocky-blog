@@ -27,7 +27,7 @@ function ChevronIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className="shrink-0 text-muted-foreground transition-transform duration-150 [[data-state=open]>&]:rotate-180"
+      className="text-muted-foreground shrink-0 transition-transform duration-150 [[data-state=open]>&]:rotate-180"
     >
       <path d="m6 9 6 6 6-6" />
     </svg>
@@ -47,7 +47,7 @@ function CheckIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className="size-4 shrink-0 text-primary"
+      className="text-primary size-4 shrink-0"
     >
       <path d="M20 6 9 17l-5-5" />
     </svg>
@@ -64,7 +64,7 @@ function FilterSelect({ label, value, options, onSelect }: FilterSelectProps) {
           <button
             type="button"
             aria-label={`${label}: ${current?.label}`}
-            className="flex min-h-10 w-full min-w-0 touch-manipulation items-center justify-between gap-2 rounded-lg border border-border/80 bg-background px-2.5 py-1.5 text-left outline-none hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary"
+            className="border-border/80 bg-background hover:border-primary/50 focus-visible:ring-primary flex min-h-10 w-full min-w-0 touch-manipulation items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left outline-none focus-visible:ring-2"
           >
             <span className="truncate">{current?.label}</span>
             <ChevronIcon />

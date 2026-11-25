@@ -129,7 +129,8 @@ export default function Editor({ ogEndpoint = '/api/editor/og', colophon = [] }:
       if (!import.meta.env.DEV || event.source !== window.parent || window.parent === window) return;
       if (!URL.canParse(event.origin)) return;
       const origin = new URL(event.origin);
-      if (!['localhost', '127.0.0.1'].includes(origin.hostname) || origin.port !== '4322') return;
+      const cmsPort = String(import.meta.env.PUBLIC_CMS_PORT || '4322');
+      if (!['localhost', '127.0.0.1'].includes(origin.hostname) || origin.port !== cmsPort) return;
       if (
         event.data?.type === 'koharu-cms-open' &&
         typeof event.data.source === 'string' &&

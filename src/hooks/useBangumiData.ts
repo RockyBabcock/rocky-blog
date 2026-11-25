@@ -1,34 +1,73 @@
-import type { BangumiCollectionType, BangumiUserCollection } from '@/types/bangumi';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { fetchAllCollections } from '@/lib/bangumi/api';
+import { SUBJECT_TYPE_KEYS, SUBJECT_TYPE_MAP, type SubjectTypeKey } from '@/lib/bangumi/constants';
+import type { BangumiUserCollection } from '@/types/bangumi';
 
-export function useBangumiData(userId: string, subjectType = 2, collectionType: BangumiCollectionType = 3) {
-  const [items, setItems] = useState<BangumiUserCollection[]>([]);
-  const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+type BangumiData = Record<SubjectTypeKey, BangumiUserCollection[]>;
+
+interface UseBangumiDataReturn {
+  data: BangumiData;
+  isLoading: boolean;
+  error: string | null;
+  retry: () => void;
+}
+
+const emptyData: BangumiData = {
+  anime: [],
+  book: [],
+  music: [],
+  game: [],
+  real: [],
+};
+
+export function useBangumiData(userId: string): UseBangumiDataReturn {
+  const [data, setData] = useState<BangumiData>(emptyData);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const cancelledRef = useRef(false);
+  const [trigger, setTrigger] = useState(0);
 
-  const fetchData = useCallback(async () => {
-    if (!userId) return;
+  const retry = useCallback(() => setTrigger((n) => n + 1), []);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger forces re-fetch on retry
+  useEffect(() => {
+    cancelledRef.current = false;
     setIsLoading(true);
     setError(null);
-    try {
-      const res = await fetch(
-        `https://api.bgm.tv/v0/users/${encodeURIComponent(userId)}/collections?subject_type=${subjectType}&type=${collectionType}&limit=12`,
-      );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-      setItems(Array.isArray(json.data) ? json.data : []);
-      setTotal(Number(json.total ?? 0));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load');
-    } finally {
-      setIsLoading(false);
+    setData(emptyData);
+
+    async function load() {
+      try {
+        const results = await Promise.all(
+          SUBJECT_TYPE_KEYS.map(async (key) => {
+            const items = await fetchAllCollections(userId, SUBJECT_TYPE_MAP[key]);
+            return [key, items] as const;
+          }),
+        );
+
+        if (cancelledRef.current) return;
+
+        const newData = { ...emptyData };
+        for (const [key, items] of results) {
+          newData[key] = items;
+        }
+        setData(newData);
+      } catch (err) {
+        if (cancelledRef.current) return;
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        if (!cancelledRef.current) {
+          setIsLoading(false);
+        }
+      }
     }
-  }, [userId, subjectType, collectionType]);
 
-  useEffect(() => {
-    void fetchData();
-  }, [fetchData]);
+    load();
 
-  return { items, total, isLoading, error, retry: fetchData };
+    return () => {
+      cancelledRef.current = true;
+    };
+  }, [userId, trigger]);
+
+  return { data, isLoading, error, retry };
 }

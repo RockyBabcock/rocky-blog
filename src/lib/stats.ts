@@ -1,26 +1,50 @@
-import { getPostWordStats, getSortedPosts } from '@lib/content/posts';
+/**
+ * Site statistics utilities
+ */
 
+import { defaultLocale } from '../i18n/config';
+import { memoize } from './content/cache';
+import { getPostReadingTime, getSortedPosts } from './content/posts';
+
+/**
+ * Calculate total word count and reading time for all posts (excluding drafts in production)
+ * Only counts default locale posts to avoid inflating stats with translations
+ */
 export async function getSiteStats() {
-  const posts = await getSortedPosts();
-  let totalWords = 0;
-  let totalMinutes = 0;
+  return memoize('siteStats', '__default__', async () => {
+    const posts = await getSortedPosts(defaultLocale);
 
-  for (const post of posts) {
-    const { words, minutes } = getPostWordStats(post);
-    totalWords += words;
-    totalMinutes += minutes;
-  }
+    let totalWords = 0;
+    let totalMinutes = 0;
 
-  const formattedWords = totalWords >= 1000 ? `${(totalWords / 1000).toFixed(1)}k` : String(totalWords);
-  const hours = Math.floor(totalMinutes / 60);
-  const mins = totalMinutes % 60;
-  const formattedTime = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+    for (const post of posts) {
+      const stats = getPostReadingTime(post);
 
-  return {
-    postCount: posts.length,
-    totalWords,
-    formattedWords,
-    totalMinutes,
-    formattedTime,
-  };
+      totalWords += stats.words;
+      totalMinutes += Math.ceil(stats.minutes);
+    }
+
+    // Format word count (e.g., 871k)
+    const formatWordCount = (count: number): string => {
+      if (count >= 1000) {
+        return `${Math.floor(count / 1000)}k`;
+      }
+      return count.toString();
+    };
+
+    // Format reading time (e.g., 13:12 for 13 hours 12 minutes)
+    const formatReadingTime = (minutes: number): string => {
+      const hours = Math.floor(minutes / 60);
+      const mins = minutes % 60;
+      return `${hours}:${mins.toString().padStart(2, '0')}`;
+    };
+
+    return {
+      totalWords,
+      totalMinutes,
+      formattedWords: formatWordCount(totalWords),
+      formattedTime: formatReadingTime(totalMinutes),
+      postCount: posts.length,
+    };
+  });
 }

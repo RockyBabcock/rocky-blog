@@ -37,8 +37,8 @@ function CustomCategoryChip({
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-sm">
-      <span className="font-medium text-primary">{category.name}</span>
+    <div className="bg-primary/10 flex items-center gap-1 rounded-full px-3 py-1 text-sm">
+      <span className="text-primary font-medium">{category.name}</span>
       {isEditing ? (
         <input
           aria-label={`Slug for ${category.name}`}
@@ -47,13 +47,13 @@ function CustomCategoryChip({
           onChange={(e) => onSlugChange(e.target.value)}
           onBlur={() => setIsEditing(false)}
           onKeyDown={(e) => e.key === 'Enter' && setIsEditing(false)}
-          className="ml-1 w-24 rounded border border-border bg-background px-1 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
+          className="border-border bg-background focus:ring-ring ml-1 w-24 rounded border px-1 text-xs focus:ring-1 focus:outline-none"
         />
       ) : (
         <button
           type="button"
           onClick={() => setIsEditing(true)}
-          className="ml-1 text-muted-foreground text-xs hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground ml-1 text-xs"
           title="Edit slug"
         >
           ({category.slug})
@@ -62,7 +62,7 @@ function CustomCategoryChip({
       <button
         type="button"
         onClick={onRemove}
-        className="ml-1 text-muted-foreground hover:text-destructive"
+        className="text-muted-foreground hover:text-destructive ml-1"
         aria-label={`Remove ${category.name}`}
       >
         <Icon icon="ri:close-line" className="size-3.5" />
@@ -184,7 +184,7 @@ export function CreatePostDialog({ open, onOpenChange, existingCategories, onSuc
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Title */}
           <div className="space-y-2">
-            <label htmlFor="title" className="font-medium text-sm">
+            <label htmlFor="title" className="text-sm font-medium">
               Title <span className="text-destructive">*</span>
             </label>
             <input
@@ -193,8 +193,8 @@ export function CreatePostDialog({ open, onOpenChange, existingCategories, onSuc
               {...register('title')}
               placeholder="Enter post title..."
               className={cn(
-                'w-full rounded-lg border border-input bg-background px-3 py-2 text-sm',
-                'focus:outline-none focus:ring-2 focus:ring-ring',
+                'border-input bg-background w-full rounded-lg border px-3 py-2 text-sm',
+                'focus:ring-ring focus:ring-2 focus:outline-none',
                 errors.title && 'border-destructive',
               )}
             />
@@ -203,11 +203,11 @@ export function CreatePostDialog({ open, onOpenChange, existingCategories, onSuc
 
           {/* Categories */}
           <div className="space-y-2">
-            <span className="font-medium text-sm">Categories</span>
+            <span className="text-sm font-medium">Categories</span>
 
             {/* Selected categories display */}
             {selectedCategories.length > 0 && (
-              <div className="flex flex-wrap gap-2 rounded-lg border border-border bg-muted/30 p-2">
+              <div className="border-border bg-muted/30 flex flex-wrap gap-2 rounded-lg border p-2">
                 {selectedCategories.map((cat) => {
                   const customCat = customCategories.find((c) => c.name === cat);
                   if (customCat) {
@@ -221,7 +221,7 @@ export function CreatePostDialog({ open, onOpenChange, existingCategories, onSuc
                     );
                   }
                   return (
-                    <span key={cat} className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm">
+                    <span key={cat} className="bg-muted flex items-center gap-1 rounded-full px-3 py-1 text-sm">
                       {cat}
                       <button
                         type="button"
@@ -267,7 +267,7 @@ export function CreatePostDialog({ open, onOpenChange, existingCategories, onSuc
                   }
                 }}
                 placeholder="Add custom category..."
-                className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                className="border-input bg-background focus:ring-ring flex-1 rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
               />
               <Button type="button" variant="outline" size="sm" onClick={handleAddCustomCategory}>
                 <Icon icon="ri:add-line" className="size-4" />
@@ -277,7 +277,7 @@ export function CreatePostDialog({ open, onOpenChange, existingCategories, onSuc
 
           {/* Tags */}
           <div className="space-y-2">
-            <label htmlFor="tags" className="font-medium text-sm">
+            <label htmlFor="tags" className="text-sm font-medium">
               Tags
             </label>
             <input
@@ -285,14 +285,14 @@ export function CreatePostDialog({ open, onOpenChange, existingCategories, onSuc
               type="text"
               {...register('tags')}
               placeholder="tag1, tag2, tag3..."
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="border-input bg-background focus:ring-ring w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
             />
             <p className="text-muted-foreground text-xs">Separate tags with commas</p>
           </div>
 
           {/* Draft checkbox */}
           <div className="flex items-center gap-2">
-            <input id="draft" type="checkbox" {...register('draft')} className="size-4 rounded border-input" />
+            <input id="draft" type="checkbox" {...register('draft')} className="border-input size-4 rounded" />
             <label htmlFor="draft" className="text-sm">
               Save as draft
             </label>

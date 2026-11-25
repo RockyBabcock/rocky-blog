@@ -124,7 +124,7 @@ export function MobileTOCDropdown({
                 ref={refs.setFloating}
                 style={panelStyle}
                 className={cn(
-                  'z-50 flex max-h-[min(70vh,34rem)] flex-col overflow-hidden rounded-2xl border border-primary/15 bg-popover shadow-xl',
+                  'border-primary/15 bg-popover z-50 flex max-h-[min(70vh,34rem)] flex-col overflow-hidden rounded-2xl border shadow-xl',
                   phone ? 'w-[calc(100vw-1.5rem)]' : 'w-[min(20rem,calc(100vw-1.5rem))]',
                 )}
                 initial={motionDisabled ? false : { opacity: 0, clipPath: closedClip }}
@@ -141,14 +141,14 @@ export function MobileTOCDropdown({
                 {...getFloatingProps()}
               >
                 <div className="flex items-center justify-between px-4 pt-3 pb-1.5 text-xs">
-                  <span className="font-semibold text-foreground/85">{t('toc.title')}</span>
+                  <span className="text-foreground/85 font-semibold">{t('toc.title')}</span>
                   {chapter > 0 && (
                     <span className="text-muted-foreground tabular-nums">
                       {chapter} / {headings.length}
                     </span>
                   )}
                 </div>
-                <div className="toc-scroll-fade overflow-y-auto overflow-x-hidden px-2 pb-2" data-toc-scroller>
+                <div className="toc-scroll-fade overflow-x-hidden overflow-y-auto px-2 pb-2" data-toc-scroller>
                   <nav
                     ref={(nav) => {
                       currentEntry.current = nav?.querySelector<HTMLElement>('[aria-current]') ?? null;

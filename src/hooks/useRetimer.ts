@@ -1,16 +1,18 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
+/**
+ * A hook that manages a single timer, automatically clearing the previous one
+ * when a new timer is set. Compatible with both Node.js and browser environments.
+ *
+ * change from https://github.com/SukkaW/foxact/blob/master/packages/foxact/src/use-retimer/index.ts
+ */
 export function useRetimer() {
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timerIdRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  useEffect(() => {
-    return () => {
-      if (timerRef.current !== null) clearTimeout(timerRef.current);
-    };
-  }, []);
-
-  return useCallback((timer?: ReturnType<typeof setTimeout> | null) => {
-    if (timerRef.current !== null) clearTimeout(timerRef.current);
-    timerRef.current = timer ?? null;
+  return useCallback((timerId?: ReturnType<typeof setTimeout> | null) => {
+    if (timerIdRef.current !== undefined) {
+      clearTimeout(timerIdRef.current);
+    }
+    timerIdRef.current = timerId ?? undefined;
   }, []);
 }

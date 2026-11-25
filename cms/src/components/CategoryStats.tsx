@@ -14,7 +14,7 @@ export function CategoryStats({ categories, maxDisplay = 6 }: CategoryStatsProps
   const maxCount = Math.max(...displayCategories.map((c) => c.count), 1);
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className="border-border bg-card rounded-lg border p-4">
       <h2 className="mb-4 font-semibold">Categories</h2>
       <div className="space-y-3">
         {displayCategories.map((cat) => {
@@ -25,9 +25,9 @@ export function CategoryStats({ categories, maxDisplay = 6 }: CategoryStatsProps
                 <span className="font-medium">{cat.name}</span>
                 <span className="text-muted-foreground">{cat.count}</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-muted">
+              <div className="bg-muted h-2 overflow-hidden rounded-full">
                 <div
-                  className="h-full rounded-full bg-primary transition-all duration-500"
+                  className="bg-primary h-full rounded-full transition-all duration-500"
                   style={{ width: `${percentage}%` }}
                 />
               </div>

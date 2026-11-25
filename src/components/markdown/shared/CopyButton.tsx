@@ -26,9 +26,9 @@ export function CopyButton({ text, className, showLabel }: CopyButtonProps) {
       type="button"
       onClick={() => copy(text)}
       className={cn(
-        'flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors',
+        'text-muted-foreground flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-md transition-colors',
         'hover:bg-accent hover:text-accent-foreground active:scale-95',
-        showLabel ? 'gap-2 px-3 tablet:px-0 py-1.5' : 'size-11',
+        showLabel ? 'tablet:px-0 gap-2 px-3 py-1.5' : 'size-11',
         copied && 'text-primary',
         className,
       )}

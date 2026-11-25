@@ -1,12 +1,26 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.9/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!**/dist", "!**/node_modules", "!**/.astro", "!**/public", "!**/.acceptance"]
+    "includes": [
+      "**",
+      "!**/dist",
+      "!**/node_modules",
+      "!**/.astro",
+      "!**/public",
+      "!**/.acceptance",
+      "!**/.playwright-cli",
+      "!**/*.md",
+      "!**/*.mdx",
+      "!**/*.yaml",
+      "!**/*.yml",
+      "!**/*.svg",
+      "!**/docs/design/**"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -18,15 +32,11 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "nursery": {
-        "useSortedClasses": {
+        "useTailwindSortedClasses": {
           "level": "warn",
-          "fix": "safe",
-          "options": {
-            "attributes": ["class", "className"],
-            "functions": ["clsx", "cn", "cva"]
-          }
+          "fix": "safe"
         }
       }
     }
@@ -69,5 +79,10 @@
         }
       }
     }
-  ]
+  ],
+  "tailwind": {
+    "attributes": ["class", "className"],
+    "mergeFunctions": ["clsx", "cn"],
+    "variantFunctions": ["cva"]
+  }
 }

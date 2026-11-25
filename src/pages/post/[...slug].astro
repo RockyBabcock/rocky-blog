@@ -1,125 +1,265 @@
 ---
 import { render } from 'astro:content';
 import CustomContent from '@components/common/CustomContent.astro';
-import PostNavigation from '@components/post/PostNavigation.astro';
+import HomeSider from '@components/layout/HomeSider.astro';
+import ColophonBanner from '@components/post/colophon/ColophonBanner.astro';
+import ColophonSeal from '@components/post/colophon/ColophonSeal.astro';
+import PostPagination from '@components/post/PostPagination.astro';
+import SummaryPanel, { type SummarySource } from '@components/post/SummaryPanel';
+import Cover from '@components/ui/cover/Cover.astro';
+import { defaultContentConfig } from '@constants/content-config';
 import { HomeSiderType } from '@constants/enum';
+import { CONTENT_PADDING } from '@constants/layout';
+import { devConfig, siteConfig } from '@constants/site-config';
+import Layout from '@layouts/Layout.astro';
 import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
-import { getPostSlug, getSortedPosts } from '@lib/content';
-import { translateCategoryName } from '@lib/content/categories';
-import { getPostDescriptionWithSummary, getPostLastCategory, getPostWordStats, getRandomCover } from '@lib/content/posts';
-import { displayDate } from '@lib/date';
+import { isOpenInEditorAvailable } from '@lib/config/post-actions';
+import { editorConfig, postActionsConfig } from '@lib/config/site';
+import {
+  buildCategoryPath,
+  getCategoryArr,
+  getPostById,
+  getPostDescription,
+  getPostLocale,
+  getPostSlug,
+  getPostSummary,
+  translateCategoryName,
+} from '@lib/content';
+import { colophonItemsAt } from '@lib/content/colophon';
+import { getPostColophon } from '@lib/content/post-colophon';
+import { getLocalEditorHref, getPostSourceFilename, getPostSourcePath, isPostSourcePublic } from '@lib/content/post-source';
+import { getAdjacentSeriesPosts } from '@lib/content/posts';
+import { toPostRef } from '@lib/content/transforms';
+import { formatForSeo } from '@lib/date';
+import { encodeSlug } from '@lib/route';
+import { getOgImageUrl } from '@lib/seo/og-image';
 import { Icon } from 'astro-icon/components';
-import type { BlogPost } from 'types/blog';
-import { defaultLocale, localizedPath, t } from '@/i18n';
+import { Comment } from '@/components/comment';
+import PostMarkdownActions from '@/components/post/PostMarkdownActions';
+import { defaultLocale, getLocaleLabel, localizedPath, t } from '@/i18n';
+import { extractTextFromMarkdown } from '@/lib/sanitize';
+import { postRoute } from '../_shared/routes';
 
-export async function getStaticPaths() {
-  const posts = await getSortedPosts(defaultLocale);
-  return posts.map((post, index) => ({
-    params: { slug: getPostSlug(post) },
-    props: {
-      post,
-      prevPost: index > 0 ? posts[index - 1] : null,
-      nextPost: index < posts.length - 1 ? posts[index + 1] : null,
-      locale: defaultLocale,
-    },
-  }));
-}
+export const getStaticPaths = postRoute.root;
 
 interface Props {
-  post: BlogPost;
-  prevPost: BlogPost | null;
-  nextPost: BlogPost | null;
-  locale?: string;
+  postId: string;
+  locale: string;
 }
 
-const { post, prevPost, nextPost, locale = defaultLocale } = Astro.props;
+const { postId, locale } = Astro.props;
+// Look up by locale first (may find a translated version); fall back to defaultLocale
+// which is guaranteed to exist since getStaticPaths enumerates from defaultLocale posts.
+const post =
+  (await getPostById(postId, locale)) ?? (locale !== defaultLocale ? await getPostById(postId, defaultLocale) : undefined);
+if (!post) throw new Error(`Post not found: ${postId}`);
+const normalizedPostFilePath = post.filePath?.replaceAll('\\', '/');
+const contentRoot = 'src/content/blog/';
+const postRelativePath = normalizedPostFilePath?.startsWith(contentRoot)
+  ? normalizedPostFilePath.slice(contentRoot.length)
+  : undefined;
+const isFallback = getPostLocale(post) !== locale;
+// For fallback pages (showing default-locale content under /en/), canonical should point to the original
+const canonicalUrl = isFallback
+  ? new URL(localizedPath(`/post/${encodeSlug(getPostSlug(post))}`, defaultLocale), Astro.site).href
+  : undefined;
 const { Content } = await render(post);
-const slug = getPostSlug(post);
-const cover = post.data.cover || getRandomCover(slug);
-const description = getPostDescriptionWithSummary(post);
-const category = getPostLastCategory(post);
-const categoryLabel = category.name ? translateCategoryName(category.name, locale) : '';
-const { words, minutes } = getPostWordStats(post.body ?? '');
+const adjacent = await getAdjacentSeriesPosts(post, locale);
+const prevPost = adjacent.prevPost ? toPostRef(adjacent.prevPost) : null;
+const nextPost = adjacent.nextPost ? toPostRef(adjacent.nextPost) : null;
+const { title, categories = [], tags = [], date, math: postMath, keywords: postKeywords = [] } = post?.data ?? {};
+// KaTeX CSS: only load when global enableMath is on, post hasn't opted out,
+// and the post explicitly enables math or contains LaTeX math delimiters.
+const hasMath =
+  defaultContentConfig.enableMath && (postMath === true || (postMath !== false && /\$|\\\(|\\\[/.test(post.body ?? '')));
+
+// 使用统一的工具函数获取文章描述（加密文章使用通用描述）
+const finalDescription = getPostDescription(post, locale);
+
+// OGP image for BlogPosting schema (uses same fallback chain as Layout)
+const ogImage = getOgImageUrl(post?.data.cover, Astro.site);
+
+const categoryKeywords = categories?.length ? categories.flat() : [];
+const postKw = postKeywords?.length ? postKeywords : [...tags, ...categoryKeywords];
+const keywords = [...new Set([...postKw, ...(siteConfig.keywords ?? [])])] as string[];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description: finalDescription,
+  keywords,
+  author: {
+    '@type': 'Person',
+    name: siteConfig.author ?? siteConfig.name,
+    url: Astro.site,
+  },
+  datePublished: formatForSeo(date),
+  ...(post.data.updated && { dateModified: formatForSeo(post.data.updated) }),
+  ...(ogImage && { image: ogImage }),
+  mainEntityOfPage: Astro.url.href,
+};
+
+const categoryArr = getCategoryArr(categories?.[0]);
+const categoryStr = categoryArr?.length ? ` | ${categoryArr.map((c) => translateCategoryName(c, locale)).join(' / ')}` : '';
+
+// Generate breadcrumb data for categories (translated for current locale)
+const breadcrumbCategories = [];
+if (categoryArr?.length) {
+  for (let i = 0; i < categoryArr.length; i++) {
+    const partialCategories = categoryArr.slice(0, i + 1);
+    const link = localizedPath(buildCategoryPath(partialCategories), locale);
+    breadcrumbCategories.push({
+      name: translateCategoryName(categoryArr[i], locale),
+      link: link,
+    });
+  }
+}
+
+// BreadcrumbList structured data for SEO
+const homeName = t(locale, 'breadcrumb.home');
+const breadcrumbListItems = [
+  {
+    '@type': 'ListItem',
+    position: 1,
+    name: homeName,
+    item: new URL(localizedPath('/', locale), Astro.site).href,
+  },
+  ...breadcrumbCategories.map((category, index) => ({
+    '@type': 'ListItem',
+    position: index + 2,
+    name: category.name,
+    item: new URL(category.link, Astro.site).href,
+  })),
+  {
+    '@type': 'ListItem',
+    position: breadcrumbCategories.length + 2,
+    name: title,
+    // 当前页面（最后一项）省略 item，符合 Google 结构化数据最佳实践
+  },
+];
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbListItems,
+};
+
+// 确定显示的摘要内容和来源类型
+const postSlug = getPostSlug(post);
+const colophonItems = getPostColophon(post, locale);
+const bannerMarks = colophonItemsAt(colophonItems, 'banner');
+const sealMarks = colophonItemsAt(colophonItems, 'seal');
+const postSourcePath = getPostSourcePath(localizedPath(`/post/${encodeSlug(postSlug)}`, locale));
+const postEditorHref = isOpenInEditorAvailable(postActionsConfig, editorConfig.enabled, import.meta.env.DEV)
+  ? `${localizedPath('/editor/')}?from=${encodeURIComponent(postSourcePath)}`
+  : undefined;
+const localEditors =
+  import.meta.env.DEV && devConfig.localProjectPath && postRelativePath
+    ? devConfig.editors.map(({ id, name, icon, urlTemplate }) => ({
+        id,
+        name,
+        icon,
+        href: getLocalEditorHref({ urlTemplate }, devConfig, postRelativePath),
+      }))
+    : [];
+let summaryText: string | null = null;
+let summarySource: SummarySource | null = null;
+
+if (post.data.description) {
+  // 优先使用手写描述
+  summaryText = post.data.description;
+  summarySource = 'description';
+} else {
+  // 尝试获取 AI 摘要
+  const aiSummary = getPostSummary(postSlug);
+  if (aiSummary) {
+    summaryText = aiSummary;
+    summarySource = 'ai';
+  } else {
+    // 降级到自动提取
+    summaryText = extractTextFromMarkdown(post.body ?? '', 200);
+    summarySource = 'auto';
+  }
+}
 ---
 
-<TwoColumnLayout
-  title={post.data.title}
-  description={description}
-  cover={cover}
-  coverTitle={post.data.title}
-  isPostPage={true}
-  tocNumbering={post.data.tocNumbering ?? true}
+<Layout
+  locale={locale}
+  title={`${post.data.title}${categoryStr} | ${siteConfig.title}`}
+  description={finalDescription}
   siderType={HomeSiderType.POST}
   post={post}
-  locale={locale}
-  compactHero={true}
+  canonical={canonicalUrl}
+  keywords={keywords}
 >
-  <div slot="hero" class="flex flex-col items-center gap-3">
-    <h1 class="shadow-text max-w-3xl font-extrabold text-3xl leading-snug text-white md:text-2xl">
-      {post.data.title}
-    </h1>
-    <div class="shadow-text flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-white/90">
-      <time datetime={post.data.date.toISOString()} class="inline-flex items-center gap-1">
-        <Icon name="ri:calendar-line" class="h-3.5 w-3.5" />
-        {displayDate(post.data.date)}
-      </time>
-      <span class="inline-flex items-center gap-1">
-        <Icon name="ri:quill-pen-line" class="h-3.5 w-3.5" />
-        {t(locale, 'post.wordCount', { count: words.toLocaleString() })}
-      </span>
-      <span class="inline-flex items-center gap-1">
-        <Icon name="ri:time-line" class="h-3.5 w-3.5" />
-        {t(locale, 'post.readingTime', { minutes })}
-      </span>
-      {categoryLabel && (
-        <a
-          href={localizedPath(category.link, locale)}
-          class="inline-flex items-center gap-1 underline-offset-4 hover:underline"
-        >
-          <Icon name="ri:folder-2-line" class="h-3.5 w-3.5" />
-          {categoryLabel}
-        </a>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+  {hasMath && <link slot="head" rel="stylesheet" href="/katex/katex.min.css" />}
+  <TwoColumnLayout post={post}>
+    <Cover slot="cover" data={post} />
+    <HomeSider slot="sider" type={HomeSiderType.POST} post={post} />
+    <div
+      class={`shadow-box bg-gradient-start flex min-w-0 w-full max-w-full flex-col gap-2 overflow-x-clip ${CONTENT_PADDING.standard}`}
+    >
+      <!-- Breadcrumb Navigation -->
+      <nav class="text-muted-foreground flex items-center justify-between gap-2 text-sm">
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1">
+            <!-- Home Icon and Link -->
+            <Icon name="fa6-solid:house-chimney" class="h-4 w-4" />
+            <a href={localizedPath('/', locale)} aria-label={homeName}>
+              <span class="hover:text-blue transition-colors duration-300">{homeName}</span>
+            </a>
+          </div>
+          <!-- Category Breadcrumbs -->
+          {
+            breadcrumbCategories.map((category, index) => (
+              <>
+                <Icon name="ri:arrow-right-s-line" class="text-muted-foreground/60 h-4 w-4" />
+                <a
+                  href={category.link}
+                  class={`hover:text-blue transition-colors duration-300 ${index === breadcrumbCategories.length - 1 ? 'text-primary bg-primary/10 hover:text-primary hover:bg-primary/20 rounded-full px-2.5 py-1' : ''}`}
+                  aria-label={t(locale, 'breadcrumb.goToCategory', { name: category.name })}
+                >
+                  {category.name}
+                </a>
+              </>
+            ))
+          }
+        </div>
+        {
+          isPostSourcePublic(post.data, post.body, import.meta.env.PROD) && (
+            <PostMarkdownActions
+              client:idle
+              locale={locale}
+              sourcePath={postSourcePath}
+              filename={getPostSourceFilename(postSlug)}
+              copy={postActionsConfig.copyMarkdown}
+              download={postActionsConfig.downloadMarkdown}
+              editorHref={postEditorHref}
+              localEditors={localEditors}
+            />
+          )
+        }
+      </nav>
+      {isFallback && (
+        <div class="flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-400">
+          <Icon name="ri:translate-2" class="h-4 w-4 shrink-0" />
+          <span>{t(locale, 'post.fallbackNotice', { lang: getLocaleLabel(locale) })}</span>
+        </div>
       )}
+      {bannerMarks.length > 0 && <ColophonBanner items={bannerMarks} />}
+      {
+        !post.data.password && summaryText && summarySource && (
+          <SummaryPanel client:visible summary={summaryText} source={summarySource} className="mt-2" locale={locale} />
+        )
+      }
+      <article class="prose dark:prose-invert" data-pagefind-body>
+        <CustomContent Content={Content} />
+      </article>
+      {sealMarks.length > 0 && <ColophonSeal items={sealMarks} date={post.data.date} locale={locale} />}
+      <PostPagination prevPost={prevPost} nextPost={nextPost} locale={locale} />
+      <Comment />
     </div>
-  </div>
-
-  <article class="rounded-2xl border border-border/70 bg-card p-8 shadow-card md:p-5">
-    <!-- Breadcrumbs -->
-    <nav class="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground" aria-label="Breadcrumb">
-      <a href={localizedPath('/', locale)} class="inline-flex items-center gap-1 hover:text-primary">
-        <Icon name="ri:home-4-line" class="h-3.5 w-3.5" />
-        <span>{t(locale, 'nav.home')}</span>
-      </a>
-      {categoryLabel && (
-        <>
-          <span>/</span>
-          <a href={localizedPath(category.link, locale)} class="hover:text-primary">
-            {categoryLabel}
-          </a>
-        </>
-      )}
-      <span>/</span>
-      <span class="truncate text-foreground/80">{post.data.title}</span>
-    </nav>
-
-    <div class="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
-      <CustomContent Content={Content} />
-    </div>
-
-    {post.data.tags && post.data.tags.length > 0 && (
-      <div class="mt-8 flex flex-wrap items-center gap-2 border-t border-border/60 pt-5">
-        {post.data.tags.map((tag) => (
-          <a
-            href={localizedPath(`/tags/${encodeURIComponent(tag)}`, locale)}
-            class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-white"
-          >
-            <Icon name="ri:hashtag" class="h-3 w-3" />
-            <span>{tag}</span>
-          </a>
-        ))}
-      </div>
-    )}
-
-    <PostNavigation prevPost={prevPost} nextPost={nextPost} locale={locale} />
-  </article>
-</TwoColumnLayout>
+  </TwoColumnLayout>
+</Layout>

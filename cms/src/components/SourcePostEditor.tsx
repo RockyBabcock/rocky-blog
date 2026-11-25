@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { DEV_SERVER_URL } from '@/lib/config';
+import { DEV_SERVER_URL } from '@/lib/ports';
 
 interface Props {
   postId: string;
@@ -118,7 +118,10 @@ export function SourcePostEditor({ postId, onClose, onSaved }: Props) {
     };
     window.addEventListener('message', receive);
     const timeout = window.setTimeout(() => {
-      if (baseline.current === null) setError('请同时启动博客开发服务：pnpm dev。编辑器与实际博客预览共用该服务。');
+      if (baseline.current === null)
+        setError(
+          `请同时启动博客开发服务（npm run dev / pnpm dev，默认地址 ${DEV_SERVER_URL}）。编辑器与实际博客预览共用该服务。`,
+        );
     }, 8000);
     return () => {
       cancelled = true;
@@ -128,21 +131,21 @@ export function SourcePostEditor({ postId, onClose, onSaved }: Props) {
   }, [postId]);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-background">
+    <div className="bg-background fixed inset-0 z-50 flex flex-col">
       <div className="flex items-center justify-between gap-4 border-b px-4 py-2 text-sm">
         <button type="button" className="shrink-0" onClick={onClose}>
           ← 返回文章列表
         </button>
-        <span className="min-w-0 truncate text-muted-foreground" title={postId}>
+        <span className="text-muted-foreground min-w-0 truncate" title={postId}>
           CMS · {postId}
         </span>
       </div>
       {error && (
-        <div className="border-b bg-destructive/10 p-4 text-destructive text-sm" role="alert">
+        <div className="bg-destructive/10 text-destructive border-b p-4 text-sm" role="alert">
           {error}
         </div>
       )}
-      {!ready && !error && <output className="p-4 text-muted-foreground text-sm">正在连接写作室…</output>}
+      {!ready && !error && <output className="text-muted-foreground p-4 text-sm">正在连接写作室…</output>}
       <iframe
         ref={frame}
         src={`${DEV_SERVER_URL}/editor`}

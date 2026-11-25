@@ -22,14 +22,14 @@ export function QuizBlock({ element }: QuizBlockProps) {
 
   if (!quiz) {
     return (
-      <div className="not-prose my-4 rounded-xl border border-destructive/50 bg-card p-4 text-muted-foreground text-sm">
+      <div className="not-prose border-destructive/50 bg-card text-muted-foreground my-4 rounded-xl border p-4 text-sm">
         {t('quiz.parseFailed')}
       </div>
     );
   }
 
   return (
-    <div className="not-prose my-4 rounded-xl border bg-card p-4 shadow-sm">
+    <div className="not-prose bg-card my-4 rounded-xl border p-4 shadow-sm">
       {(() => {
         switch (quiz.type) {
           case 'single':

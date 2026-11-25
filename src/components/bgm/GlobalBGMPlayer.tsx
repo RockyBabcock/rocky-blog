@@ -240,7 +240,7 @@ export default function GlobalBGMPlayer({ audioGroups, metingApi }: GlobalBGMPla
                 {/* Close button */}
                 <button
                   type="button"
-                  className="absolute top-2 right-2 z-10 rounded-full bg-background/80 p-1.5 text-muted-foreground backdrop-blur-sm transition-colors hover:bg-background hover:text-foreground"
+                  className="bg-background/80 text-muted-foreground hover:bg-background hover:text-foreground absolute top-2 right-2 z-10 rounded-full p-1.5 backdrop-blur-sm transition-colors"
                   onClick={closeBgmPanel}
                   aria-label={t('audio.closePanel')}
                 >

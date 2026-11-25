@@ -91,7 +91,7 @@ export function CategoryMappingDialog({ open, onOpenChange, newCategories, onCon
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Icon icon="ri:folder-add-line" className="size-5 text-primary" />
+            <Icon icon="ri:folder-add-line" className="text-primary size-5" />
             New Categories Detected
           </DialogTitle>
           <DialogDescription>
@@ -104,13 +104,13 @@ export function CategoryMappingDialog({ open, onOpenChange, newCategories, onCon
             {categoryNames.map((name) => (
               <div key={name} className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <label htmlFor={`slug-${name}`} className="font-medium text-sm">
+                  <label htmlFor={`slug-${name}`} className="text-sm font-medium">
                     {name}
                   </label>
                   <button
                     type="button"
                     onClick={() => handleRegenerate(name)}
-                    className="flex items-center gap-1 text-muted-foreground text-xs hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs"
                     title="Regenerate slug"
                   >
                     <Icon icon="ri:refresh-line" className="size-3.5" />
@@ -125,8 +125,8 @@ export function CategoryMappingDialog({ open, onOpenChange, newCategories, onCon
                     {...register(name)}
                     placeholder="category-slug"
                     className={cn(
-                      'flex-1 rounded border border-input bg-background px-2 py-1.5 text-sm',
-                      'focus:outline-none focus:ring-1 focus:ring-ring',
+                      'border-input bg-background flex-1 rounded border px-2 py-1.5 text-sm',
+                      'focus:ring-ring focus:ring-1 focus:outline-none',
                       errors[name] && 'border-destructive',
                     )}
                   />
@@ -136,7 +136,7 @@ export function CategoryMappingDialog({ open, onOpenChange, newCategories, onCon
             ))}
           </div>
 
-          <div className="rounded-lg bg-muted/50 p-3">
+          <div className="bg-muted/50 rounded-lg p-3">
             <p className="text-muted-foreground text-xs">
               <Icon icon="ri:information-line" className="mr-1 inline size-3.5" />
               Slugs should be lowercase and contain only letters, numbers, and hyphens (e.g., "front-end").

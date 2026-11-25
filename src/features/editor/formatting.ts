@@ -204,6 +204,24 @@ function partialEmphasis(state: EditorState, action: 'bold' | 'italic') {
     for (let node: Node | null = nextTree.resolveInner(from, 1); node; node = node.parent) {
       if (node.name === name && node.from <= from && node.to >= to) preserved = true;
     }
+    if (!preserved && action === 'bold') {
+      // @lezer/markdown 1.8.x mis-splits interior `**` inside `***...***` (e.g. `***a**bc**def***`),
+      // even though CommonMark renders both sides as StrongEmphasis inside Emphasis.
+      const segment = next.doc.sliceString(from, to);
+      const before = next.doc.sliceString(Math.max(0, from - 2), from);
+      const after = next.doc.sliceString(to, Math.min(next.doc.length, to + 2));
+      const inOuterEmphasis = bounds.some((group) => {
+        const parent = group.node.parent;
+        return (
+          parent?.name === 'Emphasis' &&
+          state.doc.sliceString(parent.from, group.node.from) === '*' &&
+          state.doc.sliceString(group.node.to, parent.to) === '*'
+        );
+      });
+      if (inOuterEmphasis && before === '**' && after === '**' && segment.length > 0 && !/[*\s]/.test(segment)) {
+        preserved = true;
+      }
+    }
     if (!preserved) return false;
   }
   return { changes, selection: ordinaryEdits.selection.map(partialChanges) };

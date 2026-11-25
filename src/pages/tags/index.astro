@@ -1,42 +1,48 @@
 ---
 import PageIntro from '@components/common/PageIntro.astro';
-import { HomeSiderType } from '@constants/enum';
-import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
+import HomeSider from '@components/layout/HomeSider.astro';
+import TagItem from '@components/tag/TagItem.astro';
+import Cover from '@components/ui/cover/Cover.astro';
+import { siteConfig } from '@constants/site-config';
+import { Layout, TwoColumnLayout } from '@layouts/index';
 import { getAllTags, getSortedPosts } from '@lib/content';
-import { defaultLocale, localizedPath, t } from '@/i18n';
+import { tierTags } from '@lib/content/index-tags';
+import { defaultLocale, t } from '@/i18n';
 
 interface Props {
   locale?: string;
 }
-
-const locale = Astro.props.locale ?? defaultLocale;
+const { locale = defaultLocale } = Astro.props;
 const posts = await getSortedPosts(locale);
-const tags = Object.entries(getAllTags(posts)).sort((a, b) => b[1] - a[1]);
+const tags = tierTags(getAllTags(posts));
+const mainTags = tags.filter(({ count }) => count > 1);
+const singleTags = tags.filter(({ count }) => count === 1);
+const stats = [
+  { value: tags.length, label: t(locale, 'index.tags') },
+  ...(tags.length ? [{ value: tags[0].tag, label: t(locale, 'index.mostUsed'), labelFirst: true }] : []),
+];
 ---
-
-<TwoColumnLayout
-  title={t(locale, 'nav.tags')}
-  coverTitle={t(locale, 'nav.tags')}
-  siderType={HomeSiderType.HOME}
-  locale={locale}
-  compactHero={true}
->
-  <div class="rounded-2xl border border-border/70 bg-card p-7 shadow-card md:p-5">
-    <PageIntro stats={[{ value: tags.length, label: t(locale, 'stats.tagsLabel') }]} />
-
-    <div class="mt-6 flex flex-wrap gap-3">
-      {tags.map(([tag, count]) => (
-        <a
-          href={localizedPath(`/tags/${encodeURIComponent(tag)}`, locale)}
-          class="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm font-medium text-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:bg-primary/10 hover:text-primary"
-        >
-          <span class="text-primary">#</span>
-          <span>{tag}</span>
-          <span class="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground tabular-nums">
-            {count}
-          </span>
-        </a>
-      ))}
+<Layout articleTools={false} locale={locale} title={`${t(locale, 'tag.allTags')} | ${siteConfig.title}`} description={t(locale, 'tag.allTags')}>
+  <TwoColumnLayout showPostFooter={false}>
+    <Cover compact slot="cover" title={t(locale, 'tag.allTags')} />
+    <HomeSider slot="sider" />
+    <div class="index-surface shadow-box" data-tag-cloud>
+      <PageIntro stats={stats}>
+        <label class="tag-filter" slot="tools">
+          <span class="sr-only">{t(locale, 'tag.filter')}</span>
+          <input type="search" data-tag-filter placeholder={t(locale, 'tag.filterPlaceholder')} autocomplete="off" />
+        </label>
+      </PageIntro>
+      <div class="tag-cloud-list">{mainTags.map((tag) => <TagItem {...tag} locale={locale} />)}</div>
+      {singleTags.length > 0 && <details class="tag-singletons">
+        <summary>{t(locale, 'tag.singleTags', { count: singleTags.length })}</summary>
+        <div class="tag-cloud-list">{singleTags.map((tag) => <TagItem {...tag} locale={locale} />)}</div>
+      </details>}
+      <p class="tag-empty text-muted-foreground" data-tag-empty role="status" aria-live="polite" hidden={tags.length > 0}>{t(locale, 'tag.noMatches')}</p>
     </div>
-  </div>
-</TwoColumnLayout>
+  </TwoColumnLayout>
+</Layout>
+<script>
+  import { setupTagFilter } from '@lib/tag-filter';
+  setupTagFilter();
+</script>

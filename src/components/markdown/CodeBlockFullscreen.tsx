@@ -50,7 +50,7 @@ export default function CodeBlockFullscreen() {
       <MacToolbar language={data.language} onClose={isTablet ? undefined : closeModal} className="tablet:rounded-none">
         <button
           type="button"
-          className="flex size-11 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground aria-pressed:bg-accent aria-pressed:text-accent-foreground"
+          className="text-muted-foreground hover:bg-accent hover:text-accent-foreground aria-pressed:bg-accent aria-pressed:text-accent-foreground flex size-11 shrink-0 items-center justify-center rounded-md transition-colors"
           aria-label={t('code.wrapLines')}
           title={t('code.wrapLines')}
           aria-pressed={wrapLines}
@@ -74,11 +74,11 @@ export default function CodeBlockFullscreen() {
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Safe - codeHTML comes from Shiki syntax highlighter output only */}
         <code className={data.codeClassName} dangerouslySetInnerHTML={{ __html: data.codeHTML }} />
       </pre>
-      <div className="tablet:block hidden shrink-0 border-border border-t p-3">
+      <div className="tablet:block border-border hidden shrink-0 border-t p-3">
         <button
           type="button"
           onClick={closeModal}
-          className="flex min-h-11 w-full items-center justify-center rounded-xl bg-primary/10 px-4 py-2 font-medium text-primary text-sm transition-colors hover:bg-primary/20 active:bg-primary/25"
+          className="bg-primary/10 text-primary hover:bg-primary/20 active:bg-primary/25 flex min-h-11 w-full items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition-colors"
         >
           {t('common.close')}
         </button>

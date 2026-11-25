@@ -13,22 +13,22 @@ function TwikooSkeleton() {
     <div className="twikoo-skeleton animate-pulse space-y-4 px-4" aria-hidden="true">
       {/* Avatar + meta inputs row */}
       <div className="flex gap-3">
-        <div className="size-10 shrink-0 rounded-full bg-muted" />
+        <div className="bg-muted size-10 shrink-0 rounded-full" />
         <div className="flex flex-1 gap-2">
-          <div className="h-10 flex-1 rounded bg-muted" />
-          <div className="hidden h-10 flex-1 rounded bg-muted sm:block" />
-          <div className="hidden h-10 flex-1 rounded bg-muted sm:block" />
+          <div className="bg-muted h-10 flex-1 rounded" />
+          <div className="bg-muted hidden h-10 flex-1 rounded sm:block" />
+          <div className="bg-muted hidden h-10 flex-1 rounded sm:block" />
         </div>
       </div>
       {/* Textarea */}
-      <div className="h-[150px] rounded bg-muted" />
+      <div className="bg-muted h-[150px] rounded" />
       {/* Action row */}
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
-          <div className="size-6 rounded bg-muted" />
-          <div className="size-6 rounded bg-muted" />
+          <div className="bg-muted size-6 rounded" />
+          <div className="bg-muted size-6 rounded" />
         </div>
-        <div className="h-9 w-16 rounded bg-muted" />
+        <div className="bg-muted h-9 w-16 rounded" />
       </div>
     </div>
   );
@@ -82,11 +82,11 @@ export default function Twikoo() {
       <div className="px-4">
         {status === 'loading' && <TwikooSkeleton />}
         {status === 'error' && (
-          <div className="flex flex-col items-center gap-3 rounded-lg border border-border p-6 text-center">
+          <div className="border-border flex flex-col items-center gap-3 rounded-lg border p-6 text-center">
             <p className="text-muted-foreground text-sm">{t('comment.error')}</p>
             <button
               type="button"
-              className="rounded-md bg-primary px-4 py-2 text-primary-foreground text-sm transition-opacity hover:opacity-90"
+              className="bg-primary text-primary-foreground rounded-md px-4 py-2 text-sm transition-opacity hover:opacity-90"
               onClick={() => window.location.reload()}
             >
               {t('comment.retry')}

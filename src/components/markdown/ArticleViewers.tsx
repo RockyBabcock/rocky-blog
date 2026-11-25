@@ -28,9 +28,9 @@ export default function ArticleViewers() {
 
   function notice(message: string, onClose: () => void) {
     return (
-      <div className="fixed inset-x-4 bottom-4 z-60 flex items-center justify-between gap-4 rounded-xl bg-card p-4 shadow-lg">
+      <div className="bg-card fixed inset-x-4 bottom-4 z-60 flex items-center justify-between gap-4 rounded-xl p-4 shadow-lg">
         <output>{message}</output>
-        <button type="button" className="min-h-11 rounded-lg px-4 hover:bg-muted" onClick={onClose}>
+        <button type="button" className="hover:bg-muted min-h-11 rounded-lg px-4" onClick={onClose}>
           {t('common.close')}
         </button>
       </div>

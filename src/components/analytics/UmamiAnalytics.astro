@@ -3,8 +3,11 @@ import { analyticsConfig } from '@constants/site-config';
 import { normalizeUrl } from '@lib/utils';
 
 const config = analyticsConfig.umami;
-const enabled = config?.enabled === true && Boolean(config.id);
+const rawId = config?.id?.trim() ?? '';
 const endpoint = normalizeUrl(config?.endpoint) || 'https://cloud.umami.is';
+const isPlaceholderId = !rawId || /^your-umami-id$/i.test(rawId);
+const isPlaceholderEndpoint = /(?:^|\/\/)(?:[^/]+\.)?example\.com(?:[:/]|$)/i.test(endpoint);
+const enabled = config?.enabled === true && !isPlaceholderId && !isPlaceholderEndpoint;
 const scriptSrc = `${endpoint}/script.js`;
 const hostUrl = endpoint === 'https://cloud.umami.is' ? undefined : endpoint;
 ---

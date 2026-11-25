@@ -85,7 +85,7 @@ const DropdownNavComponent = ({
         {name}
         <Icon
           icon="ri:arrow-drop-down-fill"
-          className={cn('absolute right-0 size-6 transition-transform duration-300 ease-out-expo', {
+          className={cn('ease-out-expo absolute right-0 size-6 transition-transform duration-300', {
             'rotate-180': open,
           })}
         />

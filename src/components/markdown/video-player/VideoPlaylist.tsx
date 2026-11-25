@@ -49,24 +49,30 @@ export const VideoPlaylist = memo(function VideoPlaylist({
   return (
     <div className="audio-player-playlist">
       <div className="audio-player-song-list">
-        {tracks.map((track, index) => {
-          const isCurrent = index === currentIndex;
-          return (
-            <button
-              key={`${track.url}-${index}`}
-              type="button"
-              className={cn('audio-player-song-item', isCurrent && 'current')}
-              onClick={(e) => handleClick(e, index)}
-            >
-              {isCurrent && <div ref={progressBgRef} className="audio-player-song-progress-bg" style={{ width: '0%' }} />}
-              <span className="audio-player-song-index">{isCurrent ? <Icon icon="ri:play-fill" /> : index + 1}</span>
-              <span className="audio-player-song-title">{track.name}</span>
-              <span className="audio-player-song-artist">
-                {isCurrent ? <TrackTimeDisplay timeStore={timeStore} /> : (track.author ?? '')}
-              </span>
-            </button>
-          );
-        })}
+        {(() => {
+          const seen = new Map<string, number>();
+          return tracks.map((track, index) => {
+            const isCurrent = index === currentIndex;
+            const base = `${track.url}-${track.name}`;
+            const count = (seen.get(base) ?? 0) + 1;
+            seen.set(base, count);
+            return (
+              <button
+                key={`${base}#${count}`}
+                type="button"
+                className={cn('audio-player-song-item', isCurrent && 'current')}
+                onClick={(e) => handleClick(e, index)}
+              >
+                {isCurrent && <div ref={progressBgRef} className="audio-player-song-progress-bg" style={{ width: '0%' }} />}
+                <span className="audio-player-song-index">{isCurrent ? <Icon icon="ri:play-fill" /> : index + 1}</span>
+                <span className="audio-player-song-title">{track.name}</span>
+                <span className="audio-player-song-artist">
+                  {isCurrent ? <TrackTimeDisplay timeStore={timeStore} /> : (track.author ?? '')}
+                </span>
+              </button>
+            );
+          });
+        })()}
       </div>
     </div>
   );

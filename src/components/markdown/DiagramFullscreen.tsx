@@ -70,7 +70,7 @@ export default function DiagramFullscreen() {
           role="img"
           aria-label={data.diagramType}
           className={cn(
-            'diagram-viewport flex min-h-0 flex-1 touch-none select-none items-center justify-center bg-(--code-surface)',
+            'diagram-viewport flex min-h-0 flex-1 touch-none items-center justify-center bg-(--code-surface) select-none',
             isZoomed ? 'cursor-grab data-dragging:cursor-grabbing' : 'cursor-zoom-in',
             data.diagramType === 'infographic' && 'infographic-container',
           )}
@@ -88,10 +88,10 @@ export default function DiagramFullscreen() {
             dangerouslySetInnerHTML={{ __html: data.svg }}
           />
         </div>
-        <div className="absolute inset-x-0 bottom-3 tablet:flex hidden justify-center">
+        <div className="tablet:flex absolute inset-x-0 bottom-3 hidden justify-center">
           <ZoomGroup
             controls={controls}
-            className="bg-(--code-toolbar)/90 shadow-lg ring-(--code-border) ring-1 backdrop-blur-md"
+            className="bg-(--code-toolbar)/90 shadow-lg ring-1 ring-(--code-border) backdrop-blur-md"
           />
         </div>
         <GestureHint />
@@ -136,7 +136,7 @@ function DiagramToolbar({
     <MacToolbar language={data.diagramType} onClose={closeModal}>
       <div className="flex items-center gap-1">
         <ZoomGroup controls={controls} className="tablet:hidden bg-foreground/5" />
-        <div className="mx-1 tablet:hidden h-4 w-px bg-border" />
+        <div className="tablet:hidden bg-border mx-1 h-4 w-px" />
         <DownloadButton data={data} content={content} />
         <CopyButton text={data.source} showLabel />
       </div>
@@ -157,7 +157,7 @@ function ZoomGroup({ controls, className }: { controls: ZoomControls; className?
         onClick={() => zoomBy(1 / BUTTON_STEP)}
         disabled={scale <= MIN_SCALE + 0.001}
       />
-      <output aria-live="polite" className="min-w-12 text-center font-mono text-muted-foreground text-xs tabular-nums">
+      <output aria-live="polite" className="text-muted-foreground min-w-12 text-center font-mono text-xs tabular-nums">
         {zoomLevel}
       </output>
       <ToolButton
@@ -166,7 +166,7 @@ function ZoomGroup({ controls, className }: { controls: ZoomControls; className?
         onClick={() => zoomBy(BUTTON_STEP)}
         disabled={scale >= MAX_SCALE - 0.001}
       />
-      <div className="mx-0.5 h-4 w-px bg-border" />
+      <div className="bg-border mx-0.5 h-4 w-px" />
       <ToolButton
         icon="ri:fullscreen-exit-line"
         label={`${t('diagram.fitToScreen')} (0)`}
@@ -207,7 +207,7 @@ function DownloadButton({ data, content }: { data: DiagramFullscreenData; conten
       type="button"
       onClick={handleDownload}
       disabled={busy}
-      className="flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-2 rounded-md px-3 tablet:px-0 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:scale-95 disabled:opacity-50"
+      className="tablet:px-0 text-muted-foreground hover:bg-accent hover:text-accent-foreground flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-2 rounded-md px-3 py-1.5 transition-colors active:scale-95 disabled:opacity-50"
       aria-label={t('diagram.download')}
       title={t('diagram.download')}
     >
@@ -244,7 +244,7 @@ function ToolButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex size-8 tablet:size-11 items-center justify-center rounded-lg text-muted-foreground transition-[color,background-color,opacity,transform] hover:bg-background hover:text-foreground active:scale-90 disabled:pointer-events-none disabled:opacity-35"
+      className="tablet:size-11 text-muted-foreground hover:bg-background hover:text-foreground flex size-8 items-center justify-center rounded-lg transition-[color,background-color,opacity,transform] active:scale-90 disabled:pointer-events-none disabled:opacity-35"
       aria-label={label}
       title={label}
     >
@@ -266,7 +266,7 @@ function GestureHint() {
     <div
       aria-hidden
       className={cn(
-        'pointer-events-none absolute bottom-4 tablet:bottom-20 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground/75 px-3.5 py-1.5 text-background text-xs shadow-lg backdrop-blur-sm transition-opacity duration-500',
+        'tablet:bottom-20 bg-foreground/75 text-background pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full px-3.5 py-1.5 text-xs whitespace-nowrap shadow-lg backdrop-blur-sm transition-opacity duration-500',
         visible ? 'opacity-100' : 'opacity-0',
       )}
     >

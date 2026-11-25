@@ -14,7 +14,7 @@ export default function DeferredComment({ provider }: { provider: keyof typeof p
   const mounted = useIsMounted();
   const { t } = useTranslation();
   const Provider = providers[provider];
-  const placeholder = <div className="h-80 animate-pulse rounded-xl bg-muted/30" aria-hidden="true" />;
+  const placeholder = <div className="bg-muted/30 h-80 animate-pulse rounded-xl" aria-hidden="true" />;
 
   return (
     <div className="min-h-80">
@@ -24,7 +24,7 @@ export default function DeferredComment({ provider }: { provider: keyof typeof p
             <p>{t('comment.error')}</p>
             <button
               type="button"
-              className="rounded-md bg-primary px-4 py-2 text-primary-foreground"
+              className="bg-primary text-primary-foreground rounded-md px-4 py-2"
               onClick={() => window.location.reload()}
             >
               {t('comment.retry')}

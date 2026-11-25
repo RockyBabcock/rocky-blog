@@ -211,7 +211,7 @@ export function ChristmasOrnamentToggle() {
       <AnimatePresence>
         {shouldShowOrnament && (
           <m.div
-            className="fixed top-0 right-0 tablet:right-12 z-90 flex w-[100px] justify-center lg:right-40"
+            className="tablet:right-12 fixed top-0 right-0 z-90 flex w-[100px] justify-center lg:right-40"
             initial={shouldReduceMotion ? false : { opacity: 0, y: -50 }}
             animate={{
               opacity: isEnabled ? 1 : 0.5,
@@ -232,7 +232,7 @@ export function ChristmasOrnamentToggle() {
             {/* The ornament follows the bottom of the string. */}
             <m.button
               className={cn(
-                'absolute cursor-grab touch-none select-none will-change-transform active:cursor-grabbing',
+                'absolute cursor-grab touch-none will-change-transform select-none active:cursor-grabbing',
                 'rounded-full outline-none focus-visible:ring-4 focus-visible:ring-yellow-400/50',
               )}
               style={{
@@ -272,7 +272,7 @@ export function ChristmasOrnamentToggle() {
                     transition={shouldReduceMotion ? { duration: 0 } : undefined}
                     className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2"
                   >
-                    <div className="whitespace-nowrap rounded-full border border-white/10 bg-red-950/90 px-3 py-1 font-medium text-[10px] text-white shadow-md">
+                    <div className="rounded-full border border-white/10 bg-red-950/90 px-3 py-1 text-[10px] font-medium whitespace-nowrap text-white shadow-md">
                       {shouldReduceMotion ? (isEnabled ? '点击关闭' : '点击开启') : isEnabled ? '下拉关闭' : '下拉开启'}
                     </div>
                   </m.div>

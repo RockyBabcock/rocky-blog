@@ -99,9 +99,9 @@ function FloatingButton({
       onPointerDown={onIntent}
       onFocus={onIntent}
       className={cn(
-        'relative size-10 flex-center rounded-full bg-background/85 shadow-sakura-sm ring-1 ring-primary/10 backdrop-blur-md',
-        'transition-[background-color,box-shadow,translate,scale] duration-300 ease-out-quart',
-        'hover:-translate-y-0.5 hover:bg-background hover:shadow-sakura-md hover:ring-primary/25 active:scale-90 active:duration-100',
+        'flex-center bg-background/85 shadow-sakura-sm ring-primary/10 relative size-10 rounded-full ring-1 backdrop-blur-md',
+        'ease-out-quart transition-[background-color,box-shadow,translate,scale] duration-300',
+        'hover:bg-background hover:shadow-sakura-md hover:ring-primary/25 hover:-translate-y-0.5 active:scale-90 active:duration-100',
         className,
       )}
       aria-label={ariaLabel}
@@ -170,7 +170,7 @@ export default function FloatingGroup() {
   return (
     <LazyMotionProvider>
       <m.div
-        className="fixed right-4 bottom-4 z-50 flex flex-col items-center gap-2 text-primary"
+        className="text-primary fixed right-4 bottom-4 z-50 flex flex-col items-center gap-2"
         animate={{
           transform: isHidden ? 'translateX(200px)' : 'translateX(0px)',
           opacity: isHidden ? 0 : 1,
@@ -216,7 +216,7 @@ export default function FloatingGroup() {
                 >
                   <Icon
                     icon={isSettingsOpen ? 'ri:settings-3-fill' : 'ri:settings-3-line'}
-                    className={cn('size-5 transition-transform duration-500 ease-out-expo', isSettingsOpen && 'rotate-90')}
+                    className={cn('ease-out-expo size-5 transition-transform duration-500', isSettingsOpen && 'rotate-90')}
                   />
                 </FloatingButton>
               </m.div>

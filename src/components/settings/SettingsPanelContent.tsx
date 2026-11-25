@@ -202,7 +202,7 @@ export default function SettingsPanelContent() {
                     {active && (
                       <m.span
                         layoutId={shouldReduceMotion ? undefined : `settings-${item.key}-pill`}
-                        className="absolute inset-0 rounded-md bg-primary"
+                        className="bg-primary absolute inset-0 rounded-md"
                         transition={shouldReduceMotion ? { duration: 0 } : microReboundPreset}
                       />
                     )}
@@ -262,13 +262,13 @@ export default function SettingsPanelContent() {
                 transition: panelTransition(false),
               }}
             >
-              <div className="flex h-[calc(100dvh-6rem)] max-h-96 flex-col overflow-hidden rounded-2xl border border-border bg-popover p-4 text-popover-foreground shadow-xl">
+              <div className="border-border bg-popover text-popover-foreground flex h-[calc(100dvh-6rem)] max-h-96 flex-col overflow-hidden rounded-2xl border p-4 shadow-xl">
                 {/* Header */}
                 <div className="mb-3 flex items-center justify-between">
-                  <h2 className="font-semibold text-sm">{t('settings.title')}</h2>
+                  <h2 className="text-sm font-semibold">{t('settings.title')}</h2>
                   <button
                     type="button"
-                    className="relative rounded-full p-1 text-muted-foreground transition-[background-color,color,transform] after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-accent hover:text-foreground active:scale-[0.96]"
+                    className="text-muted-foreground hover:bg-accent hover:text-foreground relative rounded-full p-1 transition-[background-color,color,transform] after:absolute after:-inset-2 after:rounded-full after:content-[''] active:scale-[0.96]"
                     onClick={closeModal}
                     aria-label={t('settings.closePanel')}
                   >
@@ -277,7 +277,7 @@ export default function SettingsPanelContent() {
                 </div>
 
                 {/* Section tabs */}
-                <div className="mb-3 flex gap-1 rounded-lg bg-muted p-1">
+                <div className="bg-muted mb-3 flex gap-1 rounded-lg p-1">
                   {SECTIONS.map((key) => {
                     const active = section === key;
                     return (
@@ -286,7 +286,7 @@ export default function SettingsPanelContent() {
                         type="button"
                         onClick={() => setSection(key)}
                         className={cn(
-                          'relative flex-1 rounded-md px-3 py-1 font-medium text-xs transition-colors',
+                          'relative flex-1 rounded-md px-3 py-1 text-xs font-medium transition-colors',
                           active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
                         )}
                       >
@@ -295,7 +295,7 @@ export default function SettingsPanelContent() {
                           {active && (
                             <m.span
                               layoutId={shouldReduceMotion ? undefined : 'settings-section-pill'}
-                              className="absolute inset-0 rounded-md bg-background shadow-sm"
+                              className="bg-background absolute inset-0 rounded-md shadow-sm"
                               transition={shouldReduceMotion ? { duration: 0 } : microReboundPreset}
                             />
                           )}
@@ -317,7 +317,7 @@ export default function SettingsPanelContent() {
                       exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
                       transition={{ duration: 0.15, ease: 'easeOut' }}
                     >
-                      <div className="flex flex-col divide-y divide-border">
+                      <div className="divide-border flex flex-col divide-y">
                         {items.map((item) => {
                           const disabled = Boolean(item.disabledByReducedMotion && shouldReduceMotion);
                           return (
@@ -334,21 +334,21 @@ export default function SettingsPanelContent() {
                                   onPointerEnter={preloadLocalFontPicker}
                                   onPointerDown={preloadLocalFontPicker}
                                   onFocus={preloadLocalFontPicker}
-                                  className="mt-2 flex w-full items-center gap-2 rounded-md border border-input px-2.5 py-1.5 text-left text-xs transition-colors hover:bg-accent"
+                                  className="border-input hover:bg-accent mt-2 flex w-full items-center gap-2 rounded-md border px-2.5 py-1.5 text-left text-xs transition-colors"
                                   aria-label={t('settings.localFont.change')}
                                 >
-                                  <Icon icon="ri:font-family" className="size-4 shrink-0 text-primary" />
+                                  <Icon icon="ri:font-family" className="text-primary size-4 shrink-0" />
                                   <span className="min-w-0 flex-1 truncate">{fontFamily}</span>
-                                  <Icon icon="ri:arrow-right-s-line" className="size-4 shrink-0 text-muted-foreground" />
+                                  <Icon icon="ri:arrow-right-s-line" className="text-muted-foreground size-4 shrink-0" />
                                 </button>
                               )}
                               {item.key === 'motionLevel' && (
-                                <p className="mt-1.5 text-muted-foreground text-xs">
+                                <p className="text-muted-foreground mt-1.5 text-xs">
                                   {t(systemReducedMotion ? 'settings.motionLevel.systemReduced' : MOTION_HINT_KEYS[level])}
                                 </p>
                               )}
                               {disabled && (
-                                <p className="mt-1 text-muted-foreground text-xs">
+                                <p className="text-muted-foreground mt-1 text-xs">
                                   {t('settings.waveDisabledByReducedMotion')}
                                 </p>
                               )}
@@ -362,7 +362,7 @@ export default function SettingsPanelContent() {
                         <button
                           type="button"
                           onClick={resetReaderPreferences}
-                          className="mt-3 w-full rounded-md border border-input py-1.5 text-muted-foreground text-xs transition-[background-color,color,transform] hover:bg-accent hover:text-foreground active:scale-[0.96]"
+                          className="border-input text-muted-foreground hover:bg-accent hover:text-foreground mt-3 w-full rounded-md border py-1.5 text-xs transition-[background-color,color,transform] active:scale-[0.96]"
                         >
                           {t('settings.reset')}
                         </button>

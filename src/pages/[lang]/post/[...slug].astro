@@ -1,35 +1,14 @@
 ---
-import { getPostSlug, getSortedPosts } from '@lib/content';
-import type { BlogPost } from 'types/blog';
-import { getLocaleStaticPaths } from '@/i18n';
+import { postRoute } from '../../_shared/routes';
 import PostPage from '../../post/[...slug].astro';
 
-export async function getStaticPaths() {
-  const locales = getLocaleStaticPaths();
-  const paths: Array<{
-    params: { lang: string; slug: string };
-    props: { post: BlogPost; prevPost: BlogPost | null; nextPost: BlogPost | null; locale: string };
-  }> = [];
+export const getStaticPaths = postRoute.mirror;
 
-  for (const { params: { lang } } of locales) {
-    const posts = await getSortedPosts(lang);
-    posts.forEach((post, index) => {
-      paths.push({
-        params: { lang, slug: getPostSlug(post) },
-        props: {
-          post,
-          prevPost: index > 0 ? posts[index - 1] : null,
-          nextPost: index < posts.length - 1 ? posts[index + 1] : null,
-          locale: lang,
-        },
-      });
-    });
-  }
-
-  return paths;
+interface Props {
+  postId: string;
+  locale: string;
 }
 
-const props = Astro.props;
+const { postId, locale } = Astro.props;
 ---
-
-<PostPage {...props} />
+<PostPage postId={postId} locale={locale} />

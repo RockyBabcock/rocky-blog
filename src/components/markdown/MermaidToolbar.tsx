@@ -98,7 +98,7 @@ function RenderedMermaidToolbar({ preElement }: MermaidToolbarProps) {
           type="button"
           onClick={handleFullscreen}
           disabled={renderState !== 'ready'}
-          className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+          className="text-muted-foreground hover:bg-accent hover:text-accent-foreground flex h-8 w-8 items-center justify-center rounded-md transition-colors active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label={t('diagram.fullscreen')}
           title={t('diagram.fullscreen')}
         >

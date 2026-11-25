@@ -1,9 +1,19 @@
-export const ITEMS_PER_PAGE = 12;
+import type { BangumiSubjectType } from '@/types/bangumi';
 
-export const SUBJECT_TYPE_KEYS = {
-  anime: 'anime',
-  game: 'game',
-  book: 'book',
-} as const;
+export const BANGUMI_API_BASE = 'https://api.bgm.tv/v0';
 
-export type SubjectTypeKey = keyof typeof SUBJECT_TYPE_KEYS;
+export const ITEMS_PER_PAGE = 24;
+export const API_PAGE_SIZE = 50;
+export const MAX_API_PAGES = 20;
+
+export type SubjectTypeKey = 'anime' | 'book' | 'music' | 'game' | 'real';
+
+export const SUBJECT_TYPE_MAP: Record<SubjectTypeKey, BangumiSubjectType> = {
+  book: 1,
+  anime: 2,
+  music: 3,
+  game: 4,
+  real: 6,
+};
+
+export const SUBJECT_TYPE_KEYS: SubjectTypeKey[] = ['anime', 'book', 'music', 'game', 'real'];

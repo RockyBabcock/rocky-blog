@@ -1,77 +1,155 @@
-import { announcementsConfig } from '@constants/site-config';
+/**
+ * Announcement State Management
+ *
+ * Nanostores-based state for the site announcement system.
+ * Tracks read status via localStorage and provides computed stores
+ * for active/unread announcements.
+ */
+
+import { announcements } from '@constants/announcements';
 import { atom, computed } from 'nanostores';
 import type { Announcement } from '@/types/announcement';
 
-const READ_STORAGE_KEY = 'koharu-read-announcements';
+const STORAGE_KEY = 'announcement-read-ids:v1';
+const LEGACY_STORAGE_KEY = 'announcement-read-ids';
 
-function isWithinDateWindow(item: Announcement): boolean {
-  const now = Date.now();
-  if (item.startDate && now < new Date(item.startDate).getTime()) return false;
-  if (item.endDate && now > new Date(item.endDate).getTime()) return false;
+/**
+ * Set of read announcement IDs (persisted to localStorage)
+ */
+export const readAnnouncementIds = atom<Set<string>>(new Set());
+
+/**
+ * Whether the announcement system has been initialized
+ */
+export const announcementInitialized = atom<boolean>(false);
+
+/**
+ * Whether the announcement list popup is open
+ */
+export const announcementListOpen = atom<boolean>(false);
+
+if (typeof window !== 'undefined') {
+  const notifyPanel = () => {
+    if (announcementListOpen.get()) window.dispatchEvent(new Event('koharu:announcement-open'));
+  };
+  announcementListOpen.listen(notifyPanel);
+  window.addEventListener('koharu:announcement-ready', notifyPanel);
+}
+
+/**
+ * Check if an announcement is currently active based on dates
+ */
+function isAnnouncementActive(announcement: Announcement): boolean {
+  const now = new Date();
+
+  if (announcement.startDate) {
+    const start = new Date(announcement.startDate);
+    if (now < start) return false;
+  }
+
+  if (announcement.endDate) {
+    const end = new Date(announcement.endDate);
+    if (now > end) return false;
+  }
+
   return true;
 }
 
-export const announcementListOpen = atom(false);
-export const announcementInitialized = atom(false);
-export const readAnnouncementIds = atom<string[]>([]);
+/**
+ * Computed: Active announcements (within date range, sorted by priority)
+ */
+export const activeAnnouncements = computed(readAnnouncementIds, () => {
+  return announcements.filter(isAnnouncementActive).sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+});
 
-export const activeAnnouncements = atom<Announcement[]>(
-  announcementsConfig.filter((a) => isWithinDateWindow(a)),
-);
+/**
+ * Computed: Unread active announcements
+ */
+export const unreadAnnouncements = computed([activeAnnouncements, readAnnouncementIds], (active, readIds) => {
+  return active.filter((a) => !readIds.has(a.id));
+});
 
-export const unreadAnnouncements = computed(
-  [activeAnnouncements, readAnnouncementIds],
-  (list, readIds) => {
-    const readSet = new Set(readIds);
-    return list.filter((item) => !readSet.has(item.id));
-  },
-);
+/**
+ * Computed: Count of unread announcements
+ */
+export const unreadCount = computed(unreadAnnouncements, (unread) => unread.length);
 
-export const unreadCount = computed(unreadAnnouncements, (list) => list.length);
-
-function persistReadIds(ids: string[]): void {
+/**
+ * Load read IDs from localStorage
+ */
+function loadReadIds(): void {
   if (typeof window === 'undefined') return;
+
   try {
-    localStorage.setItem(READ_STORAGE_KEY, JSON.stringify(ids));
-  } catch {
-    // ignore
+    const stored = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (stored) {
+      const ids = JSON.parse(stored) as string[];
+      readAnnouncementIds.set(new Set(ids));
+      localStorage.setItem(STORAGE_KEY, stored);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    }
+  } catch (e) {
+    console.warn('[Announcement] Failed to parse stored read IDs', e);
   }
 }
 
+/**
+ * Initialize announcement state from localStorage
+ * Call this on page load
+ */
 export function initAnnouncementState(): void {
-  if (typeof window === 'undefined') return;
-  try {
-    const raw = localStorage.getItem(READ_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) {
-        readAnnouncementIds.set(parsed.filter((v): v is string => typeof v === 'string'));
-      }
-    }
-  } catch {
-    // ignore
-  }
+  loadReadIds();
   announcementInitialized.set(true);
 }
 
-export function openAnnouncementList(): void {
-  announcementListOpen.set(true);
+/**
+ * Mark an announcement as read and persist to localStorage
+ */
+export function markAsRead(id: string): void {
+  const current = readAnnouncementIds.get();
+  if (current.has(id)) return;
+
+  const updated = new Set(current);
+  updated.add(id);
+  readAnnouncementIds.set(updated);
+
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...updated]));
+  }
 }
 
+/**
+ * Open announcement list popup
+ */
+export function openAnnouncementList(): void {
+  const wasOpen = announcementListOpen.get();
+  announcementListOpen.set(true);
+  // A previous import may have failed while the store remained open. Every
+  // explicit click must still reach the lazy owner so Astro can retry it.
+  if (wasOpen && typeof window !== 'undefined') window.dispatchEvent(new Event('koharu:announcement-open'));
+}
+
+/**
+ * Close announcement list popup
+ */
 export function closeAnnouncementList(): void {
   announcementListOpen.set(false);
 }
 
-export function markAsRead(id: string): void {
-  const prev = readAnnouncementIds.get();
-  if (prev.includes(id)) return;
-  const next = [...prev, id];
-  readAnnouncementIds.set(next);
-  persistReadIds(next);
-}
-
+/**
+ * Mark all active announcements as read
+ */
 export function markAllAsRead(): void {
-  const allIds = activeAnnouncements.get().map((a) => a.id);
-  readAnnouncementIds.set(allIds);
-  persistReadIds(allIds);
+  const active = activeAnnouncements.get();
+  const updated = new Set(readAnnouncementIds.get());
+
+  for (const announcement of active) {
+    updated.add(announcement.id);
+  }
+
+  readAnnouncementIds.set(updated);
+
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...updated]));
+  }
 }

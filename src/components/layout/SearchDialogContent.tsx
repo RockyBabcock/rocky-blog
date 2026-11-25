@@ -79,7 +79,7 @@ export default function SearchDialogContent() {
                     role="dialog"
                     aria-modal="true"
                     aria-label={t('search.dialogTitle')}
-                    className="search-dialog relative w-full max-w-2xl overflow-hidden rounded-2xl bg-gradient-start text-foreground shadow-[0_2rem_4rem_-1.5rem_rgb(233_84_107/0.35),0_0.75rem_1.5rem_-0.75rem_rgb(20_10_28/0.3)] ring-1 ring-primary/15"
+                    className="search-dialog bg-gradient-start text-foreground ring-primary/15 relative w-full max-w-2xl overflow-hidden rounded-2xl shadow-[0_2rem_4rem_-1.5rem_rgb(233_84_107/0.35),0_0.75rem_1.5rem_-0.75rem_rgb(20_10_28/0.3)] ring-1"
                     initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98, y: -12 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={
@@ -95,7 +95,7 @@ export default function SearchDialogContent() {
                     <button
                       type="button"
                       onClick={closeModal}
-                      className="absolute top-3.5 right-3.5 rounded-md px-1.5 py-1 text-muted-foreground text-xs transition-colors duration-200 hover:bg-foreground/5 hover:text-foreground"
+                      className="text-muted-foreground hover:bg-foreground/5 hover:text-foreground absolute top-3.5 right-3.5 rounded-md px-1.5 py-1 text-xs transition-colors duration-200"
                       aria-label={t('search.dialogClose')}
                     >
                       {/* .kbd sets display outside the utilities layer, so the wrapper carries the breakpoint. */}
@@ -105,7 +105,7 @@ export default function SearchDialogContent() {
                       <span className="hidden md:inline">{t('search.dialogClose')}</span>
                     </button>
 
-                    <div className="search-dialog-footer flex items-center justify-end gap-4 border-foreground/6 border-t px-4 py-2.5 text-muted-foreground text-xs md:hidden">
+                    <div className="search-dialog-footer border-foreground/6 text-muted-foreground flex items-center justify-end gap-4 border-t px-4 py-2.5 text-xs md:hidden">
                       <span>
                         <kbd className="kbd">↑↓</kbd> {t('search.dialogSelect')}
                       </span>

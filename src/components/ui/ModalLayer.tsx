@@ -105,7 +105,7 @@ export function ModalLayer({
               />
               <FloatingFocusManager context={context}>
                 {isPanel ? (
-                  <div className={cn('fixed inset-0 grid place-items-center px-4 tablet:px-0', isSheet && 'tablet:items-end')}>
+                  <div className={cn('tablet:px-0 fixed inset-0 grid place-items-center px-4', isSheet && 'tablet:items-end')}>
                     <m.div
                       ref={refs.setFloating}
                       className={cn(PANEL_CLASS, isSheet && SHEET_CLASS, className)}

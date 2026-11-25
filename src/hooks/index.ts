@@ -1,55 +1,30 @@
-import { type RefObject, useEffect, useState } from 'react';
+/**
+ * Custom Hooks Barrel Export
+ *
+ * Centralized export for all custom React hooks.
+ * Import hooks from '@hooks' for convenience.
+ */
 
+// Controlled/uncontrolled state pattern
+export { type UseControlledStateOptions, useControlledState } from './useControlledState';
+// Clipboard with feedback
+export { useCopyToClipboard } from './useCopyToClipboard';
+export { type CurrentHeading, type UseCurrentHeadingOptions, useCurrentHeading } from './useCurrentHeading';
+export { useElementVisibility } from './useElementVisibility';
+// Floating UI wrapper
+export { type UseFloatingUIOptions, useFloatingUI } from './useFloatingUI';
+// TOC hooks (useTocController etc.) are imported via direct paths; see src/hooks/useTocController.ts
+// Theme state hook (monitors actual page theme, not system preference)
+export { useIsDarkTheme } from './useIsDarkTheme';
+// Utility hooks
 export { useIsMounted } from './useIsMounted';
-export { useIsMobile, useMediaQuery } from './useMediaQuery';
-export { useMotionLevel } from './useMotionLevel';
-export { useTranslation } from './useTranslation';
-export { useScrollTrigger } from './useScrollTrigger';
-export { useGlideIndicator } from './useGlideIndicator';
-export { useControlledState } from './useControlledState';
-export { useFloatingUI } from './useFloatingUI';
-export { useReadingProgress } from './useReadingProgress';
-export { useCurrentHeading } from './useCurrentHeading';
-export { useTocController } from './useTocController';
-
-export function useIsDarkTheme(): boolean {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    const read = () => setIsDark(document.documentElement.classList.contains('dark'));
-    read();
-    const observer = new MutationObserver(read);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
-
-  return isDark;
-}
-
-export function useElementVisibility(
-  ref: RefObject<Element | null>,
-  options?: IntersectionObserverInit,
-): boolean {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === 'undefined') {
-      setIsVisible(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setIsVisible(true);
-        }
-      },
-      { rootMargin: '200px', ...options },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [ref, options?.rootMargin, options?.threshold]);
-
-  return isVisible;
-}
+// Keyboard shortcuts
+export { type KeyboardShortcutOptions, type ModifierKey, useEscapeKey, useKeyboardShortcut } from './useKeyboardShortcut';
+// Media query hooks
+export { useIsMobile, useIsTablet, useMediaQuery, usePrefersColorSchemeDark, usePrefersReducedMotion } from './useMediaQuery';
+// Timer management
+export { useRetimer } from './useRetimer';
+// Scroll state hooks
+export { type ScrollTriggerState, type UseScrollTriggerOptions, useScrollTrigger } from './useScrollTrigger';
+// Zoom and pan for fullscreen viewers
+export { type UseZoomPanReturn, useZoomPan } from './useZoomPan';

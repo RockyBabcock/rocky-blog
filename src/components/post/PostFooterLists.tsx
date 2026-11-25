@@ -46,22 +46,22 @@ export default function PostFooterLists({ allPosts, relatedPosts, leftCount, rig
     <>
       {/* Left side: Random posts */}
       <div className="flex flex-col gap-4">
-        <h2 className="font-semibold text-2xl text-foreground/80">{t('post.randomPosts')}</h2>
+        <h2 className="text-foreground/80 text-2xl font-semibold">{t('post.randomPosts')}</h2>
         <div className="flex flex-col gap-2">
           {leftPosts.map((post, index) => (
             <a
               key={post.slug}
               href={localizedPath(`/post/${encodeSlug(post.link ?? post.slug)}`, locale)}
-              className="motion-reveal group flex gap-3 rounded-md p-2 text-sm transition-colors duration-300 [--rise-y:0.75rem] hover:bg-foreground/5 hover:text-primary"
+              className="motion-reveal group hover:bg-foreground/5 hover:text-primary flex gap-3 rounded-md p-2 text-sm transition-colors duration-300 [--rise-y:0.75rem]"
             >
-              <span className="shrink-0 font-mono text-foreground/30">{index + 1}</span>
+              <span className="text-foreground/30 shrink-0 font-mono">{index + 1}</span>
               <div className="flex min-w-0 flex-col gap-0.5">
                 {post.categoryName && (
-                  <div className="truncate text-foreground/50 text-xs">
+                  <div className="text-foreground/50 truncate text-xs">
                     {locale ? translateCategoryName(post.categoryName, locale) : post.categoryName}
                   </div>
                 )}
-                <div className="line-clamp-2 text-foreground/80 transition-colors group-hover:text-primary">{post.title}</div>
+                <div className="text-foreground/80 group-hover:text-primary line-clamp-2 transition-colors">{post.title}</div>
               </div>
             </a>
           ))}
@@ -71,22 +71,22 @@ export default function PostFooterLists({ allPosts, relatedPosts, leftCount, rig
       {/* Right side: Related or fallback posts */}
       {rightPosts.length > 0 && (
         <div className="flex flex-col gap-4">
-          <h2 className="font-semibold text-2xl text-foreground/80">{rightTitle}</h2>
+          <h2 className="text-foreground/80 text-2xl font-semibold">{rightTitle}</h2>
           <div className={cn('flex flex-col gap-2', { '-mt-4 pt-12 md:-mt-5 md:pt-0': !hasRelatedPosts })}>
             {rightPosts.map((post, index) => (
               <a
                 key={post.slug}
                 href={localizedPath(`/post/${encodeSlug(post.link ?? post.slug)}`, locale)}
-                className="motion-reveal group flex gap-3 rounded-md p-2 text-sm transition-colors duration-300 [--rise-y:0.75rem] hover:bg-foreground/5 hover:text-primary"
+                className="motion-reveal group hover:bg-foreground/5 hover:text-primary flex gap-3 rounded-md p-2 text-sm transition-colors duration-300 [--rise-y:0.75rem]"
               >
-                <span className="shrink-0 font-mono text-foreground/30">{index + (hasRelatedPosts ? 1 : leftCount + 1)}</span>
+                <span className="text-foreground/30 shrink-0 font-mono">{index + (hasRelatedPosts ? 1 : leftCount + 1)}</span>
                 <div className="flex min-w-0 flex-col gap-0.5">
                   {post.categoryName && (
-                    <div className="truncate text-foreground/50 text-xs">
+                    <div className="text-foreground/50 truncate text-xs">
                       {locale ? translateCategoryName(post.categoryName, locale) : post.categoryName}
                     </div>
                   )}
-                  <div className="line-clamp-2 text-foreground/80 transition-colors group-hover:text-primary">{post.title}</div>
+                  <div className="text-foreground/80 group-hover:text-primary line-clamp-2 transition-colors">{post.title}</div>
                 </div>
               </a>
             ))}

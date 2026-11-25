@@ -1,32 +1,32 @@
 ---
-import { BangumiCollection } from '@components/bangumi/BangumiCollection';
-import { HomeSiderType } from '@constants/enum';
-import { bangumiConfig } from '@constants/site-config';
+import { BangumiCollection } from '@components/bangumi';
+import HomeSider from '@components/layout/HomeSider.astro';
+import Cover from '@components/ui/cover/Cover.astro';
+import { bangumiConfig, siteConfig } from '@constants/site-config';
+import Layout from '@layouts/Layout.astro';
 import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
+import { Comment } from '@/components/comment';
 import { defaultLocale, t } from '@/i18n';
 
 interface Props {
   locale?: string;
 }
 
-const locale = Astro.props.locale ?? defaultLocale;
-const userId = bangumiConfig?.username ?? '';
+if (!bangumiConfig) return Astro.redirect('/404');
+
+// Root pages render the default locale; `[lang]/` mirrors pass their locale in explicitly.
+const { locale = defaultLocale } = Astro.props;
+const title = `${t(locale, 'bangumi.title')} | ${siteConfig.title}`;
+const description = t(locale, 'bangumi.description');
 ---
 
-<TwoColumnLayout
-  title={t(locale, 'nav.bangumi')}
-  coverTitle={t(locale, 'nav.bangumi')}
-  siderType={HomeSiderType.HOME}
-  locale={locale}
-  compactHero={true}
->
-  <div class="rounded-2xl border border-border/70 bg-card p-7 shadow-card md:p-5">
-    {userId ? (
-      <BangumiCollection client:load userId={userId} />
-    ) : (
-      <p class="py-10 text-center text-sm text-muted-foreground">
-        Bangumi username is not configured in config/site.yaml.
-      </p>
-    )}
-  </div>
-</TwoColumnLayout>
+<Layout locale={locale} title={title} description={description}>
+  <TwoColumnLayout>
+    <Cover compact slot="cover" title={t(locale, 'bangumi.title')} />
+    <HomeSider slot="sider" />
+    <div class="index-surface shadow-box flex flex-col gap-8">
+      <BangumiCollection client:load userId={bangumiConfig.userId} />
+      <Comment />
+    </div>
+  </TwoColumnLayout>
+</Layout>

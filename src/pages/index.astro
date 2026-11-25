@@ -1,108 +1,80 @@
 ---
-import CategoryCards from '@components/post/CategoryCards.astro';
+import HomeSider from '@components/layout/HomeSider.astro';
 import PostList from '@components/post/PostList.astro';
-import Divider from '@components/ui/Divider.astro';
-import { HomeSiderType } from '@constants/enum';
-import { featuredSeriesList, siteConfig } from '@constants/site-config';
+import Cover from '@components/ui/cover/Cover.astro';
+import { CONTENT_PADDING, PAGINATION } from '@constants/layout';
+import { seoConfig, siteConfig } from '@constants/site-config';
+import Layout from '@layouts/Layout.astro';
 import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
-import { getCategoryList, getPostSlug, getSortedPosts } from '@lib/content';
-import { getPostsBySticky, getSeriesPostsByCategory } from '@lib/content/posts';
-import { displayDate } from '@lib/date';
-import { Icon } from 'astro-icon/components';
+import { getHomePagePosts } from '@lib/content';
+import { toPostCardDataList } from '@lib/content/transforms';
+import type { Page } from 'astro';
+import type { BlogPost } from 'types/blog';
+import CategoryCards from '@/components/post/CategoryCards.astro';
+import Divider from '@/components/ui/divider';
 import { defaultLocale, localizedPath, t } from '@/i18n';
 
 interface Props {
   locale?: string;
 }
 
-const locale = Astro.props.locale ?? defaultLocale;
-const allPosts = await getSortedPosts(locale);
-const { stickyPosts, nonStickyPosts } = getPostsBySticky(allPosts);
-const { countMap } = await getCategoryList(locale);
+// Root pages render the default locale; `[lang]/` mirrors pass their locale in explicitly.
+const { locale = defaultLocale } = Astro.props;
 
-const highlightedSeries = await Promise.all(
-  featuredSeriesList
-    .filter((s) => s.enabled && s.highlightOnHome)
-    .map(async (series) => ({
-      series,
-      posts: (await getSeriesPostsByCategory(series.categoryName, locale)).slice(0, 3),
-    })),
-);
+// 使用优化的单次查询获取所有首页数据
+const { highlightedPosts, stickyPosts: normalStickyPosts, regularPosts } = await getHomePagePosts(locale);
+
+// 将高亮系列文章放在置顶列表开头（转换为卡片数据）
+const stickyPosts = toPostCardDataList([...highlightedPosts, ...normalStickyPosts], locale);
+
+// 首页显示前N篇普通文章（不含系列文章）
+const { pageSize } = PAGINATION;
+const regularPostsSlice = regularPosts.slice(0, pageSize);
+const posts = toPostCardDataList(regularPostsSlice, locale);
+const totalRegularPosts = regularPosts.length;
+
+const homeUrl = localizedPath('/', locale);
+const postsBaseUrl = localizedPath('/posts', locale);
+
+const page: Page<BlogPost> = {
+  data: regularPostsSlice,
+  start: 0,
+  end: Math.min(pageSize - 1, regularPostsSlice.length - 1),
+  size: pageSize,
+  total: totalRegularPosts,
+  currentPage: 1,
+  lastPage: Math.ceil(totalRegularPosts / pageSize),
+  url: {
+    current: homeUrl,
+    prev: undefined,
+    next: totalRegularPosts > pageSize ? `${postsBaseUrl}/2` : undefined,
+    first: homeUrl,
+    last: `${postsBaseUrl}/${Math.ceil(totalRegularPosts / pageSize)}`,
+  },
+};
 ---
 
-<TwoColumnLayout
-  coverTitle={siteConfig.title}
-  coverSubtitle={siteConfig.subtitle}
-  siderType={HomeSiderType.HOME}
-  locale={locale}
->
-  <div class="flex flex-col gap-8">
-    {stickyPosts.length > 0 && (
-      <PostList posts={stickyPosts} title={t(locale, 'home.pinned')} locale={locale} />
-    )}
-
-    {highlightedSeries.map(({ series, posts }) =>
-      posts.length > 0 ? (
-        <section class="flex flex-col gap-4">
-          <Divider>{series.label || series.categoryName}</Divider>
-          <div class="overflow-hidden rounded-xl border border-border/70 bg-card shadow-card">
-            <div class="grid grid-cols-12 md:grid-cols-1">
-              <div class="relative col-span-5 min-h-[180px] overflow-hidden bg-muted md:col-span-1">
-                <img
-                  src={series.cover || '/img/weekly_header.webp'}
-                  alt={series.fullName}
-                  class="h-full w-full object-cover"
-                  loading="lazy"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
-                <div class="absolute inset-x-4 bottom-4 text-white">
-                  <div class="font-bold text-lg">{series.fullName}</div>
-                  {series.description && (
-                    <p class="mt-1 line-clamp-2 text-xs text-white/85">{series.description}</p>
-                  )}
-                </div>
-              </div>
-              <div class="col-span-7 flex flex-col justify-between p-5 md:col-span-1">
-                <ul class="flex flex-col gap-2.5">
-                  {posts.map((post) => (
-                    <li>
-                      <a
-                        href={localizedPath(`/post/${getPostSlug(post)}`, locale)}
-                        class="group flex items-baseline justify-between gap-3 rounded-lg px-2.5 py-2 transition-colors hover:bg-primary/8"
-                      >
-                        <span class="truncate font-medium text-sm text-foreground transition-colors group-hover:text-primary">
-                          {post.data.title}
-                        </span>
-                        <time class="shrink-0 font-mono text-xs text-muted-foreground tabular-nums">
-                          {displayDate(post.data.date)}
-                        </time>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <div class="mt-4 flex justify-end">
-                  <a
-                    href={localizedPath(`/${series.slug}`, locale)}
-                    class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
-                  >
-                    <span>{t(locale, 'post.readMore')}</span>
-                    <Icon name="ri:arrow-right-line" class="h-3.5 w-3.5" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      ) : null,
-    )}
-
-    <CategoryCards categoryCounts={countMap} locale={locale} />
-
-    <PostList
-      posts={nonStickyPosts}
-      title={t(locale, 'home.latestPosts')}
-      locale={locale}
-      startIndex={stickyPosts.length}
-    />
-  </div>
-</TwoColumnLayout>
+<Layout locale={locale} title={seoConfig.title}>
+  <TwoColumnLayout>
+    <Cover slot="cover" />
+    <HomeSider slot="sider" />
+    <div
+      class={`bg-gradient-start shadow-box tablet:shadow-none flex flex-col gap-4 overflow-clip ${CONTENT_PADDING.standard}`}
+    >
+      {stickyPosts.length > 0 && (
+        <>
+          <Divider>{t(locale, 'post.stickyPosts')}</Divider>
+          <PostList posts={stickyPosts} showPaginator={false} />
+        </>
+      )}
+      <Divider>{t(locale, 'post.postList')}</Divider>
+      <PostList posts={posts} page={page} showPaginator={true} baseUrl={postsBaseUrl} isHomePage={true} />
+      {!!siteConfig?.featuredCategories?.length && (
+        <>
+          <Divider className="mt-6">{t(locale, 'post.featuredCategories')}</Divider>
+          <CategoryCards />
+        </>
+      )}
+    </div>
+  </TwoColumnLayout>
+</Layout>

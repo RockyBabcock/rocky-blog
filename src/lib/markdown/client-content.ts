@@ -2,15 +2,18 @@ import type { ClientDirective } from 'astro';
 
 declare module 'astro' {
   interface AstroClientDirectives {
-    'client:content'?: boolean;
+    'client:content'?: boolean | string;
   }
 }
 
+const DEFAULT_CONTENT_SELECTOR =
+  'pre, li.quiz, .friend-links-grid[data-links], [data-audio-player], [data-video-player], .note-block:not(.no-icon), .encrypted-post[data-cipher], .encrypted-block[data-cipher], details.collapse-block';
+
 /** Hydrate the portal owner when any of its content needs controls, including anchor jumps. */
-const contentDirective: ClientDirective = (load, _options, island) => {
+const contentDirective: ClientDirective = (load, options, island) => {
   let container = island.previousElementSibling;
-  // Astro emits directive and renderer scripts between the content and its island.
-  while (container?.matches('script, style')) container = container.previousElementSibling;
+  // Astro emits directive, renderer scripts, and sibling content islands between the content and this island.
+  while (container?.matches('script, style, astro-island')) container = container.previousElementSibling;
   let observer: IntersectionObserver | undefined;
   let disposed = false;
   let started = false;
@@ -42,9 +45,8 @@ const contentDirective: ClientDirective = (load, _options, island) => {
     start();
     return;
   }
-  const targets = container.querySelectorAll(
-    'pre, li.quiz, .friend-links-grid[data-links], [data-audio-player], [data-video-player], .note-block:not(.no-icon), .encrypted-post[data-cipher], .encrypted-block[data-cipher], details.collapse-block',
-  );
+  const selector = typeof options.value === 'string' && options.value.trim() ? options.value : DEFAULT_CONTENT_SELECTOR;
+  const targets = container.querySelectorAll(selector);
   if (targets.length === 0) return;
 
   observer = new IntersectionObserver(

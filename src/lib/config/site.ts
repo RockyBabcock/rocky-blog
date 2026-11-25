@@ -1,139 +1,88 @@
-import rawSiteYaml from '../../../config/site.yaml';
-import rawI18nContentYaml from '../../../config/i18n-content.yaml';
-import type {
-  AnalyticsConfig,
-  BangumiConfig,
-  BgmConfig,
-  ChristmasConfig,
-  FeaturedCategoryConfig,
-  FeaturedSeriesConfig,
-  FriendGroup,
-  FriendLink,
-  FriendsIntro,
-  LocaleEntry,
-  SiteConfig,
-  SocialLinkConfig,
-} from './types';
-import type { Announcement } from '@/types/announcement';
-import type { Router } from '@constants/router';
+/**
+ * Resolved site configuration.
+ *
+ * The single place where `config/site.yaml` is turned into normalized values.
+ * Everything here is derived through the pure normalizers in this directory, so
+ * lower layers (`src/lib/**`) can depend on config without importing the
+ * assembly layer in `src/constants/**`.
+ */
 
-// biome-ignore lint/suspicious/noExplicitAny: parsed YAML root
-const raw = (rawSiteYaml ?? {}) as Record<string, any>;
-// biome-ignore lint/suspicious/noExplicitAny: parsed YAML i18n content
-export const i18nContentConfig = (rawI18nContentYaml ?? {}) as Record<string, any>;
+import yamlConfig from '../../../config/site.yaml';
+import { DEFAULT_TIMEZONE, isValidTimezone } from '../timezone';
+import { normalizeColophonConfig } from './colophon';
+import { normalizeContentConfig } from './content';
+import { normalizeEditorConfig } from './editor';
+import { enabledFeaturedSeriesSlugs, normalizeFeaturedSeries } from './featured-series';
+import { normalizeFriendGroups } from './friends';
+import { normalizeMotionConfig } from './motion';
+import { normalizePostActionsConfig } from './post-actions';
+import { RESERVED_ROUTES } from './reserved-routes';
+import type { I18nConfig, ResolvedContentConfig, ResolvedMotionConfig, ResolvedSiteConfig } from './types';
 
-export const siteConfig: SiteConfig = {
-  title: raw.site?.title ?? 'astro-koharu',
-  alternate: raw.site?.alternate ?? 'koharu',
-  subtitle: raw.site?.subtitle ?? '',
-  name: raw.site?.name ?? 'Author',
-  description: raw.site?.description ?? '',
-  avatar: raw.site?.avatar ?? '/img/avatar.webp',
-  showLogo: Boolean(raw.site?.showLogo),
-  author: raw.site?.author ?? raw.site?.name ?? 'Author',
-  url: raw.site?.url ?? 'https://koharu.cosine.ren',
-  defaultOgImage: raw.site?.defaultOgImage ?? '/img/avatar.webp',
-  startYear: raw.site?.startYear ?? 2024,
-  timezone: raw.site?.timezone ?? 'Asia/Shanghai',
-  keywords: Array.isArray(raw.site?.keywords) ? raw.site.keywords : [],
-  breadcrumbHome: raw.site?.breadcrumbHome,
-  icp: raw.site?.icp,
-  enableSlugTransliteration: Boolean(raw.site?.enableSlugTransliteration),
+/** Category name → URL slug map, e.g. `{ '随笔': 'life' }`. */
+export const categoryMap: Record<string, string> = yamlConfig.categoryMap ?? {};
+
+export const friendGroups = normalizeFriendGroups(yamlConfig.friends?.groups);
+
+/** Validated featured series, always an array with lowercase slugs. */
+export const featuredSeriesList = normalizeFeaturedSeries(yamlConfig.featuredSeries, {
+  categoryMap: yamlConfig.categoryMap,
+  reservedRoutes: RESERVED_ROUTES,
+});
+
+/** Slugs of the series that are enabled — used to reserve their routes. */
+export const enabledSeriesSlugList = enabledFeaturedSeriesSlugs(featuredSeriesList);
+
+export const i18nConfig: I18nConfig = yamlConfig.i18n ?? {
+  defaultLocale: 'zh',
+  locales: [{ code: 'zh', label: '中文' }],
 };
 
-export const siteTimezone: string = siteConfig.timezone ?? 'Asia/Shanghai';
+/** Locale codes that are not disabled — used to reserve their URL prefixes. */
+export const enabledLocaleCodes = i18nConfig.locales.flatMap((locale) => (locale.enabled !== false ? [locale.code] : []));
 
-export const i18nConfig: { defaultLocale: string; locales: LocaleEntry[] } = {
-  defaultLocale: raw.i18n?.defaultLocale ?? 'zh',
-  locales: Array.isArray(raw.i18n?.locales)
-    ? raw.i18n.locales.filter((l: LocaleEntry) => l.enabled !== false)
-    : [{ code: 'zh', label: '中文' }],
+/** Content processing flags with field-level defaults applied. */
+export const contentConfig: ResolvedContentConfig = normalizeContentConfig(yamlConfig.content);
+
+/** Default motion level and sakura effect switches with field-level defaults applied. */
+export const motionConfig: ResolvedMotionConfig = normalizeMotionConfig(yamlConfig.motion);
+
+/** Writing room pages are only available when explicitly enabled. */
+export const editorConfig = normalizeEditorConfig(yamlConfig.editor);
+
+/** Colophon mark dictionary in the default locale; localize via `getColophonConfig()` in `@lib/content/post-colophon`. */
+export const colophonConfig = normalizeColophonConfig(yamlConfig.colophon);
+
+export const postActionsConfig = normalizePostActionsConfig(yamlConfig.postActions);
+
+/**
+ * Site timezone in IANA format.
+ * Falls back to {@link DEFAULT_TIMEZONE} when the configured value is invalid.
+ */
+export const siteTimezone: string = (() => {
+  const configured = yamlConfig.site.timezone ?? DEFAULT_TIMEZONE;
+  if (!isValidTimezone(configured)) {
+    console.warn(`[config] Invalid timezone "${configured}", falling back to "${DEFAULT_TIMEZONE}"`);
+    return DEFAULT_TIMEZONE;
+  }
+  return configured;
+})();
+
+export const siteConfig: ResolvedSiteConfig = {
+  title: yamlConfig.site.title,
+  alternate: yamlConfig.site.alternate,
+  subtitle: yamlConfig.site.subtitle,
+  name: yamlConfig.site.name,
+  description: yamlConfig.site.description,
+  avatar: yamlConfig.site.avatar,
+  showLogo: yamlConfig.site.showLogo,
+  author: yamlConfig.site.author,
+  site: yamlConfig.site.url,
+  startYear: yamlConfig.site.startYear,
+  defaultOgImage: yamlConfig.site.defaultOgImage,
+  keywords: yamlConfig.site.keywords,
+  breadcrumbHome: yamlConfig.site.breadcrumbHome,
+  featuredCategories: yamlConfig.featuredCategories,
+  featuredSeries: featuredSeriesList,
+  enableSlugTransliteration: yamlConfig.site.enableSlugTransliteration,
 };
-
-export const categoryMap: Record<string, string> = raw.categoryMap ?? {};
-
-export const featuredCategories: FeaturedCategoryConfig[] = Array.isArray(raw.featuredCategories)
-  ? raw.featuredCategories
-  : [];
-
-export const featuredSeries: FeaturedSeriesConfig[] = Array.isArray(raw.featuredSeries)
-  ? raw.featuredSeries.filter((s: FeaturedSeriesConfig) => s.enabled !== false)
-  : [];
-
-export const allFeaturedSeries: FeaturedSeriesConfig[] = Array.isArray(raw.featuredSeries) ? raw.featuredSeries : [];
-
-export const socialConfig: Record<string, SocialLinkConfig> = raw.social ?? {};
-
-export const friendsData: FriendLink[] = Array.isArray(raw.friends?.data) ? raw.friends.data : [];
-export const friendGroups: FriendGroup[] = Array.isArray(raw.friends?.groups) ? raw.friends.groups : [];
-export const friendsIntro: FriendsIntro = {
-  title: raw.friends?.intro?.title ?? '友情链接',
-  subtitle: raw.friends?.intro?.subtitle ?? '欢迎交换友链！',
-  applyTitle: raw.friends?.intro?.applyTitle ?? '申请友链',
-  applyDesc: raw.friends?.intro?.applyDesc ?? '请在本页留言，格式如下',
-  exampleYaml: raw.friends?.intro?.exampleYaml ?? '',
-};
-
-export const announcementsConfig: Announcement[] = Array.isArray(raw.announcements) ? raw.announcements : [];
-
-export const defaultCoverList: string[] = Array.isArray(raw.defaultCoverList) && raw.defaultCoverList.length > 0
-  ? raw.defaultCoverList
-  : Array.from({ length: 21 }, (_, i) => `/img/cover/${i + 1}.webp`);
-
-export const navigationConfig: Router[] = Array.isArray(raw.navigation) ? raw.navigation : [];
-
-export const bgmConfig: BgmConfig = {
-  enabled: raw.bgm?.enabled !== false && Array.isArray(raw.bgm?.audio) && raw.bgm.audio.length > 0,
-  metingApi: raw.bgm?.metingApi ?? 'https://163.hyc.moe/',
-  audio: Array.isArray(raw.bgm?.audio) ? raw.bgm.audio : [],
-};
-
-export const christmasConfig: ChristmasConfig = {
-  enabled: Boolean(raw.christmas?.enabled),
-  features: {
-    snowfall: Boolean(raw.christmas?.features?.snowfall),
-    christmasColorScheme: Boolean(raw.christmas?.features?.christmasColorScheme),
-    christmasCoverDecoration: Boolean(raw.christmas?.features?.christmasCoverDecoration),
-    christmasHat: Boolean(raw.christmas?.features?.christmasHat),
-    readingTimeSnow: Boolean(raw.christmas?.features?.readingTimeSnow),
-  },
-  snowfall: {
-    speed: raw.christmas?.snowfall?.speed ?? 0.5,
-    intensity: raw.christmas?.snowfall?.intensity ?? 0.7,
-    mobileIntensity: raw.christmas?.snowfall?.mobileIntensity ?? 0.4,
-    maxLayers: raw.christmas?.snowfall?.maxLayers ?? 6,
-    maxIterations: raw.christmas?.snowfall?.maxIterations ?? 8,
-    mobileMaxLayers: raw.christmas?.snowfall?.mobileMaxLayers ?? 4,
-    mobileMaxIterations: raw.christmas?.snowfall?.mobileMaxIterations ?? 6,
-  },
-};
-
-export const analyticsConfig: AnalyticsConfig = raw.analytics ?? {};
-
-export const bangumiConfig: BangumiConfig | null = raw.bangumi?.userId
-  ? {
-      userId: String(raw.bangumi.userId),
-      label: raw.bangumi.label ?? '追番',
-      icon: raw.bangumi.icon ?? 'ri:bilibili-fill',
-    }
-  : null;
-
-export const editorConfig = {
-  enabled: raw.editor?.enabled !== false,
-};
-
-export const commentConfig = {
-  provider: raw.comment?.provider ?? 'none',
-  remark42: raw.comment?.remark42,
-  giscus: raw.comment?.giscus,
-  waline: raw.comment?.waline,
-  twikoo: raw.comment?.twikoo,
-};
-
-export const motionConfig = {
-  level: (raw.motion?.level ?? 'lively') as 'lively' | 'subtle' | 'reduced',
-  heroPetals: raw.motion?.heroPetals !== false,
-  clickBurst: raw.motion?.clickBurst !== false,
-};
-
-export const contentYamlConfig = raw.content ?? {};

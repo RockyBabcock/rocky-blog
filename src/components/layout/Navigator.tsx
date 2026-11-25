@@ -145,11 +145,11 @@ const Navigator = memo(function Navigator({ currentPath, locale = defaultLocale 
   }, [direction, isPostPageMobile]);
 
   return (
-    <div className="tablet:col-start-3 flex grow tablet:grow-0 items-center tablet:justify-self-end">
+    <div className="tablet:col-start-3 tablet:grow-0 tablet:justify-self-end flex grow items-center">
       {/* Desktop navigation */}
       <nav
         ref={navRef}
-        className="relative isolate flex tablet:hidden grow items-center"
+        className="tablet:hidden relative isolate flex grow items-center"
         onPointerLeave={() => setIntent(null)}
         onBlur={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget)) setIntent(null);
@@ -196,6 +196,7 @@ const Navigator = memo(function Navigator({ currentPath, locale = defaultLocale 
         <div className="tablet:hidden flex-center">
           <LanguageSwitcher
             locale={locale}
+            currentPath={pagePath}
             open={openKey === languageMenuKey}
             onOpenChange={(open) =>
               setOpenKey((current) => (open ? languageMenuKey : current === languageMenuKey ? null : current))

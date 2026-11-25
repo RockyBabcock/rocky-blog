@@ -1,17 +1,22 @@
-import type { TocContextValue } from '@hooks/useTocController';
+/**
+ * TocContext
+ *
+ * Carries active/expanded state and the click handler to the heading tree, so
+ * `HeadingList` and `HeadingTreeItem` read them directly instead of having them
+ * threaded through every nesting level.
+ */
+
+import type { TocContextValue } from '@lib/toc';
 import { createContext, useContext } from 'react';
 
-const defaultTocContext: TocContextValue = {
-  activeId: '',
-  expandedIds: new Set(),
-  onHeadingClick: () => {},
-  toggleExpanded: () => {},
-};
+const TocContext = createContext<TocContextValue | null>(null);
 
-const TocContext = createContext<TocContextValue>(defaultTocContext);
-
-export const TocProvider = TocContext.Provider;
+export function TocProvider({ value, children }: { value: TocContextValue; children: React.ReactNode }) {
+  return <TocContext.Provider value={value}>{children}</TocContext.Provider>;
+}
 
 export function useTocContext(): TocContextValue {
-  return useContext(TocContext);
+  const value = useContext(TocContext);
+  if (!value) throw new Error('useTocContext must be used within a TocProvider');
+  return value;
 }

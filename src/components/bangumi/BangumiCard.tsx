@@ -34,7 +34,7 @@ export function BangumiCard({ item, showStatus }: BangumiCardProps) {
         {imageUrl ? (
           <img src={imageUrl} alt="" width={200} height={300} loading="lazy" decoding="async" />
         ) : (
-          <span className="flex size-full items-center justify-center text-muted-foreground text-xs">
+          <span className="text-muted-foreground flex size-full items-center justify-center text-xs">
             {t('bangumi.noImage')}
           </span>
         )}

@@ -79,20 +79,20 @@ export function DiagramResizeHandle({ scale, range, naturalHeight, onScaleChange
       onPointerCancel={endDrag}
       onDoubleClick={onReset}
       onKeyDown={handleKeyDown}
-      className="group/resize absolute bottom-0 left-1/2 z-10 flex h-6 w-24 -translate-x-1/2 cursor-ns-resize touch-none select-none items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring print:hidden"
+      className="group/resize focus-visible:ring-ring absolute bottom-0 left-1/2 z-10 flex h-6 w-24 -translate-x-1/2 cursor-ns-resize touch-none items-center justify-center rounded-full outline-none select-none focus-visible:ring-2 print:hidden"
     >
       <span
         className={cn(
-          'h-1 w-9 rounded-full bg-muted-foreground/30 transition-[width,background-color] duration-200 ease-out',
-          'group-hover/resize:w-12 group-hover/resize:bg-muted-foreground/60 group-focus-visible/resize:w-12',
-          isDragging && 'w-12 bg-primary group-hover/resize:bg-primary',
+          'bg-muted-foreground/30 h-1 w-9 rounded-full transition-[width,background-color] duration-200 ease-out',
+          'group-hover/resize:bg-muted-foreground/60 group-hover/resize:w-12 group-focus-visible/resize:w-12',
+          isDragging && 'bg-primary group-hover/resize:bg-primary w-12',
         )}
       />
       <span
         aria-hidden="true"
         className={cn(
-          'pointer-events-none absolute bottom-full mb-1 rounded-md border border-border bg-background/90 px-1.5 py-0.5',
-          'font-mono text-[11px] text-muted-foreground tabular-nums shadow-sm backdrop-blur-sm',
+          'border-border bg-background/90 pointer-events-none absolute bottom-full mb-1 rounded-md border px-1.5 py-0.5',
+          'text-muted-foreground font-mono text-[11px] tabular-nums shadow-sm backdrop-blur-sm',
           'opacity-0 transition-opacity duration-200 group-focus-visible/resize:opacity-100',
           isDragging && 'opacity-100',
         )}

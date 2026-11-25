@@ -28,7 +28,7 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
 {/* React-based content enhancement (code blocks, mermaid, infographic toolbars) */}
 {finalConfig.enhanceCodeBlock && (
   <ContentEnhancer
-    client:idle
+    client:content
     enableCopy={finalConfig.enableCodeCopy}
     enableFullscreen={finalConfig.enableCodeFullscreen}
     enableQuiz={finalConfig.enableQuiz}
@@ -36,8 +36,8 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
   />
 )}
 
-{/* Only load EmbedHydrator if tweet embeds are enabled (link previews are now server-rendered) */}
-{finalConfig.enableTweetEmbed && <EmbedHydrator client:load />}
+{/* Only hydrate EmbedHydrator when the rendered content actually contains tweet embeds */}
+{finalConfig.enableTweetEmbed && <EmbedHydrator client:content="[data-tweet-embed]" />}
 
 <script>
   import { getScrollBehavior } from '@lib/motion-level';

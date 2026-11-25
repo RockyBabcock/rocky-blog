@@ -5,13 +5,14 @@ import path from 'node:path';
 import type { Context } from 'hono';
 import { z } from 'zod';
 import { CONTENT_DIR } from '../lib/paths';
+import { CMS_PORT } from '../lib/ports';
 import { hasValidMarkdownExtension, isPathSafe } from '../lib/validation';
 
 const MAX_SOURCE_BYTES = 5 * 1024 * 1024;
 // Two originals can each expand to six JSON bytes per UTF-8 byte (for example, \u0001).
 // The remaining allowance covers the bounded postId and JSON framing.
 const MAX_REQUEST_BYTES = MAX_SOURCE_BYTES * 2 * 6 + 8 * 1024;
-const ALLOWED_ORIGINS = new Set(['http://localhost:4322', 'http://127.0.0.1:4322']);
+const ALLOWED_ORIGINS = new Set([`http://localhost:${CMS_PORT}`, `http://127.0.0.1:${CMS_PORT}`]);
 const pendingWrites = new Map<string, Promise<void>>();
 const sourceRequestSchema = z
   .object({ postId: z.string().min(1).max(1024), source: z.string(), expectedSource: z.string() })

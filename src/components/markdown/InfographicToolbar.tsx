@@ -159,7 +159,7 @@ export function InfographicToolbar({ preElement }: InfographicToolbarProps) {
         <button
           type="button"
           onClick={handleFullscreen}
-          className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:scale-95"
+          className="text-muted-foreground hover:bg-accent hover:text-accent-foreground flex h-8 w-8 items-center justify-center rounded-md transition-colors active:scale-95"
           aria-label={t('diagram.fullscreen')}
           title={t('diagram.fullscreen')}
         >

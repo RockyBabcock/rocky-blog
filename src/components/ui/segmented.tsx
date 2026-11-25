@@ -61,7 +61,7 @@ export const Segmented = <T extends string | number = string | number>({
   return (
     <div
       ref={trackRef}
-      className={cn('segmented flex w-fit select-none rounded-xl bg-muted p-1 font-semibold text-xs', className)}
+      className={cn('segmented bg-muted flex w-fit rounded-xl p-1 text-xs font-semibold select-none', className)}
     >
       <span ref={thumbRef} aria-hidden="true" className={cn('segmented-thumb', indicateClass)} />
       {options.map((option) => {

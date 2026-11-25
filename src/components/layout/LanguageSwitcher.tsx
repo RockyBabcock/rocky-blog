@@ -13,7 +13,7 @@ import Popover from '@components/ui/popover';
 import { Icon } from '@iconify/react';
 import { cn } from '@lib/utils';
 import { memo, useCallback, useSyncExternalStore } from 'react';
-import { defaultLocale, getAlternateUrl, getLocaleFromUrl, localeEntries } from '@/i18n';
+import { getAlternateUrl, getLocaleFromUrl, localeEntries, localizedPath } from '@/i18n';
 import { NavMenu } from './NavMenu';
 
 /** Subscribe to pathname changes via Astro's `astro:page-load` event. */
@@ -29,17 +29,24 @@ function getPathname() {
 interface LanguageSwitcherProps {
   /** Initial locale code from SSR (e.g., 'zh', 'en') */
   locale: string;
+  /** Initial pathname from SSR so hydration matches on non-default locales */
+  currentPath?: string;
   className?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const LanguageSwitcherComponent = ({ locale: _ssrLocale, className, open, onOpenChange }: LanguageSwitcherProps) => {
-  const ssrPath = _ssrLocale && _ssrLocale !== defaultLocale ? `/${_ssrLocale}` : '/';
-  const getServerSnapshot = useCallback(() => ssrPath, [ssrPath]);
-  const currentPath = useSyncExternalStore(subscribePathname, getPathname, getServerSnapshot);
+const LanguageSwitcherComponent = ({
+  locale: ssrLocale,
+  currentPath: ssrPath,
+  className,
+  open,
+  onOpenChange,
+}: LanguageSwitcherProps) => {
+  const initialPath = ssrPath ?? localizedPath('/', ssrLocale);
+  const currentPath = useSyncExternalStore(subscribePathname, getPathname, () => initialPath);
 
-  // Derive locale from currentPath (matches _ssrLocale during SSR & hydration, tracks live URL afterwards)
+  // Derive locale from live URL so it stays in sync after View Transition navigations
   const locale = getLocaleFromUrl(currentPath);
 
   // Find current locale label
@@ -77,7 +84,7 @@ const LanguageSwitcherComponent = ({ locale: _ssrLocale, className, open, onOpen
       <button
         type="button"
         className={cn(
-          'size-10 flex-center cursor-pointer rounded-full transition-[background-color,scale] duration-200 ease-out-quart hover:bg-current/15 active:scale-90',
+          'flex-center ease-out-quart size-10 cursor-pointer rounded-full transition-[background-color,scale] duration-200 hover:bg-current/15 active:scale-90',
           className,
         )}
         aria-label={`Language: ${currentLabel}`}

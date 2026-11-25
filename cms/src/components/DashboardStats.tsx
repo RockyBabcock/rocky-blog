@@ -41,13 +41,13 @@ export function DashboardStats({ total, published, draft }: DashboardStatsProps)
   return (
     <div className="grid grid-cols-3 gap-4">
       {stats.map((stat) => (
-        <div key={stat.label} className="rounded-lg border border-border bg-card p-4">
+        <div key={stat.label} className="border-border bg-card rounded-lg border p-4">
           <div className="flex items-center gap-4">
             <div className={cn('flex size-12 shrink-0 items-center justify-center rounded-full', stat.bgColor)}>
               <Icon icon={stat.icon} className={cn('size-6', stat.iconColor)} />
             </div>
             <div>
-              <p className="font-bold text-2xl">{stat.value}</p>
+              <p className="text-2xl font-bold">{stat.value}</p>
               <p className="text-muted-foreground text-sm">{stat.label}</p>
             </div>
           </div>
