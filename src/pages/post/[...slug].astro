@@ -2,7 +2,10 @@
 import { render } from 'astro:content';
 import CustomContent from '@components/common/CustomContent.astro';
 import HomeSider from '@components/layout/HomeSider.astro';
+import FocusModeToggle from '@components/post/FocusModeToggle';
 import PostPagination from '@components/post/PostPagination.astro';
+import PostShareActions from '@components/post/PostShareActions';
+import SeriesContextBanner from '@components/post/SeriesContextBanner.astro';
 import SummaryPanel from '@components/post/SummaryPanel';
 import Cover from '@components/ui/cover/Cover.astro';
 import { defaultContentConfig } from '@constants/content-config';
@@ -15,11 +18,14 @@ import { postActionsConfig } from '@lib/config/site';
 import {
   buildCategoryPath,
   getCategoryArr,
+  getPostAvailableLocales,
   getPostById,
   getPostDescription,
+  getPostLastCategory,
   getPostLocale,
   getPostSlug,
   translateCategoryName,
+  translateSeriesField,
 } from '@lib/content';
 import {
   buildBreadcrumbJsonLd,
@@ -31,7 +37,7 @@ import {
   hasMathSyntax,
 } from '@lib/content/post-page';
 import { getPostSourceFilename, getPostSourcePath, isPostSourcePublic } from '@lib/content/post-source';
-import { getAdjacentSeriesPosts } from '@lib/content/series';
+import { getAdjacentSeriesPosts, getEnabledSeries, getSeriesPosts } from '@lib/content/series';
 import { toPostRef } from '@lib/content/transforms';
 import { formatForSeo } from '@lib/date';
 import { encodeSlug } from '@lib/route';
@@ -56,9 +62,12 @@ const post =
 if (!post) throw new Error(`Post not found: ${postId}`);
 
 const postRelativePath = getPostRelativePath(post.filePath);
-const isFallback = getPostLocale(post) !== locale;
+const originalLocale = getPostLocale(post);
+const isFallback = originalLocale !== locale;
+const availableLocales = await getPostAvailableLocales(post);
 // For fallback pages (showing default-locale content under /en/), canonical should point to the original
 const postSlug = getPostSlug(post);
+const originalPostUrl = localizedPath(`/post/${encodeSlug(postSlug)}`, originalLocale);
 const canonicalUrl = isFallback
   ? new URL(localizedPath(`/post/${encodeSlug(postSlug)}`, defaultLocale), Astro.site).href
   : undefined;
@@ -67,6 +76,20 @@ const adjacent = await getAdjacentSeriesPosts(post, locale);
 const prevPost = adjacent.prevPost ? toPostRef(adjacent.prevPost) : null;
 const nextPost = adjacent.nextPost ? toPostRef(adjacent.nextPost) : null;
 const { title, categories = [], tags = [], date, math: postMath, keywords: postKeywords = [] } = post?.data ?? {};
+
+const seriesPosts = await getSeriesPosts(post, locale);
+const lastCategory = getPostLastCategory(post);
+const matchedFeaturedSeries = getEnabledSeries().find((series) => series.categoryName === lastCategory.name);
+const seriesIndex = seriesPosts.findIndex((item) => getPostSlug(item) === postSlug);
+const showSeriesBanner = Boolean(seriesPosts.length >= 2 && seriesIndex >= 0 && lastCategory.name);
+const seriesBannerName = matchedFeaturedSeries
+  ? translateSeriesField(matchedFeaturedSeries.slug, 'fullName', matchedFeaturedSeries.fullName, locale) ||
+    translateSeriesField(matchedFeaturedSeries.slug, 'label', matchedFeaturedSeries.label, locale) ||
+    translateCategoryName(lastCategory.name, locale)
+  : translateCategoryName(lastCategory.name, locale);
+const seriesBannerHref = matchedFeaturedSeries
+  ? localizedPath(`/${matchedFeaturedSeries.slug}`, locale)
+  : localizedPath(lastCategory.link, locale);
 
 const hasMath = hasMathSyntax(defaultContentConfig.enableMath, postMath, post.body);
 const finalDescription = getPostDescription(post, locale);
@@ -92,7 +115,9 @@ const jsonLd = buildPostJsonLd({
 });
 
 const categoryArr = getCategoryArr(categories?.[0]);
-const categoryStr = categoryArr?.length ? ` | ${categoryArr.map((c) => translateCategoryName(c, locale)).join(' / ')}` : '';
+const translatedCategories = categoryArr.map((c) => translateCategoryName(c, locale));
+const categoryStr = translatedCategories.length ? ` | ${translatedCategories.join(' / ')}` : '';
+const primaryCategoryLabel = translatedCategories[translatedCategories.length - 1] ?? '';
 const breadcrumbCategories = buildPostBreadcrumbs(
   categoryArr,
   (partial) => localizedPath(buildCategoryPath(partial), locale),
@@ -111,6 +136,8 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd({
 const postSourcePath = getPostSourcePath(localizedPath(`/post/${encodeSlug(postSlug)}`, locale));
 const localEditors = buildLocalEditorLinks(import.meta.env.DEV, devConfig, postRelativePath);
 const summaryText = post.data.description?.trim() || null;
+const isEncryptedPost = Boolean(post.data.password);
+const seoDate = formatForSeo(date);
 ---
 
 <Layout
@@ -121,6 +148,8 @@ const summaryText = post.data.description?.trim() || null;
   post={post}
   canonical={canonicalUrl}
   keywords={keywords}
+  availableLocales={availableLocales}
+  openGraph={{ type: 'article' }}
 >
   <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -129,11 +158,19 @@ const summaryText = post.data.description?.trim() || null;
     <Cover slot="cover" data={post} />
     <HomeSider slot="sider" type={HomeSiderType.POST} post={post} />
     <div
+      data-reading-surface
+      data-reading-post
+      data-post-slug={postSlug}
+      data-post-title={title}
+      data-post-locale={locale}
+      data-post-category={primaryCategoryLabel}
+      data-post-encrypted={isEncryptedPost ? 'true' : 'false'}
+      data-available-locales={availableLocales.join(',')}
       class={`shadow-box bg-gradient-start flex min-w-0 w-full max-w-full flex-col gap-2 overflow-x-clip ${CONTENT_PADDING.standard}`}
     >
-      <!-- Breadcrumb Navigation -->
-      <nav class="text-muted-foreground flex items-center justify-between gap-2 text-sm">
-        <div class="flex items-center gap-2">
+      <!-- Breadcrumb Navigation & Reading Toolbar -->
+      <nav class="text-muted-foreground flex flex-wrap items-center justify-between gap-2 text-sm">
+        <div class="flex flex-wrap items-center gap-1.5">
           <div class="flex items-center gap-1">
             <!-- Home Icon and Link -->
             <Icon name="fa6-solid:house-chimney" class="h-4 w-4" />
@@ -157,32 +194,77 @@ const summaryText = post.data.description?.trim() || null;
             ))
           }
         </div>
-        {
-          isPostSourcePublic(post.data, post.body, import.meta.env.PROD) && (
-            <PostMarkdownActions
-              client:idle
-              locale={locale}
-              sourcePath={postSourcePath}
-              filename={getPostSourceFilename(postSlug)}
-              copy={postActionsConfig.copyMarkdown}
-              download={postActionsConfig.downloadMarkdown}
-              localEditors={localEditors}
-            />
-          )
-        }
+        <div class="flex flex-wrap items-center gap-1.5">
+          <FocusModeToggle client:idle locale={locale} />
+          <PostShareActions client:idle locale={locale} title={title} description={finalDescription} />
+          {
+            isPostSourcePublic(post.data, post.body, import.meta.env.PROD) && (
+              <PostMarkdownActions
+                client:idle
+                locale={locale}
+                sourcePath={postSourcePath}
+                filename={getPostSourceFilename(postSlug)}
+                copy={postActionsConfig.copyMarkdown}
+                download={postActionsConfig.downloadMarkdown}
+                localEditors={localEditors}
+              />
+            )
+          }
+        </div>
       </nav>
       {isFallback && (
-        <div class="flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-400">
-          <Icon name="ri:translate-2" class="h-4 w-4 shrink-0" />
-          <span>{t(locale, 'post.fallbackNotice', { lang: getLocaleLabel(locale) })}</span>
+        <div class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-400">
+          <div class="flex items-center gap-2">
+            <Icon name="ri:translate-2" class="h-4 w-4 shrink-0" />
+            <span>{t(locale, 'post.fallbackNotice', { lang: getLocaleLabel(locale) })}</span>
+          </div>
+          <a
+            href={originalPostUrl}
+            class="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium transition-colors hover:bg-amber-500/20"
+          >
+            <span>{t(locale, 'post.viewOriginal', { lang: getLocaleLabel(originalLocale) })}</span>
+            <Icon name="ri:arrow-right-up-line" class="size-3.5" aria-hidden="true" />
+          </a>
         </div>
       )}
       {
-        !post.data.password && summaryText && (
+        showSeriesBanner && (
+          <SeriesContextBanner
+            locale={locale}
+            seriesName={seriesBannerName}
+            seriesHref={seriesBannerHref}
+            currentPosition={seriesIndex + 1}
+            totalCount={seriesPosts.length}
+            prevPost={prevPost}
+            nextPost={nextPost}
+          />
+        )
+      }
+      {
+        !isEncryptedPost && summaryText && (
           <SummaryPanel client:visible summary={summaryText} className="mt-2" locale={locale} />
         )
       }
-      <article class="prose dark:prose-invert" data-pagefind-body>
+      <article
+        class="prose dark:prose-invert"
+        data-pagefind-body={isEncryptedPost ? undefined : ''}
+        data-pagefind-ignore={isEncryptedPost ? 'all' : undefined}
+      >
+        {!isEncryptedPost && (
+          <div class="hidden" aria-hidden="true">
+            <span data-pagefind-meta={`title:${title}`} />
+            <span data-pagefind-meta={`date:${seoDate}`} />
+            <span data-pagefind-meta={`locale:${locale}`} data-pagefind-filter={`language:${locale}`} />
+            {primaryCategoryLabel && <span data-pagefind-meta={`category:${primaryCategoryLabel}`} />}
+            {translatedCategories.map((cat) => (
+              <span data-pagefind-filter={`category:${cat}`} />
+            ))}
+            {tags.length > 0 && <span data-pagefind-meta={`tags:${tags.join(',')}`} />}
+            {tags.map((tag) => (
+              <span data-pagefind-filter={`tag:${tag}`} />
+            ))}
+          </div>
+        )}
         <CustomContent Content={Content} />
       </article>
       <PostPagination prevPost={prevPost} nextPost={nextPost} locale={locale} />

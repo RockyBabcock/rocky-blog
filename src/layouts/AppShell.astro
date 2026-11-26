@@ -11,11 +11,11 @@ interface Props {
   articleTools?: boolean;
 }
 
+import CommandPalette from '@components/layout/CommandPalette';
 import FloatingGroup from '@components/layout/FloatingGroup';
 import Header from '@components/layout/Header.astro';
 import MobileDrawer from '@components/layout/MobileDrawer.astro';
 import SearchDialog from '@components/layout/SearchDialog';
-import SearchPortal from '@components/layout/SearchPortal.astro';
 import ArticleViewers from '@components/markdown/ArticleViewers';
 import SettingsPanel from '@components/settings/SettingsPanel';
 import { Toaster } from '@components/ui/sonner';
@@ -32,7 +32,7 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
   <SettingsPanel client:idle />
   <MobileDrawer type={siderType} post={post} />
   <SearchDialog client:idle />
-  <SearchPortal />
+  <CommandPalette client:idle />
   {articleTools && <div data-article-viewers><ArticleViewers client:idle /></div>}
   <Toaster client:idle />
 </div>
@@ -42,6 +42,7 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
   import { setupArrivalRender } from '@lib/arrival-render';
   import { setupHeaderContinuity } from '@lib/header-continuity';
   import { setupMorphTransitions } from '@lib/morph-transitions';
+  import { setupPostReadingTracker } from '@lib/reading-tracker';
   import { setupPetalBurst } from '@lib/sakura/petal-burst';
   import { setupScrollReveal } from '@lib/scroll-reveal';
   import { setupScrollbarActivity } from '@lib/scrollbar-activity';
@@ -61,5 +62,6 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
   setupScrollReveal();
   setupScrollbarActivity();
   setupTouchPrefetch();
+  setupPostReadingTracker();
   if (motionConfig.clickBurst) setupPetalBurst();
 </script>

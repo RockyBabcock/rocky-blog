@@ -1,6 +1,6 @@
 ---
-import { getPostLastCategory, getPostSlug, translateCategoryName } from '@lib/content';
-import { displayDate } from '@lib/date';
+import { buildTagPath, getPostLastCategory, getPostSlug, translateCategoryName } from '@lib/content';
+import { displayDate, formatLocalizedMonthDay } from '@lib/date';
 import { encodeSlug } from '@lib/route';
 import type { BlogPost } from 'types/blog';
 import { localizedPath } from '@/i18n';
@@ -9,16 +9,28 @@ interface Props {
   post: BlogPost;
   locale: string;
   showCategory?: boolean;
+  showTags?: boolean;
   id?: string;
   /** Lets an in-page filter (category sub-tabs) match this row without re-deriving it on the client. */
   filterKey?: string;
 }
-const { post, locale, showCategory = true, id, filterKey } = Astro.props;
-const date = displayDate.date(post.data.date);
+const { post, locale, showCategory = true, showTags = false, id, filterKey } = Astro.props;
+const isoDate = displayDate.date(post.data.date);
+const shortDate = formatLocalizedMonthDay(post.data.date, locale);
 const category = getPostLastCategory(post);
+const tags = showTags ? (post.data.tags ?? []).slice(0, 3) : [];
 ---
-<li class="post-row" id={id} tabindex={id ? -1 : undefined} data-filter-key={filterKey}>
-  <time datetime={date}>{date.slice(5)}</time>
-  <a class="post-row-title" href={localizedPath(`/post/${encodeSlug(getPostSlug(post))}`, locale)}>{post.data.title}</a>
+<li class:list={['post-row', showTags && 'post-row-timeline']} id={id} tabindex={id ? -1 : undefined} data-filter-key={filterKey}>
+  <time datetime={isoDate}>{shortDate}</time>
+  <div class="post-row-body">
+    <a class="post-row-title" href={localizedPath(`/post/${encodeSlug(getPostSlug(post))}`, locale)}>{post.data.title}</a>
+    {tags.length > 0 && (
+      <div class="post-row-tags">
+        {tags.map((tag) => (
+          <a class="post-row-tag" href={localizedPath(buildTagPath(tag), locale)}>#{tag}</a>
+        ))}
+      </div>
+    )}
+  </div>
   {showCategory && category.link && <a class="post-row-category" href={localizedPath(category.link, locale)}>{translateCategoryName(category.name, locale)}</a>}
 </li>

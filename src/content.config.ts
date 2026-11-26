@@ -53,6 +53,8 @@ const blogCollection = defineCollection({
     password: z.string().optional(),
     /** Keywords for SEO */
     keywords: z.array(z.string()).optional(),
+    /** Optional explicit key linking translated versions of the same post across locales */
+    translationKey: z.string().optional(),
   }) satisfies z.ZodType<BlogSchema, BlogSchemaInput>,
 });
 

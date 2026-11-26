@@ -173,10 +173,27 @@ export function getAlternateUrl(currentPathname: string, targetLocale: Locale): 
  */
 const HTML_LANG_MAP: Record<string, string> = {
   zh: 'zh-CN',
+  en: 'en',
+  ja: 'ja',
+  fr: 'fr',
+};
+
+const OG_LOCALE_MAP: Record<string, string> = {
+  zh: 'zh_CN',
+  en: 'en_US',
+  ja: 'ja_JP',
+  fr: 'fr_FR',
 };
 
 export function getHtmlLang(locale: Locale): string {
   return HTML_LANG_MAP[locale] ?? locale;
+}
+
+/**
+ * Map short locale codes to Open Graph `og:locale` tags (e.g. `zh_CN`, `fr_FR`).
+ */
+export function getOgLocale(locale: Locale): string {
+  return OG_LOCALE_MAP[locale] ?? locale;
 }
 
 /**

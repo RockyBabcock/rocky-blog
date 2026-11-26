@@ -69,31 +69,33 @@ ja:
       label: ツール
       description: ツールの使い方と生産性
 
-ko:
+fr:
   categories:
-    life: 에세이
-    note: 노트
-    tools: 도구
-    weekly: 주간지
-    front-end: 프론트엔드
+    life: Essais
+    note: Notes
+    tools: Outils
+    weekly: Hebdo
+    front-end: Frontend
     css: CSS
-    anime: 애니메이션
+    anime: Anime
 
   series:
     weekly:
-      label: 나의 주간지
-      fullName: 나의 기술 주간지
+      label: Mon Hebdo
+      fullName: Ma Veille Tech Hebdomadaire
+      description: |
+        Une sélection régulière d'articles techniques, d'outils et de réflexions d'ingénierie.
 
   featuredCategories:
     life:
-      label: 에세이
-      description: 일상 기록, 이런저런 생각들
+      label: Essais
+      description: Récits du quotidien et réflexions
     note:
-      label: 노트
-      description: 기술 노트, 학습 노트
+      label: Notes
+      description: Notes techniques et d'apprentissage
     note/front-end:
-      label: 프론트엔드
-      description: 프론트엔드 기술 관련
+      label: Frontend
+      description: Technologies et pratiques frontend
     tools:
-      label: 도구
-      description: 도구 사용법, 효율성 향상
+      label: Outils
+      description: Outils pratiques et productivité

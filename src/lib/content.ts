@@ -33,6 +33,7 @@ export { getPostLocale, getPostSlug } from './content/locale';
 // Post Utilities
 // =============================================================================
 export {
+  getPostAvailableLocales,
   getPostById,
   getPostCount,
   getPostDescription,

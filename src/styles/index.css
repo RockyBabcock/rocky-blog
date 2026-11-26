@@ -26,5 +26,5 @@
 @import "./components/tag-cloud.css";
 @import "./components/post.css";
 @import "./components/toc.css";
-@import "./components/pagefind.css";
+@import "./theme/focus-mode.css";
 @import "./components/lqip.css";

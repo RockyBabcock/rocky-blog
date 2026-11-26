@@ -46,7 +46,15 @@ export interface ImageLightboxData {
   currentIndex: number;
 }
 
-export type ModalType = 'drawer' | 'search' | 'codeFullscreen' | 'diagramFullscreen' | 'imageLightbox' | 'settings' | null;
+export type ModalType =
+  | 'drawer'
+  | 'search'
+  | 'command'
+  | 'codeFullscreen'
+  | 'diagramFullscreen'
+  | 'imageLightbox'
+  | 'settings'
+  | null;
 
 export interface ModalState {
   type: ModalType;
@@ -58,9 +66,13 @@ export interface ModalState {
  */
 export const $activeModal = atom<ModalState>({ type: null });
 
+/** Optional pre-filled query passed when jumping from Command Palette into Search. */
+export const $searchInitialQuery = atom<string>('');
+
 // Computed helpers for convenience
 export const $isDrawerOpen = computed($activeModal, (m) => m.type === 'drawer');
 export const $isSearchOpen = computed($activeModal, (m) => m.type === 'search');
+export const $isCommandOpen = computed($activeModal, (m) => m.type === 'command');
 export const $codeFullscreenData = computed($activeModal, (m) =>
   m.type === 'codeFullscreen' ? (m.data as CodeBlockData) : null,
 );
@@ -72,6 +84,12 @@ export const $imageLightboxData = computed($activeModal, (m) =>
 );
 export const $isAnyModalOpen = computed($activeModal, (m) => m.type !== null);
 export const $isSettingsOpen = computed($activeModal, (m) => m.type === 'settings');
+
+/** Open the search modal optionally pre-seeded with a query string. */
+export function openSearchWithQuery(query = ''): void {
+  $searchInitialQuery.set(query);
+  openModal('search');
+}
 
 /**
  * Open a modal with optional data

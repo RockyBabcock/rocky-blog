@@ -2,6 +2,7 @@
 import SakuraSVG from '@components/svg/SakuraSvg';
 import { siteTimezone } from '@lib/config/site';
 import { groupPostsByYear } from '@lib/content/index-groups';
+import { formatLocalizedMonthYear } from '@lib/date';
 import { PETAL_MASK } from '@lib/sakura/petal';
 import { formatInTimeZone } from 'date-fns-tz';
 import type { BlogPost } from 'types/blog';
@@ -12,7 +13,7 @@ interface Props {
   posts: BlogPost[];
   locale: string;
   showCategory?: boolean;
-  /** Archive mode: larger year rules, and `#year-YYYY` / `#month-YYYY-MM` anchors for the calendar. */
+  /** Archive timeline mode: year/month anchors, timeline rail, month headers, and tags. */
   anchors?: boolean;
   filterKeyOf?: (post: BlogPost) => string | undefined;
 }
@@ -20,17 +21,66 @@ const { posts, locale, showCategory = true, anchors = false, filterKeyOf } = Ast
 // The in-page filter rewrites year counts from this template, so it stays localized.
 const countTemplate = t(locale, 'post.yearPosts', { count: '#' });
 const groups = groupPostsByYear(posts, siteTimezone);
-const monthKey = (post: BlogPost) => formatInTimeZone(post.data.date, siteTimezone, 'yyyy-MM');
+const monthKeyOf = (post: BlogPost) => formatInTimeZone(post.data.date, siteTimezone, 'yyyy-MM');
+
+function groupByMonth(yearPosts: BlogPost[]) {
+  const buckets: { key: string; month: number; posts: BlogPost[] }[] = [];
+  for (const post of yearPosts) {
+    const key = monthKeyOf(post);
+    const month = Number(key.slice(5, 7));
+    const current = buckets.at(-1);
+    if (current && current.key === key) {
+      current.posts.push(post);
+    } else {
+      buckets.push({ key, month, posts: [post] });
+    }
+  }
+  return buckets;
+}
+function formatPostCount(count: number): string {
+  const formatted = t(locale, 'post.yearPosts', { count });
+  if (count === 1) {
+    if (locale === 'fr') return formatted.replace(/\barticles\b/, 'article');
+    if (locale === 'en') return formatted.replace(/\bposts\b/, 'post');
+  }
+  return formatted;
+}
 ---
 {groups.length ? <div class:list={['post-years', anchors && 'post-years-archive']} style={{ '--petal-mask': PETAL_MASK }}>
+  {anchors && groups.length > 1 && (
+    <nav class="timeline-year-nav" aria-label={t(locale, 'archives.quickJump')}>
+      {groups.map(({ year, posts: yearPosts }) => (
+        <a class="timeline-year-pill" href={`#year-${year}`}>
+          <span>{year}</span>
+          <small>{yearPosts.length}</small>
+        </a>
+      ))}
+    </nav>
+  )}
   {groups.map(({ year, posts: yearPosts }) => <section class="motion-reveal" id={anchors ? `year-${year}` : undefined} tabindex={anchors ? -1 : undefined} data-post-year>
-    <h2 class="year-rule"><SakuraSVG className="year-rule-bloom" /><span>{year}</span><small data-count-template={countTemplate}>{t(locale, 'post.yearPosts', { count: yearPosts.length })}</small></h2>
-    <ol class="post-rows">
-      {yearPosts.map((post, index) => {
-        const key = monthKey(post);
-        const firstOfMonth = anchors && (index === 0 || monthKey(yearPosts[index - 1]) !== key);
-        return <PostRow post={post} locale={locale} showCategory={showCategory} id={firstOfMonth ? `month-${key}` : undefined} filterKey={filterKeyOf?.(post)} />;
-      })}
-    </ol>
+    <h2 class="year-rule"><SakuraSVG className="year-rule-bloom" /><span>{year}</span><small data-count-template={countTemplate}>{formatPostCount(yearPosts.length)}</small></h2>
+    {anchors ? (
+      <div class="timeline-months">
+        {groupByMonth(yearPosts).map(({ key, month, posts: monthPosts }) => (
+          <div class="timeline-month-group" id={`month-${key}`} tabindex={-1}>
+            <h3 class="timeline-month-heading">
+              <span>{formatLocalizedMonthYear(year, month, locale)}</span>
+              <small>{formatPostCount(monthPosts.length)}</small>
+            </h3>
+            <ol class="post-rows timeline-rows">
+              {monthPosts.map((post) => (
+                <PostRow post={post} locale={locale} showCategory={showCategory} showTags filterKey={filterKeyOf?.(post)} />
+              ))}
+            </ol>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <ol class="post-rows">
+        {yearPosts.map((post) => (
+          <PostRow post={post} locale={locale} showCategory={showCategory} filterKey={filterKeyOf?.(post)} />
+        ))}
+      </ol>
+    )}
   </section>)}
 </div> : <p class="text-muted-foreground">{t(locale, 'post.noPostsFound')}</p>}

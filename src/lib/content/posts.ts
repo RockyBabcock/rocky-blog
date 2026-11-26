@@ -8,11 +8,11 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import readingTime from 'reading-time';
 import type { BlogPost } from 'types/blog';
 import { t } from '@/i18n';
-import { defaultLocale } from '@/i18n/config';
+import { defaultLocale, localeList } from '@/i18n/config';
 import { extractTextFromMarkdown } from '../sanitize';
 import { memoize } from './cache';
 import { buildCategoryPath } from './category-path';
-import { filterPostsByLocale } from './locale';
+import { filterPostsByLocale, getAvailablePostLocales } from './locale';
 import { isPostInCategory } from './post-helpers';
 
 /** WeakMap-based cache for reading-time results — auto-GC when post objects are collected */
@@ -147,4 +147,13 @@ export function getPostLastCategory(post: BlogPost): { link: string; name: strin
   }
 
   return { link: '', name: '' };
+}
+
+/**
+ * Return the list of enabled locales that actually have a native translation
+ * matching `post` (cached across the build).
+ */
+export async function getPostAvailableLocales(post: BlogPost): Promise<string[]> {
+  const allPosts = await getSortedPosts();
+  return getAvailablePostLocales(post, allPosts, localeList);
 }

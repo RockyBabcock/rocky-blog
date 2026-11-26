@@ -7,7 +7,7 @@ import { ScrollableRow } from '@components/ui/ScrollableRow';
 import { Routes } from '@constants/router';
 import { defaultCoverList } from '@constants/site-config';
 import { buildCategoryPath, buildTagPath, getCategoryArr, translateCategoryName } from '@lib/content';
-import { displayDate } from '@lib/date';
+import { formatLocalizedDate } from '@lib/date';
 import { getLqipProps } from '@lib/lqip';
 import { postTitleMorphName } from '@lib/morph-transitions';
 import { routeBuilder } from '@lib/route';
@@ -111,7 +111,7 @@ const titleMorph = postTitleMorphName(slug);
           date ? (
             <p class="flex-center gap-1 whitespace-nowrap">
               <Icon name="fa6-solid:calendar-days" />
-              {displayDate.date(date)}
+              {formatLocalizedDate(date, locale)}
             </p>
           ) : null
         }

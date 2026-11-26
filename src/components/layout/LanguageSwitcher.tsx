@@ -53,17 +53,25 @@ const LanguageSwitcherComponent = ({
   const currentLabel = localeEntries.find((l) => l.code === locale)?.label ?? locale;
 
   const renderDropdownContent = useCallback(
-    ({ close }: { close: () => void }) => (
-      <NavMenu
-        items={localeEntries.map((entry) => ({
-          key: entry.code,
-          href: getAlternateUrl(currentPath, entry.code),
-          label: entry.label,
-          current: entry.code === locale,
-        }))}
-        onSelect={close}
-      />
-    ),
+    ({ close }: { close: () => void }) => {
+      const availableAttr =
+        typeof document !== 'undefined'
+          ? document.querySelector<HTMLElement>('[data-available-locales]')?.dataset.availableLocales
+          : undefined;
+      const availableSet = availableAttr ? new Set(availableAttr.split(',').filter(Boolean)) : null;
+
+      return (
+        <NavMenu
+          items={localeEntries.map((entry) => ({
+            key: entry.code,
+            href: getAlternateUrl(currentPath, entry.code),
+            label: availableSet && !availableSet.has(entry.code) ? `${entry.label} ·` : entry.label,
+            current: entry.code === locale,
+          }))}
+          onSelect={close}
+        />
+      );
+    },
     [locale, currentPath],
   );
 

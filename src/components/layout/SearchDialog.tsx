@@ -1,7 +1,7 @@
 import { useEscapeKey, useKeyboardShortcut } from '@hooks/useKeyboardShortcut';
 import { useTranslation } from '@hooks/useTranslation';
 import { useStore } from '@nanostores/react';
-import { $isSearchOpen, closeModal, openModal } from '@store/modal';
+import { $isAnyModalOpen, $isSearchOpen, closeModal, openModal } from '@store/modal';
 import { useEffect, useState } from 'react';
 
 const loadSearchDialog = () => import('./SearchDialogContent');
@@ -14,9 +14,16 @@ export function preloadSearchDialog(): void {
 export default function SearchDialog() {
   const { t } = useTranslation();
   const open = useStore($isSearchOpen);
+  const anyModalOpen = useStore($isAnyModalOpen);
   const [Content, setContent] = useState<typeof import('./SearchDialogContent').default | null>(null);
 
-  useKeyboardShortcut({ key: 'k', modifiers: ['meta'], handler: () => openModal('search') });
+  // `/` opens full-text search directly when no modal is open and focus is outside editable inputs.
+  useKeyboardShortcut({
+    key: '/',
+    handler: () => openModal('search'),
+    enabled: !anyModalOpen,
+    ignoreInputs: true,
+  });
   useEscapeKey(() => closeModal(), open);
 
   useEffect(() => {

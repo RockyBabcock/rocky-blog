@@ -2,15 +2,18 @@
 import PageIntro from '@components/common/PageIntro.astro';
 import HomeSider from '@components/layout/HomeSider.astro';
 import SeriesIssues from '@components/series/SeriesIssues.astro';
+import SeriesRouteBar from '@components/series/SeriesRouteBar';
 import SeriesCover from '@components/ui/cover/SeriesCover.astro';
+import { Routes } from '@constants/router';
 import { siteConfig } from '@constants/site-config';
 import { Layout, TwoColumnLayout } from '@layouts/index';
 import { siteTimezone } from '@lib/config/site';
 import type { FeaturedSeriesItem } from '@lib/config/types';
 import { getPostsByCategory, translateSeriesField } from '@lib/content';
 import { toPostCardDataList } from '@lib/content/transforms';
+import { routeBuilder } from '@lib/route';
 import { formatInTimeZone } from 'date-fns-tz';
-import { t } from '@/i18n';
+import { localizedPath, t } from '@/i18n';
 import { seriesRoute } from './_shared/routes';
 
 export const getStaticPaths = seriesRoute.root;
@@ -27,8 +30,15 @@ const seriesPosts = series.categoryName
   ? toPostCardDataList(await getPostsByCategory(series.categoryName, locale), locale)
   : [];
 
+const routeItems = seriesPosts.map((post) => ({
+  slug: post.slug,
+  title: post.title,
+  href: localizedPath(routeBuilder(Routes.Post, { slug: post.slug, link: post.link, title: post.title }), locale),
+}));
+
 const seriesFullName = translateSeriesField(series.slug, 'fullName', series.fullName, locale);
 const seriesLabel = translateSeriesField(series.slug, 'label', series.label, locale);
+const seriesDesc = translateSeriesField(series.slug, 'description', series.description, locale);
 const pageTitle = `${seriesFullName || seriesLabel || series.categoryName} | ${siteConfig.title}`;
 // Oldest–newest year of the run; one year when the series has not crossed a new year yet.
 const span = [
@@ -40,12 +50,13 @@ const stats = [
 ];
 ---
 
-<Layout articleTools={false} locale={locale} title={pageTitle} description={series.description?.slice(0, 160)} heroImage={series.cover ?? null}>
+<Layout articleTools={false} locale={locale} title={pageTitle} description={seriesDesc?.slice(0, 160)} heroImage={series.cover ?? null}>
   <TwoColumnLayout showPostFooter={false}>
     <SeriesCover slot="cover" series={series} />
     <HomeSider slot="sider" />
     <div class="index-surface shadow-box">
       <PageIntro stats={stats} />
+      <SeriesRouteBar client:idle locale={locale} items={routeItems} />
       <SeriesIssues posts={seriesPosts} locale={locale} />
     </div>
   </TwoColumnLayout>

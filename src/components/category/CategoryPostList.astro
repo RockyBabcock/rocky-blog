@@ -1,7 +1,9 @@
 ---
 import PageIntro from '@components/common/PageIntro.astro';
 import PostYears from '@components/common/PostYears.astro';
+import { siteConfig } from '@constants/site-config';
 import { buildCategoryPath, type Category, translateCategoryName } from '@lib/content';
+import { translateFeaturedCategoryField } from '@lib/content/categories';
 import { postsInCategoryPath } from '@lib/content/index-categories';
 import type { BlogPost } from 'types/blog';
 import { localizedPath, t } from '@/i18n';
@@ -14,6 +16,11 @@ interface Props {
 }
 const { category, path, allPosts, locale } = Astro.props;
 const posts = postsInCategoryPath(allPosts, path);
+const categorySlugPath = buildCategoryPath(path).replace(/^\/categories\//, '');
+const matchedFeatured = siteConfig.featuredCategories?.find((item) => item.link === categorySlugPath);
+const categoryDescription = matchedFeatured
+  ? translateFeaturedCategoryField(matchedFeatured.link, 'description', matchedFeatured.description, locale)
+  : undefined;
 /** The child branch a post sits in under this category, matched by the sub-tabs. */
 const childOf = (post: BlogPost) => {
   const first = post.data.categories?.[0];
@@ -29,7 +36,7 @@ const breadcrumbs = [
 ];
 ---
 <div class="index-surface shadow-box" data-category-filter-root>
-  <PageIntro stats={[{ value: posts.length, label: t(locale, 'index.posts') }]} breadcrumbs={breadcrumbs}>
+  <PageIntro stats={[{ value: posts.length, label: t(locale, 'index.posts') }]} breadcrumbs={breadcrumbs} description={categoryDescription}>
     {category?.children?.length && <div class="index-tabs" slot="tools" role="group" aria-label={t(locale, 'category.filter')}>
       <button type="button" data-category-filter="" aria-pressed="true">{t(locale, 'tag.all')}<sup>{posts.length}</sup></button>
       {category.children.map((child) => <button type="button" data-category-filter={child.name} aria-pressed="false">{translateCategoryName(child.name, locale)}<sup>{postsInCategoryPath(allPosts, [...path, child.name]).length}</sup></button>)}

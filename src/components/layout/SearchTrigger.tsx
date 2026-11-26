@@ -19,12 +19,10 @@ export function SearchTrigger({ className, locale }: { className?: string; local
   const isMounted = useIsMounted();
   const { t } = useTranslation(locale);
 
-  // Only compute platform-specific shortcut after mount to avoid hydration mismatch
+  // Compute tooltip after mount to avoid hydration mismatch
   const title = useMemo(() => {
     if (!isMounted) return undefined;
-    const platform = navigator.userAgentData?.platform || navigator.userAgent;
-    const isMac = /mac/i.test(platform);
-    return t('search.searchShortcut', { shortcut: isMac ? '⌘K' : 'Ctrl+K' });
+    return t('search.searchShortcut', { shortcut: '/' });
   }, [isMounted, t]);
 
   return (

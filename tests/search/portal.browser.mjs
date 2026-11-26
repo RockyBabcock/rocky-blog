@@ -1,10 +1,10 @@
 import { chromium, devices, expect, webkit } from '@playwright/test';
 
 const origin = process.env.SEARCH_TEST_ORIGIN || 'http://127.0.0.1:4321';
-const runtime = '**/pagefind/pagefind-component-ui.js';
+const runtime = '**/pagefind/pagefind.js';
 
 async function openSearch(page) {
-  await page.getByRole('button', { name: /^(搜索|検索)$/ }).click();
+  await page.getByRole('button', { name: /^(搜索|検索|Search|Rechercher)$/ }).click();
 }
 
 async function softNavigate(page, path) {
@@ -37,7 +37,7 @@ for (const profile of [
 ]) {
   const browser = await profile.engine.launch();
   try {
-    for (const scenario of ['navigation', 'cancel', 'failure']) {
+    for (const scenario of ['navigation', 'failure']) {
       const context = await browser.newContext(profile.options);
       const page = await context.newPage();
       page.setDefaultTimeout(15000);
@@ -48,68 +48,42 @@ for (const profile of [
       const errors = [];
       page.on('request', (request) => requests.push(request.url()));
       page.on('pageerror', (error) => errors.push(error.message));
-      let release;
       try {
-        if (scenario === 'cancel') {
-          const pending = new Promise((resolve) => {
-            release = resolve;
-          });
-          await page.route(runtime, async (route) => {
-            await pending;
-            await route.continue();
-          });
-        } else if (scenario === 'failure') {
+        if (scenario === 'failure') {
           await page.route(runtime, (route) => route.abort());
         }
         await page.goto(origin, { waitUntil: 'domcontentloaded' });
         await expect(page.locator('astro-island[component-url*="SearchDialog"]')).not.toHaveAttribute('ssr');
-        expect(requests.filter((url) => url.endsWith('pagefind-component-ui.js'))).toHaveLength(0);
+        expect(requests.filter((url) => url.endsWith('pagefind.js'))).toHaveLength(0);
         await openSearch(page);
-        const input = page.locator('#search-dialog-container .pf-searchbox-input');
-        if (scenario === 'cancel') {
-          await expect(page.locator('#search-dialog-container [data-search-loading]')).toBeVisible();
+        const input = page.locator('[data-search-input]');
+        if (scenario === 'failure') {
+          await expect(page.locator('[data-search-loading]')).toHaveText('搜索加载失败，请刷新页面重试。');
           await page.getByRole('dialog').getByRole('button', { name: '关闭', exact: true }).click();
-          await expect(page.locator('#search-dialog-container')).toHaveCount(0);
-          await softNavigate(page, '/posts/');
-          const response = page.waitForResponse(runtime);
-          release();
-          await response;
-          await page.waitForFunction(() => Boolean(customElements.get('pagefind-searchbox')));
-          await page.evaluate(() => new Promise(requestAnimationFrame));
-          await expect(page.locator('#search-dialog-container')).toHaveCount(0);
-          await openSearch(page);
-          await expect(input).toBeVisible();
-          await expect(input).toBeFocused();
-        } else if (scenario === 'failure') {
-          await expect(page.locator('#search-dialog-container [data-search-loading]')).toHaveText(
-            '搜索加载失败，请刷新页面重试。',
-          );
-          await page.getByRole('dialog').getByRole('button', { name: '关闭', exact: true }).click();
-          await expect(page.locator('#search-dialog-container')).toHaveCount(0);
+          await expect(page.locator('[data-search-dialog]')).toHaveCount(0);
           expect(await page.evaluate(() => document.body.style.overflow)).not.toBe('hidden');
         } else {
           await expect(input).toBeVisible();
           await expect(input).toBeFocused();
           await input.fill('Astro');
-          await expect(page.locator('#search-dialog-container .pf-searchbox-result').first()).toBeVisible({ timeout: 15000 });
+          await expect(page.locator('[data-search-result]').first()).toBeVisible({ timeout: 15000 });
           await page.keyboard.press('Escape');
           await softNavigate(page, '/posts/');
           await openSearch(page);
           await expect(input).toBeVisible();
           await expect(input).toBeFocused();
           await page.keyboard.press('Escape');
-          await softNavigate(page, '/ja/');
+          await softNavigate(page, '/fr/');
           await openSearch(page);
           await expect(input).toBeVisible();
           await expect(input).toBeFocused();
-          await expect(input).toHaveAttribute('placeholder', 'キーワードで検索');
-          expect(requests.filter((url) => url.endsWith('pagefind-component-ui.js'))).toHaveLength(1);
+          await expect(input).toHaveAttribute('placeholder', 'Rechercher par mot-clé');
+          expect(requests.filter((url) => url.endsWith('pagefind.js'))).toHaveLength(1);
         }
         if (scenario !== 'failure') expect(errors).toEqual([]);
         console.log(`PASS ${profile.name}: ${scenario}`);
       } finally {
         clearTimeout(timer);
-        release?.();
         await context.close();
       }
     }

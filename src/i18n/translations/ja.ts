@@ -300,4 +300,83 @@ export const uiStrings: UIStrings = {
 
   // ── リンクをコピー ───────────────────────────────────────────────
   'cover.copyLink': 'リンクをコピー',
+
+  // ── 多言語・フォールバック ──────────────────────────────────
+  'post.viewOriginal': '元の投稿（{lang}）を見る',
+  'post.originalLocale': '原文: {lang}',
+  'language.nativeAvailable': '翻訳あり',
+  'language.fallbackLabel': '原文表示',
+
+  // ── 検索機能強化 ───────────────────────────────────────────
+  'search.filterCategory': 'カテゴリー',
+  'search.filterTag': 'タグ',
+  'search.filterLanguage': '言語',
+  'search.clearFilters': '絞り込みを解除',
+  'search.all': 'すべて',
+  'search.resultCount': '{count}件の記事が見つかりました',
+  'search.emptyPrompt': 'キーワードを入力するか、下のフィルターを選択してください',
+  'search.retry': '再試行',
+  'search.openCommands': 'コマンドパレットを開く',
+  'search.shortcutHint': 'コマンド',
+
+  // ── 閲覧履歴 ───────────────────────────────────────────────
+  'history.title': '最近読んだ記事',
+  'history.continueReading': '続きを読む',
+  'history.empty': '閲覧履歴はまだありません',
+  'history.clearAll': '履歴をクリア',
+  'history.cleared': '閲覧履歴をクリアしました',
+  'history.removeItem': '履歴を削除',
+  'history.progress': '{percent}% 読了',
+  'history.completed': '読了',
+  'history.justNow': 'たった今',
+  'history.minutesAgo': '{count}分前',
+  'history.hoursAgo': '{count}時間前',
+  'history.daysAgo': '{count}日前',
+
+  // ── コマンドパレット ───────────────────────────────────────
+  'command.title': 'コマンドパレット',
+  'command.placeholder': 'コマンドやページを検索...',
+  'command.empty': '一致するコマンドがありません',
+  'command.groupNav': 'ナビゲーション',
+  'command.groupActions': 'アクション',
+  'command.groupRecent': '最近読んだ記事',
+  'command.searchPosts': '記事を検索',
+  'command.searchForQuery': '「{query}」を記事から検索',
+  'command.openSettings': '読書設定を開く',
+  'command.toggleFocus': '集中読書モードを切り替え',
+  'command.toggleTheme': 'ライト / ダークテーマを切り替え',
+  'command.trigger': 'コマンド',
+  'command.navigateHint': '移動',
+  'command.executeHint': '実行',
+
+  // ── 記事シェア ─────────────────────────────────────────────
+  'share.title': '共有',
+  'share.copyLink': '記事リンクをコピー',
+  'share.copyMarkdown': 'Markdown リンクをコピー',
+  'share.nativeShare': 'システムで共有',
+  'share.linkCopied': '記事リンクをコピーしました',
+  'share.markdownCopied': 'Markdown リンクをコピーしました',
+  'share.shared': '共有メニューを開きました',
+  'share.failed': 'コピーに失敗しました。URLを手動でコピーしてください。',
+
+  // ── 集中読書モード ─────────────────────────────────────────
+  'focus.enter': '集中読書',
+  'focus.exit': '集中モードを終了',
+  'focus.active': '集中読書モード',
+  'focus.shortcutHint': 'Esc キーで終了',
+
+  // ── シリーズ読書ルート ─────────────────────────────────────
+  'series.progressTitle': 'シリーズ読書進捗',
+  'series.completedCount': '{read} / {total} 記事を読了',
+  'series.continueReading': '続きを読む',
+  'series.startReading': '最初から読む',
+  'series.statusRead': '読了',
+  'series.statusInProgress': '{percent}%',
+  'series.backToSeries': 'シリーズ一覧へ',
+  'series.partOfSeries': 'シリーズ',
+
+  // ── アーカイブタイムライン ─────────────────────────────────
+  'archives.timelineTitle': '記事タイムライン',
+  'archives.allYears': 'すべての年',
+  'archives.quickJump': '年へ移動',
 };

@@ -189,6 +189,32 @@
   color: hsl(var(--foreground) / 0.88);
   text-wrap: pretty;
 }
+.issue-row-right {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.issue-status-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  background: hsl(var(--primary) / 0.12);
+  color: var(--index-ink);
+}
+.issue-status-pill[hidden] {
+  display: none;
+}
+.issue-status-pill[data-status="completed"] {
+  background: hsl(var(--primary) / 0.18);
+  color: hsl(var(--primary));
+}
 .issue-row time {
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;

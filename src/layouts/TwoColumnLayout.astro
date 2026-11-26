@@ -25,9 +25,9 @@ const { className, post, showPostFooter = true } = Astro.props;
     )}
   >
     <slot name="sider" />
-    <div class="flex min-w-0 grow flex-col gap-8 md:w-full">
+    <div class="two-column-main flex min-w-0 grow flex-col gap-8 md:w-full">
       <slot />
-      {showPostFooter && <PostFooter post={post} />}
+      {showPostFooter && <div data-focus-hide><PostFooter post={post} /></div>}
       <Footer />
     </div>
   </div>

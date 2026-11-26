@@ -299,4 +299,83 @@ export const uiStrings = {
 
   // ── Copy Link ───────────────────────────────────────────────
   'cover.copyLink': '复制链接',
+
+  // ── Cross-Language & Fallback ──────────────────────────────
+  'post.viewOriginal': '查看{lang}原文',
+  'post.originalLocale': '原文：{lang}',
+  'language.nativeAvailable': '已有翻译',
+  'language.fallbackLabel': '原文回退',
+
+  // ── Search Upgrade ─────────────────────────────────────────
+  'search.filterCategory': '分类',
+  'search.filterTag': '标签',
+  'search.filterLanguage': '语言',
+  'search.clearFilters': '清空筛选',
+  'search.all': '全部',
+  'search.resultCount': '找到 {count} 篇相关文章',
+  'search.emptyPrompt': '输入关键词搜索全文，或直接选择下方筛选条件',
+  'search.retry': '重试',
+  'search.openCommands': '打开命令面板',
+  'search.shortcutHint': '命令面板',
+
+  // ── Reading History ────────────────────────────────────────
+  'history.title': '最近阅读',
+  'history.continueReading': '继续阅读',
+  'history.empty': '暂无本地阅读记录',
+  'history.clearAll': '清空记录',
+  'history.cleared': '已清空本地阅读记录',
+  'history.removeItem': '移除记录',
+  'history.progress': '已读 {percent}%',
+  'history.completed': '已读完',
+  'history.justNow': '刚刚',
+  'history.minutesAgo': '{count} 分钟前',
+  'history.hoursAgo': '{count} 小时前',
+  'history.daysAgo': '{count} 天前',
+
+  // ── Command Palette ────────────────────────────────────────
+  'command.title': '快捷命令面板',
+  'command.placeholder': '输入命令或搜索站内页面...',
+  'command.empty': '没有匹配的命令',
+  'command.groupNav': '快速导航',
+  'command.groupActions': '快捷操作',
+  'command.groupRecent': '最近阅读',
+  'command.searchPosts': '搜索文章',
+  'command.searchForQuery': '在文章中搜索「{query}」',
+  'command.openSettings': '打开阅读设置',
+  'command.toggleFocus': '切换专注阅读模式',
+  'command.toggleTheme': '切换浅色 / 深色主题',
+  'command.trigger': '快捷命令',
+  'command.navigateHint': '选择',
+  'command.executeHint': '执行',
+
+  // ── Article Share ──────────────────────────────────────────
+  'share.title': '分享',
+  'share.copyLink': '复制文章链接',
+  'share.copyMarkdown': '复制 Markdown 链接',
+  'share.nativeShare': '系统分享',
+  'share.linkCopied': '已复制文章链接',
+  'share.markdownCopied': '已复制 Markdown 链接',
+  'share.shared': '已调起系统分享',
+  'share.failed': '复制失败，请手动复制地址栏链接',
+
+  // ── Focus Reading Mode ─────────────────────────────────────
+  'focus.enter': '专注阅读',
+  'focus.exit': '退出专注',
+  'focus.active': '专注阅读模式',
+  'focus.shortcutHint': '按 Esc 退出专注阅读',
+
+  // ── Series Reading Route ───────────────────────────────────
+  'series.progressTitle': '系列阅读进度',
+  'series.completedCount': '已读 {read} / {total} 篇',
+  'series.continueReading': '继续阅读',
+  'series.startReading': '从头开始',
+  'series.statusRead': '已读',
+  'series.statusInProgress': '已读 {percent}%',
+  'series.backToSeries': '返回系列目录',
+  'series.partOfSeries': '所属系列',
+
+  // ── Archives Timeline ──────────────────────────────────────
+  'archives.timelineTitle': '文章时间线',
+  'archives.allYears': '全部年份',
+  'archives.quickJump': '快速跳转',
 } as const;

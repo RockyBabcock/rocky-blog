@@ -19,10 +19,10 @@ import {
 } from '@lib/responsive-image';
 import { getOgImageUrl } from '@lib/seo/og-image';
 import { SEO } from 'astro-seo';
-import { defaultLocale, getAlternateUrl, getHtmlLang, isI18nEnabled, localeList, localizedPath } from '@/i18n';
+import { defaultLocale, getAlternateUrl, getHtmlLang, getOgLocale, isI18nEnabled, localeList, localizedPath } from '@/i18n';
 
 const { meta } = Astro.props;
-const { locale, title, description, openGraph, robots, includeLocaleAlternates = true } = meta;
+const { locale, title, description, openGraph, robots, includeLocaleAlternates = true, availableLocales } = meta;
 
 const resolveAbsoluteUrl = (value: string | undefined) => (value ? new URL(value, Astro.site).href : undefined);
 
@@ -38,9 +38,15 @@ const rssFeeds = meta.rssFeeds ?? [
 ];
 
 const showLocaleAlternates = includeLocaleAlternates && isI18nEnabled;
+const alternateLocales = availableLocales ? localeList.filter((loc) => availableLocales.includes(loc)) : localeList;
 const alternateUrl = (target: string) => new URL(getAlternateUrl(Astro.url.pathname, target), Astro.site).href;
 const hreflangLinks = showLocaleAlternates
-  ? localeList.map((loc) => ({ lang: getHtmlLang(loc), href: alternateUrl(loc) }))
+  ? alternateLocales.map((loc) => ({ lang: getHtmlLang(loc), href: alternateUrl(loc) }))
+  : [];
+const includeXDefault = showLocaleAlternates && alternateLocales.includes(defaultLocale);
+const ogLocale = getOgLocale(locale);
+const ogLocaleAlternates = showLocaleAlternates
+  ? alternateLocales.filter((loc) => loc !== locale).map((loc) => getOgLocale(loc))
   : [];
 // Dynamic routes use the existing static variants so their first visitor need not wait for AVIF encoding.
 const runtimeHero = !Astro.isPrerendered && meta.heroImage !== null && (!meta.heroImage || meta.heroImage === defaultHeroImage);
@@ -85,6 +91,8 @@ const portraitHero =
     optional: {
       siteName: siteConfig.name,
       description: ogDescription,
+      locale: ogLocale,
+      localeAlternate: ogLocaleAlternates,
     },
   }}
   twitter={{
@@ -104,8 +112,8 @@ const portraitHero =
 {rssFeeds.map((feed) => (
   <link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />
 ))}
-{/* hreflang alternate links for SEO — only output when multiple locales are configured */}
+{/* hreflang alternate links for SEO — only output real existing locale variants */}
 {hreflangLinks.map(({ lang, href }) => (
   <link rel="alternate" hreflang={lang} href={href} />
 ))}
-{showLocaleAlternates && <link rel="alternate" hreflang="x-default" href={alternateUrl(defaultLocale)} />}
+{includeXDefault && <link rel="alternate" hreflang="x-default" href={alternateUrl(defaultLocale)} />}

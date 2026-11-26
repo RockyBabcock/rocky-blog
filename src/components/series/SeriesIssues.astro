@@ -4,7 +4,7 @@ import { Routes } from '@constants/router';
 import { siteTimezone } from '@lib/config/site';
 import { groupPostsByYear } from '@lib/content/index-groups';
 import { parseIssueTitle } from '@lib/content/series-issue';
-import { displayDate } from '@lib/date';
+import { displayDate, formatLocalizedDate, formatLocalizedMonthDay } from '@lib/date';
 import { routeBuilder } from '@lib/route';
 import { PETAL_MASK } from '@lib/sakura/petal';
 import { Icon } from 'astro-icon/components';
@@ -24,6 +24,8 @@ const issues = posts.map((post) => {
     href,
     ...parseIssueTitle(post.title),
     date: displayDate.date(post.date),
+    localizedDate: formatLocalizedDate(post.date, locale),
+    localizedMonthDay: formatLocalizedMonthDay(post.date, locale),
     // groupPostsByYear reads `data.date`, the shape of collection entries.
     data: { date: post.date },
   };
@@ -32,11 +34,12 @@ const [latest, ...rest] = issues;
 const years = groupPostsByYear(rest, siteTimezone);
 ---
 {latest ? <div class="series-issues" style={{ '--petal-mask': PETAL_MASK }}>
-  <article class="issue-latest motion-rise" style="--i: 0">
+  <article class="issue-latest motion-rise" style="--i: 0" data-series-issue-slug={latest.post.slug}>
     <SakuraSVG className="issue-latest-bloom" />
     <p class="issue-latest-label">
       <span>{t(locale, 'series.latestIssue')}</span>
-      <time datetime={latest.date}>{latest.date}</time>
+      <time datetime={latest.date}>{latest.localizedDate}</time>
+      <span class="issue-status-pill" data-series-issue-status hidden></span>
     </p>
     <div class="issue-latest-head">
       {latest.number && <span class="issue-latest-no" aria-hidden="true"><small>Vol.</small>{latest.number}</span>}
@@ -57,12 +60,15 @@ const years = groupPostsByYear(rest, siteTimezone);
   {years.map(({ year, posts: yearIssues }) => <section class="motion-reveal">
     <h2 class="year-rule"><SakuraSVG className="year-rule-bloom" /><span>{year}</span><small>{yearIssues.length} {t(locale, 'series.issues')}</small></h2>
     <ol class="issue-rows">
-      {yearIssues.map((issue) => <li class="issue-row">
+      {yearIssues.map((issue) => <li class="issue-row" data-series-issue-slug={issue.post.slug}>
         <span class="issue-no" aria-hidden="true">{issue.number ?? <SakuraSVG className="issue-no-bloom" />}</span>
         <h3 class="issue-title">
           <a class="issue-link" href={issue.href} aria-label={issue.post.title} title={issue.post.description}>{issue.headline}</a>
         </h3>
-        <time datetime={issue.date}>{issue.date.slice(5)}</time>
+        <span class="issue-row-right">
+          <span class="issue-status-pill" data-series-issue-status hidden></span>
+          <time datetime={issue.date}>{issue.localizedMonthDay}</time>
+        </span>
       </li>)}
     </ol>
   </section>)}

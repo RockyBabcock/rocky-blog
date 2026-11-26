@@ -1,0 +1,71 @@
+/* ==========================================================================
+ * Focus Reading Mode (`html.focus-mode`)
+ *
+ * Distraction-free reading experience for post pages:
+ * - Hides non-essential chrome (site header, desktop sidebar, footer recommendations)
+ * - Softens hero banner into a quiet compact title strip
+ * - Centers the reading surface while strictly honoring reader settings
+ *   (--reader-measure, --reader-font-size, --reader-line-height)
+ * ========================================================================== */
+
+html.focus-mode #site-header,
+html.focus-mode #mobile-menu-container {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition:
+    opacity 220ms var(--ease-out-quart, ease-out),
+    transform 260ms var(--ease-out-quart, ease-out);
+}
+
+html.focus-mode .cover-hero {
+  height: auto !important;
+  min-height: 11.5rem !important;
+  max-height: 18rem !important;
+  padding-top: 3.5rem;
+  padding-bottom: 2.5rem;
+}
+
+html.focus-mode .cover-hero .cover-copy {
+  position: relative;
+  bottom: auto;
+  padding-inline: 1.25rem;
+}
+
+html.focus-mode .cover-hero #banner-box,
+html.focus-mode .cover-hero .sakura-petals,
+html.focus-mode .cover-hero svg {
+  opacity: 0.16;
+  transition: opacity 300ms ease;
+}
+
+html.focus-mode .page-home-sider,
+html.focus-mode [data-focus-hide] {
+  display: none !important;
+}
+
+html.focus-mode .two-column-main,
+html.focus-mode [data-reading-surface] {
+  margin-inline: auto;
+  width: 100%;
+  max-width: min(100%, calc(var(--reader-measure, 68ch) + 6rem));
+}
+
+html.focus-mode [data-reading-surface] {
+  border-radius: 1rem;
+  box-shadow: 0 0.75rem 2.5rem -1.25rem rgb(20 10 28 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.focus-mode #site-header,
+  html.focus-mode #mobile-menu-container,
+  html.focus-mode .cover-hero #banner-box {
+    transition: none;
+  }
+}
+
+html[data-motion="reduced"].focus-mode #site-header,
+html[data-motion="reduced"].focus-mode #mobile-menu-container,
+html[data-motion="reduced"].focus-mode .cover-hero #banner-box {
+  transition: none;
+}

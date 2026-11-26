@@ -3,9 +3,10 @@
 }
 .archive-calendar-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.5rem 1rem;
   margin-bottom: 0.75rem;
 }
 .archive-calendar-head h2 {
@@ -14,8 +15,10 @@
 }
 .archive-calendar-legend {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 4px;
+  white-space: nowrap;
   font-size: 0.6875rem;
   color: hsl(var(--muted-foreground));
 }

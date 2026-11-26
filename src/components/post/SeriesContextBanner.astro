@@ -1,0 +1,78 @@
+---
+/**
+ * SeriesContextBanner — Displays the current post's series membership, exact position (`X / N`),
+ * link back to the dedicated series route (or category index), and quick prev/next navigation.
+ */
+
+import { Routes } from '@constants/router';
+import { routeBuilder } from '@lib/route';
+import { Icon } from 'astro-icon/components';
+import { localizedPath, t } from '@/i18n';
+import type { PostRef } from '@/types/blog';
+
+interface Props {
+  locale: string;
+  seriesName: string;
+  seriesHref: string;
+  currentPosition: number;
+  totalCount: number;
+  prevPost: PostRef | null;
+  nextPost: PostRef | null;
+}
+
+const { locale, seriesName, seriesHref, currentPosition, totalCount, prevPost, nextPost } = Astro.props;
+const postHref = (post: PostRef) => localizedPath(routeBuilder(Routes.Post, post), locale);
+---
+
+<aside
+  class="bg-primary/5 border-primary/15 mt-1 mb-2 flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm"
+  aria-label={t(locale, 'series.partOfSeries')}
+  data-series-context
+>
+  <div class="flex min-w-0 items-center gap-2.5">
+    <span class="bg-primary/15 text-primary flex size-7 shrink-0 items-center justify-center rounded-lg">
+      <Icon name="ri:book-2-line" class="size-4" aria-hidden="true" />
+    </span>
+    <div class="min-w-0">
+      <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+        <span class="text-muted-foreground text-xs">{t(locale, 'series.partOfSeries')}</span>
+        <a href={seriesHref} class="text-foreground hover:text-primary truncate font-semibold transition-colors">
+          {seriesName}
+        </a>
+        <span class="bg-primary/12 text-primary rounded-full px-2 py-0.5 text-xs font-medium tabular-nums">
+          {t(locale, 'series.position', { current: currentPosition, total: totalCount })}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-2 text-xs">
+    {prevPost && (
+      <a
+        href={postHref(prevPost)}
+        class="border-border/80 bg-background/70 text-muted-foreground hover:border-primary/40 hover:text-primary inline-flex items-center gap-1 rounded-full border px-2.5 py-1 transition-colors"
+        title={prevPost.title}
+      >
+        <Icon name="ri:arrow-left-s-line" class="size-3.5" aria-hidden="true" />
+        <span>{t(locale, 'post.seriesPrev')}</span>
+      </a>
+    )}
+    {nextPost && (
+      <a
+        href={postHref(nextPost)}
+        class="border-border/80 bg-background/70 text-muted-foreground hover:border-primary/40 hover:text-primary inline-flex items-center gap-1 rounded-full border px-2.5 py-1 transition-colors"
+        title={nextPost.title}
+      >
+        <span>{t(locale, 'post.seriesNext')}</span>
+        <Icon name="ri:arrow-right-s-line" class="size-3.5" aria-hidden="true" />
+      </a>
+    )}
+    <a
+      href={seriesHref}
+      class="text-primary hover:bg-primary/12 inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-medium transition-colors"
+    >
+      <span>{t(locale, 'series.backToSeries')}</span>
+      <Icon name="ri:arrow-right-up-line" class="size-3.5" aria-hidden="true" />
+    </a>
+  </div>
+</aside>

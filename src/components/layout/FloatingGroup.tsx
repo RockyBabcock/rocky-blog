@@ -7,6 +7,7 @@
  */
 
 import { LazyMotionProvider } from '@components/common/LazyMotionProvider';
+import { preloadCommandPalette } from '@components/layout/CommandPalette';
 import { preloadSettingsPanel } from '@components/settings/SettingsPanel';
 import { animation } from '@constants/design-tokens';
 import { useIsMounted } from '@hooks/useIsMounted';
@@ -16,7 +17,7 @@ import { Icon } from '@iconify/react';
 import { getScrollBehavior } from '@lib/motion-level';
 import { cn } from '@lib/utils';
 import { useStore } from '@nanostores/react';
-import { $isDrawerOpen, $isSettingsOpen, toggleSettings } from '@store/modal';
+import { $isDrawerOpen, $isSettingsOpen, openModal, toggleSettings } from '@store/modal';
 import { initSettings, scrollProgressEnabled } from '@store/settings';
 import { AnimatePresence, type MotionValue, m, useScroll, useSpring, type Variants } from 'motion/react';
 import { useEffect, useState } from 'react';
@@ -150,7 +151,7 @@ export default function FloatingGroup() {
   return (
     <LazyMotionProvider>
       <m.div
-        className="text-primary fixed right-4 bottom-4 z-50 flex flex-col items-center gap-2"
+        className="text-primary fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex flex-col items-center gap-2"
         animate={{
           transform: isHidden ? 'translateX(200px)' : 'translateX(0px)',
           opacity: isHidden ? 0 : 1,
@@ -167,6 +168,16 @@ export default function FloatingGroup() {
               animate="open"
               exit="closed"
             >
+              <m.div variants={reduced ? staticVariants : itemVariants}>
+                <FloatingButton
+                  onClick={() => openModal('command')}
+                  ariaLabel={t('command.trigger')}
+                  title={t('command.title')}
+                  onIntent={preloadCommandPalette}
+                >
+                  <Icon icon="ri:command-line" className="size-5" />
+                </FloatingButton>
+              </m.div>
               <m.div variants={reduced ? staticVariants : itemVariants}>
                 <FloatingButton
                   onClick={toggleSettings}

@@ -300,4 +300,83 @@ export const uiStrings: UIStrings = {
 
   // ── Copy Link ───────────────────────────────────────────────
   'cover.copyLink': 'Copy link',
+
+  // ── Cross-Language & Fallback ──────────────────────────────
+  'post.viewOriginal': 'View original ({lang})',
+  'post.originalLocale': 'Original: {lang}',
+  'language.nativeAvailable': 'Translated',
+  'language.fallbackLabel': 'Original fallback',
+
+  // ── Search Upgrade ─────────────────────────────────────────
+  'search.filterCategory': 'Category',
+  'search.filterTag': 'Tag',
+  'search.filterLanguage': 'Language',
+  'search.clearFilters': 'Clear filters',
+  'search.all': 'All',
+  'search.resultCount': '{count} matching posts',
+  'search.emptyPrompt': 'Type a keyword to search posts, or pick a filter below',
+  'search.retry': 'Retry',
+  'search.openCommands': 'Open Command Palette',
+  'search.shortcutHint': 'Commands',
+
+  // ── Reading History ────────────────────────────────────────
+  'history.title': 'Recently Read',
+  'history.continueReading': 'Continue',
+  'history.empty': 'No local reading history yet',
+  'history.clearAll': 'Clear all',
+  'history.cleared': 'Reading history cleared',
+  'history.removeItem': 'Remove entry',
+  'history.progress': '{percent}% read',
+  'history.completed': 'Completed',
+  'history.justNow': 'Just now',
+  'history.minutesAgo': '{count}m ago',
+  'history.hoursAgo': '{count}h ago',
+  'history.daysAgo': '{count}d ago',
+
+  // ── Command Palette ────────────────────────────────────────
+  'command.title': 'Command Palette',
+  'command.placeholder': 'Type a command or jump to a page...',
+  'command.empty': 'No matching commands',
+  'command.groupNav': 'Navigation',
+  'command.groupActions': 'Actions',
+  'command.groupRecent': 'Recently Read',
+  'command.searchPosts': 'Search Posts',
+  'command.searchForQuery': 'Search posts for "{query}"',
+  'command.openSettings': 'Open Reading Settings',
+  'command.toggleFocus': 'Toggle Focus Reading Mode',
+  'command.toggleTheme': 'Toggle Light / Dark Theme',
+  'command.trigger': 'Commands',
+  'command.navigateHint': 'Navigate',
+  'command.executeHint': 'Run',
+
+  // ── Article Share ──────────────────────────────────────────
+  'share.title': 'Share',
+  'share.copyLink': 'Copy article link',
+  'share.copyMarkdown': 'Copy Markdown link',
+  'share.nativeShare': 'System share',
+  'share.linkCopied': 'Article link copied',
+  'share.markdownCopied': 'Markdown link copied',
+  'share.shared': 'Opened share sheet',
+  'share.failed': 'Copy failed. Please copy the URL from the address bar.',
+
+  // ── Focus Reading Mode ─────────────────────────────────────
+  'focus.enter': 'Focus mode',
+  'focus.exit': 'Exit focus',
+  'focus.active': 'Focus Reading Mode',
+  'focus.shortcutHint': 'Press Esc to exit focus mode',
+
+  // ── Series Reading Route ───────────────────────────────────
+  'series.progressTitle': 'Series Progress',
+  'series.completedCount': '{read} / {total} completed',
+  'series.continueReading': 'Continue reading',
+  'series.startReading': 'Start reading',
+  'series.statusRead': 'Read',
+  'series.statusInProgress': '{percent}% read',
+  'series.backToSeries': 'All in series',
+  'series.partOfSeries': 'Series',
+
+  // ── Archives Timeline ──────────────────────────────────────
+  'archives.timelineTitle': 'Article Timeline',
+  'archives.allYears': 'All years',
+  'archives.quickJump': 'Quick jump',
 };

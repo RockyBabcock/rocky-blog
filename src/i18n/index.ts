@@ -20,6 +20,7 @@ export {
   getAlternateUrl,
   getHtmlLang,
   getLocaleFromUrl,
+  getOgLocale,
   localizedPath,
   resolveNavName,
   stripLocaleFromPath,

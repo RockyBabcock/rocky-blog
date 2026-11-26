@@ -7,6 +7,13 @@
 
 import { siteTimezone } from '@lib/config/site';
 import { formatInTimeZone, fromZonedTime, toDate } from 'date-fns-tz';
+import {
+  formatLocalizedDate as formatLocalizedDateBase,
+  formatLocalizedDateTime as formatLocalizedDateTimeBase,
+  formatLocalizedMonthDay as formatLocalizedMonthDayBase,
+  formatLocalizedMonthYear as formatLocalizedMonthYearBase,
+  getIntlLocale,
+} from './date-localized';
 
 /**
  * Standard date formats used across the site
@@ -124,4 +131,26 @@ export function reinterpretUtcAsTimezone(date: Date): Date {
   const dateStr = formatInTimeZone(date, 'UTC', 'yyyy-MM-dd HH:mm:ss');
   // Re-parse this string as if it were in the site timezone
   return fromZonedTime(dateStr, siteTimezone);
+}
+
+export { getIntlLocale };
+
+/** Format a date in a natural localized form with explicit timezone (deterministic across SSR & client). */
+export function formatLocalizedDate(date: Date | string, locale: string, timezone: string = siteTimezone): string {
+  return formatLocalizedDateBase(date, locale, timezone);
+}
+
+/** Format date + hour/minute in a natural localized form with explicit timezone. */
+export function formatLocalizedDateTime(date: Date | string, locale: string, timezone: string = siteTimezone): string {
+  return formatLocalizedDateTimeBase(date, locale, timezone);
+}
+
+/** Format month + day in a natural localized form (e.g. for archive/timeline rows). */
+export function formatLocalizedMonthDay(date: Date | string, locale: string, timezone: string = siteTimezone): string {
+  return formatLocalizedMonthDayBase(date, locale, timezone);
+}
+
+/** Format a localized month heading (e.g. "2025年1月", "January 2025", "janvier 2025"). */
+export function formatLocalizedMonthYear(year: number, month: number, locale: string, timezone: string = siteTimezone): string {
+  return formatLocalizedMonthYearBase(year, month, locale, timezone);
 }

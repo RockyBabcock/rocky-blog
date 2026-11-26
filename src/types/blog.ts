@@ -24,6 +24,8 @@ export interface BlogSchema {
   password?: string;
   /** Keywords for SEO */
   keywords?: string[];
+  /** Optional explicit key linking translated versions of the same post across locales */
+  translationKey?: string;
 }
 
 /**

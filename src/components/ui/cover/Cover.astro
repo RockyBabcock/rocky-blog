@@ -2,7 +2,7 @@
 import { motionConfig, siteConfig } from '@constants/site-config';
 import { getPostSlug } from '@lib/content/locale';
 import { getPostReadingTime } from '@lib/content/posts';
-import { displayDate } from '@lib/date';
+import { formatLocalizedDateTime } from '@lib/date';
 import { getLqipStyle } from '@lib/lqip';
 import { postTitleMorphName } from '@lib/morph-transitions';
 import { defaultHeroImage, defaultHeroSrcset } from '@lib/responsive-image';
@@ -97,12 +97,12 @@ const copyFailedLabel = t(locale, 'common.copyFailed');
             <p class="motion-rise mt-3 flex flex-wrap items-center justify-center gap-4 md:text-xs" style="--i: 1">
               <span class="flex items-center gap-1">
                 <Icon name="fa6-solid:calendar-days" />
-                {t(locale, "post.publishedAt", { date: date ? displayDate.datetime(date) : '' })}
+                {t(locale, "post.publishedAt", { date: date ? formatLocalizedDateTime(date, locale) : '' })}
               </span>
               {updated && (
                 <span class="flex items-center gap-1">
                   <Icon name="fa6-solid:calendar-days" />
-                  {t(locale, "post.updatedAt", { date: displayDate.datetime(updated) })}
+                  {t(locale, "post.updatedAt", { date: formatLocalizedDateTime(updated, locale) })}
                 </span>
               )}
               <span class="flex items-center gap-1">
