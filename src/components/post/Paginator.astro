@@ -1,7 +1,7 @@
 ---
 import { Button } from '@components/ui/button';
 import type { Page } from 'astro';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { Icon } from 'astro-icon/components';
 import type { BlogPost } from 'types/blog';
 import { getLocaleFromUrl, localizedPath, t } from '@/i18n';
 
@@ -32,12 +32,12 @@ const getPageUrl = (pageNum: number) => {
     page.url.prev ? (
       <a href={page.url.prev} aria-label={t(locale, 'pagination.prev')}>
         <Button variant="ghost" className={PAGE_BUTTON}>
-          <FaChevronLeft />
+          <Icon name="fa6-solid:chevron-left" class="size-3.5" aria-hidden="true" />
         </Button>
       </a>
     ) : (
       <Button variant="ghost" className={PAGE_BUTTON} disabled aria-label={t(locale, 'pagination.prev')}>
-        <FaChevronLeft />
+        <Icon name="fa6-solid:chevron-left" class="size-3.5" aria-hidden="true" />
       </Button>
     )
   }
@@ -85,14 +85,14 @@ const getPageUrl = (pageNum: number) => {
   }
   {
     page.url.next ? (
-      <a href={page.url.next}>
+      <a href={page.url.next} aria-label={t(locale, 'pagination.next')}>
         <Button variant="ghost" className={PAGE_BUTTON}>
-          <FaChevronRight aria-label={t(locale, 'pagination.next')} />
+          <Icon name="fa6-solid:chevron-right" class="size-3.5" aria-hidden="true" />
         </Button>
       </a>
     ) : (
       <Button variant="ghost" className={PAGE_BUTTON} disabled aria-label={t(locale, 'pagination.next')}>
-        <FaChevronRight />
+        <Icon name="fa6-solid:chevron-right" class="size-3.5" aria-hidden="true" />
       </Button>
     )
   }

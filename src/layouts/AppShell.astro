@@ -21,6 +21,7 @@ import SearchPortal from '@components/layout/SearchPortal.astro';
 import ArticleViewers from '@components/markdown/ArticleViewers';
 import SettingsPanel from '@components/settings/SettingsPanel';
 import { Toaster } from '@components/ui/sonner';
+import { announcements } from '@constants/announcements';
 
 const { post, siderType, isPostPage, articleTools = true } = Astro.props;
 ---
@@ -37,7 +38,7 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
   <SearchPortal />
   {articleTools && <div data-article-viewers><ArticleViewers client:idle /></div>}
   <Toaster client:idle />
-  <AnnouncementProvider />
+  {announcements.length > 0 && <AnnouncementProvider />}
   <CodePenEmbed />
 </div>
 

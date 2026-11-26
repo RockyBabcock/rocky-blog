@@ -1,9 +1,8 @@
 'use client';
 
+import { Icon } from '@iconify/react';
 import type { ComponentProps, FC, PropsWithChildren, ReactNode } from 'react';
 import { ErrorBoundary as ErrorBoundaryLib, type FallbackProps } from 'react-error-boundary';
-import { HiChat } from 'react-icons/hi';
-import { RiExternalLinkLine, RiRefreshLine } from 'react-icons/ri';
 import { Button } from '../ui/button';
 
 export interface ErrorFallbackProps extends FallbackProps {
@@ -58,7 +57,7 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
           rel="noopener noreferrer"
           title={sourceUrl}
         >
-          <RiExternalLinkLine className="size-4 shrink-0" />
+          <Icon icon="ri:external-link-line" className="size-4 shrink-0" />
           <span className="shrink-0 font-medium">Original link:</span>
           <span className="truncate">{sourceUrl}</span>
         </a>
@@ -68,7 +67,7 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
         {actions ?? (
           <>
             <Button variant="outline" size="sm" onClick={resetErrorBoundary} className="gap-1.5">
-              <RiRefreshLine className="size-4" />
+              <Icon icon="ri:refresh-line" className="size-4" />
               Try Again
             </Button>
             <a
@@ -77,7 +76,7 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
               className="flex-center gap-1.5 text-sm text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
               rel="noopener noreferrer"
             >
-              <HiChat className="size-4" />
+              <Icon icon="ri:chat-3-line" className="size-4" />
               Report Issue
             </a>
           </>
@@ -96,7 +95,7 @@ export const InlineErrorFallback: FC<FallbackProps> = ({ error, resetErrorBounda
       <span>Error{error?.message ? `: ${error.message}` : ''}</span>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Button variant="outline" size="sm" onClick={resetErrorBoundary} className="gap-1.5">
-          <RiRefreshLine className="size-4" />
+          <Icon icon="ri:refresh-line" className="size-4" />
           Try Again
         </Button>
         <a
@@ -105,7 +104,7 @@ export const InlineErrorFallback: FC<FallbackProps> = ({ error, resetErrorBounda
           className="flex-center-y gap-1.5 text-sm text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
           rel="noopener noreferrer"
         >
-          <HiChat className="size-4" />
+          <Icon icon="ri:chat-3-line" className="size-4" />
           Report Issue
         </a>
       </div>

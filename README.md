@@ -35,14 +35,8 @@
     <td width="50%"><img src="./docs/assets/showcase/theme.webp" alt="圆形扩散，切换到夜樱深色主题" /><br /><sub>圆形扩散，切换到夜樱深色主题</sub></td>
   </tr>
   <tr>
-    <td width="50%"><img src="./docs/assets/showcase/pages.webp" alt="点击导航时花瓣迸发、指示条滑动，归档、分类、友链与周刊之间平滑过渡" /><br /><sub>点击导航时花瓣迸发、指示条滑动，归档、分类、友链与周刊之间平滑过渡</sub></td>
+    <td width="50%"><img src="./docs/assets/showcase/pages.webp" alt="点击导航时花瓣迸发、指示条滑动，归档、分类与周刊之间平滑过渡" /><br /><sub>点击导航时花瓣迸发、指示条滑动，归档、分类与周刊之间平滑过渡</sub></td>
     <td width="50%"><img src="./docs/assets/showcase/toc.webp" alt="丝线目录跟随阅读进度" /><br /><sub>丝线目录跟随阅读进度</sub></td>
-  </tr>
-</table>
-<table>
-  <tr>
-    <td width="76%"><img src="./docs/assets/showcase/editor.webp" alt="写作室：边写边预览" /><br /><sub>写作室：边写边预览</sub></td>
-    <td width="24%"><img src="./docs/assets/showcase/mobile.webp" alt="移动端抽屉，可拖拽关闭" /><br /><sub>移动端抽屉，可拖拽关闭</sub></td>
   </tr>
 </table>
 
@@ -50,33 +44,17 @@
 
 | 场景 | 功能与入口 |
 | --- | --- |
-| 写文章 | [写作室](./docs/features/editor.md)：Markdown 源码与博客效果实时预览、可搜索的语法手册、文章属性、浏览器草稿、导入与导出；本地 CMS 复用同一编辑器保存到文件 |
-| 写丰富的正文 | GFM、代码高亮、数学公式、Mermaid、Infographic、链接卡片；Shoka 提醒块、折叠、标签卡、文字特效、隐藏文字、注音、练习题和音视频，可按需开关；见[语法指南](./src/content/blog/tools/astro-koharu-guide.md#markdown-增强) |
-| 标注与分享文章 | [文章落款](./src/content/blog/tools/astro-koharu-guide.md#文章落款)标注创作方式、剧透或过时提醒，支持归档筛选；[文章操作](./src/content/blog/tools/astro-koharu-guide.md#文章操作复制-markdown-与在写作室打开)可复制、下载完整 Markdown 或导入写作室 |
+| 写丰富的正文 | GFM、代码高亮、数学公式、Mermaid、Infographic、链接卡片；Shoka 提醒块、折叠、标签卡、文字特效、隐藏文字、注音、练习题和文章内音视频，可按需开关；见[语法指南](./src/content/blog/tools/astro-koharu-guide.md#markdown-增强) |
+| 标注与分享文章 | [文章落款](./src/content/blog/tools/astro-koharu-guide.md#文章落款)标注创作方式、剧透或过时提醒，支持归档筛选；文章操作支持复制或下载完整 Markdown 源码 |
 | 组织内容 | 多级分类、标签、归档、草稿、置顶；[特色系列](./src/content/blog/tools/astro-koharu-guide.md#系列文章系统)有独立页面与首页高亮，自定义页面可直接放在 `src/pages/` |
 | 舒适阅读 | 深浅主题、移动端章节标题与目录、阅读进度和时长；Pagefind 搜索、LQIP 图片占位；`motion` 提供三档动效、樱花效果，并尊重系统减少动态效果设置 |
 | 多语言发布 | 内置中文、英文、日文、韩文 UI 字典；内容翻译、语言切换、hreflang、按语言订阅 RSS；见 [i18n 配置](./src/content/blog/tools/astro-koharu-guide.md#多语言支持i18n) |
-| 和读者互动 | Waline / Giscus / Remark42 / Twikoo 评论、[友链分组](./docs/features/friend-link-groups.md)、公告、Umami 统计；可配置 BGM、Bangumi 收藏与圣诞效果 |
-| 生成内容资产 | [Koharu CLI](./docs/guides/koharu-cli.md)管理新建、备份、还原、更新和迁移；可生成 LQIP、语义相似度推荐与 AI 摘要 |
-| 扩展博客 | 整篇或局部 AES-256-GCM 加密；可选[碎碎念](./docs/features/moments.md)接入 koharu-suite 公开频道，提供详情、搜索、分页与 RSS |
-
-![功能概览：写作室边写边预览，文章页带目录与落款，文章操作可复制、下载 Markdown 并切换语言](./docs/assets/readme-feature-overview.zh.webp)
-
-![写丰富的正文：提醒块、标签卡、信息图、Mermaid、折叠、练习题与公式](./docs/assets/readme-feature-markdown.zh.webp)
-
-![整理与个性化：写作日历、归档、系列周刊、全站搜索、友链分组、夜樱深色与设置面板](./docs/assets/readme-feature-organize.zh.webp)
-
-![追番与歌单：Bangumi 收藏海报墙与网易云歌单播放器](./docs/assets/readme-feature-media.zh.webp)
+| 公告与内容资产 | 支持站点公告系统，以及按需运行的脚本生成 LQIP、语义相似度推荐与 AI 摘要 |
+| 内容加密 | 支持整篇或局部 AES-256-GCM 加密 |
 
 ## 写作与管理
 
-安装后，在仓库根目录创建第一篇文章：
-
-```bash
-pnpm koharu new post
-```
-
-按提示输入标题、分类和标签，文章会写入 `src/content/blog/`。也可以直接新建 Markdown 文件：
+在 `src/content/blog/` 目录下直接新建 Markdown 文件即可发布文章：
 
 ```markdown
 ---
@@ -89,28 +67,16 @@ tags: [生活]
 今天开始记录一点有意思的事。
 ```
 
-运行 `pnpm dev` 后打开 `http://localhost:4321/post/hello-koharu`。
-
-想在浏览器里写作，在 `config/site.yaml` 中确认 `editor.enabled: true`，重启开发服务器后打开 `http://localhost:4321/editor/`。公开写作室将草稿存在当前浏览器；需要保存到博客文件时，在另一个终端运行：
-
-```bash
-pnpm cms
-```
-
-打开 `http://localhost:4322`，在 CMS 中选择文章，进入同一个写作室编辑并保存。公开写作室与本地 CMS 的使用边界见[写作室指南](./docs/features/editor.md)。
+运行 `pnpm dev` 后访问 `/post/hello-koharu` 即可预览。
 
 ## 本地启动
 
 需要 **Node.js ≥ 22.20.0** 和 **pnpm 10.28.2**（以 [package.json](./package.json) 为准）。
 
 ```bash
-git clone https://github.com/cosZone/astro-koharu.git
-cd astro-koharu
 pnpm install
 pnpm dev
 ```
-
-访问 `http://localhost:4321`。根目录 workspace 同时安装主站和 CMS 的依赖，共用一份 lockfile；仅安装主站可用 `pnpm --filter astro-koharu install`，仅安装 CMS 可用 `pnpm cms:install`。
 
 接着修改 [config/site.yaml](./config/site.yaml) 中的站点名称、作者、域名、头像与导航，用自己的内容替换示例文章。配置修改后需重启开发服务器或重新构建；步骤见[快速开始](./GETTING-STARTED.md)。
 
@@ -121,40 +87,21 @@ pnpm build
 pnpm preview
 ```
 
-| 模式 | 部署方式 | 要求 |
-| --- | --- | --- |
-| 静态博客（默认） | 将 `dist/` 部署到 Vercel、Netlify 或静态文件服务器；Docker 使用 nginx | 无需博客后端 |
-| 碎碎念（可选） | Astro Node standalone；Docker 使用 `pnpm docker:up:dynamic` | `moments.enabled: true`、公开 `KOHARU_SUITE_URL` 与可用的 koharu-suite 服务 |
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cosZone/astro-koharu&project-name=astro-koharu&repository-name=astro-koharu)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cosZone/astro-koharu)
-
-默认 Docker 部署：
-
-```bash
-cp .env.example .env
-pnpm docker:up
-```
-
-静态与动态部署、端口、环境变量和重建方式见[部署指南](./docs/overview/11-deployment-adapters.md)。写作室可以静态托管；Vercel 自动提供链接预览抓取函数，其他静态平台需配置独立[链接预览服务](./docs/features/editor-link-service.md)才能抓取新链接卡片。
+本站点为纯静态博客，可将 `dist/` 直接部署到 Vercel、Netlify、Cloudflare Pages 或任意静态托管平台，无需后端服务。
 
 ## 配置与文档
 
 | 想调整什么 | 去哪里看 |
 | --- | --- |
-| 站点信息、导航、评论、音乐、动效与可选功能 | [站点配置](./config/site.yaml)与[完整使用指南](./src/content/blog/tools/astro-koharu-guide.md) |
+| 站点信息、导航、动效与可选功能 | [站点配置](./config/site.yaml)与[完整使用指南](./src/content/blog/tools/astro-koharu-guide.md) |
 | 分类、系列和落款的多语言文案 | [内容翻译配置](./config/i18n-content.yaml)；翻译文章放在 `src/content/blog/<locale>/` |
-| 写作室、文章属性、CMS 原文保存 | [写作室指南](./docs/features/editor.md) |
-| 备份、还原、更新、历史链接迁移与内容生成 | [Koharu CLI 指南](./docs/guides/koharu-cli.md) |
-| 碎碎念频道与动态部署 | [碎碎念指南](./docs/features/moments.md)与[部署指南](./docs/overview/11-deployment-adapters.md) |
+| 链接嵌入与元数据缓存 | [链接嵌入说明](./docs/features/link-embedding.md) |
 | 参与主题开发 | [贡献指南](./CONTRIBUTING.md) |
 
 ## 使用前了解
 
-- **升级旧版本**：旧文章的 `slug` 需要迁移为 `link`。更新进程退出后、启动或构建前，运行 `pnpm koharu migrate --dry-run` 和 `pnpm koharu migrate`；详见 [CLI 迁移说明](./docs/guides/koharu-cli.md#历史内容迁移)。
-- **写作室与 CMS**：公开写作室不会发布到仓库，浏览器草稿应下载备份；本地 CMS 用于本机文件管理。写作室当前界面与语法说明为中文，图片通过 URL 插入。
 - **原文与加密**：启用文章操作时，公开 Markdown 包含 frontmatter；整篇加密或含加密块的文章不提供原文。AES-256-GCM 密码只在构建时用于加密，不传给客户端；读者需自行输入密码。
-- **外部服务**：评论、音乐 API、Bangumi、Umami 和链接抓取依赖各自服务；AI 摘要、语义向量是可选生成步骤。
+- **内容资产脚本**：LQIP（`pnpm generate:lqips`）、语义相似度（`pnpm generate:similarities`）和 AI 摘要（`pnpm generate:summaries`）均为可选生成步骤。
 - **性能**：下方截图是历史示例，效果会受内容、配置与部署影响。请对自己的站点重新测量。
 
 ## 界面预览

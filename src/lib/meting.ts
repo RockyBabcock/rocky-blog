@@ -59,19 +59,11 @@ export function parseMetingUrl(rawUrl: string): MetingReference | null {
   }
 
   // QQ Music (y.qq.com)
-  const qqMatch = trimmed.match(
-    /y\.qq\.com\/n\/(?:ryqq|yqq)\/(songDetail|playlist|albumDetail|singer)\/([a-zA-Z0-9]+)/i,
-  );
+  const qqMatch = trimmed.match(/y\.qq\.com\/n\/(?:ryqq|yqq)\/(songDetail|playlist|albumDetail|singer)\/([a-zA-Z0-9]+)/i);
   if (qqMatch) {
     const rawType = qqMatch[1].toLowerCase();
     const type: MetingType =
-      rawType === 'songdetail'
-        ? 'song'
-        : rawType === 'albumdetail'
-          ? 'album'
-          : rawType === 'singer'
-            ? 'artist'
-            : 'playlist';
+      rawType === 'songdetail' ? 'song' : rawType === 'albumdetail' ? 'album' : rawType === 'singer' ? 'artist' : 'playlist';
     return { server: 'tencent', type, id: qqMatch[2] };
   }
 
@@ -127,9 +119,7 @@ function normalizeMetingItem(raw: unknown): MetingSong | null {
     (typeof item.title === 'string' && item.title.trim()) ||
     deriveTrackName(url);
   const artist =
-    (typeof item.artist === 'string' && item.artist.trim()) ||
-    (typeof item.author === 'string' && item.author.trim()) ||
-    '';
+    (typeof item.artist === 'string' && item.artist.trim()) || (typeof item.author === 'string' && item.author.trim()) || '';
   const pic = typeof item.pic === 'string' ? item.pic.trim() : '';
   const lrc = typeof item.lrc === 'string' ? item.lrc.trim() : '';
 
@@ -227,9 +217,7 @@ async function resolveSingleEntry(
     const resolved = await fetchMetingSongs(metingRef, options);
     const customName = typeof obj.name === 'string' && obj.name.trim() ? obj.name.trim() : '';
     const customArtist =
-      (typeof obj.artist === 'string' && obj.artist.trim()) ||
-      (typeof obj.author === 'string' && obj.author.trim()) ||
-      '';
+      (typeof obj.artist === 'string' && obj.artist.trim()) || (typeof obj.author === 'string' && obj.author.trim()) || '';
     if (resolved.length === 1 && (customName || customArtist)) {
       return [
         {
@@ -249,11 +237,8 @@ async function resolveSingleEntry(
     (typeof obj.title === 'string' && obj.title.trim()) ||
     deriveTrackName(rawUrl);
   const artist =
-    (typeof obj.artist === 'string' && obj.artist.trim()) ||
-    (typeof obj.author === 'string' && obj.author.trim()) ||
-    '';
-  const pic =
-    (typeof obj.pic === 'string' && obj.pic.trim()) || (typeof obj.cover === 'string' && obj.cover.trim()) || '';
+    (typeof obj.artist === 'string' && obj.artist.trim()) || (typeof obj.author === 'string' && obj.author.trim()) || '';
+  const pic = (typeof obj.pic === 'string' && obj.pic.trim()) || (typeof obj.cover === 'string' && obj.cover.trim()) || '';
   const lrc = typeof obj.lrc === 'string' ? obj.lrc.trim() : '';
 
   return [{ name, artist, url: rawUrl, pic, lrc }];

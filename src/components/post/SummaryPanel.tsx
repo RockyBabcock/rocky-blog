@@ -9,9 +9,9 @@
 import { ErrorBoundary, InlineErrorFallback } from '@components/common';
 import { useMotionLevel } from '@hooks/useMotionLevel';
 import { useTranslation } from '@hooks/useTranslation';
+import { Icon } from '@iconify/react';
 import { cn } from '@lib/utils';
 import { memo, type ReactNode, type RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { RiBook2Fill } from 'react-icons/ri';
 import type { TranslationKey } from '@/i18n/types';
 import { MingcuteAiFillSvg } from '../svg/MingcuteAiFillSvg.tsx';
 
@@ -66,7 +66,7 @@ export interface SummaryPanelProps {
 }
 
 const SOURCE_ICONS: Record<SummarySource, ReactNode> = {
-  description: <RiBook2Fill className="text-primary size-4" />,
+  description: <Icon icon="ri:book-2-fill" className="text-primary size-4" />,
   ai: <MingcuteAiFillSvg className="text-primary size-4" />,
   auto: (
     <svg

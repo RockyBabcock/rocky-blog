@@ -8,7 +8,7 @@
 import { useAudioPlayer } from '@hooks/useAudioPlayer';
 import { useTranslation } from '@hooks/useTranslation';
 import { type AudioPlaylistGroup, type MetingSong, resolveAudioPlaylist } from '@lib/meting';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PlayerPlaylist } from './audio-player/PlayerPlaylist';
 import { PlayerPreview } from './audio-player/PlayerPreview';
 import { MediaControls } from './shared/MediaControls';
@@ -25,15 +25,13 @@ export function AudioPlayer({ element }: AudioPlayerProps) {
   const [groups, setGroups] = useState<AudioPlaylistGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [reloadToken, setReloadToken] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
+  const abortRef = useRef<AbortController | null>(null);
 
-  const retry = useCallback(() => {
-    setReloadToken((n) => n + 1);
-  }, []);
-
-  useEffect(() => {
+  const loadTracks = useCallback(() => {
+    abortRef.current?.abort();
     const controller = new AbortController();
+    abortRef.current = controller;
     setLoading(true);
     setError(null);
 
@@ -49,9 +47,12 @@ export function AudioPlayer({ element }: AudioPlayerProps) {
         setError(err instanceof Error ? err.message : String(err));
         setLoading(false);
       });
+  }, [rawSrc]);
 
-    return () => controller.abort();
-  }, [rawSrc, reloadToken]);
+  useEffect(() => {
+    loadTracks();
+    return () => abortRef.current?.abort();
+  }, [loadTracks]);
 
   const player = useAudioPlayer(tracks);
   const currentTrack = tracks[player.state.currentIndex] ?? null;
@@ -80,7 +81,7 @@ export function AudioPlayer({ element }: AudioPlayerProps) {
       <div className="audio-player not-prose">
         <div className="audio-player-error">
           <span>{t('audio.loadError', { error })}</span>
-          <button type="button" className="audio-player-retry" onClick={retry}>
+          <button type="button" className="audio-player-retry" onClick={loadTracks}>
             {t('audio.retry')}
           </button>
         </div>

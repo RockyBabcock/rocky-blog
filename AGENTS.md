@@ -55,36 +55,27 @@ Package manager: **pnpm** (`pnpm@10.28.2`)
 
 ```bash
 # Development
-pnpm dev              # Start dev server at http://localhost:4321
+pnpm dev              # Start dev server
 pnpm build            # Build for production
 pnpm preview          # Preview production build
 pnpm check            # Run Astro type checking
 pnpm test             # Run all node:test suites (see package.json test:* scripts)
-pnpm cms:install && pnpm cms   # Local CMS (React/Vite app in cms/) at http://localhost:4322
 
 # Linting & Code Quality
 pnpm lint             # Run Biome linter and formatter
 pnpm lint:fix         # Auto-fix linting issues
 pnpm knip             # Find unused files/dependencies
 
-# Koharu CLI (Interactive TUI)
-pnpm koharu              # Interactive menu
-pnpm koharu backup       # Backup blog content and config (--full for complete backup)
-pnpm koharu restore      # Restore from backup (--latest, --dry-run, --force)
-pnpm koharu update       # Update theme from upstream (--check, --skip-backup, --force, --rebase, --clean)
-pnpm koharu migrate      # Migrate legacy post links (--dry-run, --force; automatically backs up before writes)
-pnpm koharu generate     # Generate content assets (interactive menu)
-pnpm koharu generate lqips        # Generate LQIP image placeholders
-pnpm koharu generate similarities # Generate semantic similarity vectors
-pnpm koharu generate summaries    # Generate AI summaries (--model, --force)
-pnpm koharu generate all          # Generate all content assets
-pnpm koharu clean        # Clean old backups (--keep N to retain N most recent)
-pnpm koharu list         # List all backups
+# Content Asset Generation
+pnpm generate:lqips        # Generate LQIP image placeholders
+pnpm generate:similarities # Generate semantic similarity vectors
+pnpm generate:summaries    # Generate AI summaries
+pnpm generate:all          # Generate all content assets
 ```
 
 **Note on Configuration Changes:** After modifying `config/site.yaml`, restart the dev server or rebuild. The YAML configuration is cached during build for performance.
 
-**Config normalization:** `src/lib/config/site.ts` is the single YAML parse/assembly point. Each config section has a pure `normalize*(raw)` function in `src/lib/config/` (content, featured-series, moments) owning its default table and validation — add new sections there, with node:test coverage, instead of reading `yamlConfig` ad hoc. `src/constants/site-config.ts` is a thin assembly/compat layer; `src/lib` must not import from `@constants/site-config`.
+**Config normalization:** `src/lib/config/site.ts` is the single YAML parse/assembly point. Each config section has a pure `normalize*(raw)` function in `src/lib/config/` (content, featured-series, motion, colophon) owning its default table and validation — add new sections there, with node:test coverage, instead of reading `yamlConfig` ad hoc. `src/constants/site-config.ts` is a thin assembly/compat layer; `src/lib` must not import from `@constants/site-config`.
 
 ## Architecture
 
@@ -148,12 +139,10 @@ pages/ → components/ → hooks/ → lib/ → constants/
 
 **Featured Series**: Special category-based content series with dedicated pages and homepage highlights. Configured via `featuredSeries` in `config/site.yaml`. Each series requires a unique `slug` (must not conflict with reserved routes) and `categoryName`. Supports multiple series, individual enable/disable, and homepage highlight control. Dynamic routes generated at `[seriesSlug].astro`.
 
-**Bangumi Page**: Optional media tracking page integrating [Bangumi API](https://api.bgm.tv). Configured via `bangumi` section in `config/site.yaml` — comment out to disable (page + navigation auto-hidden). Data fetched client-side in React (`BangumiCollection` component with `client:load`). Types in `src/types/bangumi.ts`, API client in `src/lib/bangumi/`, data hook in `src/hooks/useBangumiData.ts`. Navigation item auto-injected via `routers` in `src/constants/site-config.ts`.
-
 **Theme System**: Dark/light toggle with localStorage, inline check in `<head>` prevents FOUC.
 
 **i18n System**: Two-layer translation architecture with locale-aware routing.
-- **UI strings** (`src/i18n/translations/`): TypeScript dictionaries with `t(locale, key, params?)` function. Keys defined in `zh.ts` (source-of-truth), other locales are partial overrides. ~170 keys.
+- **UI strings** (`src/i18n/translations/`): TypeScript dictionaries with `t(locale, key, params?)` function. Keys defined in `zh.ts` (source-of-truth), other locales are partial overrides.
 - **Content strings** (`config/i18n-content.yaml`): YAML-based translations for category names, series fields, featured category labels. Accessed via `getContentCategoryName()` / `getContentSeriesField()` / `getContentFeaturedCategoryField()` (internal to `src/lib/content/categories.ts`).
 - **Routing**: Default locale has no URL prefix; other locales use `/<locale>/` prefix. Static pages in `src/pages/[lang]/` are thin wrappers using `getLocaleStaticPaths()`. Dynamic routes declare their param space once in `src/pages/_shared/routes.ts`; root/mirror pages share it via `localePaths(enumerate)` from `src/pages/_shared/utils.ts`, which injects `locale` into props — pages pass it explicitly to `<Layout locale={...}>`. `assertLocaleMirrorsComplete()` fails the build if a root page lacks its `[lang]/` mirror (exemptions in `MIRROR_EXEMPT`).
 - **React hook**: `useTranslation()` reads from `$locale` nanostore (synced via `astro:page-load` event). Returns `{ t, locale }`.
@@ -166,9 +155,7 @@ pages/ → components/ → hooks/ → lib/ → constants/
 
 **Colophon (落款)**: Configurable post marks (how a post was written, reading notices, ……). Dictionary in `colophon:` of `config/site.yaml` (groups with `exclusive`/`placement`, marks with `icon`/`label`/`description`/`tone`/`placement`); posts reference marks via frontmatter `colophon: [id | { id, note } | { icon, label, … }]`. Normalizer `src/lib/config/colophon.ts`; pure per-post resolution `src/lib/content/colophon.ts` (unknown ids / exclusive conflicts become warnings, never build errors; `colophon.defaults` fill groups a post leaves empty, `colophon: []` opts out); site-bound + localized helpers in `src/lib/content/post-colophon.ts` (overrides in `config/i18n-content.yaml` → `<locale>.colophon`). Surfaces: cover meta popover, pre-article banner, end-of-article seal (`src/components/post/colophon/`), post card icons, archives `?mark=` filter. Config icons must come from `BUNDLED_ICON_SETS` in `src/lib/config/icon-sets.ts` (also drives astro-icon `include`); adding a set needs `@iconify-json/<set>` too.
 
-**Post source & actions**: Each public post's raw file (frontmatter included) is emitted at `<post url>.md` (`src/pages/post/[...slug].md.ts` + `[lang]` mirror, param space `postSourceRoute`). `isPostSourcePublic()` in `src/lib/content/post-source.ts` gates both the endpoint and the breadcrumb `PostMarkdownActions` button — posts with `password` or any `:::encrypted` block never expose source. `postActions:` in `config/site.yaml` controls copy / download / open-in-writing-room (`openInEditor: off | dev | everyone`, requires `editor.enabled`).
-
-**Writing Room**: Public Markdown editor at `/editor` (`src/features/editor/`, enabled by `editor.enabled`; docs in `docs/features/editor.md`). Drafts live in localStorage; `/editor?from=<same-origin .md path>` imports a post as a copy draft (deduped by source). The CMS reuses the same editor for save-to-disk. Article properties edit the YAML in place (including the colophon section, whose dictionary is serialized into the page at build time).
+**Post source & actions**: Each public post's raw file (frontmatter included) is emitted at `<post url>.md` (`src/pages/post/[...slug].md.ts` + `[lang]` mirror, param space `postSourceRoute`). `isPostSourcePublic()` in `src/lib/content/post-source.ts` gates both the endpoint and the breadcrumb `PostMarkdownActions` button — posts with `password` or any `:::encrypted` block never expose source. `postActions:` in `config/site.yaml` controls copy and download of public Markdown source.
 
 ## Component Patterns
 
@@ -288,8 +275,8 @@ const search = url.searchParams.get('q') || '';
 ```typescript
 // ✅ Good: Avoid hydration mismatch
 const isMounted = useIsMounted();
-const isEnabled = useStore(christmasEnabled);
-<div className={cn({ 'z-5': isMounted && isEnabled })} />
+const isActive = useStore(panelOpen);
+<div className={cn({ 'opacity-100': isMounted && isActive })} />
 ```
 
 ## Testing Strategy

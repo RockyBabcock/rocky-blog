@@ -43,6 +43,3 @@ jobs:
 
       - name: Production build (Blog + Pagefind)
         run: pnpm build
-
-      - name: Production build (CMS)
-        run: pnpm --filter astro-koharu-cms build

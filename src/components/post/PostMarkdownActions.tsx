@@ -8,7 +8,6 @@ import { Icon } from '@iconify/react';
 import { copyText } from '@lib/clipboard';
 import { cn } from '@lib/utils';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
-import { RiArrowDownSLine, RiCheckLine, RiDownload2Line, RiErrorWarningLine, RiFileCopyLine } from 'react-icons/ri';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -123,7 +122,8 @@ export default function PostMarkdownActions({
 
   let primary: ReactNode = null;
   if (copy) {
-    const StatusIcon = status === 'copied' ? RiCheckLine : status === 'failed' ? RiErrorWarningLine : RiFileCopyLine;
+    const statusIcon =
+      status === 'copied' ? 'ri:check-line' : status === 'failed' ? 'ri:error-warning-line' : 'ri:file-copy-line';
     primary = (
       <button
         type="button"
@@ -133,14 +133,14 @@ export default function PostMarkdownActions({
         title={copyLabel}
         className={cn(primaryClass, status === 'busy' && 'cursor-progress opacity-70')}
       >
-        <StatusIcon aria-hidden="true" className={iconClass} />
+        <Icon icon={statusIcon} aria-hidden="true" className={iconClass} />
         <span className="hidden sm:inline">{status === 'copied' ? t('post.markdown.copied') : copyLabel}</span>
       </button>
     );
   } else if (download) {
     primary = (
       <a href={sourcePath} download={filename} aria-label={downloadLabel} title={downloadLabel} className={primaryClass}>
-        <RiDownload2Line aria-hidden="true" className={iconClass} />
+        <Icon icon="ri:download-2-line" aria-hidden="true" className={iconClass} />
         <span className="hidden sm:inline">{downloadLabel}</span>
       </a>
     );
@@ -164,14 +164,14 @@ export default function PostMarkdownActions({
                   'border-primary/20 data-[state=open]:bg-primary/20 rounded-r-full border-l px-1.5',
                 )}
               >
-                <RiArrowDownSLine aria-hidden="true" className={iconClass} />
+                <Icon icon="ri:arrow-down-s-line" aria-hidden="true" className={iconClass} />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-40">
               {menuDownload && (
                 <DropdownMenuItem asChild className="cursor-pointer">
                   <a href={sourcePath} download={filename}>
-                    <RiDownload2Line aria-hidden="true" />
+                    <Icon icon="ri:download-2-line" aria-hidden="true" />
                     {downloadLabel}
                   </a>
                 </DropdownMenuItem>

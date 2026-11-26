@@ -1,6 +1,7 @@
 import { animation } from '@constants/design-tokens';
 import { useControlledState } from '@hooks/useControlledState';
 import { useGlideIndicator } from '@hooks/useGlideIndicator';
+import { Icon } from '@iconify/react';
 import { readMotionLevel, subscribeMotionLevel } from '@lib/motion-level';
 import { cn } from '@lib/utils';
 import React, { useEffect, useRef } from 'react';
@@ -8,7 +9,7 @@ import React, { useEffect, useRef } from 'react';
 export type OptionType<T extends string | number = string | number> = {
   label?: string;
   value: T;
-  icon?: React.ComponentType<{ className?: string }>;
+  icon?: string | React.ComponentType<{ className?: string }>;
 } | null;
 
 type SegmentedProps<T extends string | number = string | number> = {
@@ -83,7 +84,15 @@ export const Segmented = <T extends string | number = string | number>({
             key={value}
           >
             <span className="segmented-content">
-              {icon && <span className="segmented-icon">{React.createElement(icon, { className: 'size-4' })}</span>}
+              {icon && (
+                <span className="segmented-icon">
+                  {typeof icon === 'string' ? (
+                    <Icon icon={icon} className="size-4" />
+                  ) : (
+                    React.createElement(icon, { className: 'size-4' })
+                  )}
+                </span>
+              )}
               {label && (
                 <span className="segmented-label" aria-hidden={!selected}>
                   <span className="segmented-label-clip">
