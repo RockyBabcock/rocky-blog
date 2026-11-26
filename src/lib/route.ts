@@ -1,4 +1,4 @@
-import { Routes } from '@constants/router';
+import { Routes } from '@lib/config/routes';
 import { getPostSlug } from '@lib/content/locale';
 import { encodeSlug } from '@lib/url';
 import type { BlogPost, PostRef } from 'types/blog';

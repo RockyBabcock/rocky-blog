@@ -1,22 +1,15 @@
 /**
  * Numeric stepper used by the Settings Center.
  *
- * react-hook-form and Zod accept any finite positive number without an upper clamp.
+ * Accepts any finite positive number without an upper clamp.
  * Selected controls may also use an empty value for an automatic setting.
  */
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from '@hooks/useTranslation';
 import { Icon } from '@iconify/react';
+import { formatNumberInput, parsePositiveNumberInput, stepPositiveNumber } from '@lib/settings-number';
 import { cn } from '@lib/utils';
-import { useEffect, useEffectEvent, useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-const schema = z.object({
-  value: z.number().positive().finite().nullable(),
-});
-type FormValues = z.infer<typeof schema>;
+import { type ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 /** Input debounce interval in milliseconds. */
 const APPLY_DEBOUNCE = 150;
@@ -33,75 +26,53 @@ interface NumberFieldProps {
   onApply: (value: number | null) => void;
 }
 
-/** Remove floating-point noise from fractional steps. */
-function round(value: number): number {
-  return Number(value.toFixed(4));
-}
-
 export function NumberField({ label, value, step, unit, emptyValue, onApply }: NumberFieldProps) {
   const { t } = useTranslation();
   const allowsEmpty = emptyValue !== undefined;
-  const {
-    register,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: { value },
-    mode: 'onChange',
-  });
-
+  const [rawValue, setRawValue] = useState(() => formatNumberInput(value));
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const applyWatchedValue = useEffectEvent((next: number | null) => {
-    if (next === value) return;
-    debounceRef.current = setTimeout(() => onApply(next), APPLY_DEBOUNCE);
-  });
+
+  const clearPendingApply = useCallback(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
+  }, []);
 
   // Synchronize external changes from the stepper or reset action.
   useEffect(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-      debounceRef.current = null;
-    }
-    setValue('value', value, { shouldValidate: true });
-  }, [value, setValue]);
+    clearPendingApply();
+    setRawValue(formatNumberInput(value));
+  }, [value, clearPendingApply]);
 
-  // Apply valid input after the debounce; validation owns the error state.
-  useEffect(() => {
-    const subscription = watch((data) => {
-      const next = data.value;
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-        debounceRef.current = null;
-      }
-      if (next === null) {
-        if (allowsEmpty) applyWatchedValue(null);
-        return;
-      }
-      if (typeof next !== 'number' || !Number.isFinite(next) || next <= 0) return;
-      applyWatchedValue(next);
-    });
-    return () => {
-      subscription.unsubscribe();
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [watch, allowsEmpty]);
+  // Clear pending timeout on unmount.
+  useEffect(() => clearPendingApply, [clearPendingApply]);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextRaw = event.target.value;
+    setRawValue(nextRaw);
+    clearPendingApply();
+
+    const parsed = parsePositiveNumberInput(nextRaw, allowsEmpty);
+    if (!parsed.valid || parsed.value === value) return;
+
+    const nextValue = parsed.value;
+    debounceRef.current = setTimeout(() => {
+      debounceRef.current = null;
+      onApply(nextValue);
+    }, APPLY_DEBOUNCE);
+  };
 
   const stepBy = (direction: 1 | -1) => {
-    const base = value ?? emptyValue?.fallback;
-    if (base === undefined) return;
-    const next = round(base + direction * step);
-    if (next <= 0) return;
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-      debounceRef.current = null;
-    }
+    const next = stepPositiveNumber(value, emptyValue?.fallback, step, direction);
+    if (next === null) return;
+    clearPendingApply();
     onApply(next);
   };
 
-  const inputValue = watch('value');
-  const invalid = Boolean(errors.value) || (inputValue === null && !allowsEmpty);
+  const parsed = parsePositiveNumberInput(rawValue, allowsEmpty);
+  const invalid = !parsed.valid;
+  const hasDisplayValue = rawValue.trim() !== '';
 
   return (
     <div className="flex items-center gap-1" title={invalid ? t('settings.invalidNumber') : undefined}>
@@ -117,6 +88,8 @@ export function NumberField({ label, value, step, unit, emptyValue, onApply }: N
         <input
           type="number"
           step={step}
+          value={rawValue}
+          onChange={handleChange}
           placeholder={emptyValue?.label}
           aria-label={label}
           aria-invalid={invalid || undefined}
@@ -125,11 +98,8 @@ export function NumberField({ label, value, step, unit, emptyValue, onApply }: N
             'focus-visible:ring-ring focus-visible:ring-2',
             invalid && 'border-destructive text-destructive focus-visible:ring-destructive',
           )}
-          {...register('value', {
-            setValueAs: (rawValue) => (rawValue === '' ? null : Number(rawValue)),
-          })}
         />
-        {unit && inputValue !== null && (
+        {unit && hasDisplayValue && (
           <span className="text-muted-foreground pointer-events-none absolute top-1/2 right-1.5 -translate-y-1/2 text-xs">
             {unit}
           </span>

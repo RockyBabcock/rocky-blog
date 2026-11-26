@@ -35,6 +35,9 @@ jobs:
       - name: Lint (Biome)
         run: pnpm lint
 
+      - name: Dead files & unused dependencies (Knip)
+        run: pnpm knip:strict
+
       - name: Typecheck (Astro)
         run: pnpm check
 

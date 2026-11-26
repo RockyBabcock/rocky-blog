@@ -44,7 +44,7 @@ import { AnimatePresence, m, type Transition } from 'motion/react';
 import { useEffect, useState } from 'react';
 import type { TranslationKey } from '@/i18n/types';
 import { NumberField } from './NumberField';
-import { isSettingVisible, SETTINGS_REGISTRY, type SettingItem, type SettingSection } from './registry';
+import { SETTINGS_REGISTRY, type SettingItem, type SettingSection } from './registry';
 
 const SECTIONS: SettingSection[] = ['reader', 'general'];
 
@@ -209,7 +209,7 @@ export default function SettingsPanelContent() {
     }
   };
 
-  const items = SETTINGS_REGISTRY.filter((item) => item.section === section && isSettingVisible(item));
+  const items = SETTINGS_REGISTRY.filter((item) => item.section === section);
 
   return (
     <LazyMotionProvider>

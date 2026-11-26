@@ -7,7 +7,7 @@
  */
 import type { PhrasingContent, Root } from 'mdast';
 import { visit } from 'unist-util-visit';
-import { escapeHtml } from './shoka-renderers';
+import { escapeHtml } from './html-escape';
 import { SHOKA_RUBY_PATTERN } from './shoka-ruby-pattern';
 
 const RUBY_REGEX = new RegExp(SHOKA_RUBY_PATTERN.source, 'g');

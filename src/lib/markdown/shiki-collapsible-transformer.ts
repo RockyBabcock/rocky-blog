@@ -1,6 +1,7 @@
 import type { Element } from 'hast';
 import type { ShikiTransformer } from 'shiki';
-import { COLLAPSE_LINE_THRESHOLD } from '../../constants/code-block';
+
+const COLLAPSE_LINE_THRESHOLD = 8;
 
 /** Reserve toolbar space before hydration, and collapse long blocks on first paint. */
 export function collapsibleCodeTransformer(): ShikiTransformer {

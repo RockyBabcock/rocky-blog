@@ -1,4 +1,4 @@
-import type { Router } from '@constants/router';
+import type { RouterItem } from '@lib/config/types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -54,11 +54,11 @@ export function normalizeNavSlug(path: string): string | null {
  * @returns Filtered navigation items
  */
 export function filterNavItems(
-  items: Router[],
+  items: RouterItem[],
   configuredSlugs: Set<string>,
   enabledSlugs: Set<string>,
   reservedSlugs: Set<string>,
-): Router[] {
+): RouterItem[] {
   return items
     .map((item) => {
       // Recursively filter children first
@@ -77,7 +77,7 @@ export function filterNavItems(
 
       return children && children.length > 0 ? { ...item, children } : { ...item, children: undefined };
     })
-    .filter((item): item is Router => Boolean(item));
+    .filter((item): item is RouterItem => Boolean(item));
 }
 
 /**

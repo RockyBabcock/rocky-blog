@@ -1,10 +1,10 @@
 /**
- * Post-related utility functions
+ * Core post query and metadata utility functions.
+ *
+ * Series queries live in `./series.ts` and home-page aggregations live in `./home.ts`.
  */
 
 import { type CollectionEntry, getCollection } from 'astro:content';
-import { siteConfig } from '@lib/config/site';
-import type { FeaturedSeriesItem } from '@lib/config/types';
 import readingTime from 'reading-time';
 import type { BlogPost } from 'types/blog';
 import { t } from '@/i18n';
@@ -12,7 +12,8 @@ import { defaultLocale } from '@/i18n/config';
 import { extractTextFromMarkdown } from '../sanitize';
 import { memoize } from './cache';
 import { buildCategoryPath } from './category-path';
-import { filterPostsByLocale, getPostSlug } from './locale';
+import { filterPostsByLocale } from './locale';
+import { isPostInCategory } from './post-helpers';
 
 /** WeakMap-based cache for reading-time results — auto-GC when post objects are collected */
 const readingTimeCache = new WeakMap<CollectionEntry<'blog'>, { words: number; text: string; minutes: number }>();
@@ -35,6 +36,7 @@ export function getPostReadingTime(post: CollectionEntry<'blog'>): { words: numb
  * 获取文章描述
  * 优先使用 frontmatter 中的 description，如果不存在则从 Markdown 内容中智能提取
  * @param post 文章对象
+ * @param locale 语言
  * @param maxLength 最大长度，默认 150 字符
  * @returns 文章描述文本
  */
@@ -118,21 +120,7 @@ export async function getPostCount(locale?: string) {
 export async function getPostsByCategory(categoryName: string, locale?: string): Promise<BlogPost[]> {
   return memoize('postsByCat', `${categoryName}:${locale ?? '__all__'}`, async () => {
     const posts = await getSortedPosts(locale);
-    return posts.filter((post) => {
-      const { categories } = post.data;
-      if (!categories?.length) return false;
-
-      const firstCategory = categories[0];
-      // 处理两种分类格式
-      if (Array.isArray(firstCategory)) {
-        // ['笔记', '算法']
-        return firstCategory.includes(categoryName);
-      } else if (typeof firstCategory === 'string') {
-        // '工具'
-        return firstCategory === categoryName;
-      }
-      return false;
-    });
+    return posts.filter((post) => isPostInCategory(post, categoryName));
   });
 }
 
@@ -150,7 +138,8 @@ export function getPostLastCategory(post: BlogPost): { link: string; name: strin
       link: buildCategoryPath(firstCategory),
       name: firstCategory[firstCategory.length - 1],
     };
-  } else if (typeof firstCategory === 'string') {
+  }
+  if (typeof firstCategory === 'string') {
     return {
       link: buildCategoryPath(firstCategory),
       name: firstCategory,
@@ -158,228 +147,4 @@ export function getPostLastCategory(post: BlogPost): { link: string; name: strin
   }
 
   return { link: '', name: '' };
-}
-
-/**
- * 获取文章所属系列的所有文章（基于最深层分类）
- * @param post 当前文章
- * @param locale 可选 locale 过滤
- * @returns 系列文章列表（按日期排序，最新的在前）
- */
-export async function getSeriesPosts(post: BlogPost, locale?: string): Promise<BlogPost[]> {
-  const lastCategory = getPostLastCategory(post);
-  if (!lastCategory.name) return [];
-
-  return await getPostsByCategory(lastCategory.name, locale);
-}
-
-/**
- * 获取文章的上一篇和下一篇（在同一系列中）
- * @param currentPost 当前文章
- * @param locale 可选 locale 过滤
- * @returns 上一篇和下一篇文章
- */
-export async function getAdjacentSeriesPosts(
-  currentPost: BlogPost,
-  locale?: string,
-): Promise<{
-  prevPost: BlogPost | null;
-  nextPost: BlogPost | null;
-}> {
-  const seriesPosts = await getSeriesPosts(currentPost, locale);
-
-  if (seriesPosts.length === 0) {
-    return { prevPost: null, nextPost: null };
-  }
-
-  const currentSlug = getPostSlug(currentPost);
-  const currentIndex = seriesPosts.findIndex((post) => getPostSlug(post) === currentSlug);
-
-  if (currentIndex === -1) {
-    return { prevPost: null, nextPost: null };
-  }
-
-  // 因为文章是按日期降序排列的（最新的在前）
-  // prevPost 是更新的文章（索引 - 1）
-  // nextPost 是更旧的文章（索引 + 1）
-  const prevPost = currentIndex > 0 ? seriesPosts[currentIndex - 1] : null;
-  const nextPost = currentIndex < seriesPosts.length - 1 ? seriesPosts[currentIndex + 1] : null;
-
-  return { prevPost, nextPost };
-}
-
-/**
- * 检查文章是否属于特定分类
- * @param post 文章
- * @param categoryName 分类名
- * @returns 是否属于该分类
- */
-function isPostInCategory(post: BlogPost, categoryName: string): boolean {
-  const { categories } = post.data;
-  if (!categories?.length) return false;
-
-  const firstCategory = categories[0];
-  if (Array.isArray(firstCategory)) {
-    return firstCategory.includes(categoryName);
-  } else if (typeof firstCategory === 'string') {
-    return firstCategory === categoryName;
-  }
-  return false;
-}
-
-// =============================================================================
-// Featured Series Functions
-// =============================================================================
-
-/**
- * 获取所有启用的 Featured Series
- * @returns 启用的系列列表
- */
-export function getEnabledSeries(): FeaturedSeriesItem[] {
-  return siteConfig.featuredSeries.filter((series) => series.enabled !== false);
-}
-
-/**
- * 根据 slug 查找 Featured Series
- * @param slug 系列 slug
- * @returns 系列配置或 undefined
- */
-export function getSeriesBySlug(slug: string): FeaturedSeriesItem | undefined {
-  const normalizedSlug = slug.trim().toLowerCase();
-  return siteConfig.featuredSeries.find((series) => series.slug.toLowerCase() === normalizedSlug && series.enabled !== false);
-}
-
-/**
- * 获取某个 Featured Series 的所有文章
- * @param slug 系列 slug
- * @returns 文章列表（按日期排序，最新的在前）
- */
-export async function getPostsBySeriesSlug(slug: string, locale?: string): Promise<BlogPost[]> {
-  const series = getSeriesBySlug(slug);
-  if (!series) return [];
-
-  return await getPostsByCategory(series.categoryName, locale);
-}
-
-/**
- * 获取所有 Featured Series 的分类名
- * @returns 分类名列表
- */
-export function getFeaturedCategoryNames(): string[] {
-  return getEnabledSeries().map((series) => series.categoryName);
-}
-
-/**
- * 获取所有非 Featured Series 的文章（已排序）
- * @returns 非系列文章列表（按日期排序，最新的在前）
- */
-export async function getNonFeaturedPosts(locale?: string): Promise<BlogPost[]> {
-  const categoryNames = getFeaturedCategoryNames();
-  if (categoryNames.length === 0) {
-    return await getSortedPosts(locale);
-  }
-
-  const allPosts = await getSortedPosts(locale);
-  return allPosts.filter((post) => !categoryNames.some((catName) => isPostInCategory(post, catName)));
-}
-
-/**
- * 获取非 Featured Series 文章，按置顶状态分组
- * @returns 置顶文章和非置顶的普通文章（互斥，不重叠）
- * @deprecated Use `getHomePagePosts` when loading the home page sections together.
- */
-export async function getNonFeaturedPostsBySticky(locale?: string): Promise<{
-  stickyPosts: BlogPost[];
-  regularPosts: BlogPost[];
-}> {
-  const nonFeaturedPosts = await getNonFeaturedPosts(locale);
-
-  const stickyPosts: BlogPost[] = [];
-  const regularPosts: BlogPost[] = [];
-
-  for (const post of nonFeaturedPosts) {
-    if (post.data?.sticky) {
-      stickyPosts.push(post);
-    } else {
-      regularPosts.push(post);
-    }
-  }
-
-  return { stickyPosts, regularPosts };
-}
-
-/**
- * 获取所有 highlightOnHome=true 系列的最新文章
- * @returns 最新文章列表（每个系列一篇）
- * @deprecated Use `getHomePagePosts` when loading the home page sections together.
- */
-export async function getHomeHighlightedPosts(locale?: string): Promise<BlogPost[]> {
-  const highlightedSeries = getEnabledSeries().filter((series) => series.highlightOnHome !== false);
-
-  const posts: BlogPost[] = [];
-  for (const series of highlightedSeries) {
-    const seriesPosts = await getPostsByCategory(series.categoryName, locale);
-    if (seriesPosts[0]) {
-      posts.push(seriesPosts[0]);
-    }
-  }
-
-  return posts;
-}
-
-/**
- * 优化的首页数据获取 - 单次遍历获取所有需要的数据
- * @returns 包含高亮文章、置顶文章和普通文章的对象
- */
-export async function getHomePagePosts(locale?: string): Promise<{
-  highlightedPosts: BlogPost[];
-  stickyPosts: BlogPost[];
-  regularPosts: BlogPost[];
-}> {
-  const allPosts = await getSortedPosts(locale);
-  const highlightedSeries = getEnabledSeries().filter((series) => series.highlightOnHome !== false);
-  const categoryNames = getFeaturedCategoryNames();
-
-  // 用于追踪每个高亮系列的最新文章
-  const seriesLatestMap = new Map<string, BlogPost>();
-
-  const stickyPosts: BlogPost[] = [];
-  const regularPosts: BlogPost[] = [];
-
-  // 单次遍历所有文章
-  for (const post of allPosts) {
-    // 检查是否属于任何 featured 系列
-    const isFeatured = categoryNames.some((catName) => isPostInCategory(post, catName));
-
-    if (isFeatured) {
-      // 检查是否属于高亮系列，并记录最新文章
-      for (const series of highlightedSeries) {
-        if (isPostInCategory(post, series.categoryName)) {
-          if (!seriesLatestMap.has(series.categoryName)) {
-            seriesLatestMap.set(series.categoryName, post);
-          }
-          break;
-        }
-      }
-      // 跳过所有 featured 系列文章，不加入普通列表
-      continue;
-    }
-
-    if (post.data?.sticky) {
-      stickyPosts.push(post);
-    } else {
-      regularPosts.push(post);
-    }
-  }
-
-  // 提取高亮文章（保持系列定义的顺序）
-  const highlightedPosts: BlogPost[] = [];
-  for (const series of highlightedSeries) {
-    const post = seriesLatestMap.get(series.categoryName);
-    if (post) {
-      highlightedPosts.push(post);
-    }
-  }
-
-  return { highlightedPosts, stickyPosts, regularPosts };
 }

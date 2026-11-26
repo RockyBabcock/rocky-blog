@@ -12,7 +12,7 @@
  */
 import type { PhrasingContent, Root } from 'mdast';
 import { visit } from 'unist-util-visit';
-import { escapeHtml } from './shoka-renderers';
+import { escapeHtml } from './html-escape';
 
 /** Validates a CSS identifier (class name, id) */
 const CSS_IDENT = /^[a-zA-Z_-][a-zA-Z0-9_-]*$/;

@@ -6,7 +6,7 @@
  */
 import type { PhrasingContent, Root } from 'mdast';
 import { visit } from 'unist-util-visit';
-import { escapeHtml } from './shoka-renderers';
+import { escapeHtml } from './html-escape';
 
 const SPOILER_REGEX = /!!([^!\s](?:[^!]*[^!\s])?)!!/g;
 

@@ -218,13 +218,14 @@ export default defineConfig({
     },
     plugins: [...(isAnalyze ? [Sonda({ open: false })] : []), yaml(), svgr(), tailwindcss()],
     resolve: {
+      dedupe: ['react', 'react-dom'],
       alias: {
         'hast-util-from-html-isomorphic': katexHtmlParser,
         'decode-named-character-reference': markdownEntities,
       },
     },
     optimizeDeps: {
-      include: ['@antv/infographic', '@floating-ui/react', '@hookform/resolvers/zod', 'react-hook-form', 'zod'],
+      include: ['@antv/infographic', '@floating-ui/react'],
     },
   },
   // Only enable Astro i18n routing when multiple locales are configured.

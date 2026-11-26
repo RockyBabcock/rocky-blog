@@ -38,16 +38,68 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
   import { enhanceImages } from '@lib/image-enhancer';
   import { enhanceSpoilers } from '@lib/spoiler-enhancer';
 
+  function bindDelegatedClickHandlers(contentContainer: HTMLElement, smoothScroll: boolean) {
+    if (contentContainer.dataset.listenersBound === 'true') return;
+    contentContainer.dataset.listenersBound = 'true';
+
+    contentContainer.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      // Smooth scroll for heading anchor links
+      if (smoothScroll) {
+        const anchor = target.closest<HTMLAnchorElement>('a.anchor-link[href^="#"]');
+        if (anchor && contentContainer.contains(anchor)) {
+          event.preventDefault();
+          const targetId = anchor.getAttribute('href')?.substring(1);
+          if (!targetId) return;
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: getScrollBehavior(), block: 'start' });
+            history.pushState(null, '', `#${targetId}`);
+          }
+          return;
+        }
+      }
+
+      // Tab group switching logic
+      const tabHeader = target.closest<HTMLElement>('.tab-header[role="tab"]');
+      if (tabHeader && contentContainer.contains(tabHeader)) {
+        const groupId = tabHeader.dataset.tabGroup;
+        const tabIndex = tabHeader.dataset.tabIndex;
+        if (!groupId || tabIndex === undefined) return;
+
+        const group = contentContainer.querySelector(`.tab-group[data-tab-group="${groupId}"]`);
+        if (!group) return;
+
+        group.querySelectorAll<HTMLElement>('.tab-header').forEach((header) => {
+          header.setAttribute('aria-selected', String(header.dataset.tabIndex === tabIndex));
+        });
+
+        group.querySelectorAll<HTMLElement>('.tab-panel').forEach((panel) => {
+          panel.classList.toggle('active', panel.dataset.tabIndex === tabIndex);
+        });
+        return;
+      }
+
+      // Blur spoiler click-to-reveal (default spoilers handled by spoilerjs)
+      const blurSpoiler = target.closest<HTMLElement>('.spoiler.blur');
+      if (blurSpoiler && contentContainer.contains(blurSpoiler)) {
+        blurSpoiler.classList.toggle('revealed');
+      }
+    });
+  }
+
   // Content enhancement script - handles non-React enhancements
   function enhanceContent() {
-    const contentContainer = document.querySelector('.custom-content');
+    const contentContainer = document.querySelector<HTMLElement>('.custom-content');
     if (!contentContainer) return;
 
     // Keep this outside the general enhancement guard so a transient module-load
     // failure can retry without registering the other handlers again.
     enhanceSpoilers(contentContainer);
 
-    // Avoid re-enhancing
+    // Avoid re-enhancing DOM attributes/images on duplicate runs
     if (contentContainer.getAttribute('data-enhanced') === 'true') return;
 
     // Get configuration from data attribute
@@ -55,6 +107,9 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
     const config = configData
       ? JSON.parse(configData)
       : { addBlankTarget: true, smoothScroll: true, addHeadingLevel: true };
+
+    // Bind delegated interactive handlers once per container element (also covers decrypted DOM)
+    bindDelegatedClickHandlers(contentContainer, Boolean(config.smoothScroll));
 
     // Add target="_blank" to external links
     if (config.addBlankTarget) {
@@ -65,24 +120,6 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
         if (href.startsWith('http') || href.startsWith('//')) {
           anchor.setAttribute('target', '_blank');
         }
-      });
-    }
-
-    // Add smooth scroll to anchor links
-    if (config.smoothScroll) {
-      const anchorLinks = contentContainer.querySelectorAll('a.anchor-link[href^="#"]');
-      anchorLinks.forEach((link: Element) => {
-        const anchor = link as HTMLAnchorElement;
-        anchor.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = anchor.getAttribute('href')?.substring(1);
-          if (!targetId) return;
-          const targetElement = document.getElementById(targetId);
-          if (targetElement) {
-            targetElement.scrollIntoView({ behavior: getScrollBehavior(), block: 'start' });
-            history.pushState(null, '', `#${targetId}`);
-          }
-        });
       });
     }
 
@@ -98,35 +135,6 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
     // Enhance images with loading states
     enhanceImages(contentContainer);
 
-    // Tab group switching logic
-    const tabHeaders = contentContainer.querySelectorAll<HTMLElement>('.tab-header[role="tab"]');
-    tabHeaders.forEach((header) => {
-      header.addEventListener('click', () => {
-        const groupId = header.dataset.tabGroup;
-        const tabIndex = header.dataset.tabIndex;
-        if (!groupId || tabIndex === undefined) return;
-
-        const group = contentContainer.querySelector(`.tab-group[data-tab-group="${groupId}"]`);
-        if (!group) return;
-
-        // Update headers
-        group.querySelectorAll<HTMLElement>('.tab-header').forEach((h) => {
-          h.setAttribute('aria-selected', String(h.dataset.tabIndex === tabIndex));
-        });
-
-        // Update panels
-        group.querySelectorAll<HTMLElement>('.tab-panel').forEach((panel) => {
-          panel.classList.toggle('active', panel.dataset.tabIndex === tabIndex);
-        });
-      });
-    });
-
-    // Blur spoiler click-to-reveal (default spoilers handled by spoilerjs)
-    const blurSpoilers = contentContainer.querySelectorAll<HTMLElement>('.spoiler.blur');
-    blurSpoilers.forEach((spoiler) => {
-      spoiler.addEventListener('click', () => spoiler.classList.toggle('revealed'));
-    });
-
     // Mark as enhanced
     contentContainer.setAttribute('data-enhanced', 'true');
   }
@@ -140,7 +148,7 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
     enhanceContent();
   });
 
-  // Re-enhance after encrypted post decryption (new DOM needs external links, anchors, etc.)
+  // Re-enhance after encrypted post decryption (new DOM needs external links, headings, images, etc.)
   document.addEventListener('content:decrypted', () => {
     const contentContainer = document.querySelector('.custom-content');
     if (contentContainer) {

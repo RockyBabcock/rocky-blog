@@ -14,7 +14,25 @@ import { enabledFeaturedSeriesSlugs, normalizeFeaturedSeries } from './featured-
 import { normalizeMotionConfig } from './motion';
 import { normalizePostActionsConfig } from './post-actions';
 import { RESERVED_ROUTES } from './reserved-routes';
-import type { I18nConfig, ResolvedContentConfig, ResolvedMotionConfig, ResolvedSiteConfig } from './types';
+import {
+  buildSeoConfig,
+  type IcpConfig,
+  normalizeDefaultCoverList,
+  normalizeDevConfig,
+  normalizeIcpConfig,
+  normalizeNavigation,
+  normalizeSocialConfig,
+  type SeoSummaryConfig,
+} from './site-sections';
+import type {
+  DevConfig,
+  I18nConfig,
+  ResolvedContentConfig,
+  ResolvedMotionConfig,
+  ResolvedSiteConfig,
+  RouterItem,
+  SocialConfig,
+} from './types';
 
 /** Category name → URL slug map, e.g. `{ '随笔': 'life' }`. */
 export const categoryMap: Record<string, string> = yamlConfig.categoryMap ?? {};
@@ -27,6 +45,12 @@ export const featuredSeriesList = normalizeFeaturedSeries(yamlConfig.featuredSer
 
 /** Slugs of the series that are enabled — used to reserve their routes. */
 export const enabledSeriesSlugList = enabledFeaturedSeriesSlugs(featuredSeriesList);
+
+/** All configured series slugs (lowercase). */
+export const configuredSeriesSlugs = new Set(featuredSeriesList.map((series) => series.slug));
+
+/** Only enabled series slugs (lowercase). */
+export const enabledSeriesSlugs = new Set(enabledSeriesSlugList);
 
 export const i18nConfig: I18nConfig = yamlConfig.i18n ?? {
   defaultLocale: 'zh',
@@ -75,3 +99,15 @@ export const siteConfig: ResolvedSiteConfig = {
   featuredSeries: featuredSeriesList,
   enableSlugTransliteration: yamlConfig.site.enableSlugTransliteration,
 };
+
+export const socialConfig: SocialConfig = normalizeSocialConfig(yamlConfig.social);
+
+export const icpConfig: IcpConfig | undefined = normalizeIcpConfig(yamlConfig.site.icp);
+
+export const seoConfig: SeoSummaryConfig = buildSeoConfig(siteConfig);
+
+export const defaultCoverList: string[] = normalizeDefaultCoverList(yamlConfig.defaultCoverList);
+
+export const routers: RouterItem[] = normalizeNavigation(yamlConfig.navigation);
+
+export const devConfig: DevConfig = normalizeDevConfig(yamlConfig.dev);

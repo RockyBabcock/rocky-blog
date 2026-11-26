@@ -21,8 +21,17 @@ import {
   getPostSlug,
   translateCategoryName,
 } from '@lib/content';
-import { getLocalEditorHref, getPostSourceFilename, getPostSourcePath, isPostSourcePublic } from '@lib/content/post-source';
-import { getAdjacentSeriesPosts } from '@lib/content/posts';
+import {
+  buildBreadcrumbJsonLd,
+  buildLocalEditorLinks,
+  buildPostBreadcrumbs,
+  buildPostJsonLd,
+  buildPostKeywords,
+  getPostRelativePath,
+  hasMathSyntax,
+} from '@lib/content/post-page';
+import { getPostSourceFilename, getPostSourcePath, isPostSourcePublic } from '@lib/content/post-source';
+import { getAdjacentSeriesPosts } from '@lib/content/series';
 import { toPostRef } from '@lib/content/transforms';
 import { formatForSeo } from '@lib/date';
 import { encodeSlug } from '@lib/route';
@@ -45,108 +54,62 @@ const { postId, locale } = Astro.props;
 const post =
   (await getPostById(postId, locale)) ?? (locale !== defaultLocale ? await getPostById(postId, defaultLocale) : undefined);
 if (!post) throw new Error(`Post not found: ${postId}`);
-const normalizedPostFilePath = post.filePath?.replaceAll('\\', '/');
-const contentRoot = 'src/content/blog/';
-const postRelativePath = normalizedPostFilePath?.startsWith(contentRoot)
-  ? normalizedPostFilePath.slice(contentRoot.length)
-  : undefined;
+
+const postRelativePath = getPostRelativePath(post.filePath);
 const isFallback = getPostLocale(post) !== locale;
 // For fallback pages (showing default-locale content under /en/), canonical should point to the original
+const postSlug = getPostSlug(post);
 const canonicalUrl = isFallback
-  ? new URL(localizedPath(`/post/${encodeSlug(getPostSlug(post))}`, defaultLocale), Astro.site).href
+  ? new URL(localizedPath(`/post/${encodeSlug(postSlug)}`, defaultLocale), Astro.site).href
   : undefined;
 const { Content } = await render(post);
 const adjacent = await getAdjacentSeriesPosts(post, locale);
 const prevPost = adjacent.prevPost ? toPostRef(adjacent.prevPost) : null;
 const nextPost = adjacent.nextPost ? toPostRef(adjacent.nextPost) : null;
 const { title, categories = [], tags = [], date, math: postMath, keywords: postKeywords = [] } = post?.data ?? {};
-// KaTeX CSS: only load when global enableMath is on, post hasn't opted out,
-// and the post explicitly enables math or contains LaTeX math delimiters.
-const hasMath =
-  defaultContentConfig.enableMath && (postMath === true || (postMath !== false && /\$|\\\(|\\\[/.test(post.body ?? '')));
 
-// 使用统一的工具函数获取文章描述（加密文章使用通用描述）
+const hasMath = hasMathSyntax(defaultContentConfig.enableMath, postMath, post.body);
 const finalDescription = getPostDescription(post, locale);
-
-// OGP image for BlogPosting schema (uses same fallback chain as Layout)
 const ogImage = getOgImageUrl(post?.data.cover, Astro.site);
 
-const categoryKeywords = categories?.length ? categories.flat() : [];
-const postKw = postKeywords?.length ? postKeywords : [...tags, ...categoryKeywords];
-const keywords = [...new Set([...postKw, ...(siteConfig.keywords ?? [])])] as string[];
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
-  headline: title,
+const keywords = buildPostKeywords({
+  postKeywords,
+  tags,
+  categories,
+  siteKeywords: siteConfig.keywords,
+});
+
+const jsonLd = buildPostJsonLd({
+  title,
   description: finalDescription,
   keywords,
-  author: {
-    '@type': 'Person',
-    name: siteConfig.author ?? siteConfig.name,
-    url: Astro.site,
-  },
+  authorName: siteConfig.author ?? siteConfig.name,
+  siteUrl: Astro.site,
   datePublished: formatForSeo(date),
-  ...(post.data.updated && { dateModified: formatForSeo(post.data.updated) }),
-  ...(ogImage && { image: ogImage }),
-  mainEntityOfPage: Astro.url.href,
-};
+  dateModified: post.data.updated ? formatForSeo(post.data.updated) : undefined,
+  ogImage,
+  pageUrl: Astro.url.href,
+});
 
 const categoryArr = getCategoryArr(categories?.[0]);
 const categoryStr = categoryArr?.length ? ` | ${categoryArr.map((c) => translateCategoryName(c, locale)).join(' / ')}` : '';
+const breadcrumbCategories = buildPostBreadcrumbs(
+  categoryArr,
+  (partial) => localizedPath(buildCategoryPath(partial), locale),
+  (name) => translateCategoryName(name, locale),
+);
 
-// Generate breadcrumb data for categories (translated for current locale)
-const breadcrumbCategories = [];
-if (categoryArr?.length) {
-  for (let i = 0; i < categoryArr.length; i++) {
-    const partialCategories = categoryArr.slice(0, i + 1);
-    const link = localizedPath(buildCategoryPath(partialCategories), locale);
-    breadcrumbCategories.push({
-      name: translateCategoryName(categoryArr[i], locale),
-      link: link,
-    });
-  }
-}
-
-// BreadcrumbList structured data for SEO
 const homeName = t(locale, 'breadcrumb.home');
-const breadcrumbListItems = [
-  {
-    '@type': 'ListItem',
-    position: 1,
-    name: homeName,
-    item: new URL(localizedPath('/', locale), Astro.site).href,
-  },
-  ...breadcrumbCategories.map((category, index) => ({
-    '@type': 'ListItem',
-    position: index + 2,
-    name: category.name,
-    item: new URL(category.link, Astro.site).href,
-  })),
-  {
-    '@type': 'ListItem',
-    position: breadcrumbCategories.length + 2,
-    name: title,
-    // 当前页面（最后一项）省略 item，符合 Google 结构化数据最佳实践
-  },
-];
+const breadcrumbJsonLd = buildBreadcrumbJsonLd({
+  homeName,
+  homeHref: localizedPath('/', locale),
+  breadcrumbs: breadcrumbCategories,
+  title,
+  siteUrl: Astro.site,
+});
 
-const breadcrumbJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: breadcrumbListItems,
-};
-
-const postSlug = getPostSlug(post);
 const postSourcePath = getPostSourcePath(localizedPath(`/post/${encodeSlug(postSlug)}`, locale));
-const localEditors =
-  import.meta.env.DEV && devConfig.localProjectPath && postRelativePath
-    ? devConfig.editors.map(({ id, name, icon, urlTemplate }) => ({
-        id,
-        name,
-        icon,
-        href: getLocalEditorHref({ urlTemplate }, devConfig, postRelativePath),
-      }))
-    : [];
+const localEditors = buildLocalEditorLinks(import.meta.env.DEV, devConfig, postRelativePath);
 const summaryText = post.data.description?.trim() || null;
 ---
 

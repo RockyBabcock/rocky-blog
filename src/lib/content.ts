@@ -22,6 +22,15 @@ export {
 } from './content/categories';
 
 // =============================================================================
+// Home Page Utilities
+// =============================================================================
+export {
+  getHomeHighlightedPosts,
+  getHomePagePosts,
+  getNonFeaturedPosts,
+  getNonFeaturedPostsBySticky,
+} from './content/home';
+// =============================================================================
 // Locale Utilities
 // =============================================================================
 export { getPostLocale, getPostSlug } from './content/locale';
@@ -29,28 +38,26 @@ export { getPostLocale, getPostSlug } from './content/locale';
 // Post Utilities
 // =============================================================================
 export {
-  // Core post functions
-  getAdjacentSeriesPosts,
-  // Featured series functions
-  getEnabledSeries,
-  getFeaturedCategoryNames,
-  getHomeHighlightedPosts,
-  getHomePagePosts,
-  getNonFeaturedPosts,
-  getNonFeaturedPostsBySticky,
   getPostById,
   getPostCount,
   getPostDescription,
   getPostLastCategory,
-  // Reading time utility
   getPostReadingTime,
   getPostsByCategory,
-  getPostsBySeriesSlug,
   getPostsBySticky,
-  getSeriesBySlug,
-  getSeriesPosts,
   getSortedPosts,
 } from './content/posts';
+// =============================================================================
+// Series Utilities
+// =============================================================================
+export {
+  getAdjacentSeriesPosts,
+  getEnabledSeries,
+  getFeaturedCategoryNames,
+  getPostsBySeriesSlug,
+  getSeriesBySlug,
+  getSeriesPosts,
+} from './content/series';
 
 // =============================================================================
 // Tag Utilities

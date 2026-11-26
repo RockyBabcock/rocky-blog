@@ -14,7 +14,7 @@
  * remark parsing. Inline syntax (++ins++, ==mark==, !!spoiler!!, {^ruby})
  * is handled by remark plugins since those don't conflict with Markdown.
  */
-import { escapeHtml } from './shoka-renderers';
+import { escapeHtml } from './html-escape';
 import { SHOKA_RUBY_PATTERN } from './shoka-ruby-pattern';
 
 interface ContainerOptions {

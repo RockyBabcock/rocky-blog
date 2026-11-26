@@ -30,10 +30,8 @@ pnpm-debug.log*
 .idea/
 .vscode/
 
-# Transformers.js model cache
-.cache/*
-# Keep OG data cache for Vercel builds
-!.cache/og-data.json
+# Local cache
+.cache/
 
 # Backup files
 backups/

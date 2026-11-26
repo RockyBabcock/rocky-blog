@@ -101,10 +101,3 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     disabledByReducedMotion: true,
   },
 ];
-
-/**
- * Hide settings whose build-time feature is unavailable.
- */
-export function isSettingVisible(_item: SettingItem): boolean {
-  return true;
-}

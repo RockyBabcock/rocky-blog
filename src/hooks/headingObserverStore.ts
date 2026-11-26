@@ -6,8 +6,7 @@
  * subscribes to a single observer. The observer is created on the first
  * subscriber and disconnected when the last one leaves.
  *
- * Consumers are thin `useSyncExternalStore` projections — see `useActiveHeading`
- * and `useCurrentHeading`.
+ * Consumers are thin `useSyncExternalStore` projections — see `useCurrentHeading`.
  */
 
 import { getLockedHeadingId } from '@lib/heading-scroll-lock';
