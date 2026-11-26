@@ -19,6 +19,7 @@ import {
   type IcpConfig,
   normalizeDefaultCoverList,
   normalizeDevConfig,
+  normalizeI18nConfig,
   normalizeIcpConfig,
   normalizeNavigation,
   normalizeSocialConfig,
@@ -52,10 +53,7 @@ export const configuredSeriesSlugs = new Set(featuredSeriesList.map((series) => 
 /** Only enabled series slugs (lowercase). */
 export const enabledSeriesSlugs = new Set(enabledSeriesSlugList);
 
-export const i18nConfig: I18nConfig = yamlConfig.i18n ?? {
-  defaultLocale: 'zh',
-  locales: [{ code: 'zh', label: '中文' }],
-};
+export const i18nConfig: I18nConfig = normalizeI18nConfig(yamlConfig.i18n);
 
 /** Locale codes that are not disabled — used to reserve their URL prefixes. */
 export const enabledLocaleCodes = i18nConfig.locales.flatMap((locale) => (locale.enabled !== false ? [locale.code] : []));

@@ -24,12 +24,7 @@ export {
 // =============================================================================
 // Home Page Utilities
 // =============================================================================
-export {
-  getHomeHighlightedPosts,
-  getHomePagePosts,
-  getNonFeaturedPosts,
-  getNonFeaturedPostsBySticky,
-} from './content/home';
+export { getHomePagePosts, getNonFeaturedPosts } from './content/home';
 // =============================================================================
 // Locale Utilities
 // =============================================================================

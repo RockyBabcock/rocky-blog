@@ -6,16 +6,37 @@ import {
   buildSeoConfig,
   normalizeDefaultCoverList,
   normalizeDevConfig,
+  normalizeI18nConfig,
   normalizeIcpConfig,
   normalizeNavigation,
   normalizeSocialConfig,
 } from './site-sections';
 
+function createWarnCollector() {
+  const warnings: string[] = [];
+  return { warnings, warn: (msg: string) => warnings.push(msg) };
+}
+
 describe('site-sections normalizers', () => {
-  it('normalizes social config with empty object fallback', () => {
-    assert.deepEqual(normalizeSocialConfig(undefined), {});
-    const social = { github: { url: 'https://github.com/test', icon: 'ri:github-fill', color: '#000' } };
-    assert.deepEqual(normalizeSocialConfig(social), social);
+  it('validates social config entries and skips malformed entries with warnings', () => {
+    const { warnings, warn } = createWarnCollector();
+    assert.deepEqual(normalizeSocialConfig(undefined, warn), {});
+    assert.deepEqual(
+      normalizeSocialConfig(
+        {
+          github: { url: ' https://github.com/test ', icon: ' ri:github-fill ', color: ' #000 ' },
+          noColor: { url: '/rss.xml', icon: 'ri:rss-line' },
+          missingUrl: { icon: 'ri:twitter-fill' },
+          badShape: 'not-an-object',
+        },
+        warn,
+      ),
+      {
+        github: { url: 'https://github.com/test', icon: 'ri:github-fill', color: '#000' },
+        noColor: { url: '/rss.xml', icon: 'ri:rss-line', color: '' },
+      },
+    );
+    assert.equal(warnings.length, 2);
   });
 
   it('normalizes ICP config from string shorthand or object', () => {
@@ -28,36 +49,95 @@ describe('site-sections normalizers', () => {
     });
   });
 
-  it('falls back to 21 built-in covers when defaultCoverList is empty or missing', () => {
-    assert.equal(normalizeDefaultCoverList(undefined).length, 21);
-    assert.deepEqual(normalizeDefaultCoverList([]), [...BUILT_IN_COVERS]);
-    assert.deepEqual(normalizeDefaultCoverList(['/custom.webp']), ['/custom.webp']);
+  it('validates defaultCoverList items and falls back to 21 built-in covers when empty', () => {
+    const { warnings, warn } = createWarnCollector();
+    assert.equal(normalizeDefaultCoverList(undefined, warn).length, 21);
+    assert.deepEqual(normalizeDefaultCoverList([], warn), [...BUILT_IN_COVERS]);
+    assert.deepEqual(normalizeDefaultCoverList(['/custom.webp', '', 123], warn), ['/custom.webp']);
+    assert.equal(warnings.length, 2);
   });
 
-  it('falls back to DEFAULT_ROUTERS when navigation is missing or empty', () => {
-    assert.deepEqual(normalizeNavigation(undefined), DEFAULT_ROUTERS);
-    assert.deepEqual(normalizeNavigation([]), DEFAULT_ROUTERS);
-    const nav = [{ name: 'Home', path: '/' }];
-    assert.deepEqual(normalizeNavigation(nav), nav);
+  it('validates navigation items recursively and skips entries lacking label or destination', () => {
+    const { warnings, warn } = createWarnCollector();
+    assert.deepEqual(normalizeNavigation(undefined, warn), DEFAULT_ROUTERS);
+    assert.deepEqual(normalizeNavigation([], warn), DEFAULT_ROUTERS);
+
+    const nav = normalizeNavigation(
+      [
+        { name: 'Home', nameKey: 'nav.home', path: '/', icon: 'ri:home-line' },
+        {
+          name: 'Posts',
+          children: [{ name: 'Tags', path: '/tags' }, { name: 'BrokenChild' }],
+        },
+        { path: '/no-label' },
+        { name: 'NoPathNoChildren' },
+      ],
+      warn,
+    );
+
+    assert.deepEqual(nav, [
+      { name: 'Home', nameKey: 'nav.home', path: '/', icon: 'ri:home-line' },
+      { name: 'Posts', children: [{ name: 'Tags', path: '/tags' }] },
+    ]);
+    assert.equal(warnings.length, 3);
   });
 
-  it('normalizes devConfig defaults', () => {
-    assert.deepEqual(normalizeDevConfig(undefined), {
+  it('falls back to DEFAULT_ROUTERS when all navigation items are invalid', () => {
+    const { warnings, warn } = createWarnCollector();
+    assert.deepEqual(normalizeNavigation([{ name: 'Broken' }], warn), DEFAULT_ROUTERS);
+    assert.equal(warnings.length, 2);
+  });
+
+  it('validates devConfig editors including required {path} placeholder', () => {
+    const { warnings, warn } = createWarnCollector();
+    assert.deepEqual(normalizeDevConfig(undefined, warn), {
       localProjectPath: '',
       contentRelativePath: 'src/content/blog',
       editors: [],
     });
     assert.deepEqual(
-      normalizeDevConfig({
-        localProjectPath: '/tmp/blog',
-        editors: [{ id: 'vscode', name: 'VS Code', icon: 'ri:code-line', urlTemplate: 'vscode://file/{path}' }],
-      }),
+      normalizeDevConfig(
+        {
+          localProjectPath: ' /tmp/blog ',
+          editors: [
+            { id: 'vscode', name: 'VS Code', icon: 'ri:code-line', urlTemplate: 'vscode://file/{path}' },
+            { id: 'broken', name: 'Broken', icon: 'ri:bug-line', urlTemplate: 'broken://no-placeholder' },
+          ],
+        },
+        warn,
+      ),
       {
         localProjectPath: '/tmp/blog',
         contentRelativePath: 'src/content/blog',
         editors: [{ id: 'vscode', name: 'VS Code', icon: 'ri:code-line', urlTemplate: 'vscode://file/{path}' }],
       },
     );
+    assert.equal(warnings.length, 1);
+  });
+
+  it('validates i18nConfig locales, deduplicates codes, and checks defaultLocale', () => {
+    const { warnings, warn } = createWarnCollector();
+    assert.deepEqual(
+      normalizeI18nConfig(
+        {
+          defaultLocale: 'fr',
+          locales: [
+            { code: 'zh', label: '中文' },
+            { code: 'zh', label: 'Duplicate' },
+            { code: 'en', label: 'English', enabled: true },
+          ],
+        },
+        warn,
+      ),
+      {
+        defaultLocale: 'zh',
+        locales: [
+          { code: 'zh', label: '中文' },
+          { code: 'en', label: 'English', enabled: true },
+        ],
+      },
+    );
+    assert.equal(warnings.length, 2);
   });
 
   it('builds SEO title, keywords, and url consistently', () => {
