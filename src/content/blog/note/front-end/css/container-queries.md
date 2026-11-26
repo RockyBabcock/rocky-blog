@@ -17,9 +17,6 @@ keywords:
   - container queries
   - CSS 容器查询
   - cqi
-colophon:
-  - ai-cowrite
-  - { icon: 'fa6-solid:mug-hot', label: 两杯咖啡, description: 写这篇的时候喝掉了两杯咖啡。 }
 ---
 
 做博客首页时遇到一个很常见的问题：同一张文章卡片，放在主栏里宽，放在侧栏里窄。用媒体查询只能根据视口宽度判断，可卡片关心的其实是「我自己有多宽」。

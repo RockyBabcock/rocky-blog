@@ -8,8 +8,6 @@ tags:
   - 生活
 categories:
   - 随笔
-colophon:
-  - handwritten
 ---
 
 本来打算出门，下午两点开始下雨，就没去成。

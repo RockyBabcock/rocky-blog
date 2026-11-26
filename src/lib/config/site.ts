@@ -9,7 +9,6 @@
 
 import yamlConfig from '../../../config/site.yaml';
 import { DEFAULT_TIMEZONE, isValidTimezone } from '../timezone';
-import { normalizeColophonConfig } from './colophon';
 import { normalizeContentConfig } from './content';
 import { enabledFeaturedSeriesSlugs, normalizeFeaturedSeries } from './featured-series';
 import { normalizeMotionConfig } from './motion';
@@ -42,9 +41,6 @@ export const contentConfig: ResolvedContentConfig = normalizeContentConfig(yamlC
 
 /** Default motion level and sakura effect switches with field-level defaults applied. */
 export const motionConfig: ResolvedMotionConfig = normalizeMotionConfig(yamlConfig.motion);
-
-/** Colophon mark dictionary in the default locale; localize via `getColophonConfig()` in `@lib/content/post-colophon`. */
-export const colophonConfig = normalizeColophonConfig(yamlConfig.colophon);
 
 export const postActionsConfig = normalizePostActionsConfig(yamlConfig.postActions);
 

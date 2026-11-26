@@ -1,6 +1,6 @@
 # 快速开始
 
-欢迎使用 astro-koharu 博客主题！本文档将帮助你在 5 分钟内启动你的博客。
+欢迎使用 Rocky Blog（基于 astro-koharu 主题定制）！本文档将帮助你在 5 分钟内启动博客。
 
 ## 1. 环境准备
 
@@ -19,12 +19,8 @@ npm install -g pnpm
 ### 第一步：获取代码
 
 ```bash
-# 方式一：克隆仓库
-git clone https://github.com/cosZone/astro-koharu.git
-cd astro-koharu
-
-# 方式二：使用 GitHub 模板（推荐）
-# 点击仓库页面的 "Use this template" 按钮
+git clone https://github.com/RockyBabcock/rocky-blog.git
+cd rocky-blog
 ```
 
 ### 第二步：安装依赖
@@ -39,7 +35,7 @@ pnpm install
 pnpm dev
 ```
 
-打开浏览器访问 http://localhost:4321 即可看到你的博客！
+打开浏览器访问 http://localhost:3000 即可看到博客！
 
 ## 3. 配置你的博客
 
@@ -142,13 +138,9 @@ categories:
 
 ## 5. 部署上线
 
-### Vercel 一键部署（推荐）
+### 静态托管平台部署
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cosZone/astro-koharu&project-name=astro-koharu&repository-name=astro-koharu)
-
-1. 点击上方按钮
-2. 登录 GitHub 账号
-3. 等待自动部署完成
+将仓库连接至 GitHub Pages、Vercel、Netlify 或 Cloudflare Pages，构建命令设为 `pnpm build`，输出目录设为 `dist` 即可自动部署。
 
 ### 自定义域名
 
@@ -235,8 +227,7 @@ pnpm generate:all          # 生成全部
 ## 获取帮助
 
 - 📖 [详细使用指南](./src/content/blog/tools/astro-koharu-guide.md)
-- 🐛 [提交 Issue](https://github.com/cosZone/astro-koharu/issues)
-- ⭐ [GitHub 仓库](https://github.com/cosZone/astro-koharu)
+- ⭐ [GitHub 仓库](https://github.com/RockyBabcock/rocky-blog)
 
 ---
 

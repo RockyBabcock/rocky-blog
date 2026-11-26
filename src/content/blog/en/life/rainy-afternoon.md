@@ -8,8 +8,6 @@ tags:
   - 生活
 categories:
   - 随笔
-colophon:
-  - handwritten
 ---
 
 I meant to go out, but it started raining at two, so I stayed in.

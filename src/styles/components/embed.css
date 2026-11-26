@@ -1,31 +1,6 @@
 /**
- * Embed components styles (Tweet and Link Preview)
+ * Embed components styles (Link Preview)
  */
-
-/* Import react-tweet styles */
-@import "react-tweet/theme.css";
-
-/* Custom tweet embed styling */
-/* [data-tweet-embed] {} */
-
-/* Ensure tweet theme matches site theme */
-.react-tweet-theme {
-  @apply m-0 border;
-  --tweet-border: 1px solid hsl(var(--border));
-}
-.react-tweet-theme:hover {
-  @apply border-primary/50;
-}
-
-[data-theme="dark"] .react-tweet-theme {
-  --tweet-bg-color: hsl(var(--card));
-  --tweet-bg-color-hover: hsl(var(--card) / 0.8);
-}
-
-[data-theme="light"] .react-tweet-theme {
-  --tweet-bg-color: hsl(var(--card));
-  --tweet-bg-color-hover: hsl(var(--card) / 0.8);
-}
 
 .link-preview-block {
   @apply my-4;
@@ -33,15 +8,6 @@
 
 .link-preview-block a:hover {
   text-decoration: none;
-}
-
-/* CodePen embed styling */
-.codepen-later {
-  @apply my-6 grid min-h-100 place-items-center;
-}
-
-.cp_embed_wrapper {
-  @apply my-6;
 }
 
 /* ============================================================================

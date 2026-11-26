@@ -1,5 +1,4 @@
 import type { CollectionEntry } from 'astro:content';
-import type { ColophonEntry } from '@lib/content/colophon';
 
 /**
  * Blog post schema - matches the schema defined in content.config.ts
@@ -29,8 +28,6 @@ export interface BlogSchema {
   password?: string;
   /** Keywords for SEO */
   keywords?: string[];
-  /** Colophon marks (落款), resolved against `colophon` in config/site.yaml */
-  colophon?: ColophonEntry[];
 }
 
 /**
@@ -79,11 +76,4 @@ export interface PostCardData {
   wordCount: number; // 预计算的字数
   readingTime: string; // 预计算的阅读时间
   postLocale?: string; // 文章的原始语言代码（用于 fallback 标记）
-  cardMarks?: PostCardMark[];
-}
-
-/** Colophon mark shown as an icon on post cards. */
-export interface PostCardMark {
-  icon: string;
-  label: string;
 }

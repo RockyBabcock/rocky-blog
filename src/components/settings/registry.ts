@@ -43,7 +43,6 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
       { value: 'system', i18nKey: 'settings.fontPreset.system' },
       { value: 'serif', i18nKey: 'settings.fontPreset.serif' },
       { value: 'wenkai', i18nKey: 'settings.fontPreset.wenkai' },
-      { value: 'local', i18nKey: 'settings.fontPreset.local' },
     ],
   },
   {

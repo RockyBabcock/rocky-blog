@@ -6,8 +6,6 @@
  */
 
 export type {
-  AnnouncementConfig,
-  AnnouncementLink,
   ContentConfig,
   FeaturedCategory,
   FeaturedSeries,

@@ -1,12 +1,11 @@
 ---
-import { getSortedPosts } from '@lib/content';
+import { Routes } from '@constants/router';
+import { getPostSlug, getSortedPosts, translateCategoryName } from '@lib/content';
 import { getRelatedPosts, hasSimilarityData } from '@lib/content/similarities';
 import { toPostRefWithCategory } from '@lib/content/transforms';
+import { routeBuilder } from '@lib/route';
 import type { BlogPost } from 'types/blog';
-import { getLocaleFromUrl } from '@/i18n';
-import PostFooterLists from './PostFooterLists';
-import RandomPostList from './RandomPostList';
-import RelatedPostList from './RelatedPostList';
+import { getLocaleFromUrl, localizedPath, t } from '@/i18n';
 
 interface Props {
   post?: BlogPost;
@@ -14,36 +13,48 @@ interface Props {
 
 const { post } = Astro.props;
 const locale = getLocaleFromUrl(Astro.url.pathname);
-
-// Check if similarity data is available
-const hasData = hasSimilarityData();
-
-// Get all posts
 const allPosts = await getSortedPosts(locale);
-const totalPosts = allPosts.length;
 
-// Calculate how many posts to show on each side
-// For <= 10 posts: split evenly (e.g., 8 posts = 4 left + 4 right)
-// For > 10 posts: 5 on each side from left/right halves
-const leftCount = totalPosts <= 10 ? Math.ceil(totalPosts / 2) : 5;
-const rightCount = totalPosts <= 10 ? Math.floor(totalPosts / 2) : 5;
+const currentSlug = post ? getPostSlug(post) : null;
+const relatedPosts = hasSimilarityData() && post ? getRelatedPosts(post, allPosts, 5).map(toPostRefWithCategory) : [];
 
-// Prepare post pools for client-side randomization
-const allPostItems = allPosts.map(toPostRefWithCategory);
-const leftPool = totalPosts <= 10 ? allPostItems : allPostItems.slice(0, Math.floor(totalPosts / 2));
-const rightPool = totalPosts <= 10 ? allPostItems : allPostItems.slice(Math.floor(totalPosts / 2));
+const isRelated = relatedPosts.length > 0;
+const displayPosts = isRelated
+  ? relatedPosts
+  : allPosts
+      .filter((candidate) => (currentSlug ? getPostSlug(candidate) !== currentSlug : true))
+      .slice(0, 5)
+      .map(toPostRefWithCategory);
 
-// Get related posts if current post is provided and similarity data exists
-const relatedPosts = hasData && post ? getRelatedPosts(post, allPosts, 5).map(toPostRefWithCategory) : [];
+const heading = t(locale, isRelated ? 'post.relatedPosts' : 'post.latestPosts');
 ---
 
-<div class="tablet:grid-cols-1 grid grid-cols-2 gap-4 px-10 md:px-6">
-  {totalPosts <= 10 ? (
-    <PostFooterLists client:visible allPosts={allPostItems} relatedPosts={relatedPosts} leftCount={leftCount} rightCount={rightCount} locale={locale} />
-  ) : (
-    <>
-      <RandomPostList client:visible postsPool={leftPool} count={leftCount} locale={locale} />
-      {(hasData || totalPosts <= 10) && <RelatedPostList client:idle posts={relatedPosts} fallbackPool={relatedPosts.length > 0 ? [] : rightPool} fallbackCount={rightCount} startIndex={leftCount + 1} locale={locale} />}
-    </>
-  )}
-</div>
+{
+  displayPosts.length > 0 && (
+    <section class="motion-reveal flex flex-col gap-4 px-10 md:px-6" aria-label={heading}>
+      <h2 class="text-foreground/80 text-xl font-semibold">{heading}</h2>
+      <ol class="tablet:grid-cols-1 grid grid-cols-2 gap-x-6 gap-y-2">
+        {displayPosts.map((item, index) => {
+          const href = localizedPath(routeBuilder(Routes.Post, item), locale);
+          const categoryLabel = item.categoryName ? translateCategoryName(item.categoryName, locale) : '';
+          return (
+            <li>
+              <a
+                href={href}
+                class="group text-foreground/80 hover:bg-foreground/5 hover:text-primary flex items-center gap-3 rounded-lg px-3 py-2 transition-colors duration-200"
+              >
+                <span class="text-muted-foreground/70 group-hover:text-primary w-5 shrink-0 text-right font-mono text-sm font-medium transition-colors duration-200">
+                  {index + 1}
+                </span>
+                <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+                  {categoryLabel && <span class="text-muted-foreground truncate text-xs">{categoryLabel}</span>}
+                  <span class="truncate text-sm font-medium">{item.title}</span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  )
+}

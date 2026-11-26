@@ -10,8 +10,6 @@ tags:
   - 年终总结
 categories:
   - 随笔
-colophon:
-  - { icon: 'ri:moon-clear-line', label: 深夜写的, description: 跨年前一个小时写完的。 }
 ---
 
 又到年底。今年写的东西不多，翻了一下归档页，每个月零零散散有一两篇，有几个月是空的。

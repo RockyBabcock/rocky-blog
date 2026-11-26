@@ -109,9 +109,7 @@ remarkPlugins.push([
   remarkLinkEmbed,
   {
     enableLinkEmbed: contentConfig.enableLinkEmbed,
-    enableTweetEmbed: contentConfig.enableTweetEmbed,
     enableOGPreview: contentConfig.enableOGPreview,
-    enableCodePenEmbed: contentConfig.enableCodePenEmbed,
     previewCacheTime: contentConfig.previewCacheTime,
   },
 ]);
@@ -176,7 +174,6 @@ export default defineConfig({
       hooks: {
         'astro:config:setup': ({ addClientDirective }) => {
           addClientDirective({ name: 'content', entrypoint: path.resolve('src/lib/markdown/client-content.ts') });
-          addClientDirective({ name: 'panel', entrypoint: path.resolve('src/lib/client-panel.ts') });
         },
       },
     },
@@ -236,17 +233,9 @@ export default defineConfig({
         'hast-util-from-html-isomorphic': katexHtmlParser,
         'decode-named-character-reference': markdownEntities,
       },
-      noExternal: ['react-tweet'],
     },
     optimizeDeps: {
-      include: [
-        '@antv/infographic',
-        '@floating-ui/react',
-        '@hookform/resolvers/zod',
-        '@tanstack/react-virtual',
-        'react-hook-form',
-        'zod',
-      ],
+      include: ['@antv/infographic', '@floating-ui/react', '@hookform/resolvers/zod', 'react-hook-form', 'zod'],
     },
   },
   // Only enable Astro i18n routing when multiple locales are configured.

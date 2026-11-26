@@ -13,8 +13,6 @@ export const uiStrings = {
   'index.tags': '个标签',
   'index.mostUsed': '最常用',
   'category.filter': '子分类',
-  'colophon.seal': '落款',
-  'colophon.filter': '按落款筛选',
   'tag.filter': '过滤标签',
   'tag.filterPlaceholder': '输入标签名称',
   'tag.noMatches': '没有匹配的标签',
@@ -220,22 +218,6 @@ export const uiStrings = {
   'settings.fontPreset.system': '系统黑体',
   'settings.fontPreset.serif': '衬线',
   'settings.fontPreset.wenkai': '文楷',
-  'settings.fontPreset.local': '本机字体',
-  'settings.localFont.title': '选择本机字体',
-  'settings.localFont.description': '为文章正文选择这台设备上安装的字体',
-  'settings.localFont.permission': '浏览器会请求读取本机字体列表。字体数据仅用于本地预览和选择，不会上传。',
-  'settings.localFont.requestAccess': '读取本机字体',
-  'settings.localFont.loading': '正在读取字体…',
-  'settings.localFont.search': '搜索字体',
-  'settings.localFont.preview': '春风又绿江南岸 Aa 123',
-  'settings.localFont.empty': '没有找到匹配的字体',
-  'settings.localFont.unsupported': '当前浏览器无法列出本机字体，你仍可以输入准确的字体名称。',
-  'settings.localFont.denied': '未获得本机字体权限，你仍可以手动输入字体名称。',
-  'settings.localFont.error': '读取本机字体失败，你仍可以手动输入字体名称。',
-  'settings.localFont.manualLabel': '字体名称',
-  'settings.localFont.manualPlaceholder': '例如：霞鹜文楷',
-  'settings.localFont.useFont': '使用',
-  'settings.localFont.change': '更换本机字体',
   'settings.fontSize': '字号',
   'settings.lineHeight': '行距',
   'settings.measure': '行宽',
@@ -254,17 +236,6 @@ export const uiStrings = {
   'settings.reset': '重置为默认',
   'settings.waveDisabledByReducedMotion': '动效强度为「减弱」时不可用',
   'settings.invalidNumber': '请输入正数',
-
-  // ── Announcement ────────────────────────────────────────────
-  'announcement.title': '公告',
-  'announcement.new': '新',
-  'announcement.count': '{count} 条公告',
-  'announcement.unreadCount': '{count} 条未读',
-  'announcement.markAllRead': '全部已读',
-  'announcement.dismiss': '关闭公告',
-  'announcement.learnMore': '了解更多',
-  'announcement.empty': '暂无公告',
-  'announcement.emptyHint': '有新公告时会在这里显示',
 
   // ── Quiz ────────────────────────────────────────────────────
   'quiz.check': '检查答案',
@@ -349,8 +320,8 @@ export const uiStrings = {
   'summary.ai': 'AI 摘要',
   'summary.auto': '摘要',
 
-  // ── Random Posts ────────────────────────────────────────────
-  'post.randomPosts': '随机文章',
+  // ── Latest Posts ────────────────────────────────────────────
+  'post.latestPosts': '最新文章',
 
   // ── Tag Component ───────────────────────────────────────────
   'tag.expandAll': '展开全部',
@@ -369,9 +340,6 @@ export const uiStrings = {
   'toc.sectionProgress': '本节阅读进度',
   'toc.expand': '展开目录',
   'toc.empty': '暂无目录',
-
-  // ── Embed ─────────────────────────────────────────────────
-  'embed.loadingTweet': '正在加载 Tweet',
 
   // ── Content ───────────────────────────────────────────────
   'content.revealSpoiler': '点击显示隐藏内容',

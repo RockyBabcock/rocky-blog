@@ -75,7 +75,7 @@ pnpm generate:all          # Generate all content assets
 
 **Note on Configuration Changes:** After modifying `config/site.yaml`, restart the dev server or rebuild. The YAML configuration is cached during build for performance.
 
-**Config normalization:** `src/lib/config/site.ts` is the single YAML parse/assembly point. Each config section has a pure `normalize*(raw)` function in `src/lib/config/` (content, featured-series, motion, colophon) owning its default table and validation — add new sections there, with node:test coverage, instead of reading `yamlConfig` ad hoc. `src/constants/site-config.ts` is a thin assembly/compat layer; `src/lib` must not import from `@constants/site-config`.
+**Config normalization:** `src/lib/config/site.ts` is the single YAML parse/assembly point. Each config section has a pure `normalize*(raw)` function in `src/lib/config/` (content, featured-series, motion) owning its default table and validation — add new sections there, with node:test coverage, instead of reading `yamlConfig` ad hoc. `src/constants/site-config.ts` is a thin assembly/compat layer; `src/lib` must not import from `@constants/site-config`.
 
 ## Architecture
 
@@ -153,7 +153,7 @@ pages/ → components/ → hooks/ → lib/ → constants/
 
 **Markdown**: Shiki highlighting, auto-generated heading IDs/links via rehype plugins, GFM support.
 
-**Colophon (落款)**: Configurable post marks (how a post was written, reading notices, ……). Dictionary in `colophon:` of `config/site.yaml` (groups with `exclusive`/`placement`, marks with `icon`/`label`/`description`/`tone`/`placement`); posts reference marks via frontmatter `colophon: [id | { id, note } | { icon, label, … }]`. Normalizer `src/lib/config/colophon.ts`; pure per-post resolution `src/lib/content/colophon.ts` (unknown ids / exclusive conflicts become warnings, never build errors; `colophon.defaults` fill groups a post leaves empty, `colophon: []` opts out); site-bound + localized helpers in `src/lib/content/post-colophon.ts` (overrides in `config/i18n-content.yaml` → `<locale>.colophon`). Surfaces: cover meta popover, pre-article banner, end-of-article seal (`src/components/post/colophon/`), post card icons, archives `?mark=` filter. Config icons must come from `BUNDLED_ICON_SETS` in `src/lib/config/icon-sets.ts` (also drives astro-icon `include`); adding a set needs `@iconify-json/<set>` too.
+**Icon sets**: Bundled icon collections are defined in `BUNDLED_ICON_SETS` in `src/lib/config/icon-sets.ts` (drives `astro-icon` `include`); adding a set requires installing `@iconify-json/<set>` too.
 
 **Post source & actions**: Each public post's raw file (frontmatter included) is emitted at `<post url>.md` (`src/pages/post/[...slug].md.ts` + `[lang]` mirror, param space `postSourceRoute`). `isPostSourcePublic()` in `src/lib/content/post-source.ts` gates both the endpoint and the breadcrumb `PostMarkdownActions` button — posts with `password` or any `:::encrypted` block never expose source. `postActions:` in `config/site.yaml` controls copy and download of public Markdown source.
 

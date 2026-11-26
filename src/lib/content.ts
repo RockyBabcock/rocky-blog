@@ -49,7 +49,6 @@ export {
   getPostsByCategory,
   getPostsBySeriesSlug,
   getPostsBySticky,
-  getRandomPosts,
   getSeriesBySlug,
   getSeriesPosts,
   getSortedPosts,

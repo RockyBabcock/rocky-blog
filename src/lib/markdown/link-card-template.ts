@@ -1,5 +1,5 @@
 /**
- * Pure HTML renderers for embedded links (OG preview card, CodePen, tweet).
+ * Pure HTML renderer for OG link preview cards.
  * Output is consumed verbatim by built pages, so markup must stay byte-stable.
  */
 
@@ -65,13 +65,7 @@ function renderFallbackCard(ogData: OGData, domain: string): string {
     const urlObj = new URL(url);
     const pathSegments = urlObj.pathname.split('/').filter((s) => s);
 
-    if (domain === 'codepen.io' && pathSegments.length >= 3) {
-      // CodePen: /username/pen/id
-      const username = pathSegments[0];
-      const penId = pathSegments[2];
-      displayText = `CodePen - ${username}`;
-      subtitle = `Pen: ${penId}`;
-    } else if (domain === 'github.com' && pathSegments.length >= 2) {
+    if (domain === 'github.com' && pathSegments.length >= 2) {
       // GitHub: /org/repo
       displayText = `GitHub - ${pathSegments.slice(0, 2).join('/')}`;
     } else if (pathSegments.length > 0) {
@@ -149,28 +143,4 @@ export function renderLinkPreview(ogData: OGData): string {
     </div>
   </a>
 </div>`;
-}
-
-/**
- * CodePen embed markup in the official format.
- * https://blog.codepen.io/documentation/embedded-pens/
- */
-export function renderCodePenEmbed(user: string, penId: string, url: string): string {
-  const safeUser = sanitizeText(user);
-  const safeUserAttribute = sanitizeAttribute(user);
-  const safePenId = sanitizeText(penId);
-  const safePenIdAttribute = sanitizeAttribute(penId);
-  const safeUrl = sanitizeUrlAttribute(url);
-  const safeAuthorUrl = sanitizeUrlAttribute(`https://codepen.io/${user}`);
-
-  return `<p class="codepen-later" data-height="400" data-default-tab="result" data-slug-hash="${safePenIdAttribute}" data-user="${safeUserAttribute}">
-  <span>See the Pen <a href="${safeUrl}">${safePenId}</a> by ${safeUser} (<a href="${safeAuthorUrl}">@${safeUser}</a>) on <a href="https://codepen.io">CodePen</a>.</span>
-</p>`;
-}
-
-/** Placeholder hydrated client-side by the tweet embed component. */
-export function renderTweetEmbed(tweetId: string, url: string): string {
-  const safeUrl = sanitizeUrlAttribute(url);
-  const safeTweetId = sanitizeAttribute(tweetId);
-  return `<div data-tweet-embed data-tweet-id="${safeTweetId}" data-url="${safeUrl}"></div>`;
 }

@@ -8,14 +8,12 @@
 
 import { isMotionLevel } from '@lib/config/motion';
 import type { MotionLevel } from '@lib/config/types';
-import { quoteCssString } from '@lib/css-string';
 import { atom } from 'nanostores';
 import {
   FONT_PRESETS,
   type FontPreset,
   GENERAL_DEFAULTS,
   READER_DEFAULTS,
-  READER_FONT_FAMILY_MAX_LENGTH,
   REDUCED_MOTION_QUERY,
   STORAGE_KEYS,
   WENKAI_STYLESHEET_HREF,
@@ -26,7 +24,6 @@ export type { FontPreset };
 
 // Reader preferences
 export const readerFontPreset = atom<FontPreset>(READER_DEFAULTS.fontPreset);
-export const readerFontFamily = atom<string | null>(null);
 export const readerFontSize = atom<number>(READER_DEFAULTS.fontSize);
 export const readerLineHeight = atom<number>(READER_DEFAULTS.lineHeight);
 export const readerMeasure = atom<number | null>(READER_DEFAULTS.measure);
@@ -68,14 +65,6 @@ function applyReaderPreferences(): void {
     root.style.setProperty('--reader-measure', `${measure * 0.5 * fontSize}px`);
   }
   root.dataset.fontPreset = readerFontPreset.get();
-  const fontFamily = readerFontFamily.get();
-  if (fontFamily) {
-    root.dataset.readerFont = 'local';
-    root.style.setProperty('--reader-font-family', quoteCssString(fontFamily));
-  } else {
-    delete root.dataset.readerFont;
-    root.style.removeProperty('--reader-font-family');
-  }
   root.classList.toggle('reader-justify', readerJustify.get());
 }
 
@@ -107,18 +96,8 @@ function removePersisted(key: string): void {
 
 export function setFontPreset(preset: FontPreset): void {
   readerFontPreset.set(preset);
-  readerFontFamily.set(null);
   persist(STORAGE_KEYS.fontPreset, preset);
-  removePersisted(STORAGE_KEYS.fontFamily);
   if (preset === 'wenkai') loadWenkaiFont();
-  applyReaderPreferences();
-}
-
-export function setLocalFontFamily(family: string): void {
-  const normalized = family.trim().slice(0, READER_FONT_FAMILY_MAX_LENGTH);
-  if (!normalized) return;
-  readerFontFamily.set(normalized);
-  persist(STORAGE_KEYS.fontFamily, normalized);
   applyReaderPreferences();
 }
 
@@ -218,14 +197,10 @@ function readStoredMotionLevel(): MotionLevel {
 export function initSettings(): void {
   if (typeof window === 'undefined') return;
 
-  const storedFontFamily = localStorage.getItem(STORAGE_KEYS.fontFamily)?.trim();
-  const fontFamily = storedFontFamily ? storedFontFamily.slice(0, READER_FONT_FAMILY_MAX_LENGTH) : null;
-  readerFontFamily.set(fontFamily);
-
   const storedPreset = localStorage.getItem(STORAGE_KEYS.fontPreset);
   if (storedPreset && FONT_PRESETS.includes(storedPreset as FontPreset)) {
     readerFontPreset.set(storedPreset as FontPreset);
-    if (storedPreset === 'wenkai' && !fontFamily) loadWenkaiFont();
+    if (storedPreset === 'wenkai') loadWenkaiFont();
   }
   readerFontSize.set(readPositiveNumber(STORAGE_KEYS.fontSize, READER_DEFAULTS.fontSize));
   readerLineHeight.set(readPositiveNumber(STORAGE_KEYS.lineHeight, READER_DEFAULTS.lineHeight));

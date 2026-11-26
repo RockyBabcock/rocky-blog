@@ -1,5 +1,4 @@
 ---
-import { EmbedHydrator } from '@components/embed/EmbedHydrator';
 import ContentEnhancer from '@components/markdown/ContentEnhancer';
 import type { ContentConfig } from '@constants/content-config';
 import { defaultContentConfig } from '@constants/content-config';
@@ -34,9 +33,6 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
     enableEncryptedBlock={finalConfig.enableEncryptedBlock}
   />
 )}
-
-{/* Only hydrate EmbedHydrator when the rendered content actually contains tweet embeds */}
-{finalConfig.enableTweetEmbed && <EmbedHydrator client:content="[data-tweet-embed]" />}
 
 <script>
   import { getScrollBehavior } from '@lib/motion-level';

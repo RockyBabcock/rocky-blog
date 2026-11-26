@@ -14,8 +14,6 @@ export const uiStrings: UIStrings = {
   'index.tags': '個のタグ',
   'index.mostUsed': '最多のタグ',
   'category.filter': 'サブカテゴリー',
-  'colophon.seal': '奥付',
-  'colophon.filter': '奥付マークで絞り込む',
   'tag.filter': 'タグを絞り込む',
   'tag.filterPlaceholder': 'タグ名を入力',
   'tag.noMatches': '一致するタグがありません',
@@ -221,24 +219,6 @@ export const uiStrings: UIStrings = {
   'settings.fontPreset.system': 'システム',
   'settings.fontPreset.serif': 'セリフ',
   'settings.fontPreset.wenkai': '文楷',
-  'settings.fontPreset.local': 'ローカルフォント',
-  'settings.localFont.title': 'ローカルフォントを選択',
-  'settings.localFont.description': 'この端末にインストールされているフォントを本文に使用します',
-  'settings.localFont.permission':
-    'ブラウザーがローカルフォント一覧へのアクセスを求めます。フォントデータはプレビューと選択にのみ使用され、アップロードされません。',
-  'settings.localFont.requestAccess': 'ローカルフォントを読み込む',
-  'settings.localFont.loading': 'フォントを読み込み中…',
-  'settings.localFont.search': 'フォントを検索',
-  'settings.localFont.preview': '春風が川辺を緑にする Aa 123',
-  'settings.localFont.empty': '一致するフォントがありません',
-  'settings.localFont.unsupported':
-    'このブラウザーではローカルフォントを一覧表示できませんが、正確なフォント名を入力できます。',
-  'settings.localFont.denied': 'ローカルフォントへのアクセスが許可されませんでした。フォント名を手動で入力できます。',
-  'settings.localFont.error': 'ローカルフォントを読み込めませんでした。フォント名を手動で入力できます。',
-  'settings.localFont.manualLabel': 'フォント名',
-  'settings.localFont.manualPlaceholder': '例：ヒラギノ角ゴシック',
-  'settings.localFont.useFont': '使用',
-  'settings.localFont.change': 'ローカルフォントを変更',
   'settings.fontSize': '文字サイズ',
   'settings.lineHeight': '行間',
   'settings.measure': '行幅',
@@ -257,17 +237,6 @@ export const uiStrings: UIStrings = {
   'settings.reset': 'デフォルトにリセット',
   'settings.waveDisabledByReducedMotion': 'モーションが「減らす」の間は使用できません',
   'settings.invalidNumber': '正の数を入力してください',
-
-  // ── お知らせ ────────────────────────────────────────────
-  'announcement.title': 'お知らせ',
-  'announcement.new': '新着',
-  'announcement.count': '{count}件のお知らせ',
-  'announcement.unreadCount': '{count}件が未読',
-  'announcement.markAllRead': 'すべて既読にする',
-  'announcement.dismiss': '無視',
-  'announcement.learnMore': '詳細を読む',
-  'announcement.empty': 'お知らせは見つかりません',
-  'announcement.emptyHint': '新しいお知らせはこちらに表示されます',
 
   // ── クイズ ────────────────────────────────────────────────────
   'quiz.check': 'チェック',
@@ -352,8 +321,8 @@ export const uiStrings: UIStrings = {
   'summary.ai': 'AIの概要',
   'summary.auto': '概要',
 
-  // ── ランダムな投稿 ────────────────────────────────────────────
-  'post.randomPosts': '投稿をランダムに表示',
+  // ── 最新記事 ────────────────────────────────────────────
+  'post.latestPosts': '最新記事',
 
   // ── タグコンポーネント ───────────────────────────────────────────
   'tag.expandAll': 'すべて表示',
@@ -372,9 +341,6 @@ export const uiStrings: UIStrings = {
   'toc.sectionProgress': 'この節の読書進捗',
   'toc.expand': '目次のコンテンツを展開',
   'toc.empty': '見出しはありません',
-
-  // ── 埋め込み ─────────────────────────────────────────────────
-  'embed.loadingTweet': 'ポストを読み込み中',
 
   // ── Content ───────────────────────────────────────────────
   'content.revealSpoiler': '隠された内容を表示',

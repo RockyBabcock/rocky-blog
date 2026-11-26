@@ -14,8 +14,6 @@ export const uiStrings: UIStrings = {
   'index.tags': 'tags',
   'index.mostUsed': 'most used',
   'category.filter': 'Subcategories',
-  'colophon.seal': 'Colophon',
-  'colophon.filter': 'Filter by colophon mark',
   'tag.filter': 'Filter tags',
   'tag.filterPlaceholder': 'Enter a tag name',
   'tag.noMatches': 'No matching tags',
@@ -221,23 +219,6 @@ export const uiStrings: UIStrings = {
   'settings.fontPreset.system': 'System',
   'settings.fontPreset.serif': 'Serif',
   'settings.fontPreset.wenkai': 'WenKai',
-  'settings.fontPreset.local': 'Local font',
-  'settings.localFont.title': 'Choose a local font',
-  'settings.localFont.description': 'Choose an installed font for article text on this device',
-  'settings.localFont.permission':
-    'Your browser will ask to read the local font list. Font data stays on this device for preview and selection.',
-  'settings.localFont.requestAccess': 'Read local fonts',
-  'settings.localFont.loading': 'Reading fonts…',
-  'settings.localFont.search': 'Search fonts',
-  'settings.localFont.preview': 'The quick brown fox Aa 123',
-  'settings.localFont.empty': 'No matching fonts',
-  'settings.localFont.unsupported': 'This browser cannot list local fonts, but you can enter an exact font name.',
-  'settings.localFont.denied': 'Local font access was not granted, but you can enter a font name manually.',
-  'settings.localFont.error': 'Local fonts could not be read, but you can enter a font name manually.',
-  'settings.localFont.manualLabel': 'Font name',
-  'settings.localFont.manualPlaceholder': 'For example: Charter',
-  'settings.localFont.useFont': 'Use',
-  'settings.localFont.change': 'Change local font',
   'settings.fontSize': 'Font size',
   'settings.lineHeight': 'Line height',
   'settings.measure': 'Measure',
@@ -256,17 +237,6 @@ export const uiStrings: UIStrings = {
   'settings.reset': 'Reset to default',
   'settings.waveDisabledByReducedMotion': 'Unavailable while motion is set to "Reduced"',
   'settings.invalidNumber': 'Enter a positive number',
-
-  // ── Announcement ────────────────────────────────────────────
-  'announcement.title': 'Announcements',
-  'announcement.new': 'New',
-  'announcement.count': '{count} announcements',
-  'announcement.unreadCount': '{count} unread',
-  'announcement.markAllRead': 'Mark all read',
-  'announcement.dismiss': 'Dismiss',
-  'announcement.learnMore': 'Learn more',
-  'announcement.empty': 'No announcements',
-  'announcement.emptyHint': 'New announcements will appear here',
 
   // ── Quiz ────────────────────────────────────────────────────
   'quiz.check': 'Check',
@@ -351,8 +321,8 @@ export const uiStrings: UIStrings = {
   'summary.ai': 'AI Summary',
   'summary.auto': 'Summary',
 
-  // ── Random Posts ────────────────────────────────────────────
-  'post.randomPosts': 'Random Posts',
+  // ── Latest Posts ────────────────────────────────────────────
+  'post.latestPosts': 'Latest Posts',
 
   // ── Tag Component ───────────────────────────────────────────
   'tag.expandAll': 'Show all',
@@ -371,9 +341,6 @@ export const uiStrings: UIStrings = {
   'toc.sectionProgress': 'Section reading progress',
   'toc.expand': 'Expand table of contents',
   'toc.empty': 'No headings',
-
-  // ── Embed ─────────────────────────────────────────────────
-  'embed.loadingTweet': 'Loading Tweet',
 
   // ── Content ───────────────────────────────────────────────
   'content.revealSpoiler': 'Reveal spoiler',

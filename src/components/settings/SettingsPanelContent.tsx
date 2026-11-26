@@ -22,7 +22,6 @@ import { $isSettingsOpen, closeModal } from '@store/modal';
 import {
   type FontPreset,
   motionLevel,
-  readerFontFamily,
   readerFontPreset,
   readerFontSize,
   readerJustify,
@@ -34,7 +33,6 @@ import {
   setFontSize,
   setJustify,
   setLineHeight,
-  setLocalFontFamily,
   setMeasure,
   setMotionLevel,
   setScrollProgressEnabled,
@@ -43,7 +41,7 @@ import {
 } from '@store/settings';
 import { READER_CUSTOM_MEASURE } from '@store/settings-constants';
 import { AnimatePresence, m, type Transition } from 'motion/react';
-import { lazy, type MouseEvent, Suspense, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { TranslationKey } from '@/i18n/types';
 import { NumberField } from './NumberField';
 import { isSettingVisible, SETTINGS_REGISTRY, type SettingItem, type SettingSection } from './registry';
@@ -60,13 +58,6 @@ const MOTION_HINT_KEYS: Record<MotionLevel, TranslationKey> = {
   subtle: 'settings.motionLevel.subtleHint',
   reduced: 'settings.motionLevel.reducedHint',
 };
-const loadLocalFontPicker = () => import('./LocalFontPicker');
-
-function preloadLocalFontPicker(): void {
-  void loadLocalFontPicker();
-}
-
-const LocalFontPicker = lazy(loadLocalFontPicker);
 
 export default function SettingsPanelContent() {
   const { t } = useTranslation();
@@ -76,7 +67,6 @@ export default function SettingsPanelContent() {
 
   // Store bindings
   const fontPreset = useStore(readerFontPreset);
-  const fontFamily = useStore(readerFontFamily);
   const fontSize = useStore(readerFontSize);
   const lineHeight = useStore(readerLineHeight);
   const measure = useStore(readerMeasure);
@@ -84,16 +74,6 @@ export default function SettingsPanelContent() {
   const scrollProgress = useStore(scrollProgressEnabled);
   const level = useStore(motionLevel);
   const wave = useStore(waveEnabled);
-  const [fontPickerLoaded, setFontPickerLoaded] = useState(false);
-  const [fontPickerOpen, setFontPickerOpen] = useState(false);
-  const fontPickerTriggerRef = useRef<HTMLButtonElement>(null);
-
-  const openFontPicker = (event: MouseEvent<HTMLButtonElement>) => {
-    fontPickerTriggerRef.current = event.currentTarget;
-    preloadLocalFontPicker();
-    setFontPickerLoaded(true);
-    setFontPickerOpen(true);
-  };
 
   const switchBindings: Record<string, { checked: boolean; onChange: (checked: boolean) => void }> = {
     justify: { checked: justify, onChange: setJustify },
@@ -101,13 +81,10 @@ export default function SettingsPanelContent() {
     wave: { checked: wave, onChange: setWaveEnabled },
   };
 
-  const segmentedBindings: Record<
-    string,
-    { isActive: (value: string) => boolean; onSelect: (value: string, event: MouseEvent<HTMLButtonElement>) => void }
-  > = {
+  const segmentedBindings: Record<string, { isActive: (value: string) => boolean; onSelect: (value: string) => void }> = {
     fontPreset: {
-      isActive: (value) => (value === 'local' ? fontFamily !== null : fontFamily === null && fontPreset === value),
-      onSelect: (value, event) => (value === 'local' ? openFontPicker(event) : setFontPreset(value as FontPreset)),
+      isActive: (value) => fontPreset === value,
+      onSelect: (value) => setFontPreset(value as FontPreset),
     },
     motionLevel: {
       isActive: (value) => value === level,
@@ -175,16 +152,12 @@ export default function SettingsPanelContent() {
         return (
           <div className="flex flex-wrap gap-1">
             {item.options?.map((option) => {
-              const localOption = option.value === 'local';
               const active = binding.isActive(option.value);
               return (
                 <button
                   key={option.value}
                   type="button"
-                  onClick={(event) => binding.onSelect(option.value, event)}
-                  onPointerEnter={localOption ? preloadLocalFontPicker : undefined}
-                  onPointerDown={localOption ? preloadLocalFontPicker : undefined}
-                  onFocus={localOption ? preloadLocalFontPicker : undefined}
+                  onClick={() => binding.onSelect(option.value)}
                   aria-pressed={active}
                   className={cn(
                     'relative rounded-md px-2.5 py-1 text-xs transition-colors',
@@ -320,21 +293,6 @@ export default function SettingsPanelContent() {
                                 {item.type !== 'segmented' && renderControl(item)}
                               </div>
                               {item.type === 'segmented' && <div className="mt-2">{renderControl(item)}</div>}
-                              {item.key === 'fontPreset' && fontFamily && (
-                                <button
-                                  type="button"
-                                  onClick={openFontPicker}
-                                  onPointerEnter={preloadLocalFontPicker}
-                                  onPointerDown={preloadLocalFontPicker}
-                                  onFocus={preloadLocalFontPicker}
-                                  className="border-input hover:bg-accent mt-2 flex w-full items-center gap-2 rounded-md border px-2.5 py-1.5 text-left text-xs transition-colors"
-                                  aria-label={t('settings.localFont.change')}
-                                >
-                                  <Icon icon="ri:font-family" className="text-primary size-4 shrink-0" />
-                                  <span className="min-w-0 flex-1 truncate">{fontFamily}</span>
-                                  <Icon icon="ri:arrow-right-s-line" className="text-muted-foreground size-4 shrink-0" />
-                                </button>
-                              )}
                               {item.key === 'motionLevel' && (
                                 <p className="text-muted-foreground mt-1.5 text-xs">
                                   {t(systemReducedMotion ? 'settings.motionLevel.systemReduced' : MOTION_HINT_KEYS[level])}
@@ -366,17 +324,6 @@ export default function SettingsPanelContent() {
               </div>
             </m.div>
           </FloatingFocusManager>
-        )}
-        {fontPickerLoaded && (
-          <Suspense key="local-font-picker" fallback={null}>
-            <LocalFontPicker
-              open={fontPickerOpen}
-              currentFont={fontFamily}
-              returnFocusRef={fontPickerTriggerRef}
-              onOpenChange={setFontPickerOpen}
-              onSelect={setLocalFontFamily}
-            />
-          </Suspense>
         )}
       </AnimatePresence>
     </LazyMotionProvider>

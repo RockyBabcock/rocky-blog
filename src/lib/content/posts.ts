@@ -207,30 +207,6 @@ export function getPostLastCategory(post: BlogPost): { link: string; name: strin
 }
 
 /**
- * Fisher-Yates 洗牌算法
- * 相比 sort(() => Math.random() - 0.5)，能产生均匀分布的随机排列
- */
-function shuffleArray<T>(array: T[]): T[] {
-  const result = [...array];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
-}
-
-/**
- * 获取随机文章
- * @param count 文章数量
- * @returns 随机文章列表
- */
-export async function getRandomPosts(count: number = 10, locale?: string): Promise<BlogPost[]> {
-  const posts = await getSortedPosts(locale);
-  const shuffled = shuffleArray(posts);
-  return shuffled.slice(0, Math.min(count, posts.length));
-}
-
-/**
  * 获取文章所属系列的所有文章（基于最深层分类）
  * @param post 当前文章
  * @param locale 可选 locale 过滤

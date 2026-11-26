@@ -15,19 +15,19 @@ categories:
 
 ## 链接嵌入功能
 
-astro-koharu 支持自动嵌入独行链接，包括 Tweet 和通用链接预览。
+支持自动为独行的普通链接生成 Open Graph 预览卡片，外部社交或演示链接可使用标准超链接展示。
 
-### Tweet 嵌入测试
+### 普通外链示例
 
-下面是一条独行的 Twitter 链接，应该自动转换为 Tweet 组件：
+下面是一条 Twitter / X 链接，以普通超链接形式展示：
 
-https://twitter.com/vercel_dev/status/1997059920936775706
+[Vercel Tweet on Twitter](https://twitter.com/vercel_dev/status/1997059920936775706)
 
-这是普通段落中的链接 [Vercel Tweet](https://twitter.com/vercel_dev/status/1997059920936775706)，不应该被嵌入。
+这是普通段落中的链接 [Vercel Tweet](https://twitter.com/vercel_dev/status/1997059920936775706)，保持行内链接样式。
 
-使用新域名 x.com 的 Tweet：
+使用 x.com 域名的链接示例：
 
-https://x.com/vercel_dev/status/1997059920936775706
+[Vercel Tweet on X](https://x.com/vercel_dev/status/1997059920936775706)
 
 ### 通用链接预览测试
 
@@ -45,14 +45,13 @@ https://react-tweet.vercel.app/
 
 https://zhuanlan.zhihu.com/p/1900483903984243480
 
-### Codepen 链接嵌入
+### CodePen 链接示例
 
-https://codepen.io/botteu/pen/YPKBrJX/
+[CodePen Demo](https://codepen.io/botteu/pen/YPKBrJX/)
 
 ### 链接嵌入规则
 
-- 独行的 Twitter/X 链接自动转换为 Tweet 组件
-- 独行的其他链接显示 OG 预览卡片
+- 独行的普通链接显示 OG 预览卡片
 - 段落内的链接保持原样
 - 支持深色/浅色主题切换
 

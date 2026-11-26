@@ -103,29 +103,6 @@ export interface SocialPlatform {
 export type SocialConfig = Record<string, SocialPlatform>;
 
 // =============================================================================
-// Announcements
-// =============================================================================
-
-export interface AnnouncementLink {
-  url: string;
-  text?: string;
-  external?: boolean;
-}
-
-export interface AnnouncementConfig {
-  id: string;
-  title: string;
-  content: string;
-  type?: 'info' | 'warning' | 'success' | 'important';
-  publishDate?: string;
-  startDate?: string;
-  endDate?: string;
-  priority?: number;
-  link?: AnnouncementLink;
-  color?: string;
-}
-
-// =============================================================================
 // Content Processing Configuration
 // =============================================================================
 
@@ -144,9 +121,7 @@ export interface ContentConfig {
   enableCodeCopy?: boolean;
   enableCodeFullscreen?: boolean;
   enableLinkEmbed?: boolean;
-  enableTweetEmbed?: boolean;
   enableOGPreview?: boolean;
-  enableCodePenEmbed?: boolean;
   previewCacheTime?: number;
   lazyLoadEmbeds?: boolean;
   postCardImagePosition?: PostCardImagePosition;
@@ -284,13 +259,10 @@ export interface SiteYamlConfig {
   /** Featured series configuration - supports array (multiple series) or single object (legacy) */
   featuredSeries?: FeaturedSeriesItem[] | FeaturedSeriesItem;
   social?: SocialConfig;
-  announcements?: AnnouncementConfig[];
   defaultCoverList?: string[];
   content?: ContentConfig;
   /** Motion intensity default and decorative sakura effects. */
   motion?: MotionConfig;
-  /** Post marks dictionary (落款); validated by normalizeColophonConfig. */
-  colophon?: unknown;
   /** Markdown copy / download actions on post pages. */
   postActions?: unknown;
   navigation?: RouterItem[];

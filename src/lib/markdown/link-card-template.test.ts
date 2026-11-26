@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { renderCodePenEmbed, renderLinkPreview, renderTweetEmbed } from './link-card-template';
+import { renderLinkPreview } from './link-card-template';
 
 /** Byte-exact markup: existing pages and CSS depend on it, so changes must be deliberate. */
 const SUCCESS_CARD = `<div class="link-preview-block not-prose" data-state="success">
@@ -136,39 +136,10 @@ test('a long fallback URL without a subtitle is truncated to 60 chars', () => {
 test('known hosts get a friendly fallback label', () => {
   const gh = renderLinkPreview({ originUrl: 'https://github.com/org/repo', url: 'https://github.com/org/repo', error: 'x' });
   assert.match(gh, /truncate">GitHub - org\/repo</);
-
-  const pen = renderLinkPreview({
-    originUrl: 'https://codepen.io/user/pen/abc',
-    url: 'https://codepen.io/user/pen/abc',
-    error: 'x',
-  });
-  assert.match(pen, /truncate">CodePen - user</);
-  assert.match(pen, /mt-0\.5">Pen: abc</);
 });
 
 test('an unparseable URL degrades to the raw string instead of throwing', () => {
   const html = renderLinkPreview({ originUrl: 'not a url', url: 'not a url', error: 'x' });
   assert.match(html, /data-state="error"/);
   assert.match(html, /truncate">not a url</);
-});
-
-test('CodePen embed carries the official data attributes and escapes them', () => {
-  assert.equal(
-    renderCodePenEmbed('user', 'abc', 'https://codepen.io/user/pen/abc'),
-    `<p class="codepen-later" data-height="400" data-default-tab="result" data-slug-hash="abc" data-user="user">
-  <span>See the Pen <a href="https://codepen.io/user/pen/abc">abc</a> by user (<a href="https://codepen.io/user">@user</a>) on <a href="https://codepen.io">CodePen</a>.</span>
-</p>`,
-  );
-
-  const hostile = renderCodePenEmbed('a"b', 'p<d', 'javascript:x');
-  assert.match(hostile, /data-user="a&quot;b"/);
-  assert.equal(hostile.includes('javascript:'), false);
-});
-
-test('tweet embed renders a hydration placeholder', () => {
-  assert.equal(
-    renderTweetEmbed('1234567890', 'https://x.com/user/status/1234567890'),
-    '<div data-tweet-embed data-tweet-id="1234567890" data-url="https://x.com/user/status/1234567890"></div>',
-  );
-  assert.equal(renderTweetEmbed('a"b', 'javascript:x'), '<div data-tweet-embed data-tweet-id="a&quot;b" data-url=""></div>');
 });

@@ -1,34 +1,22 @@
 ---
 layout: ../layouts/PageLayout.astro
 title: "About"
-coverTitle: "关于我"
+coverTitle: "关于"
 date: 2025-01-03 01:01:33
-description: "关于我？"
+description: "关于 Rocky Blog"
 ---
 
-## 你好，这里是余弦
+## 关于 Rocky Blog
 
-[![github badge](https://img.shields.io/badge/dynamic/json?color=blue&label=Github&query=%24.data.totalSubs&url=https%3A%2F%2Fapi.spencerwoo.com%2Fsubstats%2F%3Fsource%3Dgithub%26queryKey%3Dyusixian)](https://github.com/yusixian)
+这里是 Rocky 的个人博客，用来记录技术笔记、工程实践、工具折腾与生活随笔。
 
-cosine = 余弦 = cos
+### 站点说明
 
-愿热情永存，愿热爱不灭，愿生活无憾
+- 仓库地址：[RockyBabcock/rocky-blog](https://github.com/RockyBabcock/rocky-blog)
+- 基于 [Astro](https://astro.build/)、React 与 Tailwind CSS 构建，视觉与主题基于 [astro-koharu](https://github.com/cosZone/astro-koharu)（AGPL-3.0）演进而来。
+- 支持多语言浏览（中文 / English / 日本語 / 한국어）、全文搜索与阅读偏好设置。
 
-> 我们 都只是无名之辈 \
-> 做你自己最喜欢的事 \
-> 像花一样 肆意绽放 \
-> 不去管 有没有人欣赏
+### 订阅与联系
 
-### 找到我
-
-个人 Telegram 前端频道：日常碎碎念，偶尔掉落优质前端博文推荐、学习资源等
-
-https://t.me/cosine_front_end
-
-Gitbook 前端学习记录
-
-https://book.cosine.ren/
-
-[![GitHub State](https://git-stats.cosine.ren/api?username=yusixian&theme=dark&show_icons=true&hide_border=true)](https://github.com/anuraghazra/github-readme-stats)
-
-[![GitHub Streak](https://github-readme-streak-stats-rust-tau.vercel.app?user=yusixian&theme=dark&date_format=%5BY%20%5DM%20&hide_border=true)](https://git.io/streak-stats)
+- GitHub：[RockyBabcock](https://github.com/RockyBabcock)
+- RSS 订阅：[/rss.xml](/rss.xml)

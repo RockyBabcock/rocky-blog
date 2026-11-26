@@ -12,9 +12,6 @@ tags:
   - 迁移
 categories:
   - [笔记, 前端, CSS]
-colophon:
-  - handwritten
-  - { id: outdated, note: 写于 v4.0 发布初期，后续小版本可能已有变化 }
 ---
 
 Tailwind CSS v4.0 正式发布后，我把一个小项目从 v3 升了上去。整体比预想顺利，但有几处改动不看文档很难发现，记在这里。

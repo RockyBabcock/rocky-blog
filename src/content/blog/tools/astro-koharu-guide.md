@@ -1400,20 +1400,12 @@ function hello() {
 
 **链接自动嵌入：**
 
-独行的特殊链接会自动转换为嵌入组件：
-
-- **Twitter/X 链接**：自动嵌入 Tweet 组件
-- **CodePen 链接**：自动嵌入交互式 CodePen 演示
-- **其他链接**：显示 OG 预览卡片（包含标题、描述、图片等）
+独行的普通链接会自动转换为 Open Graph 预览卡片（包含标题、描述、图片等），段落内或带文字的链接保持标准超链接样式。
 
 示例：
 
 ```markdown
-<!-- 独行链接会被嵌入 -->
-
-https://x.com/vercel_dev/status/1997059920936775706
-
-https://codepen.io/botteu/pen/YPKBrJX/
+<!-- 独行链接会被转换为 OG 预览卡片 -->
 
 https://github.com/vercel/react-tweet
 
@@ -1426,9 +1418,9 @@ https://zhuanlan.zhihu.com/p/1900483903984243480
 这是一个 [普通链接](https://example.com)，不会被嵌入。
 ```
 
-https://x.com/vercel_dev/status/1997059920936775706
+[X / Twitter 示例链接](https://x.com/vercel_dev/status/1997059920936775706)
 
-https://codepen.io/botteu/pen/YPKBrJX/
+[CodePen 示例链接](https://codepen.io/botteu/pen/YPKBrJX/)
 
 https://github.com/vercel/react-tweet
 

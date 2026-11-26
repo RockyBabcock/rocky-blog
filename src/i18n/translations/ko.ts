@@ -12,8 +12,6 @@ export const uiStrings = {
   'index.tags': '개 태그',
   'index.mostUsed': '가장 많이 사용한 태그',
   'category.filter': '하위 카테고리',
-  'colophon.seal': '콜로폰',
-  'colophon.filter': '콜로폰 표시로 필터',
   'tag.filter': '태그 필터',
   'tag.filterPlaceholder': '태그 이름 입력',
   'tag.noMatches': '일치하는 태그가 없습니다',
@@ -219,24 +217,6 @@ export const uiStrings = {
   'settings.fontPreset.system': '시스템 고딕체',
   'settings.fontPreset.serif': '명조체',
   'settings.fontPreset.wenkai': 'Wenkai체',
-  'settings.fontPreset.local': '로컬 글꼴',
-  'settings.localFont.title': '로컬 글꼴 선택',
-  'settings.localFont.description': '본문용 글꼴을 이 기기에 설치된 글꼴 중에서 선택해 주세요',
-  'settings.localFont.permission':
-    '브라우저가 로컬 글꼴 목록 읽기 권한을 요청해요. 글꼴 데이터는 로컬 미리보기 및 선택용으로만 사용되며 업로드되지 않아요.',
-  'settings.localFont.requestAccess': '로컬 글꼴 읽기',
-  'settings.localFont.loading': '글꼴 읽는 중…',
-  'settings.localFont.search': '글꼴 검색',
-  'settings.localFont.preview': '다람쥐 헌 쳇바퀴에 타고파 Aa 123',
-  'settings.localFont.empty': '일치하는 글꼴을 찾을 수 없어요',
-  'settings.localFont.unsupported':
-    '현재 브라우저에서 로컬 글꼴을 나열할 수 없지만, 글꼴 이름을 직접 입력하여 사용할 수 있어요.',
-  'settings.localFont.denied': '로컬 글꼴 권한을 얻지 못했지만, 글꼴 이름을 직접 입력할 수 있어요.',
-  'settings.localFont.error': '로컬 글꼴을 읽지 못했지만, 글꼴 이름을 직접 입력할 수 있어요.',
-  'settings.localFont.manualLabel': '글꼴 이름',
-  'settings.localFont.manualPlaceholder': '예: NanumGothic',
-  'settings.localFont.useFont': '사용',
-  'settings.localFont.change': '로컬 글꼴 변경',
   'settings.fontSize': '글자 크기',
   'settings.lineHeight': '줄 간격',
   'settings.measure': '줄 너비',
@@ -255,17 +235,6 @@ export const uiStrings = {
   'settings.reset': '기본값으로 재설정',
   'settings.waveDisabledByReducedMotion': '모션 강도가 「줄이기」일 때는 사용할 수 없음',
   'settings.invalidNumber': '양수를 입력해 주세요',
-
-  // ── Announcement ────────────────────────────────────────────
-  'announcement.title': '공지사항',
-  'announcement.new': '신규',
-  'announcement.count': '공지사항 {count}개',
-  'announcement.unreadCount': '미확인 {count}개',
-  'announcement.markAllRead': '모두 읽음으로 표시',
-  'announcement.dismiss': '공지사항 닫기',
-  'announcement.learnMore': '더 알아보기',
-  'announcement.empty': '공지사항이 없어요',
-  'announcement.emptyHint': '새로운 공지사항이 있을 때 여기에 표시돼요',
 
   // ── Quiz ────────────────────────────────────────────────────
   'quiz.check': '정답 확인',
@@ -350,8 +319,8 @@ export const uiStrings = {
   'summary.ai': 'AI 요약',
   'summary.auto': '요약',
 
-  // ── Random Posts ────────────────────────────────────────────
-  'post.randomPosts': '랜덤 게시물',
+  // ── Latest Posts ────────────────────────────────────────────
+  'post.latestPosts': '최신 글',
 
   // ── Tag Component ───────────────────────────────────────────
   'tag.expandAll': '모두 보기',
@@ -370,9 +339,6 @@ export const uiStrings = {
   'toc.sectionProgress': '현재 절 읽기 진행률',
   'toc.expand': '목차 펼치기',
   'toc.empty': '등록된 목차가 없어요',
-
-  // ── Embed ─────────────────────────────────────────────────
-  'embed.loadingTweet': '트윗 불러오는 중',
 
   // ── Content ───────────────────────────────────────────────
   'content.revealSpoiler': '클릭하여 숨겨진 내용 보기',

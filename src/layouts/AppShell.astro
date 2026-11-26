@@ -11,8 +11,6 @@ interface Props {
   articleTools?: boolean;
 }
 
-import AnnouncementProvider from '@components/announcement/AnnouncementProvider.astro';
-import CodePenEmbed from '@components/embed/CodePenEmbed.astro';
 import FloatingGroup from '@components/layout/FloatingGroup';
 import Header from '@components/layout/Header.astro';
 import MobileDrawer from '@components/layout/MobileDrawer.astro';
@@ -21,7 +19,6 @@ import SearchPortal from '@components/layout/SearchPortal.astro';
 import ArticleViewers from '@components/markdown/ArticleViewers';
 import SettingsPanel from '@components/settings/SettingsPanel';
 import { Toaster } from '@components/ui/sonner';
-import { announcements } from '@constants/announcements';
 
 const { post, siderType, isPostPage, articleTools = true } = Astro.props;
 ---
@@ -38,8 +35,6 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
   <SearchPortal />
   {articleTools && <div data-article-viewers><ArticleViewers client:idle /></div>}
   <Toaster client:idle />
-  {announcements.length > 0 && <AnnouncementProvider />}
-  <CodePenEmbed />
 </div>
 
 <script>

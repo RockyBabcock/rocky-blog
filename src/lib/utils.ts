@@ -81,20 +81,6 @@ export function filterNavItems(
 }
 
 /**
- * Fisher-Yates shuffle algorithm
- * @param array - Array to shuffle
- * @returns New shuffled array (does not mutate original)
- */
-export function shuffleArray<T>(array: T[]): T[] {
-  const result = [...array];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
-}
-
-/**
  * Normalize shorthand hex color to full 6-digit format
  * Supports #RGB, #RGBA, #RRGGBB, #RRGGBBAA formats
  * @example normalizeHexColor('#6cf') => '#66ccff'
