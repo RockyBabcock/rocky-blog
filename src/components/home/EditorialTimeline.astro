@@ -1,0 +1,99 @@
+---
+/**
+ * EditorialTimeline — Compact chronological highlights grouped by year on the homepage.
+ *
+ * Reuses `groupPostsByYear` (same source of truth as `/archives`) and `buildTimelinePreview`
+ * so zero duplicate data structures are created.
+ */
+
+import { Routes } from '@constants/router';
+import { siteTimezone } from '@lib/config/site';
+import { getPostLastCategory, getPostSlug, translateCategoryName } from '@lib/content';
+import { groupPostsByYear } from '@lib/content/index-groups';
+import { formatLocalizedMonthDay } from '@lib/date';
+import { buildTimelinePreview } from '@lib/editorial';
+import { routeBuilder } from '@lib/route';
+import { Icon } from 'astro-icon/components';
+import type { BlogPost } from 'types/blog';
+import { localizedPath, t } from '@/i18n';
+
+interface Props {
+  posts: BlogPost[];
+  locale: string;
+  maxItems?: number;
+}
+
+const { posts, locale, maxItems = 7 } = Astro.props;
+const yearGroups = groupPostsByYear(posts, siteTimezone);
+const timelinePreview = buildTimelinePreview(yearGroups, maxItems);
+const archivesHref = localizedPath('/archives', locale);
+---
+
+{
+  timelinePreview.length > 0 && (
+    <section aria-labelledby="home-timeline-heading" class="flex flex-col gap-4" data-home-timeline>
+      <div class="editorial-section-head">
+        <div class="editorial-section-title-group">
+          <h2 id="home-timeline-heading" class="editorial-section-title">
+            <Icon name="ri:calendar-schedule-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
+            <span>{t(locale, 'home.timelineSection')}</span>
+          </h2>
+          <p class="editorial-section-subtitle">{t(locale, 'home.timelineSubtitle')}</p>
+        </div>
+        <a href={archivesHref} class="editorial-section-link">
+          <span>{t(locale, 'home.viewFullArchives')}</span>
+          <Icon name="ri:arrow-right-s-line" class="size-4" aria-hidden="true" />
+        </a>
+      </div>
+
+      <div class="border-border/70 bg-card/65 flex flex-col gap-5 rounded-xl border p-5 md:p-4">
+        {timelinePreview.map((group) => (
+          <div class="flex flex-col gap-2">
+            <div class="flex items-baseline justify-between gap-2">
+              <a
+                href={`${archivesHref}#year-${group.year}`}
+                class="text-foreground hover:text-primary font-mono text-lg font-bold tracking-tight transition-colors tabular-nums"
+              >
+                {group.year}
+              </a>
+              <span class="text-muted-foreground text-xs tabular-nums">
+                {t(locale, 'post.yearPosts', { count: group.totalInYear })}
+              </span>
+            </div>
+
+            <div class="editorial-timeline-list">
+              {group.posts.map((post) => {
+                const slug = getPostSlug(post);
+                const href = localizedPath(
+                  routeBuilder(Routes.Post, { slug, link: post.data.link, title: post.data.title }),
+                  locale,
+                );
+                const cat = getPostLastCategory(post);
+                const catLabel = cat.name ? translateCategoryName(cat.name, locale) : '';
+
+                return (
+                  <a href={href} class="editorial-timeline-entry group">
+                    <div class="flex min-w-0 items-baseline gap-3">
+                      <time
+                        datetime={post.data.date.toISOString()}
+                        class="text-muted-foreground w-14 shrink-0 font-mono text-xs tabular-nums"
+                      >
+                        {formatLocalizedMonthDay(post.data.date, locale)}
+                      </time>
+                      <span class="text-foreground group-hover:text-primary truncate text-sm font-medium transition-colors">
+                        {post.data.title}
+                      </span>
+                    </div>
+                    {catLabel && (
+                      <span class="text-muted-foreground shrink-0 text-xs md:hidden">{catLabel}</span>
+                    )}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}

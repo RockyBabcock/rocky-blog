@@ -1,0 +1,99 @@
+---
+/**
+ * CompactPostRow — High-craft compact editorial row used in the mixed-rhythm
+ * Latest Writing section on the homepage so the stream feels curated rather
+ * than repeating identical large cards endlessly.
+ */
+
+import ResponsiveImage from '@components/common/ResponsiveImage.astro';
+import { Routes } from '@constants/router';
+import { defaultCoverList } from '@constants/site-config';
+import { buildCategoryPath, getCategoryArr, translateCategoryName } from '@lib/content';
+import { formatLocalizedDate } from '@lib/date';
+import { getLqipProps } from '@lib/lqip';
+import { postTitleMorphName } from '@lib/morph-transitions';
+import { routeBuilder } from '@lib/route';
+import { Icon } from 'astro-icon/components';
+import { defaultLocale, getLocaleLabel, localizedPath } from '@/i18n';
+import type { PostCardData } from '@/types/blog';
+
+interface Props {
+  data: PostCardData;
+  randomCover: string;
+  locale: string;
+}
+
+const { data, randomCover, locale } = Astro.props;
+const cover = data.cover ?? randomCover ?? defaultCoverList[0];
+const href = localizedPath(routeBuilder(Routes.Post, { slug: data.slug, link: data.link, title: data.title }), locale);
+const categoryArr = getCategoryArr(data.categories?.[0]);
+const categoryLink = localizedPath(buildCategoryPath(categoryArr), locale);
+const categoryLabel = categoryArr.length ? translateCategoryName(categoryArr[categoryArr.length - 1], locale) : '';
+const isFallback = data.postLocale != null && locale !== defaultLocale && data.postLocale !== locale;
+const lqip = getLqipProps(cover);
+const titleMorph = postTitleMorphName(data.slug);
+---
+
+<article class="compact-post-row group">
+  <a
+    href={href}
+    tabindex="-1"
+    aria-hidden="true"
+    style={lqip.style}
+    class={`relative h-16 w-24 shrink-0 overflow-hidden rounded-lg md:h-14 md:w-20 ${lqip.class}`}
+  >
+    <ResponsiveImage
+      src={cover}
+      maxWidth={320}
+      sizes="96px"
+      loading="lazy"
+      decoding="async"
+      alt=""
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+    />
+  </a>
+
+  <div class="flex min-w-0 flex-1 flex-col gap-1">
+    <div class="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs">
+      {categoryLabel && (
+        <a href={categoryLink} class="text-primary hover:text-blue font-medium transition-colors">
+          {categoryLabel}
+        </a>
+      )}
+      <span class="text-muted-foreground tabular-nums">{formatLocalizedDate(data.date, locale)}</span>
+      <span class="text-muted-foreground inline-flex items-center gap-1 tabular-nums md:hidden">
+        <Icon name="fa6-solid:clock" class="size-3" aria-hidden="true" />
+        {data.readingTime}
+      </span>
+      {isFallback && (
+        <span class="text-amber-700 dark:text-amber-400 inline-flex items-center gap-0.5">
+          <Icon name="ri:translate-2" class="size-3" aria-hidden="true" />
+          {getLocaleLabel(data.postLocale ?? defaultLocale)}
+        </span>
+      )}
+    </div>
+
+    <a href={href} class="outline-none">
+      <h3
+        class="text-foreground group-hover:text-primary line-clamp-1 text-base font-semibold transition-colors md:text-sm"
+        transition:name={titleMorph}
+        transition:animate="initial"
+        data-morph={titleMorph}
+      >
+        {data.title}
+      </h3>
+    </a>
+
+    {data.description && (
+      <p class="text-muted-foreground line-clamp-1 text-xs leading-relaxed">{data.description}</p>
+    )}
+  </div>
+
+  <a
+    href={href}
+    aria-label={data.title}
+    class="text-muted-foreground/70 group-hover:text-primary flex size-8 shrink-0 items-center justify-center rounded-full transition-all group-hover:translate-x-0.5 md:hidden"
+  >
+    <Icon name="ri:arrow-right-line" class="size-4" aria-hidden="true" />
+  </a>
+</article>

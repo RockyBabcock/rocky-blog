@@ -275,11 +275,24 @@ html:is([data-motion="reduced"], .motion-off) .home-greeting {
   margin-inline-start: 4.5px;
 }
 
-/* Desktop: the stacked, centred Shoka profile. */
+/* Desktop: refined personal brand plate with soft hairline framing. */
+.home-info[data-variant="sider"] .home-profile {
+  margin-top: 0.75rem;
+  border: 1px solid hsl(var(--border) / 0.65);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, hsl(var(--primary) / 0.045) 0%, hsl(var(--card) / 0.7) 42%, hsl(var(--card) / 0.45) 100%);
+  padding: 0 0.75rem 0.75rem;
+}
+
+.dark .home-info[data-variant="sider"] .home-profile {
+  border-color: hsl(var(--border) / 0.8);
+  background: linear-gradient(180deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card) / 0.65) 48%, hsl(var(--card) / 0.4) 100%);
+}
+
 .home-info[data-variant="sider"] .home-identity {
   flex-direction: column;
   gap: 0;
-  padding-top: 1.75rem;
+  padding-top: 1.25rem;
   text-align: center;
 }
 
@@ -288,9 +301,9 @@ html:is([data-motion="reduced"], .motion-off) .home-greeting {
 }
 
 .home-info[data-variant="sider"] .home-avatar {
-  width: 7.5rem;
-  height: 7.5rem;
-  margin-bottom: 1rem;
+  width: 6.75rem;
+  height: 6.75rem;
+  margin-bottom: 0.875rem;
 }
 
 .home-info[data-variant="sider"] .home-description {
@@ -301,21 +314,23 @@ html:is([data-motion="reduced"], .motion-off) .home-greeting {
 .home-info[data-variant="sider"] .home-stats {
   gap: 0;
   margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid hsl(var(--border) / 0.55);
 }
 
 .home-info[data-variant="sider"] .home-stat {
   position: relative;
   background: none;
-  border-radius: 0;
+  border-radius: 0.5rem;
 }
 
 .home-info[data-variant="sider"] .home-stat + .home-stat::before {
   content: "";
   position: absolute;
-  inset-block: 28%;
+  inset-block: 24%;
   left: 0;
   width: 1px;
-  background: hsl(var(--border));
+  background: hsl(var(--border) / 0.7);
 }
 
 .home-info[data-variant="sider"] .home-social {
@@ -337,9 +352,62 @@ html:is([data-motion="reduced"], .motion-off) .home-greeting {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid hsl(var(--border) / 0.8);
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid hsl(var(--border) / 0.7);
+}
+
+.home-sider-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid hsl(var(--border) / 0.6);
+}
+
+.home-sider-tool-btn {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid hsl(var(--border) / 0.75);
+  border-radius: 0.75rem;
+  background: hsl(var(--card) / 0.75);
+  padding: 0.45rem 0.65rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.8125rem;
+  transition:
+    border-color 180ms var(--ease-out-quart),
+    color 180ms var(--ease-out-quart),
+    background-color 180ms var(--ease-out-quart);
+}
+
+.home-sider-tool-icon {
+  display: inline-flex;
+  height: 2.125rem;
+  width: 2.125rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid hsl(var(--border) / 0.75);
+  border-radius: 0.75rem;
+  background: hsl(var(--card) / 0.75);
+  color: hsl(var(--muted-foreground));
+  transition:
+    border-color 180ms var(--ease-out-quart),
+    color 180ms var(--ease-out-quart),
+    background-color 180ms var(--ease-out-quart);
+}
+
+@media (hover: hover) {
+  .home-sider-tool-btn:hover,
+  .home-sider-tool-icon:hover {
+    border-color: hsl(var(--primary) / 0.4);
+    background: hsl(var(--primary) / 0.06);
+    color: hsl(var(--foreground));
+  }
 }
 
 .home-nav-row,

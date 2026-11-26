@@ -1,18 +1,23 @@
 ---
+import EditorialTimeline from '@components/home/EditorialTimeline.astro';
+import ExploreTopics from '@components/home/ExploreTopics.astro';
+import FeaturedShowcase from '@components/home/FeaturedShowcase.astro';
+import HomeCompactUtility from '@components/home/HomeCompactUtility';
+import HomeRightRail from '@components/home/HomeRightRail.astro';
+import RecentReadingStrip from '@components/home/RecentReadingStrip';
+import SeriesShowcase from '@components/home/SeriesShowcase.astro';
 import HomeSider from '@components/layout/HomeSider.astro';
 import PostList from '@components/post/PostList.astro';
 import Cover from '@components/ui/cover/Cover.astro';
 import { CONTENT_PADDING, PAGINATION } from '@constants/layout';
-import { seoConfig, siteConfig } from '@constants/site-config';
+import { seoConfig } from '@constants/site-config';
 import Layout from '@layouts/Layout.astro';
 import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
-import { getHomePagePosts } from '@lib/content';
+import { getHomePagePosts, getSortedPosts } from '@lib/content';
 import { toPostCardDataList } from '@lib/content/transforms';
 import type { Page } from 'astro';
+import { Icon } from 'astro-icon/components';
 import type { BlogPost } from 'types/blog';
-import RecentReadingStrip from '@/components/home/RecentReadingStrip';
-import CategoryCards from '@/components/post/CategoryCards.astro';
-import Divider from '@/components/ui/divider';
 import { defaultLocale, localizedPath, t } from '@/i18n';
 
 interface Props {
@@ -22,13 +27,16 @@ interface Props {
 // Root pages render the default locale; `[lang]/` mirrors pass their locale in explicitly.
 const { locale = defaultLocale } = Astro.props;
 
-// 使用优化的单次查询获取所有首页数据
-const { highlightedPosts, stickyPosts: normalStickyPosts, regularPosts } = await getHomePagePosts(locale);
+// Fetch real homepage data & sorted posts (memoized per locale)
+const [{ highlightedPosts, stickyPosts: normalStickyPosts, regularPosts }, allPosts] = await Promise.all([
+  getHomePagePosts(locale),
+  getSortedPosts(locale),
+]);
 
-// 将高亮系列文章放在置顶列表开头（转换为卡片数据）
+// Combine highlighted series posts + sticky posts for the Featured Bento Showcase
 const stickyPosts = toPostCardDataList([...highlightedPosts, ...normalStickyPosts], locale);
 
-// 首页显示前N篇普通文章（不含系列文章）
+// Paginated Latest Writing stream (non-series posts)
 const { pageSize } = PAGINATION;
 const regularPostsSlice = regularPosts.slice(0, pageSize);
 const posts = toPostCardDataList(regularPostsSlice, locale);
@@ -56,27 +64,59 @@ const page: Page<BlogPost> = {
 ---
 
 <Layout locale={locale} title={seoConfig.title}>
-  <TwoColumnLayout>
+  <TwoColumnLayout showPostFooter={false}>
     <Cover slot="cover" />
     <HomeSider slot="sider" />
+    <HomeRightRail slot="aside" posts={allPosts} locale={locale} />
+
     <div
-      class={`bg-gradient-start shadow-box tablet:shadow-none flex flex-col gap-4 overflow-clip ${CONTENT_PADDING.standard}`}
+      id="home-content"
+      class={`bg-gradient-start shadow-box tablet:shadow-none flex flex-col gap-9 overflow-clip scroll-mt-18 ${CONTENT_PADDING.editorial}`}
     >
-      <RecentReadingStrip client:idle locale={locale} />
-      {stickyPosts.length > 0 && (
-        <>
-          <Divider>{t(locale, 'post.stickyPosts')}</Divider>
-          <PostList posts={stickyPosts} showPaginator={false} />
-        </>
-      )}
-      <Divider>{t(locale, 'post.postList')}</Divider>
-      <PostList posts={posts} page={page} showPaginator={true} baseUrl={postsBaseUrl} isHomePage={true} />
-      {!!siteConfig?.featuredCategories?.length && (
-        <>
-          <Divider className="mt-6">{t(locale, 'post.featuredCategories')}</Divider>
-          <CategoryCards />
-        </>
-      )}
+      {/* Compact Search & Continue Reading bar for < 1280px viewports */}
+      <div class="home-compact-utility">
+        <HomeCompactUtility client:idle locale={locale} />
+        <RecentReadingStrip client:idle locale={locale} />
+      </div>
+
+      {/* 1. Featured Editorial Showcase */}
+      {stickyPosts.length > 0 && <FeaturedShowcase posts={stickyPosts} locale={locale} />}
+
+      {/* 2. Latest Writing (Mixed Visual Cards + Compact Editorial Index) */}
+      <section aria-labelledby="home-latest-heading" class="flex flex-col gap-4" data-home-latest>
+        <div class="editorial-section-head">
+          <div class="editorial-section-title-group">
+            <h2 id="home-latest-heading" class="editorial-section-title">
+              <Icon name="ri:quill-pen-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
+              <span>{t(locale, 'post.latestPosts')}</span>
+            </h2>
+            <p class="editorial-section-subtitle">{t(locale, 'home.latestSubtitle')}</p>
+          </div>
+          {totalRegularPosts > pageSize && (
+            <a href={`${postsBaseUrl}/2`} class="editorial-section-link">
+              <span>{t(locale, 'series.viewAll')}</span>
+              <Icon name="ri:arrow-right-s-line" class="size-4" aria-hidden="true" />
+            </a>
+          )}
+        </div>
+        <PostList
+          posts={posts}
+          page={page}
+          showPaginator={true}
+          baseUrl={postsBaseUrl}
+          isHomePage={true}
+          mixedRhythm={true}
+        />
+      </section>
+
+      {/* 3. Series & Weekly Showcase */}
+      <SeriesShowcase locale={locale} />
+
+      {/* 4. Explore Topics (Categories & Weighted Popular Tags) */}
+      <ExploreTopics posts={allPosts} locale={locale} />
+
+      {/* 5. Editorial Timeline */}
+      <EditorialTimeline posts={allPosts} locale={locale} />
     </div>
   </TwoColumnLayout>
 </Layout>

@@ -1,7 +1,9 @@
 ---
 import { motionConfig, siteConfig } from '@constants/site-config';
+import { translateSeriesField } from '@lib/content';
 import { getPostSlug } from '@lib/content/locale';
 import { getPostReadingTime } from '@lib/content/posts';
+import { getEnabledSeries } from '@lib/content/series';
 import { formatLocalizedDateTime } from '@lib/date';
 import { getLqipStyle } from '@lib/lqip';
 import { postTitleMorphName } from '@lib/morph-transitions';
@@ -9,7 +11,7 @@ import { defaultHeroImage, defaultHeroSrcset } from '@lib/responsive-image';
 import { Icon } from 'astro-icon/components';
 import type { BlogPost } from 'types/blog';
 import { MAX_WIDTH } from '@/constants/layout';
-import { getLocaleFromUrl, t } from '@/i18n';
+import { getLocaleFromUrl, localizedPath, t } from '@/i18n';
 import HeroImage from './HeroImage.astro';
 import SakuraPetals from './SakuraPetals.astro';
 import WaveSvg from './wave';
@@ -36,12 +38,25 @@ const titleMorph = data ? postTitleMorphName(getPostSlug(data)) : undefined;
 const copyLinkLabel = t(locale, 'cover.copyLink');
 const copiedLabel = t(locale, 'common.copied');
 const copyFailedLabel = t(locale, 'common.copyFailed');
+
+const primarySeries = !title && !data ? getEnabledSeries()[0] : undefined;
+const primarySeriesLabel = primarySeries
+  ? translateSeriesField(
+      primarySeries.slug,
+      'label',
+      primarySeries.label ?? primarySeries.fullName ?? primarySeries.slug,
+      locale,
+    )
+  : '';
+const primarySeriesHref = primarySeries ? localizedPath(`/${primarySeries.slug}`, locale) : '';
 ---
 
 <div
   class:list={[
     'cover-hero relative z-0 flex overflow-hidden',
-    compact ? 'h-[42svh] min-h-72 max-h-120 tablet:h-[36svh] tablet:min-h-64' : 'h-[60svh] max-h-200',
+    compact
+      ? 'h-[42svh] min-h-72 max-h-120 tablet:h-[36svh] tablet:min-h-64'
+      : 'h-[58svh] min-h-96 max-h-192 md:h-[52svh] md:min-h-84',
   ]}
 >
   <div class="cover-scrim absolute inset-0 h-full"></div>
@@ -49,7 +64,7 @@ const copyFailedLabel = t(locale, 'common.copyFailed');
   <div
     class:list={[
       'cover-copy absolute inset-0 flex flex-col items-center justify-center px-5 text-white',
-      compact ? 'bottom-[4svh]' : 'bottom-[8svh]',
+      compact ? 'bottom-[4svh]' : 'bottom-[7svh]',
     ]}
   >
     {
@@ -94,7 +109,7 @@ const copyFailedLabel = t(locale, 'common.copyFailed');
             )}
           </h1>
           {data && (
-            <p class="motion-rise mt-3 flex flex-wrap items-center justify-center gap-4 md:text-xs" style="--i: 1">
+            <p class="motion-rise mt-3 flex flex-wrap items-center justify-center gap-4 text-sm md:gap-2.5 md:text-xs" style="--i: 1">
               <span class="flex items-center gap-1">
                 <Icon name="fa6-solid:calendar-days" />
                 {t(locale, "post.publishedAt", { date: date ? formatLocalizedDateTime(date, locale) : '' })}
@@ -117,11 +132,32 @@ const copyFailedLabel = t(locale, 'common.copyFailed');
         </>
       ) : (
         <>
-          <h2 class="motion-rise shadow-text font-chill-round text-5xl/[1.2]">{siteConfig?.alternate}</h2>
-          <h1 class="motion-rise shadow-text font-chill-round mt-3 text-5xl/[1.2] font-bold tracking-widest" style="--i: 1">
+          <p class="motion-rise shadow-text font-chill-round text-2xl/[1.2] tracking-[0.14em] opacity-95 md:text-lg">
+            {siteConfig?.alternate}
+          </p>
+          <h1 class="motion-rise shadow-text font-chill-round mt-2 text-5.5xl/[1.15] font-bold tracking-widest md:text-3xl/[1.2]" style="--i: 1">
             {siteConfig?.title}
           </h1>
-          <p class="motion-rise shadow-text mt-5 text-sm tracking-[0.2em]" style="--i: 2">= {siteConfig?.subtitle} =</p>
+          <p class="motion-rise shadow-text mt-3.5 max-w-xl text-center text-sm tracking-[0.16em] opacity-95 md:mt-2.5 md:text-xs md:tracking-[0.08em]" style="--i: 2">
+            = {siteConfig?.subtitle} =
+          </p>
+          <div class="motion-rise hero-quick-actions" style="--i: 3">
+            <a href="#home-content" class="hero-action-btn" data-primary="true">
+              <Icon name="ri:compass-3-line" class="size-4" aria-hidden="true" />
+              <span>{t(locale, 'home.heroExplore')}</span>
+            </a>
+            {primarySeries && (
+              <a href={primarySeriesHref} class="hero-action-btn">
+                <Icon name={primarySeries.icon || 'ri:newspaper-line'} class="size-4" aria-hidden="true" />
+                <span>{primarySeriesLabel}</span>
+              </a>
+            )}
+            <button type="button" class="hero-action-btn" data-hero-search-trigger>
+              <Icon name="ri:search-line" class="size-4" aria-hidden="true" />
+              <span>{t(locale, 'home.heroSearch')}</span>
+              <kbd class="ml-0.5 rounded bg-white/15 px-1.5 py-0.5 font-mono text-[10px] leading-none md:hidden">/</kbd>
+            </button>
+          </div>
         </>
       )
     }
@@ -146,6 +182,7 @@ const copyFailedLabel = t(locale, 'common.copyFailed');
 
 <script>
   import { readMotionLevel, subscribeMotionLevel } from '@lib/motion-level';
+  import { openModal } from '@store/modal';
 
   /**
    * First visit only: the banner settles from a slight zoom without hiding its first paint.
@@ -171,7 +208,12 @@ const copyFailedLabel = t(locale, 'common.copyFailed');
     );
   }
 
-  function installCoverCopyButtons() {
+  function installCoverInteractions() {
+    document.querySelectorAll<HTMLButtonElement>('[data-hero-search-trigger]:not([data-ready])').forEach((button) => {
+      button.dataset.ready = 'true';
+      button.addEventListener('click', () => openModal('search'));
+    });
+
     document.querySelectorAll<HTMLButtonElement>('.cover-copy-link:not([data-copy-ready])').forEach((button) => {
       button.dataset.copyReady = 'true';
       button.addEventListener('click', async () => {
@@ -195,6 +237,6 @@ const copyFailedLabel = t(locale, 'common.copyFailed');
   }
 
   settleBanner();
-  installCoverCopyButtons();
-  document.addEventListener('astro:page-load', installCoverCopyButtons);
+  installCoverInteractions();
+  document.addEventListener('astro:page-load', installCoverInteractions);
 </script>

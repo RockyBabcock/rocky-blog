@@ -119,12 +119,40 @@ const stats = [
       })
     }
   </nav>
+  <div class="home-sider-tools">
+    <button type="button" class="home-sider-tool-btn" data-sider-open-modal="search">
+      <Icon name="ri:search-line" class="size-4 shrink-0 text-primary" aria-hidden="true" />
+      <span class="truncate">{t(locale, 'common.search')}</span>
+      <kbd class="kbd ml-auto text-[10px]">/</kbd>
+    </button>
+    <button
+      type="button"
+      class="home-sider-tool-icon"
+      data-sider-open-modal="command"
+      aria-label={t(locale, 'command.title')}
+      title={t(locale, 'command.title')}
+    >
+      <Icon name="ri:command-line" class="size-4" aria-hidden="true" />
+    </button>
+  </div>
 </div>
 
 <script>
+  import { openModal } from '@store/modal';
+
   // Delegated listeners serve every sider copy (desktop and drawer) across page swaps.
   document.addEventListener('click', (event) => {
-    const trigger = (event.target as Element | null)?.closest?.('[data-collapse-trigger]');
+    const target = event.target as Element | null;
+    const modalBtn = target?.closest?.<HTMLElement>('[data-sider-open-modal]');
+    if (modalBtn) {
+      const modalType = modalBtn.dataset.siderOpenModal;
+      if (modalType === 'search' || modalType === 'command') {
+        openModal(modalType);
+      }
+      return;
+    }
+
+    const trigger = target?.closest?.('[data-collapse-trigger]');
     if (!trigger) return;
     trigger.setAttribute('aria-expanded', String(trigger.getAttribute('aria-expanded') !== 'true'));
   });

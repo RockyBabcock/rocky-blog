@@ -146,21 +146,20 @@ function SummaryPanel({ summary, typingSpeed = 25, className, locale }: SummaryP
 
   return (
     <ErrorBoundary FallbackComponent={InlineErrorFallback}>
-      <div className={cn('overflow-hidden rounded-lg', className)}>
+      <div className={cn('border-primary/15 bg-primary/[0.03] dark:bg-card/85 overflow-hidden rounded-xl border', className)}>
         {/* 触发按钮 */}
         <button
           type="button"
           onClick={handleToggle}
           className={cn(
-            'bg-foreground/5 flex w-full cursor-pointer items-center justify-between px-4 py-3 transition-all duration-250',
-            'hover:bg-foreground/10',
-            isExpanded && 'bg-foreground/10 rounded-t-lg',
-            !isExpanded && 'rounded-lg',
+            'flex w-full cursor-pointer items-center justify-between px-4 py-3 transition-colors duration-250',
+            'hover:bg-primary/[0.06]',
+            isExpanded && 'border-primary/12 border-b',
           )}
           aria-expanded={isExpanded}
           aria-controls="summary-panel-content"
         >
-          <div className="text-muted-foreground flex items-center gap-1.5 text-sm font-medium">
+          <div className="text-foreground/85 flex items-center gap-2 text-sm font-medium">
             <Icon icon="ri:book-2-fill" className="text-primary size-4" />
             {label}
           </div>

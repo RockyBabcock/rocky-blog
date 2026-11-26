@@ -1,0 +1,150 @@
+---
+/**
+ * SeriesShowcase — Showcases all real enabled Featured Series on the homepage
+ * with visual cover, translated title/description, issue count, latest issue preview,
+ * and hydrated local reading progress (`SeriesShowcaseProgress`).
+ */
+
+import ResponsiveImage from '@components/common/ResponsiveImage.astro';
+import { Routes } from '@constants/router';
+import { defaultCoverList } from '@constants/site-config';
+import { getEnabledSeries, getPostSlug, getPostsBySeriesSlug, translateSeriesField } from '@lib/content';
+import { formatLocalizedDate } from '@lib/date';
+import { getLqipProps } from '@lib/lqip';
+import { routeBuilder } from '@lib/route';
+import type { SeriesRouteItem } from '@lib/series-progress';
+import { Icon } from 'astro-icon/components';
+import { localizedPath, t } from '@/i18n';
+import SeriesShowcaseProgress from './SeriesShowcaseProgress';
+
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props;
+const enabledSeries = getEnabledSeries();
+
+const seriesCards = (
+  await Promise.all(
+    enabledSeries.map(async (series, idx) => {
+      const posts = await getPostsBySeriesSlug(series.slug, locale);
+      if (posts.length === 0) return null;
+      const latestPost = posts[0];
+      const readingOrderItems: SeriesRouteItem[] = [...posts].reverse().map((post) => ({
+        slug: getPostSlug(post),
+        title: post.data.title,
+        href: localizedPath(
+          routeBuilder(Routes.Post, { slug: getPostSlug(post), link: post.data.link, title: post.data.title }),
+          locale,
+        ),
+      }));
+      const cover = series.cover ?? latestPost.data.cover ?? defaultCoverList[idx % defaultCoverList.length];
+      const title =
+        translateSeriesField(series.slug, 'fullName', series.fullName, locale) ||
+        translateSeriesField(series.slug, 'label', series.label, locale) ||
+        series.slug;
+      const rawDesc = translateSeriesField(series.slug, 'description', series.description, locale);
+      const plainDesc = rawDesc.replace(/\s+/g, ' ').trim();
+      const latestHref = localizedPath(
+        routeBuilder(Routes.Post, {
+          slug: getPostSlug(latestPost),
+          link: latestPost.data.link,
+          title: latestPost.data.title,
+        }),
+        locale,
+      );
+
+      return {
+        slug: series.slug,
+        icon: series.icon || 'ri:newspaper-line',
+        title,
+        description: plainDesc,
+        cover,
+        lqip: getLqipProps(cover),
+        seriesHref: localizedPath(`/${series.slug}`, locale),
+        issueCount: posts.length,
+        latestPostTitle: latestPost.data.title,
+        latestPostDate: formatLocalizedDate(latestPost.data.date, locale),
+        latestHref,
+        readingOrderItems,
+      };
+    }),
+  )
+).filter((item): item is NonNullable<typeof item> => item !== null);
+---
+
+{
+  seriesCards.length > 0 && (
+    <section aria-labelledby="home-series-heading" class="flex flex-col gap-4" data-home-series>
+      <div class="editorial-section-head">
+        <div class="editorial-section-title-group">
+          <h2 id="home-series-heading" class="editorial-section-title">
+            <Icon name="ri:book-open-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
+            <span>{t(locale, 'home.seriesSection')}</span>
+          </h2>
+          <p class="editorial-section-subtitle">{t(locale, 'home.seriesSubtitle')}</p>
+        </div>
+      </div>
+
+      <div class={seriesCards.length === 1 ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-2 gap-4 md:grid-cols-1'}>
+        {seriesCards.map((series) => (
+          <article class="border-border/75 bg-card hover:border-primary/35 group relative flex overflow-hidden rounded-2xl border shadow-xs transition-all duration-300 md:flex-col">
+            <a
+              href={series.seriesHref}
+              tabindex="-1"
+              aria-hidden="true"
+              style={series.lqip.style}
+              class={`relative min-h-44 w-2/5 shrink-0 overflow-hidden md:h-40 md:w-full ${series.lqip.class}`}
+            >
+              <ResponsiveImage
+                src={series.cover}
+                maxWidth={720}
+                sizes="(max-width: 768px) calc(100vw - 32px), 340px"
+                loading="lazy"
+                decoding="async"
+                alt=""
+                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/15 to-transparent" />
+              <div class="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-md bg-black/45 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-xs tabular-nums">
+                <Icon name={series.icon} class="size-3.5" aria-hidden="true" />
+                <span>{t(locale, 'series.postCount', { count: series.issueCount })}</span>
+              </div>
+            </a>
+
+            <div class="flex min-w-0 flex-1 flex-col gap-2.5 p-5 md:p-4">
+              <div class="flex flex-col gap-1">
+                <a href={series.seriesHref} class="outline-none">
+                  <h3 class="text-foreground group-hover:text-primary line-clamp-1 text-lg font-bold transition-colors">
+                    {series.title}
+                  </h3>
+                </a>
+                {series.description && (
+                  <p class="text-muted-foreground line-clamp-2 text-xs leading-relaxed">{series.description}</p>
+                )}
+              </div>
+
+              <a
+                href={series.latestHref}
+                class="bg-foreground/[0.035] border-border/60 hover:border-primary/30 flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-xs transition-colors"
+              >
+                <div class="flex min-w-0 flex-col gap-0.5">
+                  <span class="text-primary font-medium">{t(locale, 'series.latestIssue')}</span>
+                  <span class="text-foreground truncate font-medium">{series.latestPostTitle}</span>
+                </div>
+                <span class="text-muted-foreground shrink-0 tabular-nums">{series.latestPostDate}</span>
+              </a>
+
+              <SeriesShowcaseProgress
+                client:visible
+                locale={locale}
+                items={series.readingOrderItems}
+                seriesHref={series.seriesHref}
+              />
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}

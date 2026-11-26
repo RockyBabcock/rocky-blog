@@ -20,11 +20,10 @@
   font-size: var(--reader-font-size, 1rem);
   line-height: var(--reader-line-height, 1.8);
 
-  /* Preserve the original full-width layout until the reader chooses a custom measure.
-     JavaScript converts that measure to px so differently sized children share one width. */
+  /* Comfortable editorial reading measure on wide screens while honoring custom reader measure settings. */
   width: 100%;
   min-width: 0;
-  max-width: var(--reader-measure, none);
+  max-width: var(--reader-measure, 78ch);
   margin-inline: auto;
 
   /* Emergency wrapping keeps unknown long text from widening the document. */
@@ -55,10 +54,23 @@
     }
   }
 
-  /* CJK text has no true italic; keep quotes upright and let the border mark them. */
+  /* CJK text has no true italic; keep quotes upright on a warm sakura-tinted paper surface. */
   blockquote {
     font-style: normal;
     font-weight: 400;
+    border-inline-start: 2.5px solid hsl(var(--primary) / 0.5);
+    border-radius: 0 0.625rem 0.625rem 0;
+    background: hsl(var(--primary) / 0.045);
+    padding: 0.875rem 1.125rem;
+    margin-block: 1.5rem;
+
+    p:first-of-type {
+      margin-top: 0;
+    }
+
+    p:last-of-type {
+      margin-bottom: 0;
+    }
 
     p:first-of-type::before,
     p:last-of-type::after {
@@ -134,6 +146,11 @@
     &:hover .anchor-link::before {
       opacity: 1;
     }
+  }
+
+  h2 {
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.65);
   }
 
   /* 级别标签 */
@@ -512,6 +529,22 @@
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+    font-size: 0.925em;
+  }
+
+  thead th {
+    background: hsl(var(--primary) / 0.055);
+    padding: 0.625rem 0.875rem;
+    font-weight: 600;
+  }
+
+  tbody td {
+    padding: 0.625rem 0.875rem;
+  }
+
+  tbody tr:nth-child(even) {
+    background: hsl(var(--foreground) / 0.02);
   }
 }
 

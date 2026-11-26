@@ -1,6 +1,8 @@
 ---
+import CompactPostRow from '@components/home/CompactPostRow.astro';
 import EmptySvg from '@components/svg/EmptySvg';
 import { contentConfig, defaultCoverList } from '@constants/site-config';
+import { splitLatestPosts } from '@lib/editorial';
 import type { Page } from 'astro';
 import { shuffle } from 'es-toolkit';
 import type { BlogPost, PostCardData } from 'types/blog';
@@ -14,9 +16,11 @@ interface Props {
   showPaginator?: boolean;
   baseUrl?: string; // 分页基础路径
   isHomePage?: boolean; // 是否是首页
+  /** When enabled (homepage), renders first 3 posts as visual cards and remaining as compact editorial rows. */
+  mixedRhythm?: boolean;
 }
 
-const { posts, page, showPaginator = true, baseUrl, isHomePage = false } = Astro.props;
+const { posts, page, showPaginator = true, baseUrl, isHomePage = false, mixedRhythm = false } = Astro.props;
 const locale = getLocaleFromUrl(Astro.url.pathname);
 const covers = shuffle(defaultCoverList);
 
@@ -38,6 +42,9 @@ function getLeftClip(index: number): boolean {
       return index % 2 === 0;
   }
 }
+
+const { featuredCards, compactRows } =
+  mixedRhythm && posts?.length ? splitLatestPosts(posts, 3) : { featuredCards: posts ?? [], compactRows: [] as PostCardData[] };
 ---
 
 {
@@ -52,7 +59,7 @@ function getLeftClip(index: number): boolean {
   posts && posts?.length > 0 && (
     <>
       <div class="flex flex-col gap-4">
-        {posts.map((post, index) => (
+        {featuredCards.map((post, index) => (
           <PostItemCard
             key={post.slug}
             data={post}
@@ -62,6 +69,17 @@ function getLeftClip(index: number): boolean {
           />
         ))}
       </div>
+      {compactRows.length > 0 && (
+        <div class="compact-post-list motion-reveal mt-1">
+          {compactRows.map((post, idx) => (
+            <CompactPostRow
+              data={post}
+              randomCover={covers[(idx + featuredCards.length) % covers.length]}
+              locale={locale}
+            />
+          ))}
+        </div>
+      )}
       {showPaginator && page && <Paginator page={page} baseUrl={baseUrl} isHomePage={isHomePage} />}
     </>
   )

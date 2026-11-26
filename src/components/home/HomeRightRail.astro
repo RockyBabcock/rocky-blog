@@ -1,0 +1,136 @@
+---
+/**
+ * HomeRightRail — Lightweight desktop right utility column on the homepage (>= 1280px).
+ *
+ * Combines interactive client widgets (Quick Search, Continue Reading, Series Progress)
+ * with zero-JS static editorial snapshots (Top Categories & Archive Years).
+ */
+
+import { Routes } from '@constants/router';
+import { siteTimezone } from '@lib/config/site';
+import {
+  buildCategoryPath,
+  getCategoryList,
+  getEnabledSeries,
+  getPostSlug,
+  getPostsBySeriesSlug,
+  translateCategoryName,
+  translateSeriesField,
+} from '@lib/content';
+import { groupPostsByYear } from '@lib/content/index-groups';
+import { routeBuilder } from '@lib/route';
+import type { SeriesRouteItem } from '@lib/series-progress';
+import { Icon } from 'astro-icon/components';
+import type { BlogPost } from 'types/blog';
+import { localizedPath, t } from '@/i18n';
+import RightRailWidgets, { type RailSeriesInfo } from './RightRailWidgets';
+
+interface Props {
+  posts: BlogPost[];
+  locale: string;
+}
+
+const { posts, locale } = Astro.props;
+
+// Primary enabled series info for progress tracker
+const enabledSeries = getEnabledSeries();
+let primarySeriesInfo: RailSeriesInfo | null = null;
+if (enabledSeries.length > 0) {
+  const firstSeries = enabledSeries[0];
+  const seriesPosts = await getPostsBySeriesSlug(firstSeries.slug, locale);
+  if (seriesPosts.length > 0) {
+    const items: SeriesRouteItem[] = [...seriesPosts].reverse().map((post) => ({
+      slug: getPostSlug(post),
+      title: post.data.title,
+      href: localizedPath(
+        routeBuilder(Routes.Post, { slug: getPostSlug(post), link: post.data.link, title: post.data.title }),
+        locale,
+      ),
+    }));
+    primarySeriesInfo = {
+      slug: firstSeries.slug,
+      title:
+        translateSeriesField(firstSeries.slug, 'label', firstSeries.label, locale) ||
+        translateSeriesField(firstSeries.slug, 'fullName', firstSeries.fullName, locale) ||
+        firstSeries.slug,
+      href: localizedPath(`/${firstSeries.slug}`, locale),
+      items,
+    };
+  }
+}
+
+// Top root categories with real counts
+const { categories, countMap } = await getCategoryList(locale);
+const topCategories = categories
+  .map((cat) => ({
+    name: cat.name,
+    label: translateCategoryName(cat.name, locale),
+    count: countMap[cat.name] ?? 0,
+    href: localizedPath(buildCategoryPath([cat.name]), locale),
+  }))
+  .filter((c) => c.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 6);
+
+// Archive year distribution
+const yearGroups = groupPostsByYear(posts, siteTimezone).slice(0, 5);
+const archivesHref = localizedPath('/archives', locale);
+---
+
+<div class="flex flex-col gap-3.5" data-home-right-rail>
+  <RightRailWidgets client:idle locale={locale} primarySeries={primarySeriesInfo} />
+
+  {topCategories.length > 0 && (
+    <section class="rail-card" aria-label={t(locale, 'home.railTopicsSummary')}>
+      <div class="rail-card-title">
+        <span class="inline-flex items-center gap-1.5">
+          <Icon name="ri:folder-3-line" class="text-primary size-4 shrink-0" aria-hidden="true" />
+          <span>{t(locale, 'home.railTopicsSummary')}</span>
+        </span>
+        <a href={localizedPath('/categories', locale)} class="text-muted-foreground hover:text-primary text-[11px] font-normal transition-colors">
+          {t(locale, 'series.viewAll')}
+        </a>
+      </div>
+      <ul class="flex flex-col gap-1">
+        {topCategories.map((cat) => (
+          <li>
+            <a
+              href={cat.href}
+              class="text-foreground/85 hover:bg-primary/8 hover:text-primary flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors"
+            >
+              <span class="truncate font-medium">{cat.label}</span>
+              <span class="text-muted-foreground font-mono text-[11px] tabular-nums">{cat.count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {yearGroups.length > 0 && (
+    <section class="rail-card" aria-label={t(locale, 'home.railArchiveSummary')}>
+      <div class="rail-card-title">
+        <span class="inline-flex items-center gap-1.5">
+          <Icon name="ri:archive-2-line" class="text-primary size-4 shrink-0" aria-hidden="true" />
+          <span>{t(locale, 'home.railArchiveSummary')}</span>
+        </span>
+        <a href={archivesHref} class="text-muted-foreground hover:text-primary text-[11px] font-normal transition-colors">
+          {t(locale, 'series.viewAll')}
+        </a>
+      </div>
+      <ul class="flex flex-col gap-1">
+        {yearGroups.map((group) => (
+          <li>
+            <a
+              href={`${archivesHref}#year-${group.year}`}
+              class="text-foreground/85 hover:bg-primary/8 hover:text-primary flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors tabular-nums"
+            >
+              <span class="font-mono font-medium">{group.year}</span>
+              <span class="text-muted-foreground text-[11px]">{t(locale, 'post.yearPosts', { count: group.posts.length })}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</div>

@@ -1,0 +1,75 @@
+---
+/**
+ * ExploreTopics — Homepage topic exploration combining upgraded CategoryCards
+ * with a clean typographically weighted Popular Tags cloud (zero pill-spam).
+ */
+
+import CategoryCards from '@components/post/CategoryCards.astro';
+import { siteConfig } from '@constants/site-config';
+import { buildTagPath, getAllTags } from '@lib/content';
+import { computeTagTiers } from '@lib/editorial';
+import { Icon } from 'astro-icon/components';
+import type { BlogPost } from 'types/blog';
+import { localizedPath, t } from '@/i18n';
+
+interface Props {
+  posts: BlogPost[];
+  locale: string;
+}
+
+const { posts, locale } = Astro.props;
+const weightedTags = computeTagTiers(getAllTags(posts), 18);
+const hasFeaturedCategories = Boolean(siteConfig?.featuredCategories?.length);
+---
+
+{
+  (hasFeaturedCategories || weightedTags.length > 0) && (
+    <section aria-labelledby="home-topics-heading" class="flex flex-col gap-5" data-home-topics>
+      <div class="editorial-section-head">
+        <div class="editorial-section-title-group">
+          <h2 id="home-topics-heading" class="editorial-section-title">
+            <Icon name="ri:compass-3-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
+            <span>{t(locale, 'home.exploreTopics')}</span>
+          </h2>
+          <p class="editorial-section-subtitle">{t(locale, 'home.exploreSubtitle')}</p>
+        </div>
+        <a href={localizedPath('/categories', locale)} class="editorial-section-link">
+          <span>{t(locale, 'home.allCategories')}</span>
+          <Icon name="ri:arrow-right-s-line" class="size-4" aria-hidden="true" />
+        </a>
+      </div>
+
+      {hasFeaturedCategories && <CategoryCards />}
+
+      {weightedTags.length > 0 && (
+        <div class="border-border/70 bg-card/65 flex flex-col gap-3 rounded-xl border p-4">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-foreground flex items-center gap-1.5 text-sm font-semibold">
+              <Icon name="ri:hashtag" class="text-primary size-4" aria-hidden="true" />
+              <span>{t(locale, 'home.popularTags')}</span>
+            </h3>
+            <a href={localizedPath('/tags', locale)} class="editorial-section-link text-xs">
+              <span>{t(locale, 'home.allTags')}</span>
+              <Icon name="ri:arrow-right-s-line" class="size-3.5" aria-hidden="true" />
+            </a>
+          </div>
+
+          <div class="editorial-tag-cloud">
+            {weightedTags.map((tag) => (
+              <a
+                href={localizedPath(buildTagPath(tag.name), locale)}
+                data-tier={tag.tier}
+                class="editorial-tag-item"
+                aria-label={t(locale, 'tag.viewTagPosts', { tag: tag.name, count: tag.count })}
+              >
+                <span class="text-primary/70">#</span>
+                <span>{tag.name}</span>
+                <sup class="text-muted-foreground ml-0.5 text-[10px] font-normal tabular-nums">{tag.count}</sup>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  )
+}

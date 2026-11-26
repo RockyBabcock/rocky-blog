@@ -13,6 +13,7 @@ interface Props {
 }
 
 const { className, post, showPostFooter = true } = Astro.props;
+const hasAside = Astro.slots.has('aside');
 ---
 
 <div class="flex flex-col">
@@ -20,7 +21,8 @@ const { className, post, showPostFooter = true } = Astro.props;
   <div
     class={cn(
       'two-column-content mx-auto md:mx-0 flex w-full items-start justify-center md:w-full',
-      MAX_WIDTH.content,
+      hasAside ? MAX_WIDTH.editorial : MAX_WIDTH.content,
+      hasAside && 'has-editorial-aside',
       className,
     )}
   >
@@ -30,6 +32,11 @@ const { className, post, showPostFooter = true } = Astro.props;
       {showPostFooter && <div data-focus-hide><PostFooter post={post} /></div>}
       <Footer />
     </div>
+    {hasAside && (
+      <aside class="page-home-aside" data-focus-hide>
+        <slot name="aside" />
+      </aside>
+    )}
   </div>
 </div>
 
