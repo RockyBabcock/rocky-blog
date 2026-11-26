@@ -4,7 +4,6 @@
  * Problem: Some Shoka syntax conflicts with standard Markdown/GFM parsing:
  * - `+++style Title` → parsed as thematicBreak before any remark plugin runs
  * - `~sub~` → parsed as GFM strikethrough (~~ is delete)
- * - `{% media %}` YAML content → parsed as Markdown lists
  *
  * Solution: This remark plugin runs as the FIRST plugin in the pipeline.
  * It reads `file.value` (the original raw text preserved in VFile), applies
@@ -27,7 +26,6 @@ import { preprocessShokaSyntax } from './shoka-preprocessor';
 
 interface RemarkShokaPreprocessOptions {
   enableContainers?: boolean;
-  enableHexoTags?: boolean;
   enableSuperSub?: boolean;
   enableMath?: boolean;
   enableEncryptedBlock?: boolean;
@@ -50,7 +48,6 @@ export function remarkShokaPreprocess(options?: RemarkShokaPreprocessOptions) {
 
     const processed = preprocessShokaSyntax(raw, {
       enableContainers: options?.enableContainers,
-      enableHexoTags: options?.enableHexoTags,
       enableSuperSub: options?.enableSuperSub,
     });
 

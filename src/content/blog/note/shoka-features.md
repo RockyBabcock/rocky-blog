@@ -10,7 +10,6 @@ tags:
   - 测试
 description: 展示所有 Shoka 主题兼容的特殊 Markdown 语法
 math: true
-quiz: true
 ---
 
 本文展示了从 Hexo Shoka 主题迁移的所有特殊 Markdown 语法。
@@ -332,175 +331,14 @@ $$
 \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
 $$
 
-## 友链卡
+## 外部媒体资源链接
 
-```markdown
-{% links %}
-- site: 余弦の博客
-  url: https://blog.cosine.ren
-  owner: cos
-  desc: FE / ACG / 手工
-  image: https://blog.cosine.ren/img/avatar.webp
-  color: '#ed788b'
-- site: 示例博客
-  url: https://example.com
-  owner: Alice
-  desc: 一个热爱技术的博客
-  image: https://api.dicebear.com/7.x/avataaars/svg?seed=Alice
-  color: '#BEDCFF'
-{% endlinks %}
-```
+音频、歌单与视频资源可直接使用标准 Markdown 链接展示：
 
-{% links %}
-- site: 余弦の博客
-  url: https://blog.cosine.ren
-  owner: cos
-  desc: FE / ACG / 手工
-  image: https://blog.cosine.ren/img/avatar.webp
-  color: '#ed788b'
-- site: 示例博客
-  url: https://example.com
-  owner: Alice
-  desc: 一个热爱技术的博客
-  image: https://api.dicebear.com/7.x/avataaars/svg?seed=Alice
-  color: '#BEDCFF'
-{% endlinks %}
-
-## 多媒体
-
-### 音频
-
-```markdown
-{% media audio %}
-- name: 示例音频
-  url: https://music.163.com/#/song?id=3339210292
-{% endmedia %}
-```
-
-{% media audio %}
-- name: 示例音频
-  url: https://music.163.com/#/song?id=3339210292
-{% endmedia %}
-
-### 音频歌单
-
-```markdown
-{% media audio %}
-- title: 诗岸歌单 山山～全是山山～
-  list:
-    - https://music.163.com/#/playlist?id=8676645748
-- title: 『诗岸』全是山山！
-  list:
-    - https://music.163.com/#/playlist?id=17606384886
-{% endmedia %}
-```
-
-{% media audio %}
-- title: 诗岸歌单 山山～全是山山～
-  list:
-    - https://music.163.com/#/playlist?id=8676645748
-- title: 『诗岸』全是山山！
-  list:
-    - https://music.163.com/#/playlist?id=17606384886
-{% endmedia %}
-
-### 视频
-
-```markdown
-{% media video %}
-- name: "测试 1"
-  url: https://cdn.kastatic.org/ka-youtube-converted/O_nY1TM2RZM.mp4/O_nY1TM2RZM.mp4#t=0
-- name: "测试 2"
-  url: https://cdn.kastatic.org/ka-youtube-converted/O_nY1TM2RZM.mp4/O_nY1TM2RZM.mp4#t=0
-{% endmedia %}
-```
-
-{% media video %}
-- name: "测试 1"
-  url: https://cdn.kastatic.org/ka-youtube-converted/O_nY1TM2RZM.mp4/O_nY1TM2RZM.mp4#t=0
-- name: "测试 2"
-  url: https://cdn.kastatic.org/ka-youtube-converted/O_nY1TM2RZM.mp4/O_nY1TM2RZM.mp4#t=0
-{% endmedia %}
-
-## 练习题
-
-支持四种题型：**单选题**、**多选题**、**判断题**、**填空题**。
-
-### 单选题
-
-```markdown
-- 下列哪个是 JavaScript 的基本数据类型？{.quiz}
-  - Object{.options}
-  - Array{.options}
-  - Symbol{.correct}
-  - Function{.options}
-
-> 解析：Symbol 是 ES6 引入的基本数据类型，而 Object、Array、Function 都是引用类型。
-```
-
-- 下列哪个是 JavaScript 的基本数据类型？{.quiz}
-  - Object{.options}
-  - Array{.options}
-  - Symbol{.correct}
-  - Function{.options}
-
-> 解析：Symbol 是 ES6 引入的基本数据类型，而 Object、Array、Function 都是引用类型。
-
-### 多选题
-
-```markdown
-- 以下哪些是 CSS 布局方式？{.quiz .multi}
-  - Flexbox{.correct}
-  - jQuery{.options}
-  - Grid{.correct}
-  - Float{.correct}
-
-> 解析：Flexbox、Grid 和 Float 都是 CSS 布局方式。jQuery 是一个 JavaScript 库，不属于 CSS 布局。
-```
-
-- 以下哪些是 CSS 布局方式？{.quiz .multi}
-  - Flexbox{.correct}
-  - jQuery{.options}
-  - Grid{.correct}
-  - Float{.correct}
-
-> 解析：Flexbox、Grid 和 Float 都是 CSS 布局方式。jQuery 是一个 JavaScript 库，不属于 CSS 布局。
-
-### 判断题
-
-```markdown
-- `const` 声明的变量不能重新赋值，但可以修改其属性。{.quiz .true}
-
-> 解析：`const` 只保证变量绑定不可变，如果变量指向一个对象，其属性仍然可以修改。
-
-- HTML 是一种编程语言。{.quiz}
-
-> 解析：HTML（超文本标记语言）是一种标记语言，不是编程语言。它没有逻辑控制能力。
-```
-
-- `const` 声明的变量不能重新赋值，但可以修改其属性。{.quiz .true}
-
-> 解析：`const` 只保证变量绑定不可变，如果变量指向一个对象，其属性仍然可以修改。
-
-- HTML 是一种编程语言。{.quiz}
-
-> 解析：HTML（超文本标记语言）是一种标记语言，不是编程语言。它没有逻辑控制能力。
-
-### 填空题
-
-```markdown
-- 在 JavaScript 中，`typeof null` 的结果是 [object]{.gap}。{.quiz .fill}
-
-> 解析：这是一个历史遗留 bug。`null` 的类型标签与 object 相同，因此 `typeof null` 返回 `"object"`。常见错误答案是 [null]{.mistake}。
-```
-
-- 在 JavaScript 中，`typeof null` 的结果是 [object]{.gap}。{.quiz .fill}
-
-> 解析：这是一个历史遗留 bug。`null` 的类型标签与 object 相同，因此 `typeof null` 返回 `"object"`。常见错误答案是 [null]{.mistake}。
-
-- CSS 中，[Flexbox]{.gap} 适合一维布局，[Grid]{.gap} 适合二维布局，而 [Float]{.gap} 是传统的布局方式。{.quiz .fill}
-
-> 解析：Flexbox 是一维布局模型（行或列），Grid 是二维布局模型（行和列同时控制），Float 是 CSS2 时代的传统布局方式。
+- [示例音频（网易云音乐）](https://music.163.com/#/song?id=3339210292)
+- [诗岸歌单 山山～全是山山～](https://music.163.com/#/playlist?id=8676645748)
+- [『诗岸』全是山山！](https://music.163.com/#/playlist?id=17606384886)
+- [示例视频（MP4）](https://cdn.kastatic.org/ka-youtube-converted/O_nY1TM2RZM.mp4/O_nY1TM2RZM.mp4#t=0)
 
 ## 加密内容块 (Encrypted Block)
 

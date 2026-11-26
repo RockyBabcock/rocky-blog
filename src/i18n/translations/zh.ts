@@ -65,7 +65,6 @@ export const uiStrings = {
   'post.updatedAt': '更新于 {date}',
   'post.prevPost': '上一篇',
   'post.nextPost': '下一篇',
-  'post.relatedPosts': '相关文章',
   'post.seriesNavigation': '系列导航',
   'post.seriesPrev': '上一篇',
   'post.seriesNext': '下一篇',
@@ -160,24 +159,6 @@ export const uiStrings = {
   'image.hintDesktop': '双击放大 · 滚轮缩放 · 点击空白关闭',
   'image.hintMobile': '双击或双指缩放 · 下滑或轻点空白关闭',
 
-  // ── Media Controls ──────────────────────────────────────────
-  'media.play': '播放',
-  'media.pause': '暂停',
-  'media.mute': '静音',
-  'media.unmute': '取消静音',
-  'media.fullscreen': '全屏',
-  'media.exitFullscreen': '退出全屏',
-  'media.pictureInPicture': '画中画',
-  'media.playbackSpeed': '播放速度',
-  'media.download': '下载',
-  'media.prevTrack': '上一曲',
-  'media.nextTrack': '下一曲',
-  'media.volume': '音量 {percent}%',
-  'media.progress': '播放进度',
-  'media.playModeOrder': '顺序播放',
-  'media.playModeRandom': '随机播放',
-  'media.playModeLoop': '单曲循环',
-
   // ── Footer ──────────────────────────────────────────────────
   'footer.poweredBy': '由 {name} 驱动',
   'footer.totalPosts': '{count} 篇文章',
@@ -237,32 +218,6 @@ export const uiStrings = {
   'settings.waveDisabledByReducedMotion': '动效强度为「减弱」时不可用',
   'settings.invalidNumber': '请输入正数',
 
-  // ── Quiz ────────────────────────────────────────────────────
-  'quiz.check': '检查答案',
-  'quiz.correct': '回答正确！',
-  'quiz.incorrect': '回答错误，请重试',
-  'quiz.incorrectAnswer': '回答错误。正确答案是 {answer}。',
-  'quiz.submitAnswer': '提交答案（已选 {count} 项）',
-  'quiz.commonMistakes': '易错项：',
-  'quiz.parseFailed': '题目解析失败',
-  'quiz.showAnswer': '查看答案',
-  'quiz.hideAnswer': '隐藏答案',
-  'quiz.reset': '重置',
-  'quiz.score': '得分：{score}/{total}',
-  'quiz.completed': '全部完成！',
-  'quiz.fillBlank': '填写答案...',
-  'quiz.selectOption': '请选择一个选项',
-  'quiz.single': '单选题',
-  'quiz.multi': '多选题',
-  'quiz.trueFalse': '判断题',
-  'quiz.fill': '填空题',
-  'quiz.optionTrue': '正确',
-  'quiz.optionFalse': '错误',
-  'quiz.clickToReveal': '点击查看答案',
-  'quiz.quizOptions': '{type}选项',
-  'quiz.trueFalseCorrect': '回答正确！',
-  'quiz.trueFalseIncorrect': '回答错误。该命题是{answer}的。',
-
   // ── Encrypted Block ─────────────────────────────────────────
   'encrypted.locked': '内容已加密',
   'encrypted.placeholder': '请输入密码查看内容',
@@ -317,8 +272,6 @@ export const uiStrings = {
 
   // ── Summary Panel ───────────────────────────────────────────
   'summary.description': '人工摘要',
-  'summary.ai': 'AI 摘要',
-  'summary.auto': '摘要',
 
   // ── Latest Posts ────────────────────────────────────────────
   'post.latestPosts': '最新文章',
@@ -326,14 +279,6 @@ export const uiStrings = {
   // ── Tag Component ───────────────────────────────────────────
   'tag.expandAll': '展开全部',
   'tag.viewTagPosts': '查看标签「{tag}」的 {count} 篇文章',
-
-  // ── Audio Player ────────────────────────────────────────────
-  'audio.loading': '加载播放列表…',
-  'audio.loadError': '加载失败: {error}',
-  'audio.retry': '重试',
-  'audio.empty': '暂无曲目',
-  'audio.listTab': '列表 {index}',
-  'audio.closePanel': '关闭面板',
 
   // ── Table of Contents ───────────────────────────────────────
   'toc.title': '文章目录',

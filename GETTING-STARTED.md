@@ -203,13 +203,10 @@ src/content/blog/
 
 ### 内容生成（可选）
 
-使用内置脚本生成内容资产：
+使用内置脚本生成 LQIP 图片占位符：
 
 ```bash
 pnpm generate:lqips        # 生成 LQIP 图片占位符，提升加载体验
-pnpm generate:similarities # 生成语义相似度向量，推荐相关文章
-pnpm generate:summaries    # 生成 AI 摘要
-pnpm generate:all          # 生成全部
 ```
 
 ## 常用命令
@@ -222,7 +219,7 @@ pnpm generate:all          # 生成全部
 | `pnpm check`                | Astro 类型检查                     |
 | `pnpm test`                 | 运行单元测试                       |
 | `pnpm lint`                 | Biome 代码检查                     |
-| `pnpm generate:all`         | 生成 LQIP / 摘要 / 语义相似度资产  |
+| `pnpm generate:lqips`       | 生成 LQIP 图片占位符               |
 
 ## 获取帮助
 

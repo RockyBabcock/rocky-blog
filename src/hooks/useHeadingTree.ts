@@ -13,8 +13,8 @@
 import { buildHeadingTree, type Heading } from '@lib/toc';
 import { useEffect, useState } from 'react';
 
-/** Every heading level inside the article, excluding link preview cards */
-const HEADING_SELECTOR = [1, 2, 3, 4, 5, 6].map((level) => `h${level}:not(.link-preview-block h${level})`).join(', ');
+/** Every heading level inside the article */
+const HEADING_SELECTOR = 'h1, h2, h3, h4, h5, h6';
 
 /** Slug fallback for headings the markdown pipeline left without an id */
 function fallbackId(text: string, index: number): string {

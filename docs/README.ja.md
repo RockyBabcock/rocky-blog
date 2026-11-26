@@ -32,12 +32,12 @@
 
 | 用途 | 機能とガイド |
 | --- | --- |
-| 表現豊かな本文を書く | GFM、Shiki コードハイライト、KaTeX 数式、Mermaid、Infographic、静的 OG リンクカード。Shoka の注意書き、折りたたみ、タブ、文字装飾、ネタバレ隠し、ルビ、クイズ、記事内音声・動画（Meting 対応）を個別に切り替え可能。[構文ガイド](../src/content/blog/tools/astro-koharu-guide.md#markdown-增强)を参照 |
+| 表現豊かな本文を書く | GFM、Shiki コードハイライト、KaTeX 数式、Mermaid、Infographic。Shoka の注意書き、折りたたみ、タブ、文字装飾、ネタバレ隠し、ルビを個別に切り替え可能。[構文ガイド](../src/content/blog/tools/astro-koharu-guide.md#markdown-增强)を参照 |
 | 原文の共有 | 公開記事の Markdown 原文をコピー・ダウンロード可能（暗号化記事は自動で非公開） |
 | 内容を整理する | 階層カテゴリ、タグ、アーカイブ、下書き、固定記事。[シリーズ](../src/content/blog/tools/astro-koharu-guide.md#系列文章系统)には専用ページとホームのハイライトがあり、独立ページは `src/pages/` に追加 |
 | 快適に読む | ライト・ダークテーマ、読書設定（4 種類の内蔵フォントプリセット、文字サイズ、行間、本文幅、均等割り付け）、モバイルの章タイトルと目次、読書進捗、ライトボックス。Pagefind 静的検索、LQIP 画像プレースホルダー。`motion` は 3 段階の動きを設定でき、OS の動きを減らす設定に対応 |
 | 多言語で公開する | 中国語・英語・日本語・韓国語の UI 辞書、記事翻訳、言語切り替え、hreflang、言語別 RSS。[i18n 設定](../src/content/blog/tools/astro-koharu-guide.md#多语言支持i18n)を参照 |
-| アセット生成スクリプト | 任意スクリプトで LQIP・意味的類似度による関連記事推薦・AI 要約を生成可能 |
+| アセット生成スクリプト | 任意スクリプトで LQIP 画像プレースホルダーを生成可能 |
 | コンテンツ暗号化 | 記事全体・ブロック単位の AES-256-GCM ビルド時暗号化に対応 |
 
 ## 記事の作成と管理
@@ -83,13 +83,12 @@ pnpm preview
 | --- | --- |
 | サイト情報・ナビゲーション・動き・任意機能 | [サイト設定](../config/site.yaml) と [使い方ガイド](../src/content/blog/tools/astro-koharu-guide.md) |
 | カテゴリ・シリーズの翻訳 | [コンテンツ翻訳](../config/i18n-content.yaml)。翻訳記事は `src/content/blog/<locale>/` に配置 |
-| OG リンクカードとメタデータキャッシュ | [リンクプレビューガイド](./features/link-embedding.md) |
 | 開発ガイドライン | [AGENTS.md](../AGENTS.md) · [CONTRIBUTING.md](../CONTRIBUTING.md) |
 
 ## 利用前に知っておくこと
 
 - **原文と暗号化**：記事操作を有効にすると frontmatter を含む Markdown 原文が公開されます。暗号化記事・暗号化ブロックを含む記事の原文は公開しません。AES-256-GCM のパスワードはビルド時の暗号化に使用し、クライアントへ配布せず、読者が入力します。
-- **アセット生成スクリプト**：LQIP（`pnpm generate:lqips`）、意味的類似度（`pnpm generate:similarities`）、AI 要約（`pnpm generate:summaries`）は任意のビルド前スクリプトです。
+- **アセット生成スクリプト**：LQIP（`pnpm generate:lqips`）は任意のビルド前スクリプトです。
 
 ## 謝辞
 

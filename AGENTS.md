@@ -47,7 +47,6 @@ astro-koharu is an Astro-based blog rebuilt from Hexo, inspired by the Shoka the
 - **Keep AGENTS.md updated**: Ask to update when making architectural changes
 - **Run lint before completion**: `pnpm lint:fix` must pass before completing tasks
 - **Check for dead code**: Run `pnpm knip` periodically
-- **Build cache**: `.cache/og-data.json` is intentionally committed to Git for build acceleration (OG metadata cache for link embeds). Do NOT add it to `.gitignore`. Other files under `.cache/` (transformers models, summaries-cache) are already ignored.
 
 ## Development Commands
 
@@ -68,9 +67,7 @@ pnpm knip             # Find unused files/dependencies
 
 # Content Asset Generation
 pnpm generate:lqips        # Generate LQIP image placeholders
-pnpm generate:similarities # Generate semantic similarity vectors
-pnpm generate:summaries    # Generate AI summaries
-pnpm generate:all          # Generate all content assets
+pnpm generate:all          # Generate all content assets (LQIPs)
 ```
 
 **Note on Configuration Changes:** After modifying `config/site.yaml`, restart the dev server or rebuild. The YAML configuration is cached during build for performance.

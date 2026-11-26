@@ -66,7 +66,6 @@ export const uiStrings: UIStrings = {
   'post.updatedAt': 'Updated {date}',
   'post.prevPost': 'Previous',
   'post.nextPost': 'Next',
-  'post.relatedPosts': 'Related Posts',
   'post.seriesNavigation': 'Series Navigation',
   'post.seriesPrev': 'Previous',
   'post.seriesNext': 'Next',
@@ -161,24 +160,6 @@ export const uiStrings: UIStrings = {
   'image.hintDesktop': 'Double-click to zoom · Scroll to scale · Click outside to close',
   'image.hintMobile': 'Double-tap or pinch to zoom · Swipe down or tap outside to close',
 
-  // ── Media Controls ──────────────────────────────────────────
-  'media.play': 'Play',
-  'media.pause': 'Pause',
-  'media.mute': 'Mute',
-  'media.unmute': 'Unmute',
-  'media.fullscreen': 'Full screen',
-  'media.exitFullscreen': 'Exit full screen',
-  'media.pictureInPicture': 'Picture in picture',
-  'media.playbackSpeed': 'Playback speed',
-  'media.download': 'Download',
-  'media.prevTrack': 'Previous track',
-  'media.nextTrack': 'Next track',
-  'media.volume': 'Volume {percent}%',
-  'media.progress': 'Playback progress',
-  'media.playModeOrder': 'Sequential',
-  'media.playModeRandom': 'Shuffle',
-  'media.playModeLoop': 'Repeat one',
-
   // ── Footer ──────────────────────────────────────────────────
   'footer.poweredBy': 'Powered by {name}',
   'footer.totalPosts': '{count} posts',
@@ -238,32 +219,6 @@ export const uiStrings: UIStrings = {
   'settings.waveDisabledByReducedMotion': 'Unavailable while motion is set to "Reduced"',
   'settings.invalidNumber': 'Enter a positive number',
 
-  // ── Quiz ────────────────────────────────────────────────────
-  'quiz.check': 'Check',
-  'quiz.correct': 'Correct!',
-  'quiz.incorrect': 'Incorrect, try again',
-  'quiz.incorrectAnswer': 'Incorrect. The correct answer is {answer}.',
-  'quiz.submitAnswer': 'Submit ({count} selected)',
-  'quiz.commonMistakes': 'Common mistakes:',
-  'quiz.parseFailed': 'Failed to parse quiz',
-  'quiz.showAnswer': 'Show answer',
-  'quiz.hideAnswer': 'Hide answer',
-  'quiz.reset': 'Reset',
-  'quiz.score': 'Score: {score}/{total}',
-  'quiz.completed': 'All done!',
-  'quiz.fillBlank': 'Type your answer...',
-  'quiz.selectOption': 'Select an option',
-  'quiz.single': 'Single Choice',
-  'quiz.multi': 'Multiple Choice',
-  'quiz.trueFalse': 'True or False',
-  'quiz.fill': 'Fill in the Blank',
-  'quiz.optionTrue': 'True',
-  'quiz.optionFalse': 'False',
-  'quiz.clickToReveal': 'Click to reveal answer',
-  'quiz.quizOptions': '{type} options',
-  'quiz.trueFalseCorrect': 'Correct!',
-  'quiz.trueFalseIncorrect': 'Incorrect. The statement is {answer}.',
-
   // ── Encrypted Block ─────────────────────────────────────────
   'encrypted.locked': 'Encrypted content',
   'encrypted.placeholder': 'Enter password to unlock',
@@ -318,8 +273,6 @@ export const uiStrings: UIStrings = {
 
   // ── Summary Panel ───────────────────────────────────────────
   'summary.description': 'Summary',
-  'summary.ai': 'AI Summary',
-  'summary.auto': 'Summary',
 
   // ── Latest Posts ────────────────────────────────────────────
   'post.latestPosts': 'Latest Posts',
@@ -327,14 +280,6 @@ export const uiStrings: UIStrings = {
   // ── Tag Component ───────────────────────────────────────────
   'tag.expandAll': 'Show all',
   'tag.viewTagPosts': 'View {count} posts tagged "{tag}"',
-
-  // ── Audio Player ────────────────────────────────────────────
-  'audio.loading': 'Loading playlist...',
-  'audio.loadError': 'Load failed: {error}',
-  'audio.retry': 'Retry',
-  'audio.empty': 'No tracks',
-  'audio.listTab': 'List {index}',
-  'audio.closePanel': 'Close panel',
 
   // ── Table of Contents ───────────────────────────────────────
   'toc.title': 'Table of Contents',

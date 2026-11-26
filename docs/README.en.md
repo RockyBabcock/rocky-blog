@@ -32,12 +32,12 @@ A fast, static personal blog built with **Astro 7, React 19, TypeScript, and Tai
 
 | Use case | Features and guides |
 | --- | --- |
-| Write rich Markdown | GFM, Shiki syntax highlighting, KaTeX math, Mermaid, Infographic, static OG link preview cards; toggleable Shoka admonitions, collapsible blocks, tabs, text effects, spoilers, ruby, quizzes, and in-article audio/video (with Meting); see the [syntax guide](../src/content/blog/tools/astro-koharu-guide.md#markdown-增强) |
+| Write rich Markdown | GFM, Shiki syntax highlighting, KaTeX math, Mermaid, Infographic; toggleable Shoka admonitions, collapsible blocks, tabs, text effects, spoilers, and ruby; see the [syntax guide](../src/content/blog/tools/astro-koharu-guide.md#markdown-增强) |
 | Share post source | Post actions to copy or download full Markdown source for public posts (automatically disabled for encrypted posts) |
 | Organize content | Nested categories, tags, archives, drafts, pinned posts; [featured series](../src/content/blog/tools/astro-koharu-guide.md#系列文章系统) with dedicated pages and homepage highlights; custom pages under `src/pages/` |
 | Read comfortably | Light/dark themes, reader typography settings (4 bundled font presets, font size, line height, measure, justify), mobile section header and TOC, reading progress, lightbox; Pagefind static search, LQIP image placeholders; three `motion` levels respecting reduced-motion preferences |
 | Publish in multiple languages | Chinese, English, Japanese, and Korean UI dictionaries; content translations, language switcher, hreflang, and locale-specific RSS; see [i18n setup](../src/content/blog/tools/astro-koharu-guide.md#多语言支持i18n) |
-| Optional asset scripts | On-demand scripts to generate LQIP placeholders, semantic similarity recommendations, and AI summaries |
+| Optional asset scripts | On-demand script to generate LQIP image placeholders |
 | Content encryption | AES-256-GCM build-time encryption for full posts or inline blocks |
 
 ## Writing and managing posts
@@ -83,13 +83,12 @@ This site outputs pure static HTML/CSS/JS into `dist/` and can be hosted on GitH
 | --- | --- |
 | Site details, navigation, motion, and optional features | [Site configuration](../config/site.yaml) and [full guide](../src/content/blog/tools/astro-koharu-guide.md) |
 | Translated category and series labels | [Content translations](../config/i18n-content.yaml); translated posts go in `src/content/blog/<locale>/` |
-| OG link preview cards and metadata cache | [Link preview guide](./features/link-embedding.md) |
 | Development guidelines | [AGENTS.md](../AGENTS.md) · [CONTRIBUTING.md](../CONTRIBUTING.md) |
 
 ## Before you start
 
 - **Source and encryption:** When post actions are enabled, public Markdown includes frontmatter. Encrypted posts and posts with encrypted blocks do not expose source files. AES-256-GCM uses passwords at build time for encryption without shipping them to the client; readers enter passwords themselves.
-- **Asset generation scripts:** LQIP (`pnpm generate:lqips`), semantic similarity (`pnpm generate:similarities`), and AI summaries (`pnpm generate:summaries`) are optional pre-build scripts.
+- **Asset generation scripts:** LQIP image placeholder generation (`pnpm generate:lqips`) is an optional pre-build script.
 
 ## Acknowledgements
 

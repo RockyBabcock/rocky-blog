@@ -11,7 +11,6 @@ tags:
   - 教程
 categories:
   - 工具
-excludeFromSummary: true
 ---
 
 主题支持两种加密：在 frontmatter 里写 `password` 加密整篇文章，或者用 `:::encrypted` 只加密其中一段。这篇只讲后者。
@@ -74,8 +73,7 @@ echo "代码块也会正常高亮"
 
 +++info 加密块会影响哪些功能？
 - **站内搜索**：页面里只有密文，加密内容不会进入搜索索引
-- **AI 摘要与相关文章**：这两个脚本读取的是 Markdown 源文件，加密块的明文会被读到。所以本文在 frontmatter 里设置了 `excludeFromSummary: true`
-- **复制 Markdown**：含局部加密块的文章不提供原文，「复制 Markdown」「下载」和「在写作室打开」都不会出现，避免明文和密码随源文件一起公开
+- **复制 Markdown**：含局部加密块的文章不提供原文，「复制 Markdown」「下载」和本地编辑器入口都不会出现，避免明文和密码随源文件一起公开
 +++
 
 ## 顺便：标签的几种颜色

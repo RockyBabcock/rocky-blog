@@ -15,20 +15,14 @@ export const CONTENT_DEFAULTS: ResolvedContentConfig = {
   enhanceCodeBlock: true,
   enableCodeCopy: true,
   enableCodeFullscreen: true,
-  enableLinkEmbed: true,
-  enableOGPreview: true,
-  previewCacheTime: 30,
-  lazyLoadEmbeds: true,
   postCardImagePosition: 'alternating',
   enableShokaContainers: true,
   enableShokaAttrs: true,
   enableShokaEffects: true,
   enableShokaSpoiler: true,
   enableShokaRuby: true,
-  enableShokaHexoTags: true,
   enableMath: true,
   enableCodeMeta: true,
-  enableQuiz: true,
   enableEncryptedBlock: false,
 };
 
@@ -45,11 +39,6 @@ export function normalizeContentConfig(raw?: Partial<ContentConfig> | null): Res
   for (const [key, fallback] of Object.entries(CONTENT_DEFAULTS)) {
     if (typeof fallback !== 'boolean') continue;
     if (typeof source[key] === 'boolean') Reflect.set(resolved, key, source[key]);
-  }
-
-  const cacheTime = source.previewCacheTime;
-  if (typeof cacheTime === 'number' && Number.isFinite(cacheTime) && cacheTime >= 0) {
-    resolved.previewCacheTime = cacheTime;
   }
 
   const imagePosition = source.postCardImagePosition;

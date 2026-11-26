@@ -13,11 +13,11 @@ categories:
 
 本文展示 astro-koharu 支持的所有 Markdown 增强功能。
 
-## 链接嵌入功能
+## 外部链接示例
 
-支持自动为独行的普通链接生成 Open Graph 预览卡片，外部社交或演示链接可使用标准超链接展示。
+支持标准 Markdown 链接和 GFM 自动链接，外部链接会自动在新窗口打开。
 
-### 普通外链示例
+### 社交与演示链接
 
 下面是一条 Twitter / X 链接，以普通超链接形式展示：
 
@@ -29,31 +29,21 @@ categories:
 
 [Vercel Tweet on X](https://x.com/vercel_dev/status/1997059920936775706)
 
-### 通用链接预览测试
+### 裸链接与自动识别
 
-这是段落中的链接 [react-tweet](https://github.com/vercel/react-tweet)，不应该被嵌入。
+这是段落中的链接 [react-tweet](https://github.com/vercel/react-tweet)，保持标准行内链接样式。
 
-下面是一个独行的普通链接，应该显示 OG 预览卡片：
+独行裸链接会自动识别为普通超链接：
 
 https://github.com/vercel/react-tweet
 
-这是没有 OG 图的链接
-
 https://react-tweet.vercel.app/
-
-这是获取不到 OG 信息的链接
 
 https://zhuanlan.zhihu.com/p/1900483903984243480
 
 ### CodePen 链接示例
 
 [CodePen Demo](https://codepen.io/botteu/pen/YPKBrJX/)
-
-### 链接嵌入规则
-
-- 独行的普通链接显示 OG 预览卡片
-- 段落内的链接保持原样
-- 支持深色/浅色主题切换
 
 ## 代码高亮
 
@@ -237,11 +227,8 @@ pie title 博客内容分布
 - **隐藏文字** — Spoiler 粒子动画 !!隐藏文字!! 和 !!模糊效果!!{.blur}
 - **注音标注** — Ruby {漢字^かんじ}
 - **容器块** — 提醒块 `:::info`、折叠块 `+++primary 标题`、标签卡 `;;;tab`
-- **友链卡片** — `{% links %}` YAML 数据渲染为交互卡片
-- **音视频播放器** — `{% media audio/video %}` 支持网易云/QQ 音乐歌单
 - **数学公式** — KaTeX 行内 $E=mc^2$ 和块级 `$$...$$`
 - **代码块增强** — title、mark 行高亮、command 提示符
-- **练习题系统** — 单选、多选、判断、填空四种题型
 - **加密内容块** — `:::encrypted{password="..."}` AES-256-GCM 加密，防止爬虫收录
 
 所有功能均可在 `config/site.yaml` 中独立开关。完整语法演示和用法请参阅 [Shoka 主题 Markdown 语法演示](/post/note/shoka-features)。

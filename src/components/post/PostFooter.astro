@@ -1,7 +1,6 @@
 ---
 import { Routes } from '@constants/router';
 import { getPostSlug, getSortedPosts, translateCategoryName } from '@lib/content';
-import { getRelatedPosts, hasSimilarityData } from '@lib/content/similarities';
 import { toPostRefWithCategory } from '@lib/content/transforms';
 import { routeBuilder } from '@lib/route';
 import type { BlogPost } from 'types/blog';
@@ -16,17 +15,12 @@ const locale = getLocaleFromUrl(Astro.url.pathname);
 const allPosts = await getSortedPosts(locale);
 
 const currentSlug = post ? getPostSlug(post) : null;
-const relatedPosts = hasSimilarityData() && post ? getRelatedPosts(post, allPosts, 5).map(toPostRefWithCategory) : [];
+const displayPosts = allPosts
+  .filter((candidate) => (currentSlug ? getPostSlug(candidate) !== currentSlug : true))
+  .slice(0, 5)
+  .map(toPostRefWithCategory);
 
-const isRelated = relatedPosts.length > 0;
-const displayPosts = isRelated
-  ? relatedPosts
-  : allPosts
-      .filter((candidate) => (currentSlug ? getPostSlug(candidate) !== currentSlug : true))
-      .slice(0, 5)
-      .map(toPostRefWithCategory);
-
-const heading = t(locale, isRelated ? 'post.relatedPosts' : 'post.latestPosts');
+const heading = t(locale, 'post.latestPosts');
 ---
 
 {

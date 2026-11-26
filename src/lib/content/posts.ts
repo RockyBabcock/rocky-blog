@@ -3,7 +3,6 @@
  */
 
 import { type CollectionEntry, getCollection } from 'astro:content';
-import summaries from '@assets/summaries.json';
 import { siteConfig } from '@lib/config/site';
 import type { FeaturedSeriesItem } from '@lib/config/types';
 import readingTime from 'reading-time';
@@ -32,15 +31,6 @@ export function getPostReadingTime(post: CollectionEntry<'blog'>): { words: numb
   return cached;
 }
 
-/** AI 摘要数据类型 */
-type SummariesData = Record<string, { title: string; summary: string }>;
-
-/** Pre-built lowercase slug → original key map for O(1) case-insensitive fallback */
-const summaryLowerMap = new Map<string, string>();
-for (const key of Object.keys(summaries as SummariesData)) {
-  summaryLowerMap.set(key.toLowerCase(), key);
-}
-
 /**
  * 获取文章描述
  * 优先使用 frontmatter 中的 description，如果不存在则从 Markdown 内容中智能提取
@@ -52,42 +42,6 @@ export function getPostDescription(post: BlogPost, locale: string = defaultLocal
   if (post.data.description) return post.data.description;
   if (post.data.password) return t(locale, 'encrypted.post.description');
   return extractTextFromMarkdown(post.body ?? '', maxLength);
-}
-
-/**
- * Get the AI-generated summary for a post.
- * @param slug Public post slug, usually derived from post.data.link or post.id.
- * @returns The generated summary, or null when none exists.
- */
-export function getPostSummary(slug: string): string | null {
-  const data = summaries as SummariesData;
-
-  // Fast path: exact match (O(1))
-  const exactMatch = data[slug]?.summary ?? null;
-  if (exactMatch) return exactMatch;
-
-  // Fallback: case-insensitive lookup via pre-built map
-  const originalKey = summaryLowerMap.get(slug.toLowerCase());
-  return originalKey ? data[originalKey].summary : null;
-}
-
-/**
- * 获取文章描述，带 AI 摘要 fallback
- * 优先级：frontmatter description > 加密文章通用描述 > AI 摘要 > markdown 提取
- * @param post 文章对象
- * @param locale 语言环境
- * @param maxLength 最大长度，默认 150 字符
- * @returns 文章描述文本
- */
-export function getPostDescriptionWithSummary(post: BlogPost, locale: string = defaultLocale, maxLength: number = 150): string {
-  // 最高优先级：frontmatter 中的描述
-  if (post.data.description) {
-    return post.data.description;
-  }
-  if (post.data.password) {
-    return t(locale, 'encrypted.post.description');
-  }
-  return getPostSummary(getPostSlug(post)) || extractTextFromMarkdown(post.body ?? '', maxLength);
 }
 
 /**

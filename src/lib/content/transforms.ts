@@ -8,7 +8,7 @@
 import { defaultLocale } from '@/i18n/config';
 import type { BlogPost } from '@/types/blog';
 import { getPostLocale, getPostSlug } from './locale';
-import { getPostDescriptionWithSummary, getPostLastCategory, getPostReadingTime } from './posts';
+import { getPostDescription, getPostLastCategory, getPostReadingTime } from './posts';
 
 /**
  * Fields that can be extracted from BlogPost.
@@ -27,7 +27,7 @@ export type PostFieldMap = {
   draft: boolean | undefined;
   // 计算字段
   categoryName: string | undefined; // from getPostLastCategory()
-  description: string; // from getPostDescriptionWithSummary()
+  description: string; // from getPostDescription()
   wordCount: number; // from reading-time
   readingTime: string; // from reading-time
   postLocale: string; // from getPostLocale()
@@ -49,7 +49,7 @@ const fieldExtractors: { [K in keyof PostFieldMap]: (post: BlogPost, locale: str
   draft: (p) => p.data?.draft,
   // 计算字段
   categoryName: (p) => getPostLastCategory(p).name || undefined,
-  description: (p, locale) => getPostDescriptionWithSummary(p, locale),
+  description: (p, locale) => getPostDescription(p, locale),
   wordCount: (p) => getPostReadingTime(p).words,
   readingTime: (p) => getPostReadingTime(p).text,
   postLocale: (p) => getPostLocale(p),

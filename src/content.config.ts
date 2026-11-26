@@ -48,11 +48,8 @@ const blogCollection = defineCollection({
     draft: z.boolean().optional(),
     // Allow posts to opt out of numbered table-of-contents headings.
     tocNumbering: z.boolean().optional().default(true),
-    // Allow posts to opt out of AI-generated summaries.
-    excludeFromSummary: z.boolean().optional(),
     // Shoka features per-post toggle
     math: z.boolean().optional(),
-    quiz: z.boolean().optional(),
     password: z.string().optional(),
     /** Keywords for SEO */
     keywords: z.array(z.string()).optional(),

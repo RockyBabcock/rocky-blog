@@ -3,6 +3,7 @@
  * copies the post's raw source (`<post url>.md`) and whose chevron opens the rest.
  */
 
+import { useIsMounted } from '@hooks/useIsMounted';
 import { useTranslation } from '@hooks/useTranslation';
 import { Icon } from '@iconify/react';
 import { copyText } from '@lib/clipboard';
@@ -84,6 +85,7 @@ export default function PostMarkdownActions({
   localEditors = [],
 }: PostMarkdownActionsProps) {
   const { t } = useTranslation(locale);
+  const isMounted = useIsMounted();
   const [status, setStatus] = useState<Status>('idle');
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -130,7 +132,7 @@ export default function PostMarkdownActions({
         onClick={handleCopy}
         aria-busy={status === 'busy'}
         aria-label={copyLabel}
-        title={copyLabel}
+        title={isMounted ? copyLabel : undefined}
         className={cn(primaryClass, status === 'busy' && 'cursor-progress opacity-70')}
       >
         <Icon icon={statusIcon} aria-hidden="true" className={iconClass} />
@@ -139,7 +141,13 @@ export default function PostMarkdownActions({
     );
   } else if (download) {
     primary = (
-      <a href={sourcePath} download={filename} aria-label={downloadLabel} title={downloadLabel} className={primaryClass}>
+      <a
+        href={sourcePath}
+        download={filename}
+        aria-label={downloadLabel}
+        title={isMounted ? downloadLabel : undefined}
+        className={primaryClass}
+      >
         <Icon icon="ri:download-2-line" aria-hidden="true" className={iconClass} />
         <span className="hidden sm:inline">{downloadLabel}</span>
       </a>
@@ -157,7 +165,7 @@ export default function PostMarkdownActions({
               <button
                 type="button"
                 aria-label={t('post.markdown.more')}
-                title={t('post.markdown.more')}
+                title={isMounted ? t('post.markdown.more') : undefined}
                 className={cn(
                   capsule,
                   focusRing,

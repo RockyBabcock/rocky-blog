@@ -10,7 +10,7 @@ import { extractLanguage, isInfographicBlock, wrapElement } from './content-enha
 
 export interface ToolbarEntry {
   id: string;
-  type: 'code' | 'mermaid' | 'infographic' | 'quiz' | 'audio' | 'video' | 'note' | 'encrypted' | 'encrypted-post';
+  type: 'code' | 'mermaid' | 'infographic' | 'note' | 'encrypted' | 'encrypted-post';
   mountPoint: HTMLElement;
   preElement: HTMLElement;
 }
@@ -40,84 +40,6 @@ export function scanPreElements(container: Element): ToolbarEntry[] {
       pre.dataset.reactEnhanced = 'true';
       entries.push({ id: `code-${index}`, type: 'code', mountPoint: mount, preElement: pre });
     }
-  });
-
-  return entries;
-}
-
-/** Scan quiz list items */
-export function scanQuizElements(container: Element): ToolbarEntry[] {
-  const entries: ToolbarEntry[] = [];
-  const quizElements = container.querySelectorAll<HTMLElement>('li.quiz');
-
-  quizElements.forEach((quizLi, qIndex) => {
-    if (quizLi.dataset.reactEnhanced === 'true') return;
-
-    // Move the blockquote that directly follows this quiz's parent list into the li.
-    // Only grab it when this li is the LAST quiz item in its list, to avoid stealing
-    // a blockquote that belongs to a subsequent list.
-    const parentList = quizLi.closest('ul, ol');
-    if (parentList) {
-      const quizItems = parentList.querySelectorAll(':scope > li.quiz');
-      const isLastQuiz = quizItems.length > 0 && quizItems[quizItems.length - 1] === quizLi;
-      if (isLastQuiz) {
-        const nextSibling = parentList.nextElementSibling;
-        if (nextSibling?.tagName === 'BLOCKQUOTE') {
-          quizLi.appendChild(nextSibling);
-        }
-      }
-      parentList.classList.add('quiz-list');
-    }
-
-    // Wrap original content in hidden container so bare text nodes don't render
-    const original = document.createElement('div');
-    original.className = 'quiz-original';
-    original.hidden = true;
-    while (quizLi.firstChild) {
-      original.appendChild(quizLi.firstChild);
-    }
-    quizLi.appendChild(original);
-
-    const mount = document.createElement('div');
-    mount.className = 'quiz-mount';
-    quizLi.appendChild(mount);
-    quizLi.classList.add('quiz-enhanced');
-    quizLi.dataset.reactEnhanced = 'true';
-    entries.push({ id: `quiz-${qIndex}`, type: 'quiz', mountPoint: mount, preElement: quizLi });
-  });
-
-  return entries;
-}
-
-/** Scan audio player elements */
-export function scanAudioPlayers(container: Element): ToolbarEntry[] {
-  const entries: ToolbarEntry[] = [];
-  const audioPlayers = container.querySelectorAll<HTMLElement>('[data-audio-player]');
-
-  audioPlayers.forEach((el, aIndex) => {
-    if (el.dataset.reactEnhanced === 'true') return;
-    const mount = document.createElement('div');
-    mount.className = 'audio-player-mount';
-    el.appendChild(mount);
-    el.dataset.reactEnhanced = 'true';
-    entries.push({ id: `audio-${aIndex}`, type: 'audio', mountPoint: mount, preElement: el });
-  });
-
-  return entries;
-}
-
-/** Scan video player elements */
-export function scanVideoPlayers(container: Element): ToolbarEntry[] {
-  const entries: ToolbarEntry[] = [];
-  const videoPlayers = container.querySelectorAll<HTMLElement>('[data-video-player]');
-
-  videoPlayers.forEach((el, vIndex) => {
-    if (el.dataset.reactEnhanced === 'true') return;
-    const mount = document.createElement('div');
-    mount.className = 'video-player-mount';
-    el.appendChild(mount);
-    el.dataset.reactEnhanced = 'true';
-    entries.push({ id: `video-${vIndex}`, type: 'video', mountPoint: mount, preElement: el });
   });
 
   return entries;

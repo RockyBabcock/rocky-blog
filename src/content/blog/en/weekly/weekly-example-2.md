@@ -5,7 +5,6 @@ catalog: true
 date: 2025-03-14 20:30:00
 description: The second example issue covers static search, formatting, and blog backups, the unglamorous tools used every day, and shows the previous and next issue navigation of a series.
 cover: /img/cover/6.webp
-excludeFromSummary: true
 tags:
   - 周刊
   - 工具
@@ -19,17 +18,15 @@ No big news this issue. Instead, a few tools I use every day but rarely write ab
 
 ### This blog theme
 
-First, a link card. When a link sits alone in its own paragraph, the build fetches the page's Open Graph data and renders it as a card:
+First, a project link — standalone URLs render as standard clickable links:
 
 https://github.com/cosZone/astro-koharu
 
-The result is written to `.cache/og-data.json` and reused on the next build. A failed fetch does not fail the build; the link simply stays a plain link.
-
-### Embedding tweets in React
+### React ecosystem reference
 
 https://github.com/vercel/react-tweet
 
-The theme's tweet embeds are built on this library. If you quote tweets often, toggle them with `content.enableTweetEmbed` in `config/site.yaml`.
+A lightweight library for rendering tweets in React applications.
 
 ## Tools
 

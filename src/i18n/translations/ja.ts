@@ -66,7 +66,6 @@ export const uiStrings: UIStrings = {
   'post.updatedAt': '更新日: {date}',
   'post.prevPost': '前へ',
   'post.nextPost': '次へ',
-  'post.relatedPosts': '関連した記事',
   'post.seriesNavigation': 'シリーズナビゲーション',
   'post.seriesPrev': '前へ',
   'post.seriesNext': '次へ',
@@ -161,24 +160,6 @@ export const uiStrings: UIStrings = {
   'image.hintDesktop': 'ダブルクリックで拡大 · スクロールでズーム · 余白をクリックして閉じる',
   'image.hintMobile': 'ダブルタップ・ピンチで拡大 · 下にスワイプ・余白をタップして閉じる',
 
-  // ── メディアコントロール ──────────────────────────────────────────
-  'media.play': '再生',
-  'media.pause': '一時停止',
-  'media.mute': 'ミュート',
-  'media.unmute': 'ミュートを解除',
-  'media.fullscreen': 'フルスクリーン',
-  'media.exitFullscreen': 'フルスクリーンを終了',
-  'media.pictureInPicture': 'ピクチャーインピクチャー',
-  'media.playbackSpeed': '再生速度',
-  'media.download': 'ダウンロード',
-  'media.prevTrack': '前のトラック',
-  'media.nextTrack': '次のトラック',
-  'media.volume': '音量: {percent}%',
-  'media.progress': '再生の進捗',
-  'media.playModeOrder': '順番',
-  'media.playModeRandom': 'シャッフル',
-  'media.playModeLoop': '1回のみリピート',
-
   // ── フッター ──────────────────────────────────────────────────
   'footer.poweredBy': 'Powered by {name}',
   'footer.totalPosts': '{count}件の投稿',
@@ -238,32 +219,6 @@ export const uiStrings: UIStrings = {
   'settings.waveDisabledByReducedMotion': 'モーションが「減らす」の間は使用できません',
   'settings.invalidNumber': '正の数を入力してください',
 
-  // ── クイズ ────────────────────────────────────────────────────
-  'quiz.check': 'チェック',
-  'quiz.correct': '正解です!',
-  'quiz.incorrect': '不正解、再度お試しください。',
-  'quiz.incorrectAnswer': '不正解、答えは「{answer}」です。',
-  'quiz.submitAnswer': '送信 ({count}個が選択済み)',
-  'quiz.commonMistakes': 'よくある間違い:',
-  'quiz.parseFailed': 'クイズの解析に失敗しました',
-  'quiz.showAnswer': '答えを表示',
-  'quiz.hideAnswer': '答えを隠す',
-  'quiz.reset': 'リセット',
-  'quiz.score': '得点: {score}/{total}',
-  'quiz.completed': 'すべて完了しました!',
-  'quiz.fillBlank': '回答を入力してください...',
-  'quiz.selectOption': 'オプションを選択',
-  'quiz.single': '単一で選択',
-  'quiz.multi': '複数で選択',
-  'quiz.trueFalse': '○か×か',
-  'quiz.fill': '空欄を埋めてください',
-  'quiz.optionTrue': '○',
-  'quiz.optionFalse': '×',
-  'quiz.clickToReveal': 'クリックで答えを表示',
-  'quiz.quizOptions': '{type}個のオプション',
-  'quiz.trueFalseCorrect': '正解です!',
-  'quiz.trueFalseIncorrect': '不正解、答えは「{answer}」です。',
-
   // ── 暗号化されたブロック ─────────────────────────────────────────
   'encrypted.locked': '暗号化されたコンテンツ',
   'encrypted.placeholder': 'パスワードを入力で解除',
@@ -318,8 +273,6 @@ export const uiStrings: UIStrings = {
 
   // ── 概要パネル ───────────────────────────────────────────
   'summary.description': '概要',
-  'summary.ai': 'AIの概要',
-  'summary.auto': '概要',
 
   // ── 最新記事 ────────────────────────────────────────────
   'post.latestPosts': '最新記事',
@@ -327,14 +280,6 @@ export const uiStrings: UIStrings = {
   // ── タグコンポーネント ───────────────────────────────────────────
   'tag.expandAll': 'すべて表示',
   'tag.viewTagPosts': '「{tag}」のタグの付いた投稿を{count}件表示',
-
-  // ── オーディオプレーヤー ────────────────────────────────────────────
-  'audio.loading': 'プレイリストを読み込み中...',
-  'audio.loadError': '読み込みに失敗: {error}',
-  'audio.retry': '再試行',
-  'audio.empty': 'トラックが見つかりません',
-  'audio.listTab': '{index}の一覧',
-  'audio.closePanel': 'パネルを閉じる',
 
   // ── 目次のコンテンツ ───────────────────────────────────────
   'toc.title': '目次',

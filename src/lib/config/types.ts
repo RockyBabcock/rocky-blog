@@ -120,10 +120,6 @@ export interface ContentConfig {
   enhanceCodeBlock?: boolean;
   enableCodeCopy?: boolean;
   enableCodeFullscreen?: boolean;
-  enableLinkEmbed?: boolean;
-  enableOGPreview?: boolean;
-  previewCacheTime?: number;
-  lazyLoadEmbeds?: boolean;
   postCardImagePosition?: PostCardImagePosition;
   // Shoka compatibility features
   enableShokaContainers?: boolean;
@@ -131,10 +127,8 @@ export interface ContentConfig {
   enableShokaEffects?: boolean;
   enableShokaSpoiler?: boolean;
   enableShokaRuby?: boolean;
-  enableShokaHexoTags?: boolean;
   enableMath?: boolean;
   enableCodeMeta?: boolean;
-  enableQuiz?: boolean;
   enableEncryptedBlock?: boolean;
 }
 

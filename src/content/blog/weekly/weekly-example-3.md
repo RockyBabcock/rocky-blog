@@ -5,7 +5,6 @@ catalog: true
 date: 2025-07-04 21:00:00
 description: 第三期示例周刊：整理一套写博客时的本地环境，从编辑器、预览到发布前检查，也是系列导航里「最新一期」的演示。
 cover: /img/cover/9.webp
-excludeFromSummary: true
 tags:
   - 周刊
   - 写作

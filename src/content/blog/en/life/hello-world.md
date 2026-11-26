@@ -14,10 +14,10 @@ Hello, World! This is my first essay.
 
 ## About This Post
 
-This post intentionally does not set a `description` field, to test the following features:
+This post intentionally does not set a `description` field, to test automatic description fallback:
 
-1. **Auto Description Extraction** - The system automatically extracts the first 150 characters as the description
-2. **AI Summary** - If `pnpm generate:summaries` has been run, an AI-generated summary will be used
+1. **Auto Description Extraction** - The system automatically extracts the first 150 characters for cards and SEO metadata
+2. **Summary Panel Omission** - Without a handwritten `description`, the summary panel at the top of the post is omitted
 
 ## The Essay Category
 

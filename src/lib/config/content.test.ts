@@ -13,7 +13,6 @@ test('defaults are applied per field, not per section', () => {
   assert.equal(resolved.enableMath, false);
   assert.equal(resolved.addBlankTarget, true);
   assert.equal(resolved.enhanceCodeBlock, true);
-  assert.equal(resolved.previewCacheTime, 30);
   assert.equal(resolved.postCardImagePosition, 'alternating');
 });
 
@@ -21,8 +20,7 @@ test('shoka features default on and encrypted blocks default off', () => {
   const resolved = normalizeContentConfig({});
   assert.equal(resolved.enableShokaContainers, true);
   assert.equal(resolved.enableShokaEffects, true);
-  assert.equal(resolved.enableShokaHexoTags, true);
-  assert.equal(resolved.enableQuiz, true);
+  assert.equal(resolved.enableMath, true);
   assert.equal(resolved.enableEncryptedBlock, false);
 });
 
@@ -39,20 +37,13 @@ test('explicit false wins for every boolean flag', () => {
 test('wrongly typed values fall back to the default', () => {
   const resolved = normalizeContentConfig({
     enableMath: 'yes',
-    previewCacheTime: '30',
     postCardImagePosition: 'middle',
   } as never);
   assert.equal(resolved.enableMath, true);
-  assert.equal(resolved.previewCacheTime, 30);
   assert.equal(resolved.postCardImagePosition, 'alternating');
 });
 
 test('accepts valid overrides for non-boolean fields', () => {
-  const resolved = normalizeContentConfig({ previewCacheTime: 0, postCardImagePosition: 'left' });
-  assert.equal(resolved.previewCacheTime, 0);
+  const resolved = normalizeContentConfig({ postCardImagePosition: 'left' });
   assert.equal(resolved.postCardImagePosition, 'left');
-});
-
-test('negative cache times are rejected', () => {
-  assert.equal(normalizeContentConfig({ previewCacheTime: -1 }).previewCacheTime, 30);
 });

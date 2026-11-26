@@ -7,7 +7,6 @@
  *
  * - `+++style Title` would be parsed as thematicBreak
  * - `~sub~` would be parsed as GFM strikethrough (~~ is delete)
- * - `{% media audio/video %}...{% endmedia %}` YAML content would be parsed as lists
  * - `:::style` is fine (remark sees it as paragraph text) but nested content
  *   with lists would be problematic
  *
@@ -15,13 +14,11 @@
  * remark parsing. Inline syntax (++ins++, ==mark==, !!spoiler!!, {^ruby})
  * is handled by remark plugins since those don't conflict with Markdown.
  */
-import YAML from 'js-yaml';
-import { escapeHtml, type MediaItem, renderAudioMedia, renderVideoMedia } from './shoka-renderers';
+import { escapeHtml } from './shoka-renderers';
 import { SHOKA_RUBY_PATTERN } from './shoka-ruby-pattern';
 
 interface ContainerOptions {
   enableContainers?: boolean;
-  enableHexoTags?: boolean;
 }
 
 /** Maximum nesting depth for recursive container processing */
@@ -29,14 +26,13 @@ const MAX_CONTAINER_DEPTH = 10;
 const NOTE_TYPES = '(?:default|primary|info|success|warning|danger)';
 
 /**
- * Process container syntax (:::, +++, ;;;) and Hexo tags in raw markdown text.
- * Returns the text with containers/tags replaced by HTML blocks.
+ * Process container syntax (:::, +++, ;;;) in raw markdown text.
+ * Returns the text with containers replaced by HTML blocks.
  */
 function processContainers(text: string, opts: ContainerOptions = {}, _depth = 0): string {
   // Guard against excessive nesting (malicious or accidental)
   if (_depth >= MAX_CONTAINER_DEPTH) return text;
   const containers = opts.enableContainers !== false;
-  const hexoTags = opts.enableHexoTags !== false;
   // Use regex to handle both \n and \r\n regardless of the runtime OS
   const lines = text.split(/\r?\n/);
   const output: string[] = [];
@@ -216,38 +212,6 @@ function processContainers(text: string, opts: ContainerOptions = {}, _depth = 0
       continue;
     }
 
-    // {% media audio/video %} ... {% endmedia %}
-    const mediaMatch = hexoTags && line.trim().match(/^{% media (audio|video) %}$/);
-    if (mediaMatch) {
-      flushTabs();
-      const mediaType = mediaMatch[1];
-      const yamlLines: string[] = [];
-      i++;
-      while (i < lines.length && lines[i].trim() !== '{% endmedia %}') {
-        yamlLines.push(lines[i]);
-        i++;
-      }
-      if (i < lines.length) i++; // skip endmedia
-
-      try {
-        const data = YAML.load(yamlLines.join('\n')) as MediaItem[];
-        if (Array.isArray(data)) {
-          if (mediaType === 'audio') {
-            output.push('');
-            output.push(renderAudioMedia(data));
-            output.push('');
-          } else {
-            output.push('');
-            output.push(renderVideoMedia(data));
-            output.push('');
-          }
-        }
-      } catch {
-        output.push(`<!-- Failed to parse media YAML -->`);
-      }
-      continue;
-    }
-
     // Don't flush pending tabs on empty lines — consecutive ;;; blocks
     // are separated by blank lines but should still group together.
     if (pendingTabId && line.trim() === '') {
@@ -332,17 +296,15 @@ export function preprocessShokaSyntax(
   source: string,
   options?: {
     enableContainers?: boolean;
-    enableHexoTags?: boolean;
     enableSuperSub?: boolean;
   },
 ): string {
   let result = source;
 
-  // Process block-level containers and Hexo tags
-  if (options?.enableContainers !== false || options?.enableHexoTags !== false) {
+  // Process block-level containers
+  if (options?.enableContainers !== false) {
     result = processContainers(result, {
       enableContainers: options?.enableContainers,
-      enableHexoTags: options?.enableHexoTags,
     });
   }
 

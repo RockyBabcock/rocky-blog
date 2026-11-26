@@ -29,7 +29,6 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
     client:content
     enableCopy={finalConfig.enableCodeCopy}
     enableFullscreen={finalConfig.enableCodeFullscreen}
-    enableQuiz={finalConfig.enableQuiz}
     enableEncryptedBlock={finalConfig.enableEncryptedBlock}
   />
 )}
@@ -37,7 +36,6 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
 <script>
   import { getScrollBehavior } from '@lib/motion-level';
   import { enhanceImages } from '@lib/image-enhancer';
-  import { enhanceLinkPreviews } from '@lib/link-preview-enhancer';
   import { enhanceSpoilers } from '@lib/spoiler-enhancer';
 
   // Content enhancement script - handles non-React enhancements
@@ -99,9 +97,6 @@ const spoilerRevealLabel = t(getLocaleFromUrl(Astro.url.pathname), 'content.reve
 
     // Enhance images with loading states
     enhanceImages(contentContainer);
-
-    // Enhance link preview images with error handling
-    enhanceLinkPreviews(contentContainer);
 
     // Tab group switching logic
     const tabHeaders = contentContainer.querySelectorAll<HTMLElement>('.tab-header[role="tab"]');

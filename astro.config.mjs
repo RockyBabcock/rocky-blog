@@ -28,7 +28,6 @@ import { rehypeEncryptedPost } from './src/lib/markdown/rehype-encrypted-post.ts
 import { rehypeImagePlaceholder } from './src/lib/markdown/rehype-image-placeholder.ts';
 import { rehypeShokaAttrs } from './src/lib/markdown/rehype-shoka-attrs.ts';
 import { remarkEncryptedDirective } from './src/lib/markdown/remark-encrypted-directive.ts';
-import { remarkLinkEmbed } from './src/lib/markdown/remark-link-embed.ts';
 import { remarkLiteralDirectives } from './src/lib/markdown/remark-literal-directives.ts';
 import { remarkIns, remarkMark } from './src/lib/markdown/remark-shoka-effects.ts';
 import { remarkShokaPreprocess } from './src/lib/markdown/remark-shoka-preprocess.ts';
@@ -74,14 +73,13 @@ const markdownEntities = markdownRequire.resolve('decode-named-character-referen
 
 // Remark plugins — order matters
 // remarkShokaPreprocess MUST be first: it re-parses raw text to fix GFM/remark conflicts
-// (+++, ~sub~, {% media %} YAML etc.) before any AST-level plugin runs.
+// (+++, ~sub~ etc.) before any AST-level plugin runs.
 const remarkPlugins = [];
-if (contentConfig.enableShokaContainers || contentConfig.enableShokaHexoTags || contentConfig.enableShokaEffects) {
+if (contentConfig.enableShokaContainers || contentConfig.enableShokaEffects) {
   remarkPlugins.push([
     remarkShokaPreprocess,
     {
       enableContainers: contentConfig.enableShokaContainers,
-      enableHexoTags: contentConfig.enableShokaHexoTags,
       // The plugin option is named after what it parses (super/subscript);
       // `enableShokaEffects` gates the whole ++ins++/==mark==/~sub~/^sup^ family.
       enableSuperSub: contentConfig.enableShokaEffects,
@@ -104,15 +102,6 @@ if (contentConfig.enableShokaEffects) {
 if (contentConfig.enableEncryptedBlock) {
   remarkPlugins.push(remarkDirective, remarkLiteralDirectives, remarkEncryptedDirective);
 }
-// Link embed is always on (existing feature)
-remarkPlugins.push([
-  remarkLinkEmbed,
-  {
-    enableLinkEmbed: contentConfig.enableLinkEmbed,
-    enableOGPreview: contentConfig.enableOGPreview,
-    previewCacheTime: contentConfig.previewCacheTime,
-  },
-]);
 
 // Rehype plugins — order matters
 const rehypePlugins = [

@@ -34,12 +34,12 @@
 
 | 场景 | 功能与入口 |
 | --- | --- |
-| 写丰富的正文 | GFM、Shiki 代码高亮、KaTeX 数学公式、Mermaid、Infographic、OG 链接卡片；Shoka 提醒块、折叠、标签卡、文字特效、隐藏文字、注音、练习题与文章内音视频（支持 Meting）；见[语法指南](./src/content/blog/tools/astro-koharu-guide.md#markdown-增强) |
+| 写丰富的正文 | GFM、Shiki 代码高亮、KaTeX 数学公式、Mermaid、Infographic；Shoka 提醒块、折叠、标签卡、文字特效、隐藏文字与注音；见[语法指南](./src/content/blog/tools/astro-koharu-guide.md#markdown-增强) |
 | 分享文章原文 | 文章操作支持一键复制或下载公开文章的完整 Markdown 源码（加密文章自动屏蔽原文输出） |
 | 组织内容 | 多级分类、标签、归档、草稿、置顶；[特色系列](./src/content/blog/tools/astro-koharu-guide.md#系列文章系统)提供独立页面与首页高亮，自定义页面可直接放在 `src/pages/` |
 | 舒适阅读 | 深浅主题切换、阅读设置（内置 4 套字体预设、字号、行高、版心与对齐）、移动端章节标题与目录、阅读进度与时长、灯箱；Pagefind 静态搜索、LQIP 图片占位；`motion` 提供三档动效并尊重系统减少动态效果设置 |
 | 多语言发布 | 内置中文、英文、日文、韩文 UI 字典；内容翻译、语言切换、hreflang、按语言订阅 RSS；见 [i18n 配置](./src/content/blog/tools/astro-koharu-guide.md#多语言支持i18n) |
-| 内容资产脚本 | 按需运行脚本生成 LQIP 图片占位、语义相似度相关文章推荐与 AI 摘要 |
+| 内容资产脚本 | 按需运行脚本生成 LQIP 图片占位符 |
 | 内容加密 | 支持整篇或局部 AES-256-GCM 静态加密，密码仅在构建期使用 |
 
 ## 写作与管理
@@ -85,13 +85,12 @@ pnpm preview
 | --- | --- |
 | 站点信息、导航、动效与可选功能 | [站点配置](./config/site.yaml) 与 [完整使用指南](./src/content/blog/tools/astro-koharu-guide.md) |
 | 分类与系列的多语言文案 | [内容翻译配置](./config/i18n-content.yaml)；翻译文章放在 `src/content/blog/<locale>/` |
-| 链接预览卡片与 OG 元数据缓存 | [链接预览说明](./docs/features/link-embedding.md) |
 | 参与开发与代码规范 | [AGENTS.md](./AGENTS.md) · [CONTRIBUTING.md](./CONTRIBUTING.md) |
 
 ## 使用前了解
 
 - **原文与加密**：启用文章操作时，公开 Markdown 包含 frontmatter；整篇加密或含加密块的文章不提供原文。AES-256-GCM 密码仅在构建时用于加密，不传给客户端；读者需自行输入密码解锁。
-- **内容资产脚本**：LQIP（`pnpm generate:lqips`）、语义相似度（`pnpm generate:similarities`）和 AI 摘要（`pnpm generate:summaries`）均为可选构建前脚本。
+- **内容资产脚本**：LQIP 图片占位符生成脚本（`pnpm generate:lqips`）为可选构建前脚本。
 
 ## 鸣谢与上游归属
 

@@ -4,7 +4,6 @@ link: astro-koharu-guide
 catalog: true
 date: 2025-12-29 21:55:00
 math: true
-quiz: true
 description: astro-koharu 博客的完整使用指南，包含快速开始、配置说明、文章系统、界面功能等详细介绍
 tags:
   - Astro
@@ -67,12 +66,6 @@ pnpm preview
 使用 Vercel 进行一键部署：
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cosZone/astro-koharu&project-name=astro-koharu&repository-name=astro-koharu)
-
-### 构建缓存说明
-
-项目将 `.cache/og-data.json` 提交到 Git 仓库。该文件缓存了链接嵌入功能抓取的外部链接 OG 元数据（标题、描述、图片等），提交到 Git 后 Vercel、Netlify 等平台构建时可直接复用，无需每次重新抓取，显著加速构建速度。
-
-`.cache/` 目录下的其他文件（如 `transformers/` 模型缓存、`summaries-cache.json`）仍被 `.gitignore` 忽略，不会提交。
 
 ## 基本配置
 
@@ -379,9 +372,7 @@ catalog: true # 是否计入分类页的分类树与篇数（默认 true）
 tocNumbering: true # 是否显示目录编号（默认 true）
 draft: false # 是否为草稿（默认 false）
 sticky: false # 是否置顶（默认 false）
-excludeFromSummary: false # 是否排除 AI 摘要和相似度计算（默认 false，系列文章建议设为 true）
 math: false # 是否启用数学公式渲染（默认 false，启用后支持 KaTeX）
-quiz: false # 是否启用练习题交互（默认 false，启用后支持四种题型）
 password: mySecret # 整篇文章加密密码（可选，设置后整篇文章需输入密码才能阅读）
 keywords: # 文章关键词（可选）
 colophon: # 文章落款（可选，见下方「文章落款」）
@@ -391,11 +382,10 @@ colophon: # 文章落款（可选，见下方「文章落款」）
 
 **关于 description 字段：**
 
-文章描述的优先级：手写 `description` > AI 自动摘要 > Markdown 正文前 150 字
+文章描述的优先级：手写 `description` > Markdown 正文前 150 字
 
-- 建议为重要文章手写描述，以获得更好的 SEO 效果
-- 如果省略描述，系统会自动使用 AI 生成的摘要（需运行 `pnpm generate:summaries`）
-- 如果既没有手写描述也没有 AI 摘要，则自动提取文章正文的前 150 个字符
+- 建议为重要文章手写描述，以获得更好的 SEO 效果，并会在文章页顶部展示摘要面板
+- 如果省略描述，文章卡片和 SEO 描述会自动提取文章正文的前 150 个字符
 
 **关于 link 字段（自定义 URL）：**
 
@@ -403,7 +393,6 @@ colophon: # 文章落款（可选，见下方「文章落款」）
 
 - **规范化行为**：无论你输入 `MyPost`、`myPost` 还是 `mypost`，最终 URL 都会是 `/post/mypost`
 - **文件名大小写无关**：文章文件名可以使用任意大小写（如 `MyPost.md`），系统会自动处理
-- **AI 摘要和相似度**：生成的 `summaries.json` 和 `similarities.json` 中的 key 也会统一为小写
 - **最佳实践**：建议直接使用小写和连字符（如 `my-awesome-post`），避免混淆
 
 ```yaml
@@ -507,7 +496,6 @@ sticky: true
 title: FE Bits Vol.16
 categories:
   - 周刊 # 对应某个 featuredSeries 的 categoryName
-excludeFromSummary: true # 可选：排除 AI 摘要生成
 ---
 ```
 
@@ -889,200 +877,10 @@ const lqipProps = getLqipProps(coverUrl);
 - 添加新图片后需要重新运行 `pnpm generate:lqips`
 - 外部图片（http/https 开头）会自动使用纯色占位符降级
 
-### 相关文章推荐
+### 文章手写摘要与最新文章
 
-参考 [No Server, No Database: Smarter Related Posts in Astro with `transformers.js`](https://alexop.dev/posts/semantic-related-posts-astro-transformersjs/)
-
-基于语义相似度的智能文章推荐系统，使用 [transformers.js](https://huggingface.co/docs/transformers.js) 在本地生成文章嵌入向量，计算文章间的语义相似度。
-
-**特性：**
-
-- 🧠 基于 AI 嵌入模型（Snowflake Arctic Embed）的语义理解
-- 📊 自动计算文章间的相似度，推荐最相关的 5 篇文章
-- 🚀 构建时预计算，运行时零开销
-- 🔧 支持通过 frontmatter 排除特定文章
-
-**使用方式：**
-
-```bash
-# 生成相似度数据（本地运行，会自动下载模型，约需 3-5 分钟）
-pnpm generate:similarities
-
-# 生成的文件会提交到 git，Vercel 等平台直接使用
-```
-
-**排除特定文章：**
-
-在文章 frontmatter 中设置 `excludeFromSummary: true` 可排除该文章：
-
-```yaml
----
-title: 周刊第 1 期
-excludeFromSummary: true # 排除此文章的相似度计算和 AI 摘要生成
----
-```
-
-> **提示**：系列文章（如周刊）通常建议设置 `excludeFromSummary: true`，避免影响其他文章的推荐质量。
-
-**配置计算内容：**
-
-可以选择是否将文章正文纳入相似度计算：
-
-```typescript
-// true: 使用 标题 + 描述 + 正文（更准确，速度较慢）
-// false: 仅使用 标题 + 描述（更快，适合文章数量较多的情况）
-const INCLUDE_BODY = true;
-```
-
-- **包含正文**：相似度更精确，能识别内容层面的相关性，但生成速度较慢
-- **仅标题+描述**：生成速度快，适合描述写得比较详细的博客
-
-```bash
-# 使用 Snowflake/snowflake-arctic-embed-m-v2.0 计算 168 篇文章（标题+描述）的时间
-Done! Generated similarities for 168 posts in 4.1s
-
-# 使用 Snowflake/snowflake-arctic-embed-m-v2.0 计算 168 篇文章（标题+描述+正文）的时间
-Done! Generated similarities for 168 posts in 219.3s
-```
-
-这差别有点大，但是我个人很喜欢带正文的结果，效果显然会更好。所以索性再加一个跑 AI 总结的功能。
-
-**模型选择：**
-
-默认使用 `Snowflake/snowflake-arctic-embed-m-v2.0` 模型：
-
-- **模型大小**：约 90MB（首次运行会自动下载到 `.cache/transformers` 目录）
-- **向量维度**：768 维
-- **性能**：平衡了质量和速度，适合中文和英文内容
-- **生成时间**：约 3-5 分钟（169 篇文章）
-
-如需更换模型，编辑 `src/scripts/generateSimilarities.ts` 中的 `MODEL_NAME`：
-
-```typescript
-const MODEL_NAME = "Snowflake/snowflake-arctic-embed-m-v2.0";
-// 可选替代方案：
-// const MODEL_NAME = 'sentence-transformers/all-MiniLM-L6-v2'; // 更小更快（约 23MB），384 维
-// const MODEL_NAME = 'BAAI/bge-small-zh-v1.5';  // 针对中文优化
-```
-
-**其他可选模型对比：**
-
-| 模型                                      | 大小  | 维度 | 优势               |
-| ----------------------------------------- | ----- | ---- | ------------------ |
-| `Snowflake/snowflake-arctic-embed-m-v2.0` | ~90MB | 768  | 质量高，中英文均衡 |
-| `sentence-transformers/all-MiniLM-L6-v2`  | ~23MB | 384  | 轻量快速           |
-| `BAAI/bge-small-zh-v1.5`                  | ~95MB | 512  | 中文专用           |
-
-**注意事项：**
-
-- 需要本地运行生成脚本（Vercel 等平台无法运行模型）
-- 生成的 `src/assets/similarities.json` 需要提交到 git
-- 如果没有生成相似度文件，相关文章模块不会显示
-- 模型文件会缓存在 `.cache/transformers` 目录（已添加到 `.gitignore`）
-
-### AI 自动摘要
-
-基于 [transformers.js](https://huggingface.co/docs/transformers.js) 的智能摘要生成系统，使用先进的 AI 模型为文章自动生成高质量摘要。
-
-**与相关文章推荐的关系：**
-
-AI 摘要功能与相关文章推荐功能相辅相成：
-
-- **相似度计算**需要读取文章全文，计算成本较高（约 3-5 分钟）
-- **AI 摘要**可以在不读取全文的情况下提供优质描述，同时生成的摘要也能帮助改善相似度计算的效果
-- 两者共享相同的模型缓存机制，节省存储空间
-
-**特性：**
-
-- 🤖 基于先进的文本生成模型（Xenova/LaMini-Flan-T5-783M）
-- 📝 自动为缺少描述的文章生成摘要
-- ✨ 文章详情页支持打字机动画展示，增强阅读体验
-- 🎯 智能 fallback：优先使用手写 description，无描述时自动使用 AI 摘要
-- 🚀 构建时预生成，运行时零开销
-- ♿ 支持无障碍访问和 prefers-reduced-motion
-
-**使用方式：**
-
-```bash
-# 生成 AI 摘要（本地运行，首次会下载模型，约需 5-10 分钟）
-pnpm generate:summaries
-
-# 生成的文件要提交到 git，然后可以在 Vercel 等平台直接使用
-```
-
-**生成效果：**
-
-AI 摘要会保存在 `src/assets/summaries.json` 文件中，格式如下：
-
-```json
-{
-  "article-slug": {
-    "title": "文章标题",
-    "summary": "AI 生成的摘要内容..."
-  }
-}
-```
-
-**在哪里使用：**
-
-1. **文章详情页**：面包屑导航下方显示可折叠的 AI 摘要卡片
-
-   - 默认收起状态，点击"展开"按钮触发
-   - 展开后以打字机动画逐字显示摘要内容
-   - 打字机动画仅播放一次，支持 `prefers-reduced-motion` 用户偏好
-
-2. **文章卡片**：作为描述的 fallback
-   - 优先级：手写 `description` > AI 摘要 > Markdown 前 150 字
-   - 在文章列表、首页、分类页等处自动使用
-
-**模型选择：**
-
-默认使用 `Xenova/LaMini-Flan-T5-783M` 模型：
-
-- **模型大小**：约 300MB（首次运行会自动下载到 `.cache/transformers` 目录）
-- **生成质量**：高质量的中英文摘要生成
-- **生成时间**：约 5-10 分钟（169 篇文章）
-
-如需更换模型，编辑 `src/scripts/generateSummaries.ts` 中的 `MODEL_NAME`：
-
-```typescript
-const MODEL_NAME = "Xenova/LaMini-Flan-T5-783M";
-// 可选替代方案：
-// const MODEL_NAME = 'Xenova/distilbart-cnn-6-6'; // 更快，英文效果好
-// const MODEL_NAME = 'facebook/bart-large-cnn';   // 质量更高，但速度较慢
-```
-
-**配置提示词：**
-
-可以自定义生成摘要的提示词，编辑 `src/scripts/generateSummaries.ts` 中的 `PROMPT_TEMPLATE`：
-
-```typescript
-const PROMPT_TEMPLATE = (title: string, content: string) =>
-  `请为以下文章生成一段简洁的摘要（100-150字）：\n\n标题：${title}\n\n内容：${content}`;
-```
-
-**注意事项：**
-
-- 需要本地运行生成脚本（Vercel 等平台无法运行大模型）
-- 生成的 `src/assets/summaries.json` 需要提交到 git
-- 如果没有生成摘要文件，会自动 fallback 到 Markdown 文本提取
-- 模型文件会缓存在 `.cache/transformers` 目录（已添加到 `.gitignore`）
-- 首次运行需要下载模型，建议在网络良好的环境下进行
-
-**最佳实践：**
-
-1. **与相似度计算配合使用**：
-
-   ```bash
-   # 先生成摘要
-   pnpm generate:summaries
-   # 再计算相似度（可以使用摘要代替全文，提升速度）
-   pnpm generate:similarities
-   ```
-
-2. **选择性生成摘要**：为了节省时间，脚本会跳过已有 `description` 的文章
-
-3. **提交到版本控制**：将生成的 JSON 文件提交到 git，避免在 CI/CD 环境重复生成
+- **手写摘要面板**：当文章 frontmatter 配置了 `description` 时，文章详情页会在面包屑导航下方显示可展开/收起的摘要面板，并保留打字机展示动画（遵循系统减少动态效果设置）。未设置 `description` 的文章不显示该面板。
+- **底部最新文章**：文章底部固定展示排除当前文章后的最新 5 篇文章，纯静态构建，无额外运行时负担。
 
 ### 圣诞特辑
 
@@ -1398,24 +1196,20 @@ function hello() {
 
 所有标题自动生成可点击的锚点链接。
 
-**链接自动嵌入：**
+**外部链接：**
 
-独行的普通链接会自动转换为 Open Graph 预览卡片（包含标题、描述、图片等），段落内或带文字的链接保持标准超链接样式。
+支持标准 Markdown 链接与 GFM 裸链接自动识别，外部链接会自动在新窗口打开。
 
 示例：
 
 ```markdown
-<!-- 独行链接会被转换为 OG 预览卡片 -->
+<!-- 独行链接与段落链接均渲染为标准超链接 -->
 
 https://github.com/vercel/react-tweet
 
-反爬严格，获取不到元信息的链接
-
 https://zhuanlan.zhihu.com/p/1900483903984243480
 
-<!-- 段落中的链接保持不变 -->
-
-这是一个 [普通链接](https://example.com)，不会被嵌入。
+这是一个 [普通链接](https://example.com)。
 ```
 
 [X / Twitter 示例链接](https://x.com/vercel_dev/status/1997059920936775706)
@@ -1424,13 +1218,9 @@ https://zhuanlan.zhihu.com/p/1900483903984243480
 
 https://github.com/vercel/react-tweet
 
-反爬严格，获取不到元信息的链接
-
 https://zhuanlan.zhihu.com/p/1900483903984243480
 
-<!-- 段落中的链接保持不变 -->
-
-这是一个 [普通链接](https://example.com)，不会被嵌入。
+这是一个 [普通链接](https://example.com)。
 
 **Shoka 兼容 Markdown 语法：**
 
@@ -1657,204 +1447,6 @@ fn main() {
 - 第一个标签默认激活
 - 标签内支持任意 Markdown 内容
 
-*友链卡片（`enableShokaHexoTags`）：*
-
-使用 `{% links %}` 标签在文章中插入友链卡片网格：
-
-```markdown
-{% links %}
-- site: 博客名称
-  url: https://example.com
-  owner: 站长昵称
-  desc: 站点描述
-  image: https://example.com/avatar.png
-  color: '#ed788b'
-- site: 另一个博客
-  url: https://example2.com
-  owner: Alice
-  desc: 一个热爱技术的博客
-  image: https://api.dicebear.com/7.x/avataaars/svg?seed=Alice
-  color: '#BEDCFF'
-{% endlinks %}
-```
-
-示例效果：
-
-{% links %}
-- site: 余弦の博客
-  url: https://blog.cosine.ren
-  owner: cos
-  desc: FE / ACG / 手工
-  image: https://blog.cosine.ren/img/avatar.webp
-  color: '#ed788b'
-- site: 示例博客
-  url: https://example.com
-  owner: Alice
-  desc: 一个热爱技术的博客
-  image: https://api.dicebear.com/7.x/avataaars/svg?seed=Alice
-  color: '#BEDCFF'
-{% endlinks %}
-
-卡片数据使用 YAML 格式，支持 `site`、`url`、`owner`、`desc`、`image`、`color` 字段。
-
-*音频播放器（`enableShokaHexoTags`）：*
-
-使用 `{% media audio %}` 标签嵌入音频播放器，支持网易云音乐、QQ 音乐等平台（通过 [Meting](https://github.com/metowolf/meting) API 解析）。
-
-默认使用 `https://163.hyc.moe/` 作为 Meting API，可在 `config/site.yaml` 的 `bgm.metingApi` 中自定义，推荐自部署以获得更稳定的服务。
-
-```markdown
-{% media audio %}
-- name: 歌曲名称
-  url: https://music.163.com/#/song?id=3339210292
-{% endmedia %}
-```
-
-示例效果：
-
-{% media audio %}
-- name: 示例音频
-  url: https://music.163.com/#/song?id=3339210292
-{% endmedia %}
-
-支持歌单模式，可配置多个分组：
-
-```markdown
-{% media audio %}
-- title: 歌单名称 1
-  list:
-    - https://music.163.com/#/playlist?id=8676645748
-- title: 歌单名称 2
-  list:
-    - https://music.163.com/#/playlist?id=17606384886
-{% endmedia %}
-```
-
-{% media audio %}
-- title: 歌单名称 1
-  list:
-    - https://music.163.com/#/playlist?id=8676645748
-- title: 歌单名称 2
-  list:
-    - https://music.163.com/#/playlist?id=17606384886
-{% endmedia %}
-
-*视频播放器（`enableShokaHexoTags`）：*
-
-使用 `{% media video %}` 标签嵌入视频播放器：
-
-```markdown
-{% media video %}
-- name: 视频 1
-  url: https://example.com/video1.mp4
-- name: 视频 2
-  url: https://example.com/video2.mp4
-{% endmedia %}
-```
-
-{% media video %}
-- name: 视频 1
-  url: https://example.com/video1.mp4
-- name: 视频 2
-  url: https://example.com/video2.mp4
-{% endmedia %}
-
-多个视频时自动显示播放列表。
-
-*练习题系统（`enableQuiz`）：*
-
-支持四种交互式题型，适合教程和学习笔记。需在文章 frontmatter 中设置 `quiz: true`。
-
-**单选题：**
-
-```markdown
-- 下列哪个是 JavaScript 的基本数据类型？{.quiz}
-  - Object{.options}
-  - Array{.options}
-  - Symbol{.correct}
-  - Function{.options}
-
-> 解析：Symbol 是 ES6 引入的基本数据类型。
-```
-
-示例效果：
-
-- 下列哪个是 JavaScript 的基本数据类型？{.quiz}
-  - Object{.options}
-  - Array{.options}
-  - Symbol{.correct}
-  - Function{.options}
-
-> 解析：Symbol 是 ES6 引入的基本数据类型，而 Object、Array、Function 都是引用类型。
-
-- 选项标记 `{.correct}` 为正确答案，`{.options}` 为干扰项
-
-**多选题：**
-
-```markdown
-- 以下哪些是 CSS 布局方式？{.quiz .multi}
-  - Flexbox{.correct}
-  - jQuery{.options}
-  - Grid{.correct}
-  - Float{.correct}
-
-> 解析：Flexbox、Grid 和 Float 都是 CSS 布局方式。
-```
-
-示例效果：
-
-- 以下哪些是 CSS 布局方式？{.quiz .multi}
-  - Flexbox{.correct}
-  - jQuery{.options}
-  - Grid{.correct}
-  - Float{.correct}
-
-> 解析：Flexbox、Grid 和 Float 都是 CSS 布局方式。jQuery 是一个 JavaScript 库。
-
-- 添加 `.multi` 标记启用多选模式
-
-**判断题：**
-
-```markdown
-- `const` 声明的变量不能重新赋值，但可以修改其属性。{.quiz .true}
-
-> 解析：`const` 只保证变量绑定不可变。
-
-- HTML 是一种编程语言。{.quiz}
-
-> 解析：HTML 是标记语言，不是编程语言。
-```
-
-示例效果：
-
-- `const` 声明的变量不能重新赋值，但可以修改其属性。{.quiz .true}
-
-> 解析：`const` 只保证变量绑定不可变，如果变量指向一个对象，其属性仍然可以修改。
-
-- HTML 是一种编程语言。{.quiz}
-
-> 解析：HTML（超文本标记语言）是一种标记语言，不是编程语言。
-
-- 添加 `.true` 表示陈述正确，不添加 `.true` 则表示错误
-
-**填空题：**
-
-```markdown
-- CSS 中，[Flexbox]{.gap} 适合一维布局，[Grid]{.gap} 适合二维布局。{.quiz .fill}
-
-> 常见错误：[Float]{.mistake}
-```
-
-示例效果：
-
-- CSS 中，[Flexbox]{.gap} 适合一维布局，[Grid]{.gap} 适合二维布局。{.quiz .fill}
-
-> 常见错误：[Float]{.mistake}
-
-- `[答案]{.gap}` 标记正确答案（支持多个空）
-- `[错误答案]{.mistake}` 标记常见错误（首次答错时提示）
-- `>` 引用块内容为解析说明
-
 *数学公式（`enableMath`）：*
 
 基于 KaTeX 渲染数学公式。需在文章 frontmatter 中设置 `math: true`：
@@ -1931,10 +1523,8 @@ content:
   enableShokaEffects: true      # ++下划线++ ==高亮== ~下标~ ^上标^
   enableShokaSpoiler: true      # !!隐藏文字!!
   enableShokaRuby: true         # {文字^注音} 注音标注
-  enableShokaHexoTags: true     # {% links %} {% media %} Hexo 标签
   enableMath: true              # $数学公式$ KaTeX 渲染
   enableCodeMeta: true          # 代码块增强 (title, mark, command)
-  enableQuiz: true              # 练习题交互功能
   enableEncryptedBlock: true    # :::encrypted{password="..."} 加密内容块
 ```
 
@@ -1999,7 +1589,6 @@ categories:
 | SEO / meta | description 使用 frontmatter 中的 `description`（若未设置则显示通用加密提示） |
 | 搜索索引 | 加密内容不会被 Pagefind 索引 |
 | 目录导航 | 解锁前不显示，解锁后自动重建 |
-| AI 摘要 | 基于加密前的原文生成（构建时可访问明文） |
 
 **其他增强：**
 
@@ -2286,8 +1875,6 @@ pnpm koharu migrate           # 迁移旧内容链接（--dry-run）
 pnpm koharu update            # 更新主题（--check, --clean, --rebase, --tag, --dry-run 等）
 pnpm koharu generate          # 生成内容资产（交互式选择）
 pnpm koharu generate lqips    # 生成 LQIP 占位符
-pnpm koharu generate similarities  # 生成相似度向量
-pnpm koharu generate summaries     # 生成 AI 摘要
 pnpm koharu generate all      # 生成全部资产
 pnpm koharu clean             # 清理旧备份（--keep N）
 pnpm koharu list              # 查看所有备份
@@ -2330,8 +1917,6 @@ docker/
 | 脚本                         | 原因                          |
 | ---------------------------- | ----------------------------- |
 | `pnpm generate:lqips`        | 使用 `sharp` 原生模块处理图片 |
-| `pnpm generate:similarities` | 需下载 500MB+ 的 ML 模型      |
-| `pnpm generate:summaries`    | 需连接本地 LLM 服务器         |
 
 **推荐工作流：**
 
@@ -2390,7 +1975,7 @@ Docker 端口可在 `.env` 中配置 `BLOG_PORT=4321`。
 **注意事项：**
 
 1. 生成的 JSON 文件必须提交到 git，Docker 构建时会直接使用
-2. 如果忘记运行生成脚本，相关功能（LQIP 占位符、相关文章推荐等）将不可用
+2. 如果忘记运行生成脚本，LQIP 占位符将不可用
 3. Docker 镜像基于 nginx:alpine，仅包含静态文件，无需 Node.js 运行时
 
 ### Koharu CLI
@@ -2568,7 +2153,7 @@ chore: merge upstream theme v2.3.2
 
 - 你对**主题文件**的自定义修改（如改了某个组件、布局、样式）**不会被保留**
 - 备份范围包含：`src/content/blog/`、`config/site.yaml`、`src/pages/*.md`、`public/img/`、`.env`
-- 使用 `--full` 备份选项可额外保留 favicon、LQIP、相似度、AI 摘要等生成资产
+- 使用 `--full` 备份选项可额外保留 favicon、LQIP 等生成资产
 
 适用场景：
 - 首次从旧版本迁移，历史冲突太多无法正常 merge
@@ -2643,8 +2228,6 @@ pnpm koharu generate
 
 # 或直接指定类型
 pnpm koharu generate lqips        # 生成 LQIP 图片占位符
-pnpm koharu generate similarities # 生成语义相似度向量
-pnpm koharu generate summaries    # 生成 AI 摘要
 pnpm koharu generate all          # 生成全部
 ```
 
@@ -3073,7 +2656,6 @@ Twikoo 已实现主题自动切换
 - **关闭评论**：移除 `comment.provider` 配置或将其设置为空
 - **关闭 Shoka 语法**：在 `config/site.yaml` 的 `content` 部分将对应功能设为 `false`，如 `enableShokaContainers: false`（关闭提醒块/折叠块/标签卡）、`enableShokaSpoiler: false`（关闭隐藏文字）等
 - **关闭数学公式**：设置 `content.enableMath = false`
-- **关闭练习题**：设置 `content.enableQuiz = false`
 
 ### 如何更改文章 URL 格式？
 

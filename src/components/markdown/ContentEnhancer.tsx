@@ -9,33 +9,26 @@
 
 import { setupCollapseAnimations } from '@lib/collapse-animation';
 import {
-  scanAudioPlayers,
   scanEncryptedBlocks,
   scanEncryptedPosts,
   scanNoteBlocks,
   scanPreElements,
-  scanQuizElements,
-  scanVideoPlayers,
   type ToolbarEntry,
 } from '@lib/content-scanner';
 import { type RefObject, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { AudioPlayer } from './AudioPlayer';
 import { CodeBlockToolbar } from './CodeBlockToolbar';
 import { EncryptedBlock } from './EncryptedBlock';
 import { EncryptedPost } from './EncryptedPost';
 import { InfographicToolbar } from './InfographicToolbar';
 import { MermaidToolbar } from './MermaidToolbar';
 import { extractNoteType, NoteBlockIcon } from './NoteBlockIcon';
-import { QuizBlock } from './QuizBlock';
-import { VideoPlayer } from './VideoPlayer';
 
 interface ContentEnhancerProps {
   containerRef?: RefObject<HTMLElement | null>;
   sanitizeDecryptedHtml?: (html: string) => string;
   enableCopy?: boolean;
   enableFullscreen?: boolean;
-  enableQuiz?: boolean;
   enableEncryptedBlock?: boolean;
 }
 
@@ -44,7 +37,6 @@ export default function ContentEnhancer({
   sanitizeDecryptedHtml,
   enableCopy = true,
   enableFullscreen = true,
-  enableQuiz = true,
   enableEncryptedBlock = false,
 }: ContentEnhancerProps) {
   const [entries, setEntries] = useState<ToolbarEntry[]>([]);
@@ -56,9 +48,6 @@ export default function ContentEnhancer({
     const newEntries: ToolbarEntry[] = [
       ...(enableEncryptedBlock ? scanEncryptedPosts(container) : []),
       ...scanPreElements(container),
-      ...(enableQuiz ? scanQuizElements(container) : []),
-      ...scanAudioPlayers(container),
-      ...scanVideoPlayers(container),
       ...scanNoteBlocks(container),
       ...(enableEncryptedBlock ? scanEncryptedBlocks(container) : []),
     ];
@@ -68,7 +57,7 @@ export default function ContentEnhancer({
     if (newEntries.length > 0) {
       setEntries((prev) => [...prev, ...newEntries]);
     }
-  }, [containerRef, enableQuiz, enableEncryptedBlock]);
+  }, [containerRef, enableEncryptedBlock]);
 
   useEffect(() => {
     scan();
@@ -120,12 +109,6 @@ export default function ContentEnhancer({
             return createPortal(<MermaidToolbar key={entry.id} preElement={entry.preElement} />, entry.mountPoint);
           case 'infographic':
             return createPortal(<InfographicToolbar key={entry.id} preElement={entry.preElement} />, entry.mountPoint);
-          case 'quiz':
-            return createPortal(<QuizBlock key={entry.id} element={entry.preElement} />, entry.mountPoint);
-          case 'audio':
-            return createPortal(<AudioPlayer key={entry.id} element={entry.preElement} />, entry.mountPoint);
-          case 'video':
-            return createPortal(<VideoPlayer key={entry.id} element={entry.preElement} />, entry.mountPoint);
           case 'note':
             return createPortal(
               <NoteBlockIcon key={entry.id} noteType={extractNoteType(entry.preElement)} />,

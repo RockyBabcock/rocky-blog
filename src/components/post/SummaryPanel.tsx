@@ -1,8 +1,7 @@
 /**
  * Summary Panel Component
  *
- * 显示文章摘要面板，支持打字机动画展示
- * 可展示手写描述、AI 生成摘要或自动提取的内容
+ * 显示文章手写摘要面板，支持打字机动画展示
  * 支持 prefers-reduced-motion 可访问性
  */
 
@@ -11,11 +10,7 @@ import { useMotionLevel } from '@hooks/useMotionLevel';
 import { useTranslation } from '@hooks/useTranslation';
 import { Icon } from '@iconify/react';
 import { cn } from '@lib/utils';
-import { memo, type ReactNode, type RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import type { TranslationKey } from '@/i18n/types';
-import { MingcuteAiFillSvg } from '../svg/MingcuteAiFillSvg.tsx';
-
-export type SummarySource = 'description' | 'ai' | 'auto';
+import { memo, type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 const SummaryPanelContent = memo(
   ({
@@ -55,8 +50,6 @@ const SummaryPanelContent = memo(
 export interface SummaryPanelProps {
   /** 摘要文本 */
   summary: string;
-  /** 摘要来源类型 */
-  source?: SummarySource;
   /** 打字机每个字符的间隔时间（毫秒），默认 25 */
   typingSpeed?: number;
   /** 自定义类名 */
@@ -65,29 +58,7 @@ export interface SummaryPanelProps {
   locale?: string;
 }
 
-const SOURCE_ICONS: Record<SummarySource, ReactNode> = {
-  description: <Icon icon="ri:book-2-fill" className="text-primary size-4" />,
-  ai: <MingcuteAiFillSvg className="text-primary size-4" />,
-  auto: (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="text-primary size-4"
-      aria-hidden="true"
-    >
-      <path d="M20 22H4C3.45 22 3 21.55 3 21V3C3 2.45 3.45 2 4 2H20C20.55 2 21 2.45 21 3V21C21 21.55 20.55 22 20 22ZM19 20V4H5V20H19ZM7 6H11V10H7V6ZM7 12H17V14H7V12ZM7 16H17V18H7V16ZM13 7H17V9H13V7Z" />
-    </svg>
-  ),
-};
-
-const SOURCE_LABEL_KEYS: Record<SummarySource, TranslationKey> = {
-  description: 'summary.description',
-  ai: 'summary.ai',
-  auto: 'summary.auto',
-};
-
-function SummaryPanel({ summary, source = 'ai', typingSpeed = 25, className, locale }: SummaryPanelProps) {
+function SummaryPanel({ summary, typingSpeed = 25, className, locale }: SummaryPanelProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const hasAnimatedRef = useRef(false);
@@ -96,8 +67,7 @@ function SummaryPanel({ summary, source = 'ai', typingSpeed = 25, className, loc
   const textRef = useRef<HTMLSpanElement | null>(null);
 
   const { t } = useTranslation(locale);
-  const icon = SOURCE_ICONS[source];
-  const label = t(SOURCE_LABEL_KEYS[source]);
+  const label = t('summary.description');
 
   const motionDisabled = useMotionLevel() === 'reduced';
 
@@ -191,9 +161,7 @@ function SummaryPanel({ summary, source = 'ai', typingSpeed = 25, className, loc
           aria-controls="summary-panel-content"
         >
           <div className="text-muted-foreground flex items-center gap-1.5 text-sm font-medium">
-            <span className={cn('transition-transform duration-300', isExpanded && source === 'ai' && 'rotate-10')}>
-              {icon}
-            </span>
+            <Icon icon="ri:book-2-fill" className="text-primary size-4" />
             {label}
           </div>
           <svg

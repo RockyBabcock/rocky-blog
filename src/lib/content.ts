@@ -41,11 +41,9 @@ export {
   getPostById,
   getPostCount,
   getPostDescription,
-  getPostDescriptionWithSummary,
   getPostLastCategory,
   // Reading time utility
   getPostReadingTime,
-  getPostSummary,
   getPostsByCategory,
   getPostsBySeriesSlug,
   getPostsBySticky,

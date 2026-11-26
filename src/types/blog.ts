@@ -18,12 +18,8 @@ export interface BlogSchema {
   sticky?: boolean;
   draft?: boolean;
   tocNumbering?: boolean;
-  /** Exclude this post from AI summary generation */
-  excludeFromSummary?: boolean;
   /** Enable KaTeX math rendering for this post */
   math?: boolean;
-  /** Enable quiz interaction for this post */
-  quiz?: boolean;
   /** Password for encrypting the entire post content */
   password?: string;
   /** Keywords for SEO */

@@ -64,7 +64,6 @@ export const uiStrings = {
   'post.updatedAt': '수정일: {date}',
   'post.prevPost': '이전 게시물',
   'post.nextPost': '다음 게시물',
-  'post.relatedPosts': '관련 게시물',
   'post.seriesNavigation': '시리즈 내비게이션',
   'post.seriesPrev': '이전 편',
   'post.seriesNext': '다음 편',
@@ -159,24 +158,6 @@ export const uiStrings = {
   'image.hintDesktop': '두 번 클릭하여 확대 · 스크롤로 확대/축소 · 빈 곳을 클릭하여 닫기',
   'image.hintMobile': '두 번 탭하거나 두 손가락으로 확대 · 아래로 밀거나 빈 곳을 탭하여 닫기',
 
-  // ── Media Controls ──────────────────────────────────────────
-  'media.play': '재생',
-  'media.pause': '일시정지',
-  'media.mute': '음소거',
-  'media.unmute': '음소거 해제',
-  'media.fullscreen': '전체 화면',
-  'media.exitFullscreen': '전체 화면 종료',
-  'media.pictureInPicture': 'PIP 모드',
-  'media.playbackSpeed': '재생 속도',
-  'media.download': '다운로드',
-  'media.prevTrack': '이전 곡',
-  'media.nextTrack': '다음 곡',
-  'media.volume': '볼륨 {percent}%',
-  'media.progress': '재생 진행률',
-  'media.playModeOrder': '순차 재생',
-  'media.playModeRandom': '랜덤 재생',
-  'media.playModeLoop': '한 곡 반복',
-
   // ── Footer ──────────────────────────────────────────────────
   'footer.poweredBy': '{name} 기반',
   'footer.totalPosts': '{count}개의 게시물',
@@ -236,32 +217,6 @@ export const uiStrings = {
   'settings.waveDisabledByReducedMotion': '모션 강도가 「줄이기」일 때는 사용할 수 없음',
   'settings.invalidNumber': '양수를 입력해 주세요',
 
-  // ── Quiz ────────────────────────────────────────────────────
-  'quiz.check': '정답 확인',
-  'quiz.correct': '정답이에요!',
-  'quiz.incorrect': '틀렸어요. 다시 시도해 보세요',
-  'quiz.incorrectAnswer': '틀렸어요. 정답은 {answer}',
-  'quiz.submitAnswer': '정답 제출 ({count}개 선택됨)',
-  'quiz.commonMistakes': '자주 틀리는 항목:',
-  'quiz.parseFailed': '문제 분석 실패',
-  'quiz.showAnswer': '정답 보기',
-  'quiz.hideAnswer': '정답 숨기기',
-  'quiz.reset': '초기화',
-  'quiz.score': '점수: {score}/{total}',
-  'quiz.completed': '모두 완료했어요!',
-  'quiz.fillBlank': '정답을 입력해 주세요...',
-  'quiz.selectOption': '선택지를 골라 주세요',
-  'quiz.single': '객관식',
-  'quiz.multi': '복수 응답형',
-  'quiz.trueFalse': 'O/X 문제',
-  'quiz.fill': '주관식',
-  'quiz.optionTrue': '참',
-  'quiz.optionFalse': '거짓',
-  'quiz.clickToReveal': '정답을 보려면 클릭해 주세요',
-  'quiz.quizOptions': '{type} 선택지',
-  'quiz.trueFalseCorrect': '정답이에요!',
-  'quiz.trueFalseIncorrect': '틀렸어요. 이 명제는 {answer}이에요.',
-
   // ── Encrypted Block ─────────────────────────────────────────
   'encrypted.locked': '내용이 암호화됐어요',
   'encrypted.placeholder': '내용을 보려면 비밀번호를 입력해 주세요',
@@ -316,8 +271,6 @@ export const uiStrings = {
 
   // ── Summary Panel ───────────────────────────────────────────
   'summary.description': '수동 요약',
-  'summary.ai': 'AI 요약',
-  'summary.auto': '요약',
 
   // ── Latest Posts ────────────────────────────────────────────
   'post.latestPosts': '최신 글',
@@ -325,14 +278,6 @@ export const uiStrings = {
   // ── Tag Component ───────────────────────────────────────────
   'tag.expandAll': '모두 보기',
   'tag.viewTagPosts': '「{tag}」 태그의 게시물 {count}개 보기',
-
-  // ── Audio Player ────────────────────────────────────────────
-  'audio.loading': '재생 목록 불러오는 중…',
-  'audio.loadError': '불러오기 실패: {error}',
-  'audio.retry': '재시도',
-  'audio.empty': '등록된 곡이 없어요',
-  'audio.listTab': '목록 {index}',
-  'audio.closePanel': '패널 닫기',
 
   // ── Table of Contents ───────────────────────────────────────
   'toc.title': '목차',

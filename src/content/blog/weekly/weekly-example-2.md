@@ -5,7 +5,6 @@ catalog: true
 date: 2025-03-14 20:30:00
 description: 第二期示例周刊：聊聊静态搜索、代码格式化和博客备份这些不起眼但天天在用的东西，顺便演示系列文章的上一期、下一期导航。
 cover: /img/cover/6.webp
-excludeFromSummary: true
 tags:
   - 周刊
   - 工具
@@ -19,17 +18,15 @@ categories:
 
 ### 本博客主题
 
-先放一张链接卡片。链接单独占一段时，构建阶段会去抓取页面的 Open Graph 信息，渲染成卡片：
+先放一个项目链接，纯文本 URL 会自动识别为可点击的超链接：
 
 https://github.com/cosZone/astro-koharu
 
-抓取结果会写进 `.cache/og-data.json`，下次构建直接读缓存；抓取失败也不会让构建失败，只是退回成普通链接。
-
-### 在 React 里嵌入推文
+### React 生态参考
 
 https://github.com/vercel/react-tweet
 
-主题的推文嵌入就是基于这个库做的。如果你的文章里经常引用推文，可以在 `config/site.yaml` 的 `content.enableTweetEmbed` 里开关。
+一个轻量的 React 推文渲染组件库，适合在需要静态或按需嵌入推文的 React 项目中参考。
 
 ## 工具
 

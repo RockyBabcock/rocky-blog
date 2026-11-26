@@ -12,10 +12,6 @@
 @import "./theme/shoka-effects.css";
 @import "./theme/shoka-containers.css";
 @import "./theme/shoka-tabs.css";
-@import "./theme/shoka-quiz.css";
-@import "./theme/shoka-media.css";
-@import "./theme/shoka-player-shared.css";
-@import "./theme/shoka-audio-player.css";
 @import "./theme/encrypted-block.css";
 @import "./components/wave.css";
 @import "./components/cover.css";
@@ -31,5 +27,4 @@
 @import "./components/post.css";
 @import "./components/toc.css";
 @import "./components/pagefind.css";
-@import "./components/embed.css";
 @import "./components/lqip.css";
