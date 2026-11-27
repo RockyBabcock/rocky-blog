@@ -1,3 +1,5 @@
+> **Legacy upstream reference — not applicable to Rocky Blog.** This document belongs to a custom infographic framework that is not present in this repository. Do not implement against it. See the parent `SKILL.md` for the current integration boundary.
+
 # 信息图结构组件生成规范
 
 本文件用于指导生成符合框架规范的 Structure 组件代码。
