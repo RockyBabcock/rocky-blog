@@ -6,6 +6,16 @@ description: Create beautiful infographics based on the given text content. Use 
 
 An infographic (Infographic) transforms data, information, and knowledge into perceivable visual language. It combines visual design with data visualization, using intuitive symbols to compress complex information and help audiences quickly understand and remember key points.
 
+## Rocky Blog workflow boundary
+
+This skill is for creating a **standalone infographic artifact** when the user explicitly asks for a separate HTML / SVG deliverable. It is not the default workflow for adding an infographic to an article.
+
+- For an infographic embedded in a Rocky Blog Markdown article, use `infographic-syntax-creator` and the existing `@antv/infographic` Markdown integration.
+- Do not add a separate runtime script, unpkg CDN dependency, remote asset loader, React item registry, or new UI framework to the blog merely to render one article infographic.
+- Do not create files under nonexistent `src/designs/`, `src/templates/`, or `site/` directories based on inherited skills.
+- A standalone HTML export is not automatically part of the deployed blog and must not be described as such.
+
+
 `Infographic = Information Structure + Visual Expression`
 
 This is a task that utilizes [AntV Infographic](https://infographic.antv.vision/) to create visual infographics.
