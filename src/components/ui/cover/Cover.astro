@@ -61,6 +61,15 @@ const primarySeriesHref = primarySeries ? localizedPath(`/${primarySeries.slug}`
 >
   <div class="cover-scrim absolute inset-0 h-full"></div>
   {motionConfig.heroPetals && <SakuraPetals />}
+  {!compact && (
+    <div class="hero-ambient-motes" aria-hidden="true">
+      <span class="hero-mote hero-mote-star" style="top: 22%; left: 11%; --mote-dur: 7.4s; --mote-delay: -1.2s;" />
+      <span class="hero-mote hero-mote-ring" style="top: 58%; left: 7%; --mote-dur: 8.8s; --mote-delay: -3.4s;" />
+      <span class="hero-mote hero-mote-petal" style="top: 28%; right: 10%; rotate: 22deg; --mote-dur: 7.8s; --mote-delay: -2.1s;" />
+      <span class="hero-mote hero-mote-star" style="top: 64%; right: 12%; --mote-dur: 6.9s; --mote-delay: -0.6s;" />
+      <span class="hero-mote hero-mote-petal" style="top: 44%; right: 6%; rotate: -18deg; --mote-dur: 9.2s; --mote-delay: -4.2s;" />
+    </div>
+  )}
   <div
     class:list={[
       'cover-copy absolute inset-0 flex flex-col items-center justify-center px-5 text-white',
@@ -109,22 +118,23 @@ const primarySeriesHref = primarySeries ? localizedPath(`/${primarySeries.slug}`
             )}
           </h1>
           {data && (
-            <p class="motion-rise mt-3 flex flex-wrap items-center justify-center gap-4 text-sm md:gap-2.5 md:text-xs" style="--i: 1">
-              <span class="flex items-center gap-1">
-                <Icon name="fa6-solid:calendar-days" />
+            <p class="motion-rise cover-meta-bar mt-3.5 text-sm md:text-xs" style="--i: 1">
+              <span class="cover-meta-item">
+                <Icon name="fa6-solid:calendar-days" aria-hidden="true" />
                 {t(locale, "post.publishedAt", { date: date ? formatLocalizedDateTime(date, locale) : '' })}
               </span>
               {updated && (
-                <span class="flex items-center gap-1">
-                  <Icon name="fa6-solid:calendar-days" />
+                <span class="cover-meta-item">
+                  <Icon name="fa6-solid:calendar-days" aria-hidden="true" />
                   {t(locale, "post.updatedAt", { date: formatLocalizedDateTime(updated, locale) })}
                 </span>
               )}
-              <span class="flex items-center gap-1">
-                <Icon name="fa6-solid:pen-nib" /> {t(locale, "post.wordCount", { count: readState?.words ?? 0 })}
+              <span class="cover-meta-item">
+                <Icon name="fa6-solid:pen-nib" aria-hidden="true" />
+                {t(locale, "post.wordCount", { count: readState?.words ?? 0 })}
               </span>
-              <span class="flex items-center gap-1">
-                <Icon name="fa6-solid:clock" />
+              <span class="cover-meta-item">
+                <Icon name="fa6-solid:clock" aria-hidden="true" />
                 {readState?.text}
               </span>
             </p>
@@ -138,8 +148,8 @@ const primarySeriesHref = primarySeries ? localizedPath(`/${primarySeries.slug}`
           <h1 class="motion-rise shadow-text font-chill-round mt-2 text-5.5xl/[1.15] font-bold tracking-widest md:text-3xl/[1.2]" style="--i: 1">
             {siteConfig?.title}
           </h1>
-          <p class="motion-rise shadow-text mt-3.5 max-w-xl text-center text-sm tracking-[0.16em] opacity-95 md:mt-2.5 md:text-xs md:tracking-[0.08em]" style="--i: 2">
-            = {siteConfig?.subtitle} =
+          <p class="motion-rise shadow-text hero-subtitle-ornament mt-3.5 text-center text-sm tracking-[0.16em] opacity-95 md:mt-2.5 md:text-xs md:tracking-[0.08em]" style="--i: 2">
+            <span>{siteConfig?.subtitle}</span>
           </p>
           <div class="motion-rise hero-quick-actions" style="--i: 3">
             <a href="#home-content" class="hero-action-btn" data-primary="true">

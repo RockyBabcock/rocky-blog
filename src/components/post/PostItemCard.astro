@@ -63,8 +63,8 @@ const titleMorph = postTitleMorphName(slug);
 
 <div
   class={cn(
-    'group text-card-foreground shadow-card border-border/65 relative flex rounded-xl border bg-white md:flex-col dark:bg-card dark:border-white/8',
-    'post-item-card motion-reveal',
+    'group text-card-foreground shadow-card border-border/65 hover:border-primary/35 relative flex rounded-xl border bg-white md:flex-col dark:bg-card dark:border-white/8 dark:hover:border-primary/40',
+    'post-item-card ambient-glow-surface motion-reveal',
   )}
 >
   <a
@@ -80,6 +80,7 @@ const titleMorph = postTitleMorphName(slug);
     )}
   >
     <ResponsiveImage src={finalCover} maxWidth={800} sizes="(max-width: 767px) calc(100vw - 48px), (max-width: 992px) 40vw, 400px" loading="lazy" decoding="async" alt="" class="h-full w-full cursor-pointer object-cover" />
+    <div class="card-sheen-layer" aria-hidden="true" />
   </a>
   <div
     class={cn(

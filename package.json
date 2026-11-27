@@ -29,7 +29,7 @@
     "test:all": "npm run test:core",
     "test:core": "npm run test:config && npm run test:i18n && npm run test:features && npm run test:markdown && npm run test:index && npm run test:toc && npm run test:lightbox && npm run test:glide && npm run test:drawer && npm run test:diagram && npm run test:motion && npm run test:settings",
     "test:i18n": "tsx --test src/i18n/translations.test.ts src/lib/date.test.ts src/lib/content/locale.test.ts",
-    "test:features": "tsx --test src/lib/reading-history.test.ts src/lib/share.test.ts src/lib/search-helpers.test.ts src/lib/commands.test.ts src/lib/series-progress.test.ts src/lib/editorial.test.ts",
+    "test:features": "tsx --test src/lib/reading-history.test.ts src/lib/share.test.ts src/lib/search-helpers.test.ts src/lib/commands.test.ts src/lib/series-progress.test.ts src/lib/editorial.test.ts src/lib/ambient-pointer.test.ts",
     "test:index": "tsx --test src/lib/content/index-groups.test.ts src/lib/content/index-categories.test.ts src/lib/content/index-tags.test.ts src/lib/content/series-issue.test.ts src/lib/content/post-source.test.ts src/lib/content/post-helpers.test.ts src/lib/content/post-page.test.ts",
     "test:config": "tsx --test src/lib/config/content.test.ts src/lib/config/featured-series.test.ts src/lib/config/motion.test.ts src/lib/config/site-sections.test.ts src/lib/config/site-consistency.test.ts",
     "test:markdown": "tsx --test src/lib/markdown/*.test.ts",

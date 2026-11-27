@@ -81,7 +81,7 @@ const archivesHref = localizedPath('/archives', locale);
   <RightRailWidgets client:idle locale={locale} primarySeries={primarySeriesInfo} />
 
   {topCategories.length > 0 && (
-    <section class="rail-card" aria-label={t(locale, 'home.railTopicsSummary')}>
+    <section class="rail-card ambient-glow-surface" aria-label={t(locale, 'home.railTopicsSummary')}>
       <div class="rail-card-title">
         <span class="inline-flex items-center gap-1.5">
           <Icon name="ri:folder-3-line" class="text-primary size-4 shrink-0" aria-hidden="true" />
@@ -108,7 +108,7 @@ const archivesHref = localizedPath('/archives', locale);
   )}
 
   {yearGroups.length > 0 && (
-    <section class="rail-card" aria-label={t(locale, 'home.railArchiveSummary')}>
+    <section class="rail-card ambient-glow-surface" aria-label={t(locale, 'home.railArchiveSummary')}>
       <div class="rail-card-title">
         <span class="inline-flex items-center gap-1.5">
           <Icon name="ri:archive-2-line" class="text-primary size-4 shrink-0" aria-hidden="true" />

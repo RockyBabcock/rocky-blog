@@ -22,9 +22,10 @@ import type { PostCardData } from '@/types/blog';
 interface Props {
   posts: PostCardData[];
   locale: string;
+  sectionNumber?: string;
 }
 
-const { posts, locale } = Astro.props;
+const { posts, locale, sectionNumber = '01' } = Astro.props;
 const leadPost = posts[0];
 const secondaryPosts = posts.slice(1, 4);
 
@@ -55,6 +56,12 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
     <section aria-labelledby="home-featured-heading" class="flex flex-col gap-4" data-home-featured>
       <div class="editorial-section-head">
         <div class="editorial-section-title-group">
+          <div class="editorial-kicker" aria-hidden="true">
+            <span class="editorial-kicker-num">{sectionNumber}</span>
+            <span class="editorial-kicker-rule" />
+            <span>FEATURED</span>
+            <span class="editorial-kicker-petal" />
+          </div>
           <h2 id="home-featured-heading" class="editorial-section-title">
             <Icon name="ri:sparkling-2-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
             <span>{t(locale, 'home.featuredSection')}</span>
@@ -69,7 +76,7 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
 
       <div class="featured-bento" data-count={layoutMode}>
         {/* Primary Editorial Feature Card */}
-        <article class="featured-lead-card motion-reveal group">
+        <article class="featured-lead-card corner-brackets corner-brackets-light motion-reveal group">
           <a href={leadMeta.href} tabindex="-1" aria-hidden="true" style={leadMeta.lqip.style} class={`absolute inset-0 ${leadMeta.lqip.class}`}>
             <ResponsiveImage
               src={leadMeta.cover}
@@ -81,6 +88,7 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
               class="h-full w-full object-cover"
             />
           </a>
+          <div class="card-sheen-layer" aria-hidden="true" />
           <div class="featured-lead-scrim" />
 
           <div class="relative z-10 flex flex-col gap-2.5 p-6 text-white md:p-4">
@@ -150,7 +158,7 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
               const isSingleSecondary = secondaryPosts.length === 1;
               return (
                 <article
-                  class="featured-sub-card motion-reveal group"
+                  class="featured-sub-card ambient-glow-surface motion-reveal group"
                   data-layout={isSingleSecondary ? 'vertical' : 'horizontal'}
                 >
                   <a

@@ -21,6 +21,8 @@ export interface SettingItem {
   section: SettingSection;
   type: SettingType;
   i18nKey: TranslationKey;
+  /** Optional Remix Icon identifier displayed beside the label. */
+  icon?: string;
   /** Display unit for numeric controls; line height has no unit. */
   unit?: string;
   /** Step size for numeric controls. */
@@ -38,6 +40,7 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     section: 'reader',
     type: 'segmented',
     i18nKey: 'settings.fontPreset',
+    icon: 'ri:font-family',
     options: [
       { value: 'round', i18nKey: 'settings.fontPreset.round' },
       { value: 'system', i18nKey: 'settings.fontPreset.system' },
@@ -50,6 +53,7 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     section: 'reader',
     type: 'number',
     i18nKey: 'settings.fontSize',
+    icon: 'ri:font-size',
     unit: 'px',
     step: 1,
   },
@@ -58,6 +62,7 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     section: 'reader',
     type: 'number',
     i18nKey: 'settings.lineHeight',
+    icon: 'ri:line-height',
     step: 0.1,
   },
   {
@@ -65,6 +70,7 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     section: 'reader',
     type: 'number',
     i18nKey: 'settings.measure',
+    icon: 'ri:text-spacing',
     unit: 'ch',
     step: 1,
   },
@@ -73,6 +79,7 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     section: 'reader',
     type: 'switch',
     i18nKey: 'settings.justify',
+    icon: 'ri:align-justify',
   },
 
   // General preferences
@@ -81,12 +88,14 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     section: 'general',
     type: 'switch',
     i18nKey: 'settings.scrollProgress',
+    icon: 'ri:donut-chart-line',
   },
   {
     key: 'motionLevel',
     section: 'general',
     type: 'segmented',
     i18nKey: 'settings.motionLevel',
+    icon: 'ri:sparkling-line',
     options: [
       { value: 'lively', i18nKey: 'settings.motionLevel.lively' },
       { value: 'subtle', i18nKey: 'settings.motionLevel.subtle' },
@@ -98,6 +107,7 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     section: 'general',
     type: 'switch',
     i18nKey: 'settings.wave',
+    icon: 'ri:water-flash-line',
     disabledByReducedMotion: true,
   },
 ];

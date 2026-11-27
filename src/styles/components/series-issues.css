@@ -47,11 +47,41 @@
   overflow: hidden;
   margin-bottom: 2.25rem;
   padding: 1.5rem 1.75rem 1.375rem;
+  border: 1px solid hsl(var(--primary) / 0.16);
   border-radius: 1rem;
   background:
     radial-gradient(120% 140% at 100% 0%, color-mix(in oklab, hsl(var(--primary)) 13%, transparent), transparent 62%),
     color-mix(in oklab, hsl(var(--primary)) 4%, hsl(var(--card)));
-  transition: box-shadow var(--dur-slow) var(--ease-out-quart);
+  transition:
+    border-color var(--dur-slow) var(--ease-out-quart),
+    box-shadow var(--dur-slow) var(--ease-out-quart);
+}
+.issue-latest::before,
+.issue-latest::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  transition:
+    width 280ms var(--ease-out-expo),
+    height 280ms var(--ease-out-expo),
+    border-color 220ms var(--ease-out-quart);
+}
+.issue-latest::before {
+  top: 9px;
+  left: 9px;
+  border-top: 1.5px solid var(--corner-stroke, hsl(var(--primary) / 0.36));
+  border-left: 1.5px solid var(--corner-stroke, hsl(var(--primary) / 0.36));
+  border-top-left-radius: 4px;
+}
+.issue-latest::after {
+  right: 9px;
+  bottom: 9px;
+  border-right: 1.5px solid var(--corner-stroke, hsl(var(--primary) / 0.36));
+  border-bottom: 1.5px solid var(--corner-stroke, hsl(var(--primary) / 0.36));
+  border-bottom-right-radius: 4px;
 }
 .issue-latest-bloom {
   position: absolute;
@@ -231,10 +261,17 @@
 
 @media (hover: hover) and (pointer: fine) {
   .issue-row:has(.issue-link:hover) {
-    background: color-mix(in oklab, hsl(var(--primary)) 5%, transparent);
+    background: color-mix(in oklab, hsl(var(--primary)) 6%, transparent);
   }
   .issue-latest:has(.issue-link:hover) {
+    border-color: hsl(var(--primary) / 0.38);
     box-shadow: 0 1.25rem 2.5rem -1.75rem rgb(233 84 107 / 0.55);
+  }
+  .issue-latest:has(.issue-link:hover)::before,
+  .issue-latest:has(.issue-link:hover)::after {
+    width: 19px;
+    height: 19px;
+    border-color: var(--corner-stroke-hover, hsl(var(--primary) / 0.72));
   }
   html:not([data-motion="reduced"]) .issue-latest:has(.issue-link:hover) .issue-latest-bloom {
     rotate: 16deg;

@@ -146,7 +146,12 @@ function SummaryPanel({ summary, typingSpeed = 25, className, locale }: SummaryP
 
   return (
     <ErrorBoundary FallbackComponent={InlineErrorFallback}>
-      <div className={cn('border-primary/15 bg-primary/[0.03] dark:bg-card/85 overflow-hidden rounded-xl border', className)}>
+      <div
+        className={cn(
+          'ambient-glow-surface border-primary/18 bg-primary/[0.03] dark:bg-card/85 hover:border-primary/35 overflow-hidden rounded-xl border transition-colors',
+          className,
+        )}
+      >
         {/* 触发按钮 */}
         <button
           type="button"
@@ -161,7 +166,8 @@ function SummaryPanel({ summary, typingSpeed = 25, className, locale }: SummaryP
         >
           <div className="text-foreground/85 flex items-center gap-2 text-sm font-medium">
             <Icon icon="ri:book-2-fill" className="text-primary size-4" />
-            {label}
+            <span>{label}</span>
+            <span className="editorial-kicker-petal opacity-75" aria-hidden="true" />
           </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"

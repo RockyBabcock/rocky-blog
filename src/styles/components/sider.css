@@ -404,10 +404,16 @@ html:is([data-motion="reduced"], .motion-off) .home-greeting {
 @media (hover: hover) {
   .home-sider-tool-btn:hover,
   .home-sider-tool-icon:hover {
-    border-color: hsl(var(--primary) / 0.4);
-    background: hsl(var(--primary) / 0.06);
+    border-color: hsl(var(--primary) / 0.45);
+    background: hsl(var(--primary) / 0.065);
     color: hsl(var(--foreground));
+    box-shadow: 0 0.4rem 1.1rem -0.75rem rgb(233 84 107 / 0.4);
   }
+}
+
+.home-sider-tool-btn:active,
+.home-sider-tool-icon:active {
+  scale: 0.98;
 }
 
 .home-nav-row,

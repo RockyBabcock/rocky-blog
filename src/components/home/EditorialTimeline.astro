@@ -21,9 +21,10 @@ interface Props {
   posts: BlogPost[];
   locale: string;
   maxItems?: number;
+  sectionNumber?: string;
 }
 
-const { posts, locale, maxItems = 7 } = Astro.props;
+const { posts, locale, maxItems = 7, sectionNumber = '05' } = Astro.props;
 const yearGroups = groupPostsByYear(posts, siteTimezone);
 const timelinePreview = buildTimelinePreview(yearGroups, maxItems);
 const archivesHref = localizedPath('/archives', locale);
@@ -34,6 +35,12 @@ const archivesHref = localizedPath('/archives', locale);
     <section aria-labelledby="home-timeline-heading" class="flex flex-col gap-4" data-home-timeline>
       <div class="editorial-section-head">
         <div class="editorial-section-title-group">
+          <div class="editorial-kicker" aria-hidden="true">
+            <span class="editorial-kicker-num">{sectionNumber}</span>
+            <span class="editorial-kicker-rule" />
+            <span>ARCHIVE</span>
+            <span class="editorial-kicker-petal" />
+          </div>
           <h2 id="home-timeline-heading" class="editorial-section-title">
             <Icon name="ri:calendar-schedule-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
             <span>{t(locale, 'home.timelineSection')}</span>
@@ -46,15 +53,16 @@ const archivesHref = localizedPath('/archives', locale);
         </a>
       </div>
 
-      <div class="border-border/70 bg-card/65 flex flex-col gap-5 rounded-xl border p-5 md:p-4">
+      <div class="decorative-dot-surface border-border/70 bg-card/70 flex flex-col gap-5 rounded-xl border p-5 md:p-4">
         {timelinePreview.map((group) => (
           <div class="flex flex-col gap-2">
             <div class="flex items-baseline justify-between gap-2">
               <a
                 href={`${archivesHref}#year-${group.year}`}
-                class="text-foreground hover:text-primary font-mono text-lg font-bold tracking-tight transition-colors tabular-nums"
+                class="text-foreground hover:text-primary inline-flex items-center gap-2 font-mono text-lg font-bold tracking-tight transition-colors tabular-nums"
               >
-                {group.year}
+                <span class="editorial-kicker-petal" aria-hidden="true" />
+                <span>{group.year}</span>
               </a>
               <span class="text-muted-foreground text-xs tabular-nums">
                 {t(locale, 'post.yearPosts', { count: group.totalInYear })}

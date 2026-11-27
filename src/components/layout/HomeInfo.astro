@@ -39,7 +39,8 @@ const stats = [
 ---
 
 <div class="home-info" data-variant={isDrawer ? 'drawer' : 'sider'} data-home-info-container>
-  <div class="home-profile" data-home-profile>
+  <div class:list={['home-profile', !isDrawer && 'corner-brackets corner-petal-mark']} data-home-profile>
+    {!isDrawer && <span class="corner-petal-watermark -right-2 -bottom-2 size-11" aria-hidden="true" />}
     <div class="home-identity">
       <div
         class="home-avatar"

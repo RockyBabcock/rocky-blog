@@ -336,7 +336,7 @@ export default function SearchDialogContent() {
                     aria-label={t('search.dialogTitle')}
                     onKeyDown={handleKeyDown}
                     data-search-dialog
-                    className="bg-gradient-start text-foreground ring-primary/15 relative flex max-h-[82dvh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl shadow-[0_2rem_4rem_-1.5rem_rgb(233_84_107/0.35),0_0.75rem_1.5rem_-0.75rem_rgb(20_10_28/0.3)] ring-1"
+                    className="modal-sakura-shell bg-gradient-start text-foreground ring-primary/18 relative flex max-h-[82dvh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl shadow-[0_2rem_4rem_-1.5rem_rgb(233_84_107/0.35),0_0.75rem_1.5rem_-0.75rem_rgb(20_10_28/0.3)] ring-1"
                     initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98, y: -12 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={
@@ -347,7 +347,7 @@ export default function SearchDialogContent() {
                     transition={shouldReduceMotion ? { duration: 0 } : animation.spring.popover}
                   >
                     {/* Header / Search Input */}
-                    <div className="border-foreground/8 flex items-center gap-2.5 border-b px-4 py-3">
+                    <div className="search-input-bar border-foreground/8 flex items-center gap-2.5 border-b px-4 py-3">
                       <Icon icon="ri:search-line" className="text-primary size-5 shrink-0" aria-hidden="true" />
                       <input
                         ref={inputRef}
@@ -523,7 +523,19 @@ export default function SearchDialogContent() {
                       )}
 
                       {status === 'error' && (
-                        <div className="flex flex-col items-center justify-center gap-3 py-10 text-center">
+                        <div className="empty-state-plate mx-1 my-3">
+                          <svg
+                            width="42"
+                            height="42"
+                            viewBox="0 0 44 44"
+                            fill="none"
+                            className="text-primary/65"
+                            aria-hidden="true"
+                          >
+                            <circle cx="22" cy="22" r="16" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+                            <path d="M22 14v9" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+                            <circle cx="22" cy="28.5" r="1.25" fill="currentColor" />
+                          </svg>
                           <output data-search-loading className="text-muted-foreground text-sm">
                             {t('search.loadError')}
                           </output>
@@ -538,21 +550,59 @@ export default function SearchDialogContent() {
                       )}
 
                       {status === 'ready' && !hasQueryOrFilter && (
-                        <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 py-10 text-center text-sm">
-                          <Icon icon="ri:search-eye-line" className="text-primary/50 size-8" aria-hidden="true" />
-                          <p>{t('search.emptyPrompt')}</p>
+                        <div className="empty-state-plate text-muted-foreground mx-1 my-3 text-sm">
+                          <svg
+                            width="46"
+                            height="46"
+                            viewBox="0 0 48 48"
+                            fill="none"
+                            className="text-primary/65"
+                            aria-hidden="true"
+                          >
+                            <circle cx="21" cy="21" r="12.5" stroke="currentColor" strokeWidth="1.5" />
+                            <path d="M30.5 30.5 39 39" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+                            <path
+                              d="M21 26.8c-2.6-1.7-4.5-4.7-4.1-7.5.4-2.1 2-3.4 3.4-3.1l.7 1.3.7-1.3c1.4-.3 3 1 3.4 3.1.4 2.8-1.5 5.8-4.1 7.5Z"
+                              fill="currentColor"
+                              fillOpacity="0.26"
+                            />
+                          </svg>
+                          <p className="max-w-sm leading-relaxed">{t('search.emptyPrompt')}</p>
                         </div>
                       )}
 
                       {status === 'ready' && hasQueryOrFilter && searching && results.length === 0 && (
                         <div className="text-muted-foreground flex items-center justify-center gap-2 py-10 text-sm">
-                          <Icon icon="ri:loader-4-line" className="size-4 animate-spin" aria-hidden="true" />
+                          <Icon icon="ri:loader-4-line" className="text-primary size-4 animate-spin" aria-hidden="true" />
                           <span>{t('common.loading')}</span>
                         </div>
                       )}
 
                       {status === 'ready' && hasQueryOrFilter && !searching && results.length === 0 && (
-                        <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 py-10 text-center text-sm">
+                        <div className="empty-state-plate text-muted-foreground mx-1 my-3 text-sm">
+                          <svg
+                            width="44"
+                            height="44"
+                            viewBox="0 0 44 44"
+                            fill="none"
+                            className="text-primary/60"
+                            aria-hidden="true"
+                          >
+                            <circle cx="22" cy="22" r="15" stroke="currentColor" strokeWidth="1.4" strokeDasharray="4 3" />
+                            <path
+                              d="M22 11v4M22 29v4M11 22h4M29 22h4"
+                              stroke="currentColor"
+                              strokeWidth="1.4"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="m18 26 2.8-6.8L27.5 16l-2.8 6.8L18 26Z"
+                              fill="currentColor"
+                              fillOpacity="0.24"
+                              stroke="currentColor"
+                              strokeWidth="1.2"
+                            />
+                          </svg>
                           <p>{t('search.noResults')}</p>
                           {activeFilterCount > 0 && (
                             <button
@@ -607,8 +657,10 @@ export default function SearchDialogContent() {
                                     navigateToResult(item.url);
                                   }}
                                   className={cn(
-                                    'block rounded-xl px-3.5 py-2.5 transition-colors',
-                                    active ? 'bg-primary/10 ring-primary/25 ring-1' : 'hover:bg-foreground/[0.04]',
+                                    'block rounded-xl border border-transparent px-3.5 py-2.5 transition-all',
+                                    active
+                                      ? 'bg-primary/10 border-primary/28 shadow-[0_0.4rem_1.2rem_-0.8rem_rgb(233_84_107/0.45)]'
+                                      : 'hover:bg-foreground/[0.04]',
                                   )}
                                 >
                                   <div className="flex items-center justify-between gap-2">

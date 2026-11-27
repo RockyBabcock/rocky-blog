@@ -23,7 +23,7 @@ import { Toaster } from '@components/ui/sonner';
 const { post, siderType, isPostPage, articleTools = true } = Astro.props;
 ---
 
-<div class="flex min-h-screen flex-col text-black dark:text-white">
+<div class="site-ambient-canvas flex min-h-screen flex-col text-black dark:text-white">
   <Header isPostPage={isPostPage} tocNumbering={post?.data.tocNumbering ?? true} />
   <main class="relative flex grow flex-col gap-4">
     {(<slot />)}
@@ -39,6 +39,7 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
 
 <script>
   import { motionConfig } from '@constants/site-config';
+  import { setupAmbientPointer } from '@lib/ambient-pointer';
   import { setupArrivalRender } from '@lib/arrival-render';
   import { setupHeaderContinuity } from '@lib/header-continuity';
   import { setupMorphTransitions } from '@lib/morph-transitions';
@@ -63,5 +64,6 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
   setupScrollbarActivity();
   setupTouchPrefetch();
   setupPostReadingTracker();
+  setupAmbientPointer();
   if (motionConfig.clickBurst) setupPetalBurst();
 </script>

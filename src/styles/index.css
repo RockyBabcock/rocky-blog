@@ -27,5 +27,6 @@
 @import "./components/post.css";
 @import "./components/toc.css";
 @import "./components/home-editorial.css";
+@import "./theme/visual-delight.css";
 @import "./theme/focus-mode.css";
 @import "./components/lqip.css";

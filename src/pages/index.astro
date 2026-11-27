@@ -13,7 +13,7 @@ import { CONTENT_PADDING, PAGINATION } from '@constants/layout';
 import { seoConfig } from '@constants/site-config';
 import Layout from '@layouts/Layout.astro';
 import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
-import { getHomePagePosts, getSortedPosts } from '@lib/content';
+import { getEnabledSeries, getHomePagePosts, getPostsBySeriesSlug, getSortedPosts } from '@lib/content';
 import { toPostCardDataList } from '@lib/content/transforms';
 import type { Page } from 'astro';
 import { Icon } from 'astro-icon/components';
@@ -61,6 +61,21 @@ const page: Page<BlogPost> = {
     last: `${postsBaseUrl}/${Math.ceil(totalRegularPosts / pageSize)}`,
   },
 };
+
+// Compute accurate sequential editorial numbering based on actually rendered homepage sections
+const enabledSeries = getEnabledSeries();
+const hasSeriesSection = (await Promise.all(enabledSeries.map((s) => getPostsBySeriesSlug(s.slug, locale)))).some(
+  (list) => list.length > 0,
+);
+const hasFeaturedSection = stickyPosts.length > 0;
+
+let sectionCounter = 0;
+const nextSectionNum = () => String(++sectionCounter).padStart(2, '0');
+const featuredSectionNum = hasFeaturedSection ? nextSectionNum() : undefined;
+const latestSectionNum = nextSectionNum();
+const seriesSectionNum = hasSeriesSection ? nextSectionNum() : undefined;
+const topicsSectionNum = nextSectionNum();
+const timelineSectionNum = nextSectionNum();
 ---
 
 <Layout locale={locale} title={seoConfig.title}>
@@ -71,7 +86,7 @@ const page: Page<BlogPost> = {
 
     <div
       id="home-content"
-      class={`bg-gradient-start shadow-box tablet:shadow-none flex flex-col gap-9 overflow-clip scroll-mt-18 ${CONTENT_PADDING.editorial}`}
+      class={`editorial-paper-surface bg-gradient-start shadow-box tablet:shadow-none flex flex-col gap-9 overflow-clip scroll-mt-18 ${CONTENT_PADDING.editorial}`}
     >
       {/* Compact Search & Continue Reading bar for < 1280px viewports */}
       <div class="home-compact-utility">
@@ -80,12 +95,24 @@ const page: Page<BlogPost> = {
       </div>
 
       {/* 1. Featured Editorial Showcase */}
-      {stickyPosts.length > 0 && <FeaturedShowcase posts={stickyPosts} locale={locale} />}
+      {hasFeaturedSection && <FeaturedShowcase posts={stickyPosts} locale={locale} sectionNumber={featuredSectionNum} />}
+
+      {hasFeaturedSection && (
+        <div class="editorial-ornament-divider" aria-hidden="true">
+          <span class="editorial-ornament-petal" />
+        </div>
+      )}
 
       {/* 2. Latest Writing (Mixed Visual Cards + Compact Editorial Index) */}
       <section aria-labelledby="home-latest-heading" class="flex flex-col gap-4" data-home-latest>
         <div class="editorial-section-head">
           <div class="editorial-section-title-group">
+            <div class="editorial-kicker" aria-hidden="true">
+              <span class="editorial-kicker-num">{latestSectionNum}</span>
+              <span class="editorial-kicker-rule" />
+              <span>WRITING</span>
+              <span class="editorial-kicker-petal" />
+            </div>
             <h2 id="home-latest-heading" class="editorial-section-title">
               <Icon name="ri:quill-pen-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
               <span>{t(locale, 'post.latestPosts')}</span>
@@ -109,14 +136,28 @@ const page: Page<BlogPost> = {
         />
       </section>
 
+      {hasSeriesSection && (
+        <div class="editorial-ornament-divider" data-variant="dots" aria-hidden="true">
+          <span class="editorial-ornament-diamond" />
+        </div>
+      )}
+
       {/* 3. Series & Weekly Showcase */}
-      <SeriesShowcase locale={locale} />
+      {hasSeriesSection && <SeriesShowcase locale={locale} sectionNumber={seriesSectionNum} />}
+
+      <div class="editorial-ornament-divider" aria-hidden="true">
+        <span class="editorial-ornament-petal" />
+      </div>
 
       {/* 4. Explore Topics (Categories & Weighted Popular Tags) */}
-      <ExploreTopics posts={allPosts} locale={locale} />
+      <ExploreTopics posts={allPosts} locale={locale} sectionNumber={topicsSectionNum} />
+
+      <div class="editorial-ornament-divider" data-variant="dots" aria-hidden="true">
+        <span class="editorial-ornament-diamond" />
+      </div>
 
       {/* 5. Editorial Timeline */}
-      <EditorialTimeline posts={allPosts} locale={locale} />
+      <EditorialTimeline posts={allPosts} locale={locale} sectionNumber={timelineSectionNum} />
     </div>
   </TwoColumnLayout>
 </Layout>

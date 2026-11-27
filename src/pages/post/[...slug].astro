@@ -166,7 +166,7 @@ const seoDate = formatForSeo(date);
       data-post-category={primaryCategoryLabel}
       data-post-encrypted={isEncryptedPost ? 'true' : 'false'}
       data-available-locales={availableLocales.join(',')}
-      class={`shadow-box bg-gradient-start flex min-w-0 w-full max-w-full flex-col gap-2 overflow-x-clip ${CONTENT_PADDING.standard}`}
+      class={`editorial-paper-surface shadow-box bg-gradient-start flex min-w-0 w-full max-w-full flex-col gap-2 overflow-x-clip ${CONTENT_PADDING.standard}`}
     >
       <!-- Breadcrumb Navigation & Reading Toolbar -->
       <nav class="border-border/65 text-muted-foreground mb-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b pb-3 text-sm">
@@ -268,6 +268,11 @@ const seoDate = formatForSeo(date);
           )}
           <CustomContent Content={Content} />
         </article>
+        <div class="article-end-ornament" aria-hidden="true">
+          <span class="editorial-ornament-diamond" />
+          <span class="editorial-ornament-petal" />
+          <span class="editorial-ornament-diamond" />
+        </div>
         <PostPagination prevPost={prevPost} nextPost={nextPost} locale={locale} />
       </div>
     </div>

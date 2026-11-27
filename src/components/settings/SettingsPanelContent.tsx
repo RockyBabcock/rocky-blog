@@ -228,10 +228,13 @@ export default function SettingsPanelContent() {
                 transition: panelTransition(false),
               }}
             >
-              <div className="border-border bg-popover text-popover-foreground flex h-[calc(100dvh-6rem)] max-h-96 flex-col overflow-hidden rounded-2xl border p-4 shadow-xl">
+              <div className="modal-sakura-shell border-primary/18 bg-popover text-popover-foreground flex h-[calc(100dvh-6rem)] max-h-96 flex-col overflow-hidden rounded-2xl border p-4 shadow-xl">
                 {/* Header */}
                 <div className="mb-3 flex items-center justify-between">
-                  <h2 className="text-sm font-semibold">{t('settings.title')}</h2>
+                  <h2 className="flex items-center gap-1.5 text-sm font-semibold">
+                    <Icon icon="ri:equalizer-line" className="text-primary size-4" aria-hidden="true" />
+                    <span>{t('settings.title')}</span>
+                  </h2>
                   <button
                     type="button"
                     className="text-muted-foreground hover:bg-accent hover:text-foreground relative rounded-full p-1 transition-[background-color,color,transform] after:absolute after:-inset-2 after:rounded-full after:content-[''] active:scale-[0.96]"
@@ -289,7 +292,12 @@ export default function SettingsPanelContent() {
                           return (
                             <div key={item.key} className="py-2.5 first:pt-1 last:pb-1">
                               <div className="flex items-center justify-between gap-3">
-                                <span className={cn('text-sm', disabled && 'opacity-50')}>{t(item.i18nKey)}</span>
+                                <span className={cn('inline-flex items-center gap-2 text-sm', disabled && 'opacity-50')}>
+                                  {item.icon && (
+                                    <Icon icon={item.icon} className="text-primary/75 size-3.5 shrink-0" aria-hidden="true" />
+                                  )}
+                                  <span>{t(item.i18nKey)}</span>
+                                </span>
                                 {item.type !== 'segmented' && renderControl(item)}
                               </div>
                               {item.type === 'segmented' && <div className="mt-2">{renderControl(item)}</div>}
@@ -313,9 +321,10 @@ export default function SettingsPanelContent() {
                         <button
                           type="button"
                           onClick={resetReaderPreferences}
-                          className="border-input text-muted-foreground hover:bg-accent hover:text-foreground mt-3 w-full rounded-md border py-1.5 text-xs transition-[background-color,color,transform] active:scale-[0.96]"
+                          className="border-input text-muted-foreground hover:border-primary/35 hover:bg-primary/6 hover:text-primary mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-md border py-1.5 text-xs transition-[border-color,background-color,color,transform] active:scale-[0.96]"
                         >
-                          {t('settings.reset')}
+                          <Icon icon="ri:restart-line" className="size-3.5" aria-hidden="true" />
+                          <span>{t('settings.reset')}</span>
                         </button>
                       )}
                     </m.div>

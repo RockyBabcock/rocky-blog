@@ -15,9 +15,10 @@ import { localizedPath, t } from '@/i18n';
 interface Props {
   posts: BlogPost[];
   locale: string;
+  sectionNumber?: string;
 }
 
-const { posts, locale } = Astro.props;
+const { posts, locale, sectionNumber = '04' } = Astro.props;
 const weightedTags = computeTagTiers(getAllTags(posts), 18);
 const hasFeaturedCategories = Boolean(siteConfig?.featuredCategories?.length);
 ---
@@ -27,6 +28,12 @@ const hasFeaturedCategories = Boolean(siteConfig?.featuredCategories?.length);
     <section aria-labelledby="home-topics-heading" class="flex flex-col gap-5" data-home-topics>
       <div class="editorial-section-head">
         <div class="editorial-section-title-group">
+          <div class="editorial-kicker" aria-hidden="true">
+            <span class="editorial-kicker-num">{sectionNumber}</span>
+            <span class="editorial-kicker-rule" />
+            <span>EXPLORE</span>
+            <span class="editorial-kicker-petal" />
+          </div>
           <h2 id="home-topics-heading" class="editorial-section-title">
             <Icon name="ri:compass-3-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
             <span>{t(locale, 'home.exploreTopics')}</span>
@@ -42,7 +49,7 @@ const hasFeaturedCategories = Boolean(siteConfig?.featuredCategories?.length);
       {hasFeaturedCategories && <CategoryCards />}
 
       {weightedTags.length > 0 && (
-        <div class="border-border/70 bg-card/65 flex flex-col gap-3 rounded-xl border p-4">
+        <div class="decorative-dot-surface ambient-glow-surface border-border/70 bg-card/70 flex flex-col gap-3 rounded-xl border p-4">
           <div class="flex items-center justify-between gap-2">
             <h3 class="text-foreground flex items-center gap-1.5 text-sm font-semibold">
               <Icon name="ri:hashtag" class="text-primary size-4" aria-hidden="true" />
