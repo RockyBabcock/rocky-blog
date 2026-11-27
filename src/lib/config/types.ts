@@ -44,7 +44,6 @@ export interface FeaturedCategory {
 
 export interface FeaturedSeriesLinks {
   github?: string;
-  rss?: string;
   chrome?: string;
   docs?: string;
 }

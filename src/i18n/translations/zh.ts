@@ -227,7 +227,6 @@ export const uiStrings = {
   // ── Encrypted Post ─────────────────────────────────────────
   'encrypted.post.title': '此文章已加密',
   'encrypted.post.description': '请输入密码以查看文章内容',
-  'encrypted.post.rssNotice': '此文章已加密，请在网页中查看',
 
   // ── 404 ─────────────────────────────────────────────────────
   'notFound.title': '页面未找到',
@@ -249,7 +248,6 @@ export const uiStrings = {
   'series.postCount': '{count} 篇',
   'series.position': '第 {current} / {total} 篇',
   'series.noPosts': '暂无系列文章',
-  'series.rss': 'RSS 订阅',
   'series.chromeExtension': 'Chrome 插件',
   'series.docs': '文档',
   'series.issues': '期',

@@ -1,0 +1,1136 @@
+# Rocky Blog — Phase III
+# Complete Editorial Frontend Design Refinement + Full RSS Removal
+
+You are working on my existing Astro project:
+
+Repository: https://github.com/RockyBabcock/rocky-blog
+
+Current verified baseline:
+`3a321e4ec23a7effddf4ffa9a6e9a31624a6431f`
+
+Default branch: `main`
+
+Your mission is to significantly improve the actual frontend design quality of Rocky Blog.
+
+This is a design-focused implementation phase.
+
+I want the website to feel more carefully designed, more detailed, more visually expressive, more professional, and more memorable.
+
+The result should look like a premium independent editorial publication and a sophisticated personal digital journal.
+
+Do not just add random decorations.
+
+Do not rebuild the entire application.
+
+Do not replace the existing Astro architecture.
+
+You must inspect the current code, understand its design system, and implement the improvements directly in the existing components and styles.
+
+---
+
+# 1. Primary Design Objective
+
+The visual direction is:
+
+**Premium Editorial × Contemporary Magazine × Sakura Botanical Atmosphere × Celestial Graphic Details**
+
+The current Sakura-Rose design system is the foundation.
+
+Continue developing it rather than introducing another unrelated visual identity.
+
+The desired atmosphere:
+
+- Elegant and editorial.
+- Rich in carefully composed visual details.
+- Sophisticated rather than playful.
+- Warm, tactile, and atmospheric.
+- Minimal where appropriate, expressive where necessary.
+- Strong typography and visual hierarchy.
+- Beautiful imagery and deliberate composition.
+- Distinctive page layouts rather than repetitive templates.
+
+I LIKE:
+
+- Sakura petals.
+- Botanical branches.
+- Stars and constellations.
+- Celestial ornaments.
+- Elegant line-art.
+- Paper textures.
+- Refined editorial layouts.
+- Asymmetric compositions.
+- Thin rules and delicate framing.
+- Beautifully art-directed images.
+- Subtle animations and layered surfaces.
+
+I DO NOT WANT:
+
+- Anime-style aesthetics.
+- Manga illustrations.
+- Chibi or kawaii styling.
+- Cartoon flowers.
+- Childish sticker decorations.
+- Excessive pink.
+- Neon gradients.
+- Generic glassmorphism.
+- Generic SaaS dashboards.
+- Excessive floating widgets.
+- Random icons and ornaments without hierarchy.
+
+Sakura and celestial details are welcome, but they must look like professional graphic-design elements.
+
+---
+
+# 2. Preserve and Improve the Existing Color System
+
+Inspect the current theme variables before making changes.
+
+The current design direction already includes:
+
+- Warm archival linen backgrounds.
+- Muted botanical rose.
+- Dusty celestial blue.
+- Deep charcoal and warm ivory for dark mode.
+
+Use the existing semantic tokens from:
+
+- `src/styles/theme/shadcn.css`
+- `src/constants/design-tokens.ts`
+- `src/styles/theme/editorial-system.css`
+- `src/styles/theme/index.css`
+
+Do not replace the current palette with another random color scheme.
+
+Improve how the colors interact across different surfaces.
+
+Pay special attention to:
+
+- Main page background.
+- Content paper surfaces.
+- Elevated cards.
+- Image overlays.
+- Borders.
+- Secondary text.
+- Accent typography.
+- Hover and focus states.
+- Dark-mode separation.
+
+The color system should feel intentional and consistent.
+
+Avoid excessive use of the primary rose color.
+
+Use the celestial slate color as a secondary accent where appropriate.
+
+Make sure text contrast remains accessible.
+
+Both light and dark modes must receive the same level of visual attention.
+
+---
+
+# 3. Priority P0 — Fix the Existing CI Failure
+
+The latest GitHub Actions run fails at:
+
+`pnpm knip:strict`
+
+The reported file is:
+
+`src/components/home/SeriesShowcaseProgress.tsx`
+
+This file is genuinely imported by:
+
+`src/components/home/SeriesShowcase.astro`
+
+It is rendered using the Astro React client directive.
+
+Do not delete this component.
+
+Investigate the actual Astro-to-React dependency tracing issue and fix Knip using a narrow, documented configuration adjustment.
+
+Do not:
+
+- Disable Knip globally.
+- Remove strict checks.
+- Delete the component.
+- Ignore all unused files.
+- Hide errors.
+
+The latest CI passed Biome but did not execute typechecking, unit tests, or the production build.
+
+Restore a fully verifiable pipeline before considering the implementation complete.
+
+---
+
+# 4. Priority P0 — Remove RSS Functionality Completely
+
+I no longer need RSS anywhere in this project.
+
+Remove the complete RSS implementation, not just its visual entry points.
+
+First perform a full repository search for:
+
+- `rss`
+- `rss.xml`
+- `application/rss+xml`
+- `rssFeeds`
+- `RssFeedLink`
+- `@astrojs/rss`
+- `/rss/feed.xsl`
+- RSS-specific translations and metadata.
+
+Use a repository-wide search or ripgrep to find every reference, including files that are not listed below.
+
+## 4.1 Remove RSS routes and assets
+
+Delete the RSS-only implementation files:
+
+- `src/pages/rss.xml.ts`
+- `src/pages/[lang]/rss.xml.ts`
+- `src/pages/rss/feed.xsl.ts`
+- `src/lib/rss-utils.ts`
+- `public/rss/feed.css`
+
+Remove the RSS-only directory if it becomes empty.
+
+Do not delete unrelated assets or CSS.
+
+## 4.2 Remove RSS metadata
+
+Update:
+
+- `src/layouts/HeadMeta.astro`
+- `src/layouts/page-meta.ts`
+
+Remove:
+
+- Automatic RSS feed URL generation.
+- The `rssFeeds` metadata property.
+- The `RssFeedLink` interface.
+- `<link rel="alternate" type="application/rss+xml">` elements.
+- RSS-specific comments and logic.
+
+Keep all other SEO functionality intact.
+
+## 4.3 Remove RSS from the footer and social profile
+
+Update:
+
+- `src/components/layout/Footer.astro`
+- `config/site.yaml`
+
+Remove the RSS footer link.
+
+Remove the default `social.rss` configuration entry.
+
+Remove the RSS entry from the featured-series related links configuration.
+
+Preserve all other social platforms and useful series links.
+
+Do not remove the generic social-link system.
+
+## 4.4 Clean up types and route configuration
+
+Inspect and update:
+
+- `src/lib/config/types.ts`
+- `src/lib/config/reserved-routes.ts`
+- `src/pages/_shared/utils.ts`
+- `config/site.yaml`
+
+Remove RSS-only configuration and route exceptions.
+
+Remove `rss.xml` and `rss` reserved-route entries if they are no longer required.
+
+Remove the obsolete `rss/feed.xsl` mirror exemption.
+
+Do not weaken the existing locale route completeness check.
+
+## 4.5 Remove dependencies
+
+Remove:
+
+`@astrojs/rss`
+
+Use the package manager to update both:
+
+- `package.json`
+- `pnpm-lock.yaml`
+
+Do not manually corrupt or partially edit the lockfile.
+
+## 4.6 Remove RSS translations and obsolete documentation
+
+Remove RSS-only translation keys from all four locales:
+
+- `zh`
+- `en`
+- `ja`
+- `fr`
+
+Examples include:
+
+- `series.rss`
+- `encrypted.post.rssNotice`
+
+Only remove keys that are exclusively used by RSS.
+
+Update outdated RSS documentation in:
+
+- `README.md`
+- `docs/README.en.md`
+- `src/content/blog/tools/astro-koharu-guide.md`
+
+Preserve unrelated technical documentation and article content.
+
+Also update the outdated Korean locale references in documentation where appropriate: this project now supports Chinese, English, Japanese, and French.
+
+## 4.7 RSS removal acceptance criteria
+
+After implementation:
+
+- `/rss.xml` must no longer be generated.
+- Localized RSS endpoints must no longer be generated.
+- No RSS autodiscovery metadata must exist.
+- No RSS UI link or RSS social icon must remain.
+- No RSS-specific package dependency must remain.
+- No RSS-only helper or stylesheet must remain.
+- No active configuration or documentation should describe RSS as an available feature.
+
+Important:
+
+Do NOT remove sitemap generation.
+
+Do NOT remove robots.txt.
+
+Do NOT remove canonical metadata.
+
+Do NOT remove hreflang metadata.
+
+Do NOT remove Open Graph or Twitter metadata.
+
+Do NOT remove search indexing or Pagefind.
+
+This request concerns RSS functionality only.
+
+---
+
+# 5. Priority P1 — Redesign the Overall Site Composition
+
+The frontend needs to feel much more intentionally art-directed.
+
+Avoid solving the problem by adding more sections.
+
+The existing content architecture is already substantial.
+
+Focus on improving the design of what is already there.
+
+Create a consistent visual language for:
+
+- Hero and cover.
+- Left profile sidebar.
+- Main editorial surface.
+- Right utility rail.
+- Article cards.
+- Section headers.
+- Category and tag navigation.
+- Archive timeline.
+- Footer.
+
+Each area should have its own visual identity while remaining part of the same design system.
+
+Use more advanced layout techniques where appropriate:
+
+- Editorial grid systems.
+- Asymmetric composition.
+- Controlled overlap.
+- Strong image hierarchy.
+- Consistent alignment.
+- Variable card proportions.
+- Deliberate negative space.
+- Layered paper-like surfaces.
+- Hairline separators.
+- Small typographic labels.
+- Fine corner-frame details.
+- Restrained decorative watermarks.
+
+The page should feel designed from top to bottom, not like a collection of default components placed inside boxes.
+
+---
+
+# 6. Priority P1 — Hero and Cover Redesign
+
+Files to inspect:
+
+- `src/components/ui/cover/Cover.astro`
+- `src/components/ui/cover/HeroImage.astro`
+- `src/components/common/BotanicalMarks.astro`
+- `src/components/ui/cover/SakuraPetals.astro`
+- `src/styles/components/cover.css`
+
+The Hero is the first visual impression of the site.
+
+Improve its art direction substantially.
+
+Requirements:
+
+1. Improve the visual composition of the site title and subtitle.
+2. Create a more deliberate balance between typography and background photography.
+3. Refine the image overlay and text contrast.
+4. Add carefully positioned editorial metadata and decorative labels where real configuration data exists.
+5. Use elegant line-art and botanical accents.
+6. Improve the visual treatment of the existing action buttons.
+7. Refine the relationship between the Hero and the main content below it.
+8. Improve responsive composition on mobile.
+
+Consider:
+
+- A small editorial overline.
+- More expressive typography.
+- Subtle framing around the main visual.
+- A restrained vertical or horizontal index detail.
+- A more deliberate text alignment.
+- Controlled image depth.
+- A subtle edge or corner treatment.
+- A clear visual path into the homepage content.
+
+Do not add fake issue numbers, fake article counts, or fabricated publication metadata.
+
+Use existing configuration and actual content data.
+
+Keep the current cover image and avatar unless there is a concrete technical reason to change them.
+
+Do not turn the Hero into an excessively busy landing page.
+
+---
+
+# 7. Priority P1 — Redesign the Profile Sidebar
+
+Files to inspect:
+
+- `src/components/layout/HomeInfo.astro`
+- `src/components/layout/HomeSider.astro`
+- `src/components/layout/Social.astro`
+- `src/styles/components/sider.css`
+
+The sidebar should feel like a carefully designed personal editorial identity panel.
+
+Improve:
+
+- Avatar framing.
+- Profile hierarchy.
+- Name typography.
+- Description layout.
+- Social icon composition.
+- Navigation grouping.
+- Active navigation state.
+- Section dividers.
+- Spacing and alignment.
+- Sticky behavior.
+- Mobile drawer presentation.
+
+The avatar should feel intentional, not like an ordinary circular image sitting above text.
+
+Use sophisticated borders, subtle framing, and controlled decorative details.
+
+Make navigation more visually expressive without making it difficult to use.
+
+Preserve all existing navigation behavior and profile functionality.
+
+Do not remove or hide navigation items simply to make the sidebar cleaner.
+
+---
+
+# 8. Priority P1 — Homepage Editorial Redesign
+
+Current homepage sections:
+
+- Featured Editorial Showcase.
+- Latest Writing.
+- Series & Weekly Showcase.
+- Explore Topics.
+- Editorial Timeline.
+- Desktop right utility rail.
+- Compact search and reading utilities.
+
+Keep every section.
+
+Do not arbitrarily add several new top-level homepage sections.
+
+## 8.1 Featured Showcase
+
+Inspect:
+
+`src/components/home/FeaturedShowcase.astro`
+
+Improve:
+
+- Lead article composition.
+- Secondary article hierarchy.
+- Image aspect ratios and cropping.
+- Text overlay.
+- Metadata placement.
+- Category labels.
+- Date and reading-time styling.
+- Card boundaries.
+- Hover feedback.
+
+Make the primary feature feel like a magazine cover story.
+
+Secondary entries should feel related but visually subordinate.
+
+Avoid making every card look identical.
+
+## 8.2 Latest Writing
+
+Inspect:
+
+- `src/components/post/PostList.astro`
+- `src/components/post/PostItemCard.astro`
+- `src/components/home/CompactPostRow.astro`
+- `src/styles/components/home-editorial.css`
+
+This area deserves particular attention.
+
+Review the existing diagonal image clipping and old card layout.
+
+Determine whether those patterns still fit the updated editorial design system.
+
+Improve the article card treatment:
+
+- Better relationship between image and text.
+- More refined typography.
+- Clear title hierarchy.
+- More organized metadata.
+- Better summary placement.
+- More deliberate category and tag treatment.
+- Consistent image proportions.
+- Stronger separation between article entries.
+
+Use a thoughtful mix of:
+
+- Large editorial feature cards.
+- Compact index rows.
+- Image-led cards.
+- Text-focused entries.
+
+Do not use a single repetitive card pattern for all content.
+
+Do not remove article descriptions, dates, categories, reading time, or other meaningful metadata.
+
+## 8.3 Series and Weekly
+
+Inspect:
+
+- `src/components/home/SeriesShowcase.astro`
+- `src/components/home/SeriesShowcaseProgress.tsx`
+- `src/components/series/SeriesIssues.astro`
+
+Improve:
+
+- Series cover composition.
+- Series title hierarchy.
+- Description typography.
+- Issue metadata.
+- Latest issue presentation.
+- Progress visualization.
+- Continue-reading CTA.
+- Responsive card geometry.
+
+Make each series feel like an individual editorial collection.
+
+The progress indicator should feel integrated into the card design rather than like a generic progress bar.
+
+Preserve accurate progress calculations.
+
+## 8.4 Explore Topics
+
+Improve category and tag discovery:
+
+- Clear category grouping.
+- Better category card hierarchy.
+- Richer but restrained background treatments.
+- Better typography.
+- More intentional tag distribution.
+- Improved interactive states.
+
+Do not introduce excessive tag pills.
+
+## 8.5 Editorial Timeline
+
+Improve:
+
+- Year navigation.
+- Date labels.
+- Timeline connectors.
+- Entry alignment.
+- Hover feedback.
+- Visual grouping.
+- Link affordances.
+
+Make it feel like a curated chronological publication archive.
+
+Preserve the actual underlying archive data.
+
+---
+
+# 9. Priority P1 — Improve the Three-Column Layout
+
+Inspect:
+
+- `src/layouts/TwoColumnLayout.astro`
+- `src/styles/components/home-editorial.css`
+- `src/components/home/HomeRightRail.astro`
+- `src/components/home/RightRailWidgets.tsx`
+
+The current layout combines:
+
+1. Left profile/sidebar.
+2. Central content.
+3. Right utility rail.
+
+Improve the proportions.
+
+Large desktop:
+
+- Main editorial content must have sufficient width.
+- Sidebar should remain visually balanced.
+- Right rail should not squeeze the center.
+- The three columns should align cleanly.
+
+Standard desktop:
+
+- Reduce unnecessary horizontal crowding.
+- Maintain readable text width.
+- Keep functional navigation.
+
+Tablet:
+
+- Reflow desktop-only elements intelligently.
+- Keep search and reading utilities accessible.
+- Avoid sudden layout compression.
+
+Mobile:
+
+- One coherent content column.
+- Optimized typography.
+- Touch-friendly actions.
+- No horizontal overflow.
+- Proper image cropping.
+- Comfortable vertical rhythm.
+
+Do not simply shrink desktop elements to fit mobile.
+
+Review the existing media queries and improve them based on real rendered results.
+
+---
+
+# 10. Priority P1 — Article Page Visual Upgrade
+
+Inspect:
+
+- `src/pages/post/[...slug].astro`
+- `src/components/common/CustomContent.astro`
+- `src/components/post/`
+- `src/components/markdown/`
+- `src/styles/components/post.css`
+- `src/styles/theme/markdown.css`
+
+The article experience should feel like reading a premium digital publication.
+
+Improve the complete reading journey.
+
+## Article header
+
+Refine:
+
+- Cover image.
+- Article title.
+- Published date.
+- Updated date.
+- Word count.
+- Estimated reading time.
+- Category breadcrumbs.
+- Description or summary.
+- Existing action toolbar.
+
+Improve title typography and content spacing.
+
+## Reading toolbar
+
+Make existing actions more coherent and visually refined.
+
+Preserve:
+
+- Focus Mode.
+- Share.
+- Markdown copy and download.
+- Table of Contents.
+- Reading Progress.
+- Reader settings.
+- Existing article functions.
+
+Do not remove functionality.
+
+Do not crowd the toolbar with unnecessary icons.
+
+## Article typography
+
+Improve:
+
+- Heading hierarchy.
+- Paragraph line length.
+- Line height.
+- Lists.
+- Quotes.
+- Tables.
+- Inline code.
+- Code blocks.
+- Images.
+- Captions.
+- Diagrams.
+- Mathematical expressions.
+- Infographic containers.
+
+Content readability is more important than decoration.
+
+Use a refined editorial typography system with consistent spacing.
+
+## Reading details
+
+Add more careful styling to:
+
+- Heading anchors.
+- Inline links.
+- Image containers.
+- Code block frames.
+- Table headers.
+- Callout blocks.
+- Blockquotes.
+- Article-end dividers.
+- Previous and next article navigation.
+
+Preserve all Markdown functionality and rendering behavior.
+
+---
+
+# 11. Priority P2 — Archives, Categories, Tags, and Series Pages
+
+These pages must not feel like secondary pages that received less design attention.
+
+Inspect:
+
+- `src/pages/archives.astro`
+- `src/pages/categories/`
+- `src/pages/tags/`
+- `src/pages/[seriesSlug].astro`
+- `src/components/category/`
+- `src/components/tag/`
+- `src/components/series/`
+- `src/styles/components/index-pages.css`
+- `src/styles/components/index-archives.css`
+
+## Archives
+
+The archive already has a writing calendar.
+
+Improve its visual hierarchy, cell geometry, labels, selected states, year navigation, and relationship with the article timeline.
+
+Do not create another calendar or duplicate archive system.
+
+## Categories
+
+Improve category cards, category labels, page intro, post counts, and article-list presentation.
+
+## Tags
+
+Improve tag cloud composition and filter controls.
+
+Keep tag filtering functionality.
+
+## Series pages
+
+Improve collection identity, series cover, issue list, progress presentation, and navigation.
+
+The pages should share a visual language without becoming identical templates.
+
+---
+
+# 12. Priority P2 — Refine the Right Utility Rail
+
+The existing rail already provides:
+
+- Quick Search.
+- Command Palette.
+- Continue Reading.
+- Series Progress.
+- Top Categories.
+- Archive Years.
+
+Improve its visual hierarchy and cohesion.
+
+It should feel like a curated reading companion.
+
+Use subtle group headings, consistent spacing, clear information density, and refined interactive elements.
+
+Avoid:
+
+- Too many separate generic cards.
+- Excessive borders.
+- Overly tall widgets.
+- Redundant information.
+- Unnecessary scrolling.
+
+Preserve all current utility functionality.
+
+---
+
+# 13. More Visual Details — Design Craftsmanship Requirements
+
+This is a major requirement.
+
+I want the page to feel richer in its details.
+
+Add visual details where they meaningfully improve composition.
+
+Examples:
+
+### Editorial typography
+- More expressive section labels.
+- Refined uppercase overlines.
+- Better number and date typography.
+- Mixed display and body type hierarchy.
+- Consistent line lengths.
+- More intentional text alignment.
+
+### Layout details
+- Asymmetric card proportions.
+- Layered section surfaces.
+- Fine inset borders.
+- Subtle image frames.
+- Carefully placed corner marks.
+- Small editorial page numbers.
+- Delicate section rules.
+- Controlled overlaps.
+- Better use of negative space.
+
+### Botanical details
+- Subtle sakura branch marks.
+- Restrained petal watermarks.
+- Thin botanical line illustrations.
+- Small floral separators.
+
+### Celestial details
+- Tiny star marks.
+- Restrained constellation lines.
+- Orbital details.
+- Subtle celestial accents.
+
+### Card details
+- Refined image crops.
+- Better overlays.
+- Metadata dividers.
+- Hover borders.
+- Image motion.
+- Focus states.
+- Clear visual hierarchy.
+
+### Interface details
+- Better button geometry.
+- Consistent icon sizing.
+- Better popover styling.
+- More sophisticated empty states.
+- Refined modal surfaces.
+- Clear loading states.
+- More complete responsive interactions.
+
+Do not add every decoration to every component.
+
+Create a controlled visual rhythm.
+
+Some surfaces should be quiet; some should become focal points.
+
+The most important principle is that visual details should feel intentionally placed.
+
+---
+
+# 14. Animation and Interaction Polish
+
+Inspect the existing motion configuration and animation components.
+
+Preserve the current sakura petals and click burst.
+
+Do not remove these effects just because the design is being refined.
+
+Improve:
+
+- Hero entrance.
+- Section reveal.
+- Card hover.
+- Image hover.
+- Navigation active state.
+- Dropdown transitions.
+- Button feedback.
+- Modal transitions.
+- Reading progress feedback.
+- Page transitions.
+
+Keep animations elegant and restrained.
+
+Avoid excessive parallax, large movement, and constant background motion.
+
+Respect:
+
+- Existing motion settings.
+- Reduced motion preferences.
+- Mobile performance.
+- Visibility-based lazy initialization.
+
+Do not create a new animation framework.
+
+Reuse the existing Motion system.
+
+---
+
+# 15. Internationalization
+
+The website supports exactly:
+
+- Chinese (`zh`).
+- English (`en`).
+- Japanese (`ja`).
+- French (`fr`).
+
+Preserve all four locales.
+
+All new visible text must use the translation system.
+
+Do not hardcode UI labels in English.
+
+Check long French strings, Japanese typography, and Chinese line wrapping.
+
+Do not reintroduce Korean.
+
+---
+
+# 16. Strict Feature Preservation
+
+Do not break or remove any retained functionality.
+
+Preserve:
+
+- Homepage sections.
+- Articles.
+- Categories.
+- Tags.
+- Archives.
+- Pagination.
+- Weekly and series.
+- About page.
+- SEO.
+- Sitemap.
+- Robots.
+- Pagefind.
+- Search.
+- Command Palette.
+- Reading History.
+- Continue Reading.
+- Series Progress.
+- Focus Mode.
+- Table of Contents.
+- Reading Progress.
+- Markdown Source Copy/Download.
+- AES-256-GCM encrypted posts.
+- Partial encrypted blocks.
+- KaTeX.
+- Mermaid.
+- Infographics.
+- Shoka containers.
+- Tabs.
+- Collapsible content.
+- Spoiler and Ruby support.
+- Shiki syntax highlighting.
+- Code copy, collapse, and fullscreen.
+- Image lightbox.
+- Image zoom/pan.
+- Lazy loading and LQIP.
+- Dark mode.
+- Reader preferences.
+- Existing sakura animations.
+- Page transitions.
+- Reduced-motion support.
+
+Do not restore previously removed features such as CMS, comments, BGM, Moments, Umami, or other removed systems.
+
+Do not add random article recommendations.
+
+Do not introduce new third-party analytics.
+
+Do not add a server-side user account system.
+
+---
+
+# 17. Visual QA Is Mandatory
+
+Do not judge the design from source code alone.
+
+Run the application and inspect actual rendered pages wherever browser testing is available.
+
+Inspect:
+
+- 1920px desktop.
+- 1440px desktop.
+- 1280px desktop.
+- 1024px tablet.
+- 768px tablet.
+- 390px mobile.
+- 360px mobile.
+
+Inspect these page types:
+
+1. Homepage.
+2. Article page.
+3. Archives.
+4. Categories.
+5. Tags.
+6. Series.
+7. About.
+8. 404 page.
+
+Inspect both light and dark modes.
+
+Create before/after screenshots if supported by the environment.
+
+Look carefully for:
+
+- Empty or unbalanced areas.
+- Excessively dense areas.
+- Misaligned elements.
+- Repetitive card styling.
+- Inconsistent border radius.
+- Poor text hierarchy.
+- Weak contrast.
+- Bad image crops.
+- Excessive decoration.
+- Sticky element collisions.
+- Mobile overflow.
+- Inconsistent translated layouts.
+
+Do not claim visual validation unless the pages have actually been rendered and inspected.
+
+---
+
+# 18. Required Technical Validation
+
+After all modifications, run:
+
+```bash
+pnpm lint
+pnpm knip:strict
+pnpm check
+pnpm test
+pnpm build
+```
+
+Confirm:
+
+- No RSS routes are generated.
+- No RSS dependency remains.
+- No RSS metadata remains.
+- Sitemap still works.
+- Robots still works.
+- Canonical and hreflang still work.
+- All four locales build.
+- Existing article routes still work.
+- Existing encrypted content still works.
+- Existing page navigation still works.
+
+Fix any regression introduced by this implementation.
+
+Do not weaken CI to achieve a green result.
+
+---
+
+# 19. Implementation Order
+
+Follow this sequence:
+
+**Phase A — Repository Stabilization**
+- Inspect the latest branch.
+- Fix the Knip issue correctly.
+- Run the necessary validation.
+
+**Phase B — Complete RSS Removal**
+- Remove RSS routes.
+- Remove RSS metadata.
+- Remove RSS UI and config.
+- Remove RSS types and helper files.
+- Remove package dependency and update lockfile.
+- Update obsolete documentation and translations.
+
+**Phase C — Design System Refinement**
+- Refine typography.
+- Refine spacing.
+- Refine surfaces.
+- Refine colors and borders.
+- Refine responsive rules.
+
+**Phase D — Page-Level Redesign**
+- Hero.
+- Sidebar.
+- Homepage.
+- Featured cards.
+- Latest Writing.
+- Series.
+- Topics.
+- Timeline.
+- Article page.
+- Archives.
+- Categories.
+- Tags.
+- Footer.
+- 404.
+
+**Phase E — Interaction and Visual QA**
+- Refine hover and focus states.
+- Test animations.
+- Inspect desktop, tablet, and mobile.
+- Inspect light and dark modes.
+
+**Phase F — Full Validation**
+- Lint.
+- Knip.
+- Typecheck.
+- Tests.
+- Production build.
+
+Do not stop at an implementation plan.
+
+Make the actual code changes.
+
+Do not commit, push, merge, or deploy.
+
+---
+
+# 20. Final Report
+
+Provide:
+
+1. Summary of the visual redesign.
+2. Summary of the RSS removal.
+3. Main layout and component improvements.
+4. New and modified files.
+5. Removed files and dependencies.
+6. Translation changes.
+7. CI results.
+8. Responsive and theme QA results.
+9. Any remaining issues.
+
+The final frontend should look significantly more designed than the current implementation.
+
+I want a website with more visual depth, more careful detail, stronger typography, better composition, and a distinctive editorial identity.
+
+**Do not confuse minimalism with emptiness.**
+
+**Do not confuse decoration with design.**
+
+Make the entire experience feel intentionally art-directed, from the first screen to the final footer.

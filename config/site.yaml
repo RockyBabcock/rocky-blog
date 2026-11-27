@@ -19,7 +19,7 @@ site:
   avatar: /img/avatar.webp # 网站头像
   showLogo: false # 是否显示图形 Logo；默认显示站点名称，启用后可替换 src/assets/svg/logo.svg
   author: Rocky # 作者名称
-  url: https://rockybabcock.github.io # 站点 URL 用于 RSS 和 SEO（部署到自定义域名时请替换）
+  url: https://rockybabcock.github.io # 站点 URL 用于 SEO 与规范链接（部署到自定义域名时请替换）
   defaultOgImage: /img/avatar.webp # 默认 Open Graph 图片
   startYear: 2024 # 建站年份
   timezone: Asia/Shanghai # 时区配置 (IANA 格式)，用于日期显示和处理
@@ -114,7 +114,7 @@ featuredCategories:
 # =============================================================================
 # 字段说明：
 #   slug: URL 路径（必填），如 'weekly' 对应 /weekly 路径
-#         注意：不能与保留路由冲突，包括：about, categories, tags, posts, archives, api, _astro, rss.xml, sitemap.xml, robots.txt, favicon.ico 等
+#         注意：不能与保留路由冲突，包括：about, categories, tags, posts, archives, shelf, api, _astro, sitemap.xml, robots.txt, favicon.ico 等
 #   categoryName: 对应的分类名称（必填，需在 categoryMap 中存在）
 #   label: 侧边栏/导航中显示的简短名称（可选）
 #   fullName: 系列页面标题显示的完整名称（可选）
@@ -139,7 +139,6 @@ featuredSeries:
     icon: ri:newspaper-line # 导航图标
     links: # 相关链接（可选）
       github: https://github.com/RockyBabcock/rocky-blog # (可选) GitHub 仓库
-      rss: /rss.xml # (可选) RSS 订阅链接
       # chrome: https://chromewebstore.google.com/detail/your-extension-id # (可选) 浏览器插件
       # docs: https://your-docs-url # (可选) 文档链接
   # 示例：添加第二个系列（取消注释启用）
@@ -169,10 +168,6 @@ social:
     url: https://github.com/RockyBabcock # GitHub 主页
     icon: ri:github-fill # Remix Icon 的 GitHub 图标
     color: '#191717' # (可选) 图标颜色
-  rss:
-    url: /rss.xml # 站内 RSS 订阅地址
-    icon: ri:rss-line
-    color: '#ff6600'
   # -------------------------------------------------------------------------
   # 以下是更多可选的社交平台配置示例，取消注释并修改即可启用：
   # -------------------------------------------------------------------------

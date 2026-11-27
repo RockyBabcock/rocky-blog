@@ -25,7 +25,7 @@ describe('site-sections normalizers', () => {
       normalizeSocialConfig(
         {
           github: { url: ' https://github.com/test ', icon: ' ri:github-fill ', color: ' #000 ' },
-          noColor: { url: '/rss.xml', icon: 'ri:rss-line' },
+          noColor: { url: 'https://example.com', icon: 'ri:global-line' },
           missingUrl: { icon: 'ri:twitter-fill' },
           badShape: 'not-an-object',
         },
@@ -33,7 +33,7 @@ describe('site-sections normalizers', () => {
       ),
       {
         github: { url: 'https://github.com/test', icon: 'ri:github-fill', color: '#000' },
-        noColor: { url: '/rss.xml', icon: 'ri:rss-line', color: '' },
+        noColor: { url: 'https://example.com', icon: 'ri:global-line', color: '' },
       },
     );
     assert.equal(warnings.length, 2);

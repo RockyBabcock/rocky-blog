@@ -15,20 +15,6 @@ export const getSanitizeHtml = (html: string) => {
 };
 
 /**
- * Strip all HTML tags and return plain text, truncated to maxLength.
- * Used by RSS feeds to generate <description> from rendered HTML.
- */
-export function stripHtmlToText(html: string, maxLength: number = 150): string {
-  const text = sanitizeHtml(html, {
-    allowedTags: [],
-    allowedAttributes: {},
-    textFilter: cleanInvalidXmlCharacters,
-  });
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength).replace(/\s+\S*$/, '');
-}
-
-/**
  * 从Markdown内容中提取纯文本，用于生成OG描述
  * @param content Markdown内容字符串
  * @param maxLength 最大长度，默认150字符

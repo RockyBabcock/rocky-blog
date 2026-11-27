@@ -228,7 +228,6 @@ export const uiStrings: UIStrings = {
   // ── Encrypted Post ─────────────────────────────────────────
   'encrypted.post.title': 'This post is encrypted',
   'encrypted.post.description': 'Please enter the password to view the content',
-  'encrypted.post.rssNotice': 'This post is encrypted. Please view it on the website.',
 
   // ── 404 ─────────────────────────────────────────────────────
   'notFound.title': 'Page Not Found',
@@ -250,7 +249,6 @@ export const uiStrings: UIStrings = {
   'series.postCount': '{count} posts',
   'series.position': '{current} of {total}',
   'series.noPosts': 'No posts in this series',
-  'series.rss': 'RSS Feed',
   'series.chromeExtension': 'Chrome Extension',
   'series.docs': 'Documentation',
   'series.issues': 'issues',

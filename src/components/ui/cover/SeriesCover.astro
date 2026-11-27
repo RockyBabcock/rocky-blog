@@ -30,7 +30,6 @@ const descriptionHtml = getSanitizeHtml(rawHtml);
 
 const links = [
   { href: series.links?.github, icon: 'ri:github-fill', label: 'GitHub' },
-  { href: series.links?.rss, icon: 'ri:rss-line', label: t(locale, 'series.rss'), reload: true },
   { href: series.links?.chrome, icon: 'ri:chrome-fill', label: t(locale, 'series.chromeExtension') },
   { href: series.links?.docs, icon: 'ri:book-open-line', label: t(locale, 'series.docs') },
 ].filter((link) => link.href);
@@ -53,7 +52,7 @@ const links = [
       links.length > 0 && (
         <div class="motion-rise mt-6 flex flex-wrap items-center justify-center gap-2.5" style="--i: 2">
           {links.map((link) => (
-            <a href={link.href} target="_blank" rel="noopener" data-astro-reload={link.reload} class="series-cover-link">
+            <a href={link.href} target="_blank" rel="noopener" class="series-cover-link">
               <Icon name={link.icon} class="size-4" aria-hidden="true" />
               <span>{link.label}</span>
             </a>

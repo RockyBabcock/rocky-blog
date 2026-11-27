@@ -19,7 +19,7 @@ import {
 } from '@lib/responsive-image';
 import { getOgImageUrl } from '@lib/seo/og-image';
 import { SEO } from 'astro-seo';
-import { defaultLocale, getAlternateUrl, getHtmlLang, getOgLocale, isI18nEnabled, localeList, localizedPath } from '@/i18n';
+import { defaultLocale, getAlternateUrl, getHtmlLang, getOgLocale, isI18nEnabled, localeList } from '@/i18n';
 
 const { meta } = Astro.props;
 const { locale, title, description, openGraph, robots, includeLocaleAlternates = true, availableLocales } = meta;
@@ -33,9 +33,6 @@ const canonicalHref = meta.canonical ?? Astro.url.href;
 const ogUrl = resolveAbsoluteUrl(openGraph?.url) ?? canonicalHref;
 
 const keywords = meta.keywords || siteConfig.keywords || [siteConfig.title];
-const rssFeeds = meta.rssFeeds ?? [
-  { href: new URL(localizedPath('/rss.xml', locale), Astro.site).href, title: siteConfig.title },
-];
 
 const showLocaleAlternates = includeLocaleAlternates && isI18nEnabled;
 const alternateLocales = availableLocales ? localeList.filter((loc) => availableLocales.includes(loc)) : localeList;
@@ -109,9 +106,6 @@ const portraitHero =
 <meta name="keywords" content={keywords.join(', ')} />
 {robots && <meta name="robots" content={robots} />}
 
-{rssFeeds.map((feed) => (
-  <link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />
-))}
 {/* hreflang alternate links for SEO — only output real existing locale variants */}
 {hreflangLinks.map(({ lang, href }) => (
   <link rel="alternate" hreflang={lang} href={href} />

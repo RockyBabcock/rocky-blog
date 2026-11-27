@@ -228,7 +228,6 @@ export const uiStrings: UIStrings = {
   // ── 暗号化された投稿 ─────────────────────────────────────────
   'encrypted.post.title': 'この記事は暗号化されています',
   'encrypted.post.description': 'パスワードを入力して内容をご覧ください',
-  'encrypted.post.rssNotice': 'この記事は暗号化されています。ウェブサイトでご覧ください。',
 
   // ── 404 ─────────────────────────────────────────────────────
   'notFound.title': 'ページは見つかりません',
@@ -250,7 +249,6 @@ export const uiStrings: UIStrings = {
   'series.postCount': '{count}件の投稿',
   'series.position': '{total} 本中 {current} 本目',
   'series.noPosts': 'このシリーズには投稿がありません',
-  'series.rss': 'RSSフィード',
   'series.chromeExtension': 'Chrome拡張機能',
   'series.docs': 'ドキュメント',
   'series.issues': '号',

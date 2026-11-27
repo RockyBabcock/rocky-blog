@@ -5,7 +5,7 @@ import { enabledFeaturedSeriesSlugs, type FeaturedSeriesContext, normalizeFeatur
 const silent = () => {};
 const context: FeaturedSeriesContext = {
   categoryMap: { 周刊: 'weekly', 随笔: 'life' },
-  reservedRoutes: ['about', 'archives', 'rss.xml'],
+  reservedRoutes: ['about', 'archives', 'robots.txt'],
   onWarning: silent,
 };
 

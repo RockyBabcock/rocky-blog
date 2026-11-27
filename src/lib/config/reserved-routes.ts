@@ -16,8 +16,6 @@ export const RESERVED_ROUTES = new Set([
   'shelf',
   '404',
   // Special files
-  'rss.xml',
-  'rss',
   'sitemap.xml',
   'sitemap-index.xml',
   'robots.txt',
