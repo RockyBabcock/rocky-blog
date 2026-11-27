@@ -125,7 +125,7 @@ Rocky Blog 是一个以内容创作、阅读和发现为中心的**高视觉表�
 | 首页和主要页面的视觉丰富度 | 持续优化目标 | 以真实页面为对象逐模块改进；不得宣称已完成最终视觉验收 |
 | 四种语言的 UI 完整性 | 已有四套字典，持续回归 | 新增文案时同步四种语言；文章译文逐篇核实 |
 | 真实浏览器 / 移动端回归 | 需要按变更范围执行 | CI 绿色不等于浏览器专项测试通过 |
-| 规范 URL / 域名 | **需要维护者确认** | 当前 `config/site.yaml` 的 `site.url` 与 GitHub 仓库元数据中的 Homepage 值不同；涉及 canonical、sitemap、OG 绝对 URL 前先确认最终主域名，不要自行猜测或替换 |
+| 规范 URL / 域名 | **需要维护者确认** | `config/site.yaml` 当前 `site.url` 为 `https://rockybabcock.github.io`，GitHub 仓库 Homepage 元数据为 `https://rocky-blog.vercel.app`。两者不同；canonical、sitemap、OG 绝对 URL 会受影响。不要推测哪一个才是最终主域名，也不要自行替换，需由维护者确认 |
 | 过往文档与上游记录 | 部分为历史资料 | 旧截图和带日期的性能报告必须标注历史；上游 CHANGELOG 不作为当前产品清单 |
 
 ### 当前没有被定义为进行中的功能项目
