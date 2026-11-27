@@ -1,6 +1,8 @@
-# Changelog
+# Changelog — Legacy Upstream History
 
-All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
+> **Provenance notice:** Entries below are inherited from the upstream `cosZone/astro-koharu` project. They document historical upstream releases, not the current feature set or release history of Rocky Blog. Some features listed below have been intentionally removed from Rocky Blog. Do not use this file to infer current product capabilities, roadmap, or implementation status. For current requirements and verified progress, read [PRODUCT-SCOPE.md](./docs/PRODUCT-SCOPE.md) and [PROJECT-STATUS.md](./docs/PROJECT-STATUS.md); use the Rocky Blog Git history for repository changes.
+
+The entries below are preserved as source-history context. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 ---
 
