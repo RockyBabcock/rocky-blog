@@ -221,7 +221,7 @@ pie title 博客内容分布
 
 ## Shoka 兼容 Markdown 语法
 
-除了上述标准 Markdown 增强外，astro-koharu 还支持从 Hexo Shoka 主题迁移的丰富扩展语法，包括：
+除了上述标准 Markdown 增强外，Rocky Blog 还支持从 Hexo Shoka 主题迁移并适配到当前 Markdown 管线的扩展语法，包括：
 
 - **文字特效** — 下划线 ++ins++、高亮 ==mark==、上下标 ~sub~ / ^sup^、颜色文字
 - **隐藏文字** — Spoiler 粒子动画 !!隐藏文字!! 和 !!模糊效果!!{.blur}
