@@ -1,27 +1,31 @@
 ---
 name: infographic-template-updater
-description: Update template catalogs and UI prompts after adding new infographic templates (src/templates/*.ts), including SKILL.md template list, site gallery template mappings, and the AIPlayground prompt list.
+description: Legacy upstream skill reference only. Do not use for Rocky Blog implementation; this repository has no local infographic template registry or AI playground gallery.
 ---
 
-# Infographic Template Updater
+# Legacy Infographic Template Updater — Not Applicable to Rocky Blog
 
-## Overview
+This file is retained only as historical context from an upstream infographic application. It is **not a valid update workflow for the current Rocky Blog repository**.
 
-Update public template lists and gallery mappings when new templates are added in `src/templates`.
+## Repository reality
 
-## Workflow
+The current Rocky Blog repository does not contain the paths assumed by the former skill:
 
-1. Collect new template names from the added `src/templates/*.ts` file (object keys).
-   - If templates are composed via spreads (e.g. `...listZigzagTemplates`), also confirm the final keys in `src/templates/built-in.ts`.
-2. Update template lists:
-   - `.skills/infographic-creator/SKILL.md` in the "Available Templates" list.
-   - `site/src/components/AIPlayground/Prompt.ts` in the template list.
-   - `.skills/infographic-syntax-creator/references/prompt.md` in the template list.
-   Keep existing ordering/grouping; add new `list-*` entries near other list templates.
-3. Sanity check with `rg -n "<template-name>"` across the above files to confirm presence.
+- No local `src/templates/` infographic registry.
+- No `site/src/components/AIPlayground/` prompt catalog.
+- No local infographic gallery dataset registry.
+- No `.skills/` directory; repository Agent Skills are under `.claude/skills/`.
 
-## Notes
+Do not create or update these missing paths based on this legacy document. Do not claim a new AntV template is integrated merely because it appears in an Agent prompt list.
 
-- Do not remove or rename existing entries.
-- Keep template names exact and lower-case.
-- If a template needs example data, update or extend `site/src/components/Gallery/datasets.ts` to match its structure.
+## Correct workflow
+
+Rocky Blog consumes the installed `@antv/infographic` package through its Markdown integration. If a template capability must be changed:
+
+1. Inspect the installed package version and current Markdown renderer.
+2. Confirm the template is supported by that package version.
+3. Update only the actual prompt / documentation files that exist and are used by the repository.
+4. Add or update a rendering test and run `pnpm build`.
+5. Update the content-system documentation if user-facing syntax or behavior changed.
+
+Any proposal to build a local template registry or playground requires a separate architecture review and explicit maintainer approval.
