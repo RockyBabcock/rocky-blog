@@ -1,268 +1,250 @@
 ---
 name: blog-writer
-description: 帮助用户按照 astro-koharu 博客的规范创建新博文。自动生成正确的 frontmatter 结构、选择合适的分类路径，并提供 Markdown 内容框架建议。使用场景：写一篇博文、创建新文章、写文章、写博客、new post、create blog post。
+description: 按 Rocky Blog 当前内容规范创建或规划 Markdown / MDX 文章，生成正确的 frontmatter、分类路径、语言目录和内容结构。适用于写博文、创建文章、写博客、new post、create blog post 等请求。
 ---
 
-# Blog Writer Skill
+# Rocky Blog — Blog Writer Skill
 
-帮助用户按照 astro-koharu 博客的规范创建新博文。
+按照仓库当前实现为 Rocky Blog 创建 Markdown / MDX 内容。不要将旧 astro-koharu 教程、旧 Hexo 配置或历史 CMS 工作流当作当前项目规范。
 
-## 你的任务
+开始前阅读：
+- `docs/PRODUCT-SCOPE.md`
+- `GETTING-STARTED.md`
+- `src/content.config.ts`
+- `config/site.yaml`
+- 如果涉及翻译，再阅读 `docs/overview/11-i18n-and-seo.md`
 
-当用户请求创建新博文时：
+## 1. 创建文章前确认的信息
 
-1. **收集必要信息**（如果用户未提供）：
-   - 文章标题
-   - 文章分类（从下面的分类列表中选择）
-   - 文章主题/关键词（用于生成标签和描述）
+根据用户需求确认：
 
-2. **生成 frontmatter**：
-   ```yaml
-   ---
-   title: [文章标题]
-   link: [URL slug，使用英文短横线分隔]
-   catalog: true
-   date: [当前日期时间，格式：YYYY-MM-DD HH:mm:ss]
-   description: [一句话描述文章内容，50-100字]
-   tags:
-     - [相关标签1]
-     - [相关标签2]
-     - [相关标签3]
-   categories:
-     - [一级分类, 二级分类]
-   ---
-   ```
+- 文章主题与目标读者。
+- 文章标题和摘要。
+- 文章所属分类。
+- 文章标签。
+- 文章日期与必要的更新日期。
+- 是否需要封面、数学公式或加密。
+- 是否需要英文、日文或法文译文。
 
-   **分类格式说明**：
-   - 嵌套分类使用数组格式：`- [一级分类, 二级分类]`
-   - 例如：`- [笔记, 前端]` 会创建 URL `/categories/note/front-end` 和面包屑 "笔记 → 前端"
-   - 单个分类直接写分类名：`categories: 随笔`
+如果用户已经提供这些信息，不要重复提问。缺少非关键项时，使用合理默认值并清楚标注。
 
-3. **确定文件路径**：
-   - 基础路径：`src/content/blog/`
-   - 根据分类生成对应的子目录结构
-   - 文件名：使用 `link` 字段值 + `.md` 扩展名
+## 2. 当前 Frontmatter schema
 
-4. **生成 Markdown 内容框架**：
-   - 提供文章结构建议（引言、正文章节、总结等）
-   - 如果适合，建议使用 infographic 信息图
-   - 提供代码示例占位符（如果是技术文章）
+文章 schema 位于 `src/content.config.ts`。常用字段：
 
-## 分类系统
-
-### 一级分类及其子分类
-
-1. **笔记 (note/)**
-   - 前端 (front-end/)
-     - React
-     - Vue
-     - TypeScript
-     - CSS
-     - 性能优化
-   - 后端 (back-end/) - 如果需要使用，确保已在 `_config.yml` 中添加映射
-   - 其他新增子分类 - 需要先在 `_config.yml` 添加映射
-
-2. **工具 (tools/)**
-   - 开发工具
-   - 效率工具
-   - 使用指南
-
-3. **随笔 (life/)**
-   - 生活随笔
-   - 年度总结
-   - 读书笔记
-
-4. **周刊 (weekly/)**
-   - 技术周刊
-   - 每周分享
-
-### 分类映射规则
-
-**YAML 格式（重要）**：
 ```yaml
-# 嵌套分类（推荐）- 使用数组包裹
+---
+title: 文章标题
+description: 一段简明摘要
+date: 2026-11-27 10:00:00
+link: stable-english-slug
+updated: 2026-11-27 12:00:00
+cover: /img/covers/example.webp
+tags:
+  - Astro
+  - 工程实践
 categories:
   - [笔记, 前端]
-
-# 单个分类 - 直接写分类名
-categories: 随笔
+sticky: false
+draft: false
+catalog: true
+tocNumbering: true
+math: false
+keywords:
+  - Rocky Blog
+translationKey: stable-english-slug
+---
 ```
 
-**URL 和路径映射**：
-- `categories: 随笔` → URL: `/categories/life` → 文件路径: `src/content/blog/life/`
-- `categories: - [笔记, 前端]` → URL: `/categories/note/front-end` → 文件路径: `src/content/blog/note/front-end/`
-- `categories: - [笔记, 前端, CSS]` → URL: `/categories/note/front-end` → 文件路径: `src/content/blog/note/front-end/`（三级分类作为标签）
+字段说明：
 
-**注意**：
-- 嵌套分类必须使用 `- [一级, 二级]` 格式
-- 分类名称（中文）会映射到 URL slug（英文），映射关系见上方分类列表
+| 字段 | 规则 |
+| --- | --- |
+| `title` | 必填，文章标题 |
+| `date` | 必填，发布时间；按 `site.timezone` 解析 |
+| `description` | 可选，文章摘要 |
+| `link` | 可选，建议使用稳定英文 slug |
+| `updated` | 可选，文章更新时间 |
+| `cover` | 可选，封面资源路径 |
+| `tags` | 可选，字符串数组 |
+| `categories` | 可选，字符串数组或嵌套字符串数组 |
+| `subtitle` | 可选，兼容现有内容的字段 |
+| `sticky` | 可选，是否置顶 |
+| `draft` | 可选，是否草稿 |
+| `catalog` | 可选，默认启用文章目录 |
+| `tocNumbering` | 可选，默认启用目录编号 |
+| `math` | 可选，数学公式相关开关 |
+| `password` | 可选，整篇文章加密配置 |
+| `keywords` | 可选，SEO 关键词数组 |
+| `translationKey` | 可选，用于关联翻译版本 |
 
-### 新增分类
+只使用 schema 已定义的字段。不要为了写作方便臆造 frontmatter 属性。
 
-如果用户需要创建上述分类之外的新分类，需要：
+## 3. 分类与路径
 
-1. **更新 `_config.yml`**：
-   ```yaml
-   category_map:
-     # 一级分类
-     随笔: life
-     笔记: note
-     工具: tools
-     周刊: weekly
+当前常用一级分类：
 
-     # 二级分类
-     前端: front-end
-     后端: back-end  # 新增示例
+- 笔记：技术笔记与开发实践。
+- 工具：工具介绍、使用指南与工作流。
+- 随笔：生活、观察、个人思考与年度总结。
+- 周刊：周期性整理与每周分享。
 
-     # 添加新分类映射
-     新分类名: new-category-slug
-   ```
+分类名称及 URL slug 映射以 `config/site.yaml` 的 `categoryMap` 为准；分类和系列的本地化显示文案见 `config/i18n-content.yaml`。不要使用已废弃的 `_config.yml`、`category_map` 或旧 CMS 配置。
 
-2. **创建对应目录**：
-   - 在 `src/content/blog/` 下创建对应的目录结构
-   - 例如：新增"后端"分类需要创建 `src/content/blog/note/back-end/`
+分类示例：
 
-3. **提醒用户**：
-   - 告知用户已添加新分类映射到 `_config.yml`
-   - 说明新分类的 URL 路径
+```yaml
+# 单层分类
+categories:
+  - 随笔
 
-## 文件命名规范
+# 嵌套分类
+categories:
+  - [笔记, 前端]
+```
 
-- 使用英文小写字母
-- 单词间用短横线 `-` 分隔
-- 避免特殊字符
-- 例如：`react-hooks-guide.md`, `astro-blog-setup.md`
+建议的文件组织：
 
-## 内容建议
+```text
+src/content/blog/
+├── note/
+│   └── front-end/
+│       └── example.md
+├── tools/
+│   └── example.md
+├── life/
+│   └── example.md
+└── weekly/
+    └── example.md
+```
 
-### 技术文章结构
+目录组织与路由 slug 的最终映射以当前内容索引实现为准。新增分类前，先查看 `categoryMap` 和现有文章目录；只有确实需要新增分类时，才修改配置和翻译映射。
+
+## 4. 多语言与翻译
+
+当前支持的 UI 语言固定为：
+
+| Locale | 语言 | 内容目录 |
+| --- | --- | --- |
+| `zh` | 中文（默认） | `src/content/blog/` |
+| `en` | English | `src/content/blog/en/` |
+| `ja` | 日本語 | `src/content/blog/ja/` |
+| `fr` | Français | `src/content/blog/fr/` |
+
+不支持韩语，不要生成 `ko/` 内容目录。
+
+译文应镜像默认文章的相对路径，并保持相同的 `link`；必要时使用相同的 `translationKey`。示例：
+
+```text
+src/content/blog/tools/example.md
+src/content/blog/en/tools/example.md
+src/content/blog/ja/tools/example.md
+src/content/blog/fr/tools/example.md
+```
+
+UI 字典由 `src/i18n/` 管理，分类与系列显示文案在 `config/i18n-content.yaml`。不要把文章翻译与 UI 字典混为一谈。没有译文时，站点按现有回退逻辑处理；不得声称文章已完成所有语言的翻译。
+
+## 5. 写作质量与内容结构
+
+优先提供真实、有用、结构清晰的内容。不要生成空泛的 SEO 关键词堆砌、伪造测试结果、虚构项目经验或没有来源的统计数据。
+
+### 技术文章
 
 ```markdown
-## 背景/问题
+## 背景与问题
 
-[描述要解决的问题或技术背景]
+说明使用场景、约束和实际问题。
 
-## 解决方案
+## 方案与实现
 
-[详细说明解决方法]
+介绍技术选择、关键步骤和代码。
 
-### 关键技术点1
+## 验证与结果
 
-[技术细节和代码示例]
+仅报告实际运行并核实的结果。
 
-### 关键技术点2
+## 权衡与局限
 
-[技术细节和代码示例]
-
-## 实践效果
-
-[实际应用效果、性能对比等]
+说明边界、失败情况和适用条件。
 
 ## 总结
 
-[总结要点和经验]
+提炼可复用的结论。
 ```
 
-### 工具/指南类文章结构
+### 工具 / 使用指南
 
 ```markdown
 ## 简介
 
-[工具/方法简介]
+说明工具解决什么问题。
 
-## 安装/准备
+## 环境与准备
 
-[安装步骤或前置条件]
+列出经过核对的版本和前置条件。
 
 ## 基本使用
 
-[基础用法和示例]
+提供可执行步骤。
 
-## 高级功能
+## 配置与进阶用法
 
-[进阶功能和技巧]
+说明关键设置和常见场景。
 
-## 实用技巧
+## 限制与排障
 
-[最佳实践和注意事项]
+解释已知边界和解决方法。
 
-## 总结
+## 参考资料
 
-[总结和资源链接]
+链接官方文档和一手资料。
 ```
 
-### 随笔类文章结构
+### 随笔
 
-```markdown
-## 引言
+以自然段落和清晰的小节展开个人观察。避免强行使用技术文章模板。
 
-[开场白，引出话题]
+## 6. Markdown 能力
 
-## 正文
+根据文章需要使用当前仓库支持的 Markdown 功能：
 
-[多个段落展开论述]
+- GFM 表格、任务列表和引用。
+- Shiki 代码高亮。
+- KaTeX 数学公式。
+- Mermaid 图表。
+- Infographic 信息图。
+- Shoka 风格容器、标签页、折叠、文本效果、隐藏文字和 Ruby 注音。
 
-## 感悟/总结
+不要为了展示效果过度堆叠组件。只有文章启用对应功能且当前配置支持时才使用。
 
-[个人思考和总结]
-```
+加密文章或局部加密块仅用于适合静态密码保护的内容。密文与公开派生参数会随页面交付，用户可以离线猜测密码；这不是服务器鉴权，也不适合保存密钥或高敏感信息。
 
-## Infographic 使用建议
+## 7. 产品边界
 
-根据文章类型，建议使用信息图的场景：
+不得在新文章、示例或配置说明中把以下功能描述为当前产品功能：
 
-- **列表信息**（技术栈、功能特性）→ `list-grid-badge-card`
-- **流程步骤**（安装步骤、开发流程）→ `sequence-zigzag-steps-underline-text`
-- **对比分析**（技术对比、优缺点）→ `compare-binary-horizontal-simple-fold`
-- **统计数据**（性能对比、用量统计）→ `chart-column-simple` 或 `chart-bar-plain-text`
-- **层级结构**（目录结构、知识体系）→ `hierarchy-tree-tech-style-capsule-item`
+- CMS / 浏览器内写作室 / 文章管理后台。
+- 评论、友链、Moments、追番。
+- 全站音乐播放器、文章音视频播放器、LRC 歌词和播放列表。
+- Umami 或其他访问分析。
+- RSS 订阅（产品已决定不保留；旧代码残留尚待独立清理）。
+- AI 摘要、embedding / 语义相似推荐、随机推荐。
+- Quiz 测验、Tweet / X、CodePen 嵌入、外链 OG 预览。
+- Docker 部署或 Koharu CLI。
 
-## 最后步骤
+阅读历史、读者设置、系列进度和 Reading Shelf 收藏是浏览器本地功能，不提供账号、云数据库或跨设备同步。
 
-创建完博文后：
+## 8. 最后检查
 
-1. **如果添加了新分类**：
-   - 确认已更新 `_config.yml` 中的 `category_map`
-   - 确认已创建对应的目录结构
-   - 告知用户新分类的 URL 路径
+创建文章后：
 
-2. **运行检查**：
-   - 运行 `pnpm dev` 在本地预览
-   - 运行 `pnpm lint:fix` 检查格式
+1. 确认文件位于正确的 `src/content/blog/` 子目录。
+2. 检查必填字段和 `src/content.config.ts` schema。
+3. 确认分类已映射，新增分类时同步内容本地化映射。
+4. 检查稳定 slug 与翻译文件的 `link` / `translationKey`。
+5. 检查代码示例、命令、链接和数据是否真实。
+6. 运行相关内容检查；必要时运行 `pnpm lint`、`pnpm check` 和 `pnpm build`。
+7. 不要声称运行过未执行的验证。
+8. 如需信息图，使用仓库的 infographic skills；不要为了插图而编造统计数据。
 
-3. **后续建议**：
-   - 提醒用户可以使用 infographic skills 添加信息图
-   - 如果需要，提供相关文章推荐的建议（基于 tags）
-
-## 示例对话
-
-### 示例 1：使用现有分类
-
-**用户**：写一篇关于 React Hooks 使用技巧的文章
-
-**你应该**：
-
-1. 确认分类：笔记 > 前端 > React
-2. 生成文件路径：`src/content/blog/note/front-end/react-hooks-best-practices.md`
-3. 创建包含完整 frontmatter 的文件（使用 `- [笔记, 前端]` 分类格式）
-4. 提供文章结构框架
-5. 建议在"常用 Hooks 对比"部分使用 `list-grid-badge-card` 信息图
-6. 建议在"Hooks 使用流程"部分使用 `sequence-zigzag-steps-underline-text` 信息图
-
-### 示例 2：需要新增分类
-
-**用户**：写一篇关于 Node.js 后端开发的文章
-
-**你应该**：
-
-1. 发现"后端"分类不在现有分类列表中
-2. 询问用户是否要添加"后端"分类
-3. 如果用户同意：
-   - 更新 `_config.yml`，添加 `后端: back-end`
-   - 创建目录 `src/content/blog/note/back-end/`
-   - 生成文章文件 `src/content/blog/note/back-end/nodejs-development.md`
-   - frontmatter 使用 `- [笔记, 后端]` 分类格式
-4. 告知用户：
-   - 新分类已添加到 `_config.yml`
-   - URL 路径为 `/categories/note/back-end`
-   - 已创建对应目录结构
+保持文章本身可读、准确和有用。视觉组件是辅助，不应取代内容质量。
