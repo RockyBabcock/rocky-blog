@@ -60,10 +60,10 @@
   min-width: 0;
 }
 
-/* Text tabs with a petal-thread underline on the current item. */
+/* Text tabs with a crisp active tinted surface and petal-thread underline. */
 .index-tabs {
   display: flex;
-  gap: 0.25rem 1.25rem;
+  gap: 0.25rem 0.5rem;
   overflow-x: auto;
   scrollbar-width: none;
   font-size: 0.875rem;
@@ -71,38 +71,158 @@
 .index-tabs > * {
   position: relative;
   flex-shrink: 0;
-  padding-block: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.5rem 0.5rem 0.25rem 0.25rem;
   color: hsl(var(--muted-foreground));
   white-space: nowrap;
+  transition:
+    color 160ms var(--ease-out-quart),
+    background-color 160ms var(--ease-out-quart);
 }
 .index-tabs sup {
-  margin-left: 0.125rem;
+  margin-left: 0.2rem;
   font-size: 0.6875rem;
   font-variant-numeric: tabular-nums;
+  opacity: 0.8;
 }
 .index-tabs :is(a, button):is(:hover, :focus-visible) {
   color: var(--index-ink);
+  background: hsl(var(--primary) / 0.06);
 }
 .index-tabs :is([aria-current], [aria-pressed="true"]) {
   color: var(--index-ink);
+  background: hsl(var(--primary) / 0.11);
   font-weight: 700;
 }
 .index-tabs :is([aria-current], [aria-pressed="true"])::after {
   content: "";
   position: absolute;
-  inset: auto 0 0;
+  inset: auto 0.5rem 0;
   height: 2px;
   border-radius: 1px;
-  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.25));
+  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.35));
 }
 
 /* Secondary filters under a tab row: same ink rules, smaller and without the underline. */
 .index-tabs-quiet {
-  gap: 0.25rem 1rem;
+  gap: 0.25rem 0.5rem;
   font-size: 0.8125rem;
 }
 .index-tabs-quiet > :is([aria-current], [aria-pressed="true"])::after {
   content: none;
+}
+
+/* ── Lightweight In-Collection Filter & Sort Bar (Archives & Categories) ── */
+.collection-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem 0.875rem;
+  margin-bottom: 1.5rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid hsl(var(--border) / 0.8);
+  border-radius: 0.75rem;
+  background: hsl(var(--muted) / 0.36);
+}
+.collection-search-wrap {
+  position: relative;
+  display: flex;
+  flex: 1 1 14rem;
+  align-items: center;
+  min-width: 0;
+}
+.collection-search-icon {
+  position: absolute;
+  left: 0.6875rem;
+  width: 0.9375rem;
+  height: 0.9375rem;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+}
+.collection-search-input {
+  width: 100%;
+  min-width: 0;
+  height: 2.125rem;
+  padding: 0 2rem 0 2.125rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  font-size: 0.8125rem;
+  transition:
+    border-color 160ms var(--ease-out-quart),
+    box-shadow 160ms var(--ease-out-quart);
+}
+.collection-search-input::placeholder {
+  color: hsl(var(--muted-foreground) / 0.85);
+}
+.collection-search-input:focus {
+  outline: none;
+  border-color: hsl(var(--primary) / 0.55);
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.14);
+}
+.collection-search-clear {
+  position: absolute;
+  right: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.375rem;
+  color: hsl(var(--muted-foreground));
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+.collection-search-clear:is(:hover, :focus-visible) {
+  color: hsl(var(--foreground));
+  background: hsl(var(--muted));
+}
+.collection-toolbar-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+.collection-count {
+  font-family: var(--font-editorial-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: hsl(var(--muted-foreground));
+  white-space: nowrap;
+}
+.collection-sort-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1875rem;
+  padding: 0.1875rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--card));
+}
+.collection-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  white-space: nowrap;
+  transition:
+    color 160ms var(--ease-out-quart),
+    background-color 160ms var(--ease-out-quart);
+}
+.collection-sort-btn:is(:hover, :focus-visible) {
+  color: hsl(var(--foreground));
+}
+.collection-sort-btn[aria-pressed="true"] {
+  background: hsl(var(--primary) / 0.13);
+  color: var(--index-ink);
+  font-weight: 600;
 }
 
 /* Year rule: architectural horizontal rule with subtle square index mark and count trailing the line. */

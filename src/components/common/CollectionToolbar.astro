@@ -1,0 +1,66 @@
+---
+/**
+ * CollectionToolbar — Lightweight zero-React-island filter and sort controls
+ * for Archives and Category listing pages, powered by `src/lib/category-filter.ts`.
+ */
+
+import { Icon } from 'astro-icon/components';
+import { t } from '@/i18n';
+
+interface Props {
+  total: number;
+  locale: string;
+}
+
+const { total, locale } = Astro.props;
+const countTemplate = t(locale, 'browse.showingCount', { visible: '{visible}', total: '{total}' });
+const initialCount = t(locale, 'browse.showingCount', { visible: total, total });
+---
+
+{total > 1 && (
+  <div class="collection-toolbar">
+    <div class="collection-search-wrap">
+      <Icon name="ri:search-line" class="collection-search-icon" aria-hidden="true" />
+      <input
+        type="search"
+        class="collection-search-input"
+        data-collection-search
+        placeholder={t(locale, 'browse.filterPlaceholder')}
+        aria-label={t(locale, 'browse.filterPlaceholder')}
+        autocomplete="off"
+      />
+      <button
+        type="button"
+        class="collection-search-clear"
+        data-collection-search-clear
+        aria-label={t(locale, 'browse.resetFilter')}
+        hidden
+      >
+        <Icon name="ri:close-line" class="size-3.5" aria-hidden="true" />
+      </button>
+    </div>
+
+    <div class="collection-toolbar-right">
+      <span
+        class="collection-count"
+        data-collection-count
+        data-template={countTemplate}
+        data-total={String(total)}
+        aria-live="polite"
+      >
+        {initialCount}
+      </span>
+
+      <div class="collection-sort-group" role="group" aria-label={t(locale, 'browse.sortNewest')}>
+        <button type="button" class="collection-sort-btn" data-collection-sort="newest" aria-pressed="true">
+          <Icon name="ri:sort-desc" class="size-3.5" aria-hidden="true" />
+          <span>{t(locale, 'browse.sortNewest')}</span>
+        </button>
+        <button type="button" class="collection-sort-btn" data-collection-sort="oldest" aria-pressed="false">
+          <Icon name="ri:sort-asc" class="size-3.5" aria-hidden="true" />
+          <span>{t(locale, 'browse.sortOldest')}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+)}

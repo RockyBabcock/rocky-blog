@@ -13,7 +13,7 @@ export interface CommandItem {
   shortcut?: string;
   icon: string;
   href?: string;
-  actionId?: 'search' | 'search-query' | 'settings' | 'focus' | 'theme';
+  actionId?: 'search' | 'search-query' | 'settings' | 'focus' | 'theme' | 'bookmark';
 }
 
 /**

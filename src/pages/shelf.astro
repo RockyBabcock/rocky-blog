@@ -1,0 +1,50 @@
+---
+import HomeSider from '@components/layout/HomeSider.astro';
+import ReadingShelfView, { type ShelfCatalogMeta } from '@components/shelf/ReadingShelfView';
+import Cover from '@components/ui/cover/Cover.astro';
+import { CONTENT_PADDING } from '@constants/layout';
+import { Layout, TwoColumnLayout } from '@layouts/index';
+import { siteConfig } from '@lib/config/site';
+import { getPostDescription, getPostLastCategory, getPostSlug, getSortedPosts, translateCategoryName } from '@lib/content';
+import { formatLocalizedDate } from '@lib/date';
+import readingTime from 'reading-time';
+import { defaultLocale, t } from '@/i18n';
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = defaultLocale } = Astro.props;
+const posts = await getSortedPosts(locale);
+
+// Build lightweight metadata lookup for real posts so saved items always show authentic publication dates,
+// reading times, and covers without inventing data or duplicating post bodies.
+const catalog: Record<string, ShelfCatalogMeta> = {};
+for (const post of posts) {
+  const slug = getPostSlug(post);
+  const category = getPostLastCategory(post);
+  const readStats = readingTime(post.body ?? '');
+  catalog[slug] = {
+    ...(post.data.cover ? { cover: post.data.cover } : {}),
+    ...(category.name ? { category: translateCategoryName(category.name, locale) } : {}),
+    description: getPostDescription(post, locale),
+    publishedAt: formatLocalizedDate(post.data.date, locale),
+    readingTime: readStats.text,
+  };
+}
+---
+
+<Layout
+  articleTools={false}
+  locale={locale}
+  title={`${t(locale, 'shelf.title')} | ${siteConfig.title}`}
+  description={t(locale, 'shelf.subtitle')}
+>
+  <TwoColumnLayout showPostFooter={false}>
+    <Cover compact slot="cover" title={t(locale, 'shelf.title')} />
+    <HomeSider slot="sider" />
+    <div class={`editorial-paper-surface bg-gradient-start shadow-box tablet:shadow-none min-w-0 w-full ${CONTENT_PADDING.standard}`}>
+      <ReadingShelfView client:load locale={locale} catalog={catalog} />
+    </div>
+  </TwoColumnLayout>
+</Layout>

@@ -1,0 +1,933 @@
+# Rocky Blog — Phase II: Reading Experience 2.0 & Editorial Interface Enhancement
+
+You are working on my existing production-oriented Astro blog project:
+
+**Repository:** https://github.com/RockyBabcock/rocky-blog  
+**Current baseline commit:** `fd76e6b101be78cf0162a1f46bc2a7edef52c39b`  
+**Default branch:** `main`
+
+Your task is to continue improving the actual existing project. This is an implementation task, not merely a design proposal.
+
+The goal is to evolve Rocky Blog into a polished, feature-rich, memorable personal editorial platform with a much better reading experience, more useful interactions, and a carefully art-directed responsive interface.
+
+Do not rebuild the application from scratch. Do not replace the existing architecture with a different framework or design system.
+
+---
+
+# 1. Product and Visual Direction
+
+The design direction is:
+
+**Premium Editorial × Modern Magazine × Sakura Atmosphere × Subtle Celestial Details**
+
+The website should feel like a thoughtfully designed independent publication combined with a personal digital reading space.
+
+The visual language should include:
+
+- Sophisticated editorial typography and distinctive type hierarchy.
+- Carefully composed layouts with strong visual rhythm.
+- Refined card surfaces, delicate borders, subtle shadows, and layered backgrounds.
+- Thoughtful use of whitespace rather than excessive empty areas.
+- Sakura petals, botanical motifs, stars, and celestial elements as tasteful decorative accents.
+- Restrained ambient gradients and subtle lighting.
+- Elegant hover states and meaningful micro-interactions.
+- A cohesive visual system across the homepage, article pages, archives, categories, tags, and navigation.
+
+Important clarification:
+
+I DO LIKE sakura, petals, stars, botanical details, and celestial atmosphere.
+
+I DO NOT WANT an anime, manga, kawaii, childish, or cartoonish overall aesthetic.
+
+Avoid:
+- Anime character illustrations.
+- Chibi artwork and manga-style visual elements.
+- Kawaii sticker collections.
+- Cartoon flowers and childish decorative patterns.
+- Excessive candy-pink or neon gradients.
+- Generic glassmorphism everywhere.
+- Game-like dashboard interfaces.
+- Unnecessary decorative elements that compete with actual content.
+
+Do not remove existing sakura or celestial elements simply because they are decorative. Improve their composition, scale, opacity, and placement where appropriate.
+
+The result should feel mature, premium, atmospheric, and professionally art-directed.
+
+---
+
+# 2. Mandatory Pre-Implementation Audit
+
+Before modifying code, inspect the current repository and understand its actual implementation.
+
+Review at least:
+
+- `src/pages/index.astro`
+- `src/pages/post/[...slug].astro`
+- `src/pages/archives.astro`
+- `src/layouts/TwoColumnLayout.astro`
+- `src/components/home/`
+- `src/components/post/`
+- `src/components/layout/`
+- `src/components/common/`
+- `src/store/`
+- `src/lib/`
+- `src/i18n/`
+- `src/styles/components/home-editorial.css`
+- `src/styles/components/post.css`
+- `src/styles/theme/editorial-celestial.css`
+- `src/styles/theme/visual-delight.css`
+- `config/site.yaml`
+- `config/i18n-content.yaml`
+- `package.json`
+- `knip.json`
+
+Determine which functionality already exists, which interactions are incomplete, and which improvements can reuse the current architecture.
+
+Do not introduce duplicate features.
+
+Do not create unnecessary abstractions or new frameworks.
+
+After auditing, proceed with implementation. Do not stop after presenting a plan.
+
+---
+
+# 3. Priority P0 — Fix the Existing CI Failure
+
+The latest GitHub Actions CI run fails at:
+
+`pnpm knip:strict`
+
+The reported unused file is:
+
+`src/components/home/SeriesShowcaseProgress.tsx`
+
+However, the current implementation imports and renders this component in:
+
+`src/components/home/SeriesShowcase.astro`
+
+Investigate why Knip does not recognize this Astro-to-React client component relationship.
+
+Requirements:
+
+1. Preserve `SeriesShowcaseProgress.tsx`.
+2. Inspect the actual Astro import and `client:visible` usage.
+3. Identify the correct Knip configuration or dependency-tracing solution.
+4. Prefer a narrow, documented exception or correct integration configuration if necessary.
+5. Do not globally disable unused-file detection.
+6. Do not weaken `knip:strict`.
+7. Do not delete working components simply to make the CI pass.
+
+Run the strict checks after fixing the issue.
+
+The project should not accumulate more features on top of a broken validation pipeline.
+
+---
+
+# 4. Priority P1 — Introduce a Personal Reading Shelf
+
+This is the major new functionality for this phase.
+
+Build a polished, privacy-first **Reading Shelf** system.
+
+The Reading Shelf allows visitors to save articles and manage their personal reading list directly in the browser.
+
+This is not a CMS, account system, or backend feature.
+
+## 4.1 Article bookmarking
+
+Introduce a reusable Save Article / Bookmark interaction.
+
+Users should be able to save or remove an article from:
+
+- Individual article pages.
+- Featured article cards.
+- Homepage article cards and compact article rows wherever the existing component architecture supports it efficiently.
+
+The button must have clearly distinguishable states:
+
+- Not saved.
+- Saved.
+- Hovered.
+- Focused.
+- Disabled or unavailable, if applicable.
+
+Suggested interaction:
+
+- Unsaved: bookmark outline icon.
+- Saved: filled bookmark icon with restrained primary accent.
+- On successful save: subtle visual feedback and a toast.
+- On removal: immediate UI state update.
+
+Do not rely exclusively on color to communicate state.
+
+Use accessible labels and keyboard interaction.
+
+Avoid excessive client-side hydration across large article lists. Use the lightest reusable implementation that fits the existing Astro and React architecture.
+
+## 4.2 Local persistence
+
+Create a dedicated saved-articles store following the existing Nanostores and local-storage conventions.
+
+Suggested architecture:
+
+- A dedicated store such as `src/store/saved-articles.ts`.
+- Reusable UI component such as `SaveArticleButton.tsx`.
+- Appropriate library helpers and tests.
+- Versioned local-storage schema.
+
+Each saved item should store only the information needed to display and open the article:
+
+- Article slug.
+- Article title.
+- Article URL.
+- Locale.
+- Save timestamp.
+- Category, when available.
+- Short description, when available.
+- Cover image path, when available.
+
+Requirements:
+
+- Persist saved items across browser sessions.
+- Validate stored data before using it.
+- Handle malformed or outdated stored data safely.
+- Prevent duplicate saved entries.
+- Distinguish localized article URLs correctly.
+- Support removing individual entries.
+- Support clearing the entire shelf with confirmation.
+- Handle local-storage failures gracefully.
+- Keep saved data synchronized with the UI.
+- Use existing storage patterns where possible.
+
+Never send saved-article data to an external server.
+
+Do not add user tracking, analytics, authentication, or third-party storage.
+
+## 4.3 Dedicated Reading Shelf page
+
+Create a polished, localized Reading Shelf page using the project's existing Astro route and layout conventions.
+
+The page should feel like a personal digital library, not a generic admin dashboard.
+
+Suggested visual structure:
+
+**Header area**
+- Editorial kicker: YOUR LIBRARY.
+- Large title: Reading Shelf.
+- Short descriptive subtitle.
+- Saved article count.
+- Small botanical or celestial ornament.
+
+**Reading status navigation**
+
+Provide four useful filtering states:
+
+- All Saved.
+- To Read.
+- In Progress.
+- Completed.
+
+Derive reading status from the saved-article data and the existing reading-history store.
+
+Do not create conflicting or duplicate reading-progress records.
+
+**Saved article collection**
+
+Each entry should display:
+
+- Cover image or graceful fallback.
+- Article title.
+- Category.
+- Original publication date, if available.
+- Estimated reading time.
+- Save date.
+- Reading progress, when available.
+- Current reading status.
+- Open / Continue Reading action.
+- Remove from shelf action.
+
+Support:
+
+- Search within saved articles.
+- Sorting by save date and title.
+- Responsive grid or editorial list layouts.
+- Empty states.
+- Clear-all interaction with confirmation.
+
+Use the existing article metadata and reading-history data wherever possible.
+
+Do not invent article statistics or fake content.
+
+## 4.4 Integrate Reading Shelf into existing navigation
+
+Make the feature easy to discover without overcrowding the interface.
+
+Provide entry points through:
+
+- Homepage utility rail.
+- Compact homepage utility area on tablet/mobile.
+- Command Palette.
+- Article reading toolbar.
+- Existing navigation or menu, if appropriate.
+
+A compact shelf widget on the homepage may show the saved count and the two most recently saved articles.
+
+Do not add a large redundant homepage section just to advertise this feature.
+
+## 4.5 Reading Shelf visual states
+
+Design complete states:
+
+- First-time empty shelf.
+- Saved articles available.
+- No search results.
+- Filter with no matches.
+- Loading or hydration transition.
+- Storage unavailable.
+- Item successfully removed.
+
+Empty states should be visually attractive and useful, with links to explore existing content.
+
+---
+
+# 5. Priority P1 — Upgrade Homepage Layout and Information Architecture
+
+The existing homepage already contains:
+
+- Featured Editorial Showcase.
+- Latest Writing.
+- Series & Weekly Showcase.
+- Explore Topics.
+- Editorial Timeline.
+- Left profile/navigation sidebar.
+- Desktop right utility rail.
+- Compact utility controls for smaller screens.
+
+Keep every existing section.
+
+Do not replace the current homepage with a completely different template.
+
+Improve the way these sections work together.
+
+## 5.1 Refine the desktop three-column structure
+
+Improve the relationship between:
+
+1. Left profile and navigation sidebar.
+2. Central editorial content.
+3. Right utility rail.
+
+Focus on:
+
+- Better proportional balance.
+- More comfortable central reading width.
+- Consistent horizontal spacing.
+- Clear visual separation between columns.
+- Reduced visual crowding.
+- Better alignment of section headings.
+- More intentional vertical rhythm.
+
+The right rail should feel like a useful editorial companion, not a collection of unrelated widgets.
+
+Review the existing breakpoints rather than introducing arbitrary new ones.
+
+Suggested behavior:
+
+**Large desktop**
+- Full three-column editorial layout.
+- Main content receives visual priority.
+- Right rail stays compact and useful.
+
+**Standard desktop**
+- Maintain readable main-content width.
+- Keep the navigation sidebar functional.
+- Avoid squeezing all three columns excessively.
+
+**Tablet**
+- Hide or reflow desktop-only utility areas intelligently.
+- Expose essential search, command, and reading functions through compact controls.
+- Avoid abrupt layout changes.
+
+**Mobile**
+- Single-column content.
+- Excellent typography and spacing.
+- Touch-friendly buttons and controls.
+- No horizontal overflow.
+- Compact navigation and reading tools.
+- No unnecessary decorative layers.
+
+## 5.2 Improve homepage section hierarchy
+
+Make each homepage section feel intentionally designed.
+
+For Featured Showcase:
+
+- Establish a clearer visual distinction between the primary featured article and secondary articles.
+- Refine image composition and crop behavior.
+- Improve title contrast and readability.
+- Add carefully positioned category and date metadata.
+- Improve card layering, borders, and hover feedback.
+
+For Latest Writing:
+
+- Improve the mixed card-and-index rhythm.
+- Make article rows easier to scan.
+- Refine metadata alignment and thumbnail proportions.
+- Add better visual differentiation between featured and compact entries.
+- Improve hover and focus feedback.
+
+For Series & Weekly:
+
+- Improve series card hierarchy.
+- Make reading progress visually meaningful.
+- Distinguish completed, active, and not-yet-started states.
+- Make the next reading action obvious.
+
+For Explore Topics:
+
+- Improve category hierarchy.
+- Refine category cards and tag cloud density.
+- Make navigation destinations visually clearer.
+- Avoid excessive pill-shaped badges.
+
+For Editorial Timeline:
+
+- Improve chronological scanning.
+- Refine year labels, date alignment, and visual connectors.
+- Give archive navigation a stronger sense of structure.
+
+## 5.3 Avoid repetitive decoration
+
+The existing editorial kickers and decorative divider system should be used with intent.
+
+Do not apply identical separators, ornaments, or borders between every section.
+
+Vary the visual rhythm using:
+
+- Typography.
+- Background surfaces.
+- Spacing.
+- Asymmetric alignment.
+- Subtle botanical marks.
+- Thin geometric details.
+- Occasional constellation ornaments.
+
+Decoration should support the content hierarchy, not replace it.
+
+---
+
+# 6. Priority P1 — Improve the Article Reading Experience
+
+The article page is one of the most important areas of the product.
+
+Make reading feel more immersive, clear, and comfortable.
+
+Reuse existing systems:
+
+- Focus Mode.
+- Table of Contents.
+- Reading Progress.
+- Reading History.
+- Article Sharing.
+- Markdown Source Copy/Download.
+- Image Lightbox.
+- Image Zoom/Pan.
+- Code Block Copy and Fullscreen.
+- Reader Preferences.
+- Existing Motion System.
+
+Do not create duplicate functionality.
+
+## 6.1 Article header
+
+Improve the structure of:
+
+- Breadcrumb navigation.
+- Article title.
+- Manual description/deck.
+- Category labels.
+- Publication and update dates.
+- Estimated reading time.
+- Existing reading actions.
+
+Use stronger typography and a more deliberate composition.
+
+The title should receive clear visual priority.
+
+Keep the metadata compact and easy to scan.
+
+## 6.2 Reading toolbar
+
+Refine the current article toolbar.
+
+Integrate the new bookmark action alongside existing functionality.
+
+Consider a compact, unobtrusive toolbar with:
+
+- Save Article.
+- Share.
+- Focus Mode.
+- Markdown Source actions where available.
+- Existing reader preference controls when appropriate.
+
+Avoid putting every possible action on screen simultaneously.
+
+On mobile, use a compact action layout that does not cover the article text.
+
+## 6.3 Reading progress experience
+
+Inspect the existing reading-progress implementation.
+
+Improve the visual feedback and relationship between:
+
+- Article reading progress.
+- Table of Contents active section.
+- Existing scroll behavior.
+- Continue-reading history.
+
+Ensure the progress indicator does not compete with the header or cause layout shifts.
+
+Maintain correct behavior when resuming an article using `?resume=1`.
+
+## 6.4 Article body typography
+
+Refine:
+
+- H1/H2/H3 hierarchy.
+- Paragraph line height.
+- Reading measure.
+- Lists and nested lists.
+- Blockquotes.
+- Tables.
+- Images and captions.
+- Horizontal rules.
+- Inline code.
+- Code blocks.
+- Mathematical expressions.
+- Mermaid diagrams.
+- Infographic containers.
+
+The article content must remain comfortable to read for long sessions.
+
+Do not reduce code readability to achieve a decorative appearance.
+
+Pay special attention to mobile table overflow and wide code blocks.
+
+## 6.5 Micro-interactions
+
+Add meaningful details:
+
+- Elegant hover states for article links.
+- Clear focus-visible styles.
+- Subtle heading anchor feedback.
+- Refined image hover behavior.
+- Useful copy-confirmation feedback.
+- Clear states for expandable content.
+- Smooth but restrained transitions.
+
+Respect `prefers-reduced-motion`.
+
+---
+
+# 7. Priority P2 — Improve Browsing and Content Discovery
+
+Enhance existing browsing functionality rather than creating unnecessary new top-level modules.
+
+Inspect the current archive, category, tag, and search interfaces before implementing anything.
+
+Improve the user experience through:
+
+- Better distinction between active and inactive category filters.
+- Clearer article count presentation.
+- Better visual grouping of content.
+- More consistent metadata.
+- Improved empty and no-results states.
+- Better archive-year navigation.
+- Clearer pagination states.
+- More readable tag exploration.
+
+Where appropriate, add useful lightweight controls such as:
+
+- Newest / Oldest sorting.
+- Search within the current collection.
+- Reading-time filtering.
+
+Only implement controls that fit the current content architecture and can be supported by actual data.
+
+Do not add complex filtering that makes the interface slower or harder to understand.
+
+Do not duplicate Pagefind search functionality.
+
+Do not introduce random article recommendation systems.
+
+---
+
+# 8. Priority P2 — Refine the Right Utility Rail
+
+The current desktop right rail already includes useful functionality:
+
+- Quick Search.
+- Command Palette.
+- Continue Reading.
+- Series Progress.
+- Top Categories.
+- Archive Years.
+
+Improve its presentation and usefulness.
+
+Add the Reading Shelf entry point.
+
+Review whether the series progress widget should expose more than the first enabled series.
+
+If the current data model supports it cleanly, make multiple enabled series accessible through a compact selector or expandable list.
+
+Each series must have independent, accurate progress calculated from its own actual article list and the existing reading-history data.
+
+Do not mix progress from different series.
+
+Do not make the rail excessively tall or introduce unnecessary scrolling.
+
+On smaller screens, expose the most important controls through the existing compact utility area.
+
+---
+
+# 9. Design System and Component Quality
+
+Continue using the existing design tokens, utilities, and theme architecture.
+
+Prefer enhancing:
+
+- Existing CSS variables.
+- Existing theme files.
+- Existing editorial components.
+- Existing shared card components.
+- Existing layout components.
+
+Avoid scattered one-off styles.
+
+Keep light and dark modes equally polished.
+
+Pay particular attention to:
+
+- Text contrast.
+- Muted text readability.
+- Border visibility.
+- Surface depth.
+- Accent consistency.
+- Focus indicators.
+- Hover states.
+- Disabled states.
+- Empty states.
+- Loading states.
+
+The visual design should feel consistent across all four supported locales.
+
+Do not introduce font files or large decorative image assets unnecessarily.
+
+Avoid expensive animations and excessive blur filters.
+
+---
+
+# 10. Internationalization Requirements
+
+The project supports exactly four intended locales:
+
+- Chinese (`zh`).
+- English (`en`).
+- Japanese (`ja`).
+- French (`fr`).
+
+Every new visible string must use the existing translation system.
+
+Add complete translations for all new Reading Shelf functionality, controls, statuses, labels, tooltips, empty states, confirmations, and feedback messages.
+
+Do not hardcode visible English strings into components.
+
+Do not introduce Korean.
+
+Check:
+
+- Translated route generation.
+- Localized article URLs.
+- Navigation.
+- Metadata.
+- Page titles.
+- Empty states.
+- Buttons.
+- Long text wrapping.
+- Mobile layout with longer French and German-like-length strings.
+
+Do not modify unrelated translations.
+
+---
+
+# 11. Strict Preservation Rules
+
+The following requirements are mandatory.
+
+## Preserve all current retained functionality
+
+Do not remove or break:
+
+- Homepage and existing editorial sections.
+- Articles and Markdown rendering.
+- Category and tag navigation.
+- Archives and pagination.
+- Weekly and series pages.
+- About page.
+- RSS.
+- Sitemap.
+- Robots configuration.
+- Pagefind.
+- Canonical and hreflang metadata.
+- Manual article descriptions.
+- Public Markdown source copy/download.
+- AES-256-GCM whole-post encryption.
+- Partial `:::encrypted` blocks.
+- KaTeX.
+- Mermaid.
+- Infographic rendering.
+- Shoka containers.
+- Tabs and collapsible blocks.
+- Text effects and spoiler support.
+- Ruby annotations.
+- Shiki syntax highlighting.
+- Code copy, fold, and fullscreen.
+- Image lightbox, zoom, and pan.
+- Lazy loading and LQIP.
+- Light/dark theme.
+- Reader preferences and built-in fonts.
+- Sakura petal animation and click burst.
+- Page transitions and existing motion effects.
+- Scroll Reveal.
+- Focus Mode.
+- Table of Contents.
+- Reading progress.
+- Mobile drawer and gestures.
+- Settings panel animation.
+- Reduced-motion support.
+- Local reading history.
+- Command Palette.
+- Search.
+- Series reading progress.
+- Editorial Timeline.
+
+## Do not reintroduce previously removed features
+
+Explicitly do NOT restore:
+
+- Friends/links functionality.
+- Writing Room or CMS/admin backend.
+- Global playlist or site-wide BGM.
+- Bangumi or anime tracking.
+- Moments.
+- Christmas effects.
+- Comment system.
+- Umami analytics.
+- Koharu CLI.
+- Docker deployment.
+- Announcement system.
+- Tweet/X embeds.
+- CodePen embeds.
+- Random article recommendations.
+- Local Font Picker.
+- Colophon metadata system.
+- AI-generated article summaries.
+- Snowflake semantic similarity recommendations.
+- Custom article audio/video players.
+- LRC lyrics or article media playlists.
+- Quiz exercises.
+- External link OG preview cards.
+
+The new Reading Shelf is a personal local reading utility, not a replacement CMS or analytics feature.
+
+---
+
+# 12. Performance, Accessibility, and Reliability
+
+Requirements:
+
+- Keep Astro pages primarily static wherever possible.
+- Use React islands only for interactions that require them.
+- Avoid unnecessary client-side hydration.
+- Lazy-load noncritical components.
+- Avoid layout shifts.
+- Avoid heavy new dependencies.
+- Avoid unnecessary DOM observers.
+- Clean up event listeners.
+- Use semantic HTML.
+- Provide accessible labels.
+- Support keyboard navigation.
+- Provide visible focus states.
+- Respect reduced-motion preferences.
+- Keep mobile performance in mind.
+- Preserve encrypted article behavior.
+- Never expose decrypted content accidentally.
+- Keep saved-reading data local to the browser.
+
+Do not introduce `any` types casually.
+
+Avoid unsafe type assertions.
+
+Validate stored data.
+
+Add tests for new storage and state logic.
+
+---
+
+# 13. Visual Verification
+
+Do not judge the result from code alone.
+
+Run the application and inspect the actual rendered interface wherever the environment supports browser testing.
+
+Check at least:
+
+- 1920px desktop.
+- 1440px desktop.
+- 1280px desktop.
+- 1024px tablet.
+- 768px tablet.
+- 390px mobile.
+- 360px mobile.
+
+Inspect:
+
+1. Homepage.
+2. Individual article page.
+3. Reading Shelf page.
+4. Archive page.
+5. Category page.
+6. Search interface.
+7. Light theme.
+8. Dark theme.
+
+Check:
+
+- Layout proportions.
+- Typography.
+- Spacing.
+- Image crops.
+- Text contrast.
+- Interactive controls.
+- Sticky elements.
+- Overflow.
+- Empty states.
+- Mobile navigation.
+- Long translated strings.
+
+The homepage must not become excessively tall due to decorative elements.
+
+The article body must remain readable.
+
+The right utility rail must not compress the central editorial content.
+
+The mobile layout must not look like a squeezed desktop layout.
+
+---
+
+# 14. Required Validation
+
+After implementation, run:
+
+```bash
+pnpm lint
+pnpm knip:strict
+pnpm check
+pnpm test
+pnpm build
+```
+
+Do not stop after the first successful command.
+
+If a command fails:
+
+1. Identify the actual failure.
+2. Fix the underlying issue.
+3. Re-run the relevant command.
+4. Continue with the remaining validation.
+
+Do not hide errors through broad ignores or weakened checks.
+
+Do not report tests as passed unless they were actually executed.
+
+---
+
+# 15. Implementation Order
+
+Follow this sequence:
+
+**Phase A — Stabilize**
+
+- Inspect the current repository.
+- Fix the Knip issue without deleting `SeriesShowcaseProgress.tsx`.
+- Confirm lint, typecheck, tests, and build.
+
+**Phase B — Reading Shelf**
+
+- Implement the local saved-article store.
+- Implement bookmark controls.
+- Implement the localized Reading Shelf page.
+- Integrate the feature into the existing utility rail and Command Palette.
+- Add complete translations and tests.
+
+**Phase C — Interface Refinement**
+
+- Improve homepage layout and section hierarchy.
+- Improve article reading experience.
+- Refine archive and category browsing.
+- Improve utility rail.
+- Refine responsive and mobile behavior.
+- Improve interaction states and visual details.
+
+**Phase D — Verification**
+
+- Execute the complete validation suite.
+- Inspect the rendered layouts.
+- Fix regressions.
+- Report exactly what changed and what remains incomplete.
+
+Do not stop after writing an implementation plan. Execute the work.
+
+Do not make unrelated refactors.
+
+Do not delete or replace major files simply to simplify implementation.
+
+Do not commit, push, merge, or deploy unless explicitly instructed.
+
+---
+
+# 16. Final Deliverables
+
+When finished, provide a clear implementation report containing:
+
+1. **New functionality**
+   - What the Reading Shelf can do.
+   - Where bookmarking is available.
+   - How saved data is persisted.
+   - How reading statuses are calculated.
+
+2. **Visual improvements**
+   - Homepage layout changes.
+   - Article page improvements.
+   - Archive and category refinements.
+   - Responsive behavior changes.
+
+3. **Files changed**
+   - Group by new files and modified files.
+   - Briefly explain the purpose of major changes.
+
+4. **Internationalization**
+   - Confirm `zh`, `en`, `ja`, and `fr` coverage.
+
+5. **Validation**
+   - Report the actual outcome of each command.
+   - Clearly identify any remaining warnings or failures.
+
+6. **Regression review**
+   - Confirm that existing retained features remain intact.
+   - Confirm that previously removed functionality has not been reintroduced.
+
+The final result should make Rocky Blog feel like a complete, thoughtfully designed personal editorial platform rather than a conventional blog template.
+
+**Quality over quantity. Meaningful functionality over decorative gimmicks. Strong editorial composition over generic dashboard styling.**

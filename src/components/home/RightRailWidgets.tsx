@@ -3,19 +3,24 @@
  *
  * Includes:
  * 1. Quick Search & Command Palette triggers (`/` & `⌘K`)
- * 2. Continue Reading widget backed strictly by `$readingHistory` (honest empty state when empty)
- * 3. Active Series Progress summary backed by real series items + `$readingHistory`
+ * 2. Reading Shelf compact companion (saved count + 2 most recently saved items + direct `/shelf` link)
+ * 3. Continue Reading widget backed strictly by `$readingHistory`
+ * 4. Multi-Series Progress summary (each enabled series tracks its own independent progress)
  */
 
 import { useIsMounted } from '@hooks/useIsMounted';
 import { useTranslation } from '@hooks/useTranslation';
 import { Icon } from '@iconify/react';
 import { getRelativeTimeToken, isEntryCompleted } from '@lib/reading-history';
+import { enrichSavedArticles } from '@lib/saved-articles';
 import { computeSeriesProgress, type SeriesRouteItem } from '@lib/series-progress';
+import { cn } from '@lib/utils';
 import { useStore } from '@nanostores/react';
 import { openModal } from '@store/modal';
 import { $readingHistory, clearAllReadingHistory, initReadingHistory, removeReadingItem } from '@store/reading-history';
-import { useEffect, useMemo } from 'react';
+import { $savedArticles, initSavedArticles, removeSavedArticleItem } from '@store/saved-articles';
+import { useEffect, useMemo, useState } from 'react';
+import { localizedPath } from '@/i18n';
 
 export interface RailSeriesInfo {
   slug: string;
@@ -26,23 +31,38 @@ export interface RailSeriesInfo {
 
 interface RightRailWidgetsProps {
   locale: string;
-  primarySeries: RailSeriesInfo | null;
+  seriesList: RailSeriesInfo[];
 }
 
-export default function RightRailWidgets({ locale, primarySeries }: RightRailWidgetsProps) {
+export default function RightRailWidgets({ locale, seriesList }: RightRailWidgetsProps) {
   const { t } = useTranslation(locale);
   const isMounted = useIsMounted();
   const history = useStore($readingHistory);
+  const savedArticles = useStore($savedArticles);
+  const [activeSeriesSlug, setActiveSeriesSlug] = useState(seriesList[0]?.slug ?? '');
 
   useEffect(() => {
     initReadingHistory();
+    initSavedArticles();
   }, []);
 
-  const visibleHistory = isMounted ? history.slice(0, 3) : [];
-  const seriesSummary = useMemo(
-    () => (primarySeries ? computeSeriesProgress(primarySeries.items, isMounted ? history : []) : null),
-    [primarySeries, history, isMounted],
+  const visibleHistory = isMounted ? history.slice(0, 2) : [];
+  const enrichedSaved = useMemo(
+    () => (isMounted ? enrichSavedArticles(savedArticles, history) : []),
+    [savedArticles, history, isMounted],
   );
+  const recentSaved = enrichedSaved.slice(0, 2);
+
+  const activeSeries = useMemo(
+    () => seriesList.find((s) => s.slug === activeSeriesSlug) ?? seriesList[0] ?? null,
+    [seriesList, activeSeriesSlug],
+  );
+  const seriesSummary = useMemo(
+    () => (activeSeries ? computeSeriesProgress(activeSeries.items, isMounted ? history : []) : null),
+    [activeSeries, history, isMounted],
+  );
+
+  const shelfHref = localizedPath('/shelf', locale);
 
   const handleClearAll = async () => {
     clearAllReadingHistory();
@@ -82,7 +102,65 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
         </div>
       </section>
 
-      {/* 2. Continue Reading (Real Local History or Calm Honest Empty State) */}
+      {/* 2. Personal Reading Shelf Compact Companion */}
+      <section className="rail-card" aria-label={t('shelf.railTitle')} data-rail-reading-shelf>
+        <div className="rail-card-title">
+          <a href={shelfHref} className="hover:text-primary inline-flex items-center gap-1.5 transition-colors">
+            <Icon icon="ri:bookmark-3-line" className="text-primary size-4 shrink-0" aria-hidden="true" />
+            <span>{t('shelf.railTitle')}</span>
+            {isMounted && enrichedSaved.length > 0 && (
+              <span className="bg-primary/12 text-primary rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold tabular-nums">
+                {enrichedSaved.length}
+              </span>
+            )}
+          </a>
+          <a href={shelfHref} className="text-muted-foreground hover:text-primary text-[11px] font-normal transition-colors">
+            {t('shelf.railOpenShelf')}
+          </a>
+        </div>
+
+        {recentSaved.length > 0 ? (
+          <ul className="flex flex-col gap-2">
+            {recentSaved.map((item) => {
+              const openHref = item.status === 'in-progress' && item.scrollY > 40 ? `${item.url}?resume=1` : item.url;
+              return (
+                <li
+                  key={`${item.locale}:${item.slug}`}
+                  className="bg-background/75 border-border/60 hover:border-primary/35 flex items-start justify-between gap-2 rounded-lg border px-2.5 py-2 transition-colors"
+                >
+                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <a
+                      href={openHref}
+                      className="text-foreground hover:text-primary line-clamp-2 text-xs leading-snug font-medium transition-colors"
+                    >
+                      {item.title}
+                    </a>
+                    <span className="text-muted-foreground text-[10px] tabular-nums">
+                      {item.status === 'completed'
+                        ? t('shelf.filterCompleted')
+                        : item.status === 'in-progress'
+                          ? t('history.progress', { percent: item.progress })
+                          : t('shelf.filterToRead')}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeSavedArticleItem(item.slug, item.locale)}
+                    aria-label={`${t('shelf.remove')}: ${item.title}`}
+                    className="text-muted-foreground/70 hover:text-foreground -mt-0.5 -mr-0.5 flex size-5 shrink-0 items-center justify-center rounded transition-colors"
+                  >
+                    <Icon icon="ri:close-line" className="size-3.5" aria-hidden="true" />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="text-muted-foreground text-xs leading-relaxed">{t('shelf.railEmpty')}</p>
+        )}
+      </section>
+
+      {/* 3. Continue Reading (Real Local History or Calm Honest Empty State) */}
       <section className="rail-card" aria-label={t('history.title')} data-rail-reading-history>
         <div className="rail-card-title">
           <span className="inline-flex items-center gap-1.5">
@@ -102,7 +180,7 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
         </div>
 
         {visibleHistory.length > 0 ? (
-          <ul className="flex flex-col gap-2.5">
+          <ul className="flex flex-col gap-2">
             {visibleHistory.map((item) => {
               const completed = isEntryCompleted(item);
               const timeToken = getRelativeTimeToken(item.lastReadAt);
@@ -149,16 +227,7 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
             })}
           </ul>
         ) : (
-          <div className="empty-state-plate !gap-2 !px-3 !py-3.5 text-xs">
-            <svg width="32" height="32" viewBox="0 0 36 36" fill="none" className="text-primary/65" aria-hidden="true">
-              <path
-                d="M11 7.5A2.5 2.5 0 0 1 13.5 5h9A2.5 2.5 0 0 1 25 7.5v22l-7-4.5-7 4.5v-22Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-              <path d="M15 12h6M15 16h6" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeOpacity="0.6" />
-            </svg>
+          <div className="empty-state-plate !gap-2 !px-3 !py-3 text-xs">
             <p className="text-muted-foreground leading-relaxed">{t('home.railHistoryEmptyHint')}</p>
             <a href="#home-content" className="text-primary inline-flex w-fit items-center gap-1 font-medium hover:underline">
               <span>{t('home.railStartExplore')}</span>
@@ -168,16 +237,41 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
         )}
       </section>
 
-      {/* 3. Active Series Progress */}
-      {primarySeries && seriesSummary && (
+      {/* 4. Multi-Series Independent Progress Tracker */}
+      {activeSeries && seriesSummary && (
         <section className="rail-card" aria-label={t('series.progressTitle')}>
           <div className="rail-card-title">
             <span className="inline-flex min-w-0 items-center gap-1.5">
               <Icon icon="ri:book-2-line" className="text-primary size-4 shrink-0" aria-hidden="true" />
-              <span className="truncate">{primarySeries.title}</span>
+              <span className="truncate">{activeSeries.title}</span>
             </span>
             <span className="text-primary shrink-0 text-xs font-semibold tabular-nums">{seriesSummary.percent}%</span>
           </div>
+
+          {seriesList.length > 1 && (
+            <div className="flex flex-wrap gap-1" role="tablist" aria-label={t('home.seriesSection')}>
+              {seriesList.map((series) => {
+                const selected = series.slug === activeSeries.slug;
+                return (
+                  <button
+                    key={series.slug}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    onClick={() => setActiveSeriesSlug(series.slug)}
+                    className={cn(
+                      'rounded-md border px-2 py-0.5 text-[11px] font-medium transition-colors',
+                      selected
+                        ? 'border-primary/45 bg-primary/12 text-primary'
+                        : 'border-border/70 text-muted-foreground hover:text-foreground',
+                    )}
+                  >
+                    {series.title}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full" aria-hidden="true">
             <div
@@ -191,7 +285,7 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
               {t('series.completedCount', { read: seriesSummary.completedCount, total: seriesSummary.total })}
             </span>
             <a
-              href={seriesSummary.recommendedItem?.href ?? primarySeries.href}
+              href={seriesSummary.recommendedItem?.href ?? activeSeries.href}
               className="text-primary inline-flex shrink-0 items-center gap-0.5 font-medium hover:underline"
             >
               <span>{seriesSummary.hasStarted ? t('series.continueReading') : t('series.startReading')}</span>

@@ -13,6 +13,7 @@ export const RESERVED_ROUTES = new Set([
   'post',
   'posts',
   'archives',
+  'shelf',
   '404',
   // Special files
   'rss.xml',

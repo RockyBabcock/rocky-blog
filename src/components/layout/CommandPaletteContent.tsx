@@ -16,11 +16,13 @@ import { useTranslation } from '@hooks/useTranslation';
 import { Icon } from '@iconify/react';
 import { type CommandGroup, type CommandItem, filterCommands, nextActiveIndex } from '@lib/commands';
 import { isEntryCompleted } from '@lib/reading-history';
+import { isArticleSaved, type SaveArticleInput } from '@lib/saved-articles';
 import { cn } from '@lib/utils';
 import { useStore } from '@nanostores/react';
 import { toggleFocusMode } from '@store/focus-mode';
 import { $isCommandOpen, closeModal, openModal, openSearchWithQuery } from '@store/modal';
 import { $readingHistory, initReadingHistory } from '@store/reading-history';
+import { $savedArticles, initSavedArticles, toggleSavedArticleItem } from '@store/saved-articles';
 import { AnimatePresence, m } from 'motion/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { localizedPath } from '@/i18n';
@@ -43,10 +45,11 @@ export default function CommandPaletteContent() {
   const { t, locale } = useTranslation();
   const isOpen = useStore($isCommandOpen);
   const history = useStore($readingHistory);
+  const savedArticles = useStore($savedArticles);
 
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPostPage, setIsPostPage] = useState(false);
+  const [currentPostMeta, setCurrentPostMeta] = useState<SaveArticleInput | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -54,12 +57,33 @@ export default function CommandPaletteContent() {
   useEffect(() => {
     if (!isOpen) return;
     initReadingHistory();
+    initSavedArticles();
     setQuery('');
     setActiveIndex(0);
-    setIsPostPage(Boolean(document.querySelector('[data-reading-post]')));
+    const marker = document.querySelector<HTMLElement>('[data-reading-post]');
+    if (marker?.dataset.postSlug && marker.dataset.postTitle) {
+      setCurrentPostMeta({
+        slug: marker.dataset.postSlug,
+        title: marker.dataset.postTitle,
+        url: marker.dataset.postUrl || window.location.pathname,
+        locale: marker.dataset.postLocale || locale,
+        category: marker.dataset.postCategory || undefined,
+        description: marker.dataset.postDescription || undefined,
+        cover: marker.dataset.postCover || undefined,
+        publishedAt: marker.dataset.postDate || undefined,
+        readingTime: marker.dataset.postReadingTime || undefined,
+      });
+    } else {
+      setCurrentPostMeta(null);
+    }
     const timer = setTimeout(() => inputRef.current?.focus(), shouldReduceMotion ? 20 : 90);
     return () => clearTimeout(timer);
-  }, [isOpen, shouldReduceMotion]);
+  }, [isOpen, shouldReduceMotion, locale]);
+
+  const isPostPage = currentPostMeta !== null;
+  const isCurrentPostSaved = currentPostMeta
+    ? isArticleSaved(savedArticles, currentPostMeta.slug, currentPostMeta.locale)
+    : false;
 
   const baseCommands = useMemo<CommandItem[]>(() => {
     const actions: CommandItem[] = [
@@ -82,6 +106,14 @@ export default function CommandPaletteContent() {
       },
       ...(isPostPage
         ? [
+            {
+              id: 'action-bookmark',
+              label: isCurrentPostSaved ? t('shelf.commandRemove') : t('shelf.commandSave'),
+              group: 'actions' as const,
+              keywords: ['bookmark', 'save', 'shelf', 'library', '收藏', '阅读架', '読書棚', 'bibliothèque'],
+              icon: isCurrentPostSaved ? 'ri:bookmark-fill' : 'ri:bookmark-line',
+              actionId: 'bookmark' as const,
+            },
             {
               id: 'action-focus',
               label: t('command.toggleFocus'),
@@ -125,6 +157,15 @@ export default function CommandPaletteContent() {
         href: localizedPath('/', locale),
       },
       ...seriesNav,
+      {
+        id: 'nav-shelf',
+        label: t('nav.shelf'),
+        description: savedArticles.length > 0 ? t('shelf.countLabel', { count: savedArticles.length }) : undefined,
+        group: 'navigation',
+        keywords: ['shelf', 'library', 'saved', 'bookmark', '阅读架', '收藏', '読書棚', 'bibliothèque'],
+        icon: 'ri:bookmark-3-line',
+        href: localizedPath('/shelf', locale),
+      },
       {
         id: 'nav-archives',
         label: t('nav.archives'),
@@ -171,7 +212,7 @@ export default function CommandPaletteContent() {
     }));
 
     return [...actions, ...navigation, ...recent];
-  }, [t, locale, isPostPage, history]);
+  }, [t, locale, isPostPage, isCurrentPostSaved, history, savedArticles.length]);
 
   const filtered = useMemo(() => {
     const matched = filterCommands(baseCommands, query);
@@ -214,6 +255,18 @@ export default function CommandPaletteContent() {
           closeModal();
           toggleFocusMode();
           break;
+        case 'bookmark':
+          closeModal();
+          if (currentPostMeta) {
+            const { saved, persisted } = toggleSavedArticleItem(currentPostMeta);
+            void import('sonner')
+              .then(({ toast }) => {
+                if (!persisted) toast.error(t('bookmark.storageUnavailable'));
+                else toast.success(saved ? t('bookmark.toastSaved') : t('bookmark.toastRemoved'));
+              })
+              .catch(() => {});
+          }
+          break;
         case 'theme':
           toggleSiteTheme();
           closeModal();
@@ -222,7 +275,7 @@ export default function CommandPaletteContent() {
           closeModal();
       }
     },
-    [query],
+    [query, currentPostMeta, t],
   );
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

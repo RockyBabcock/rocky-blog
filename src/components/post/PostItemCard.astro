@@ -1,6 +1,7 @@
 ---
 // 导入所需的库和类型
 import ResponsiveImage from '@components/common/ResponsiveImage.astro';
+import BookmarkToggleButton from '@components/post/BookmarkToggleButton.astro';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
 import { ScrollableRow } from '@components/ui/ScrollableRow';
@@ -95,8 +96,8 @@ const titleMorph = postTitleMorphName(slug);
     <ScrollableRow
       client:visible
       className={cn('w-full', getStaggerPadding(0), 'md:pl-0 md:pr-0')}
-      innerClassName="items-center justify-between gap-4 w-full"
-      fadeWidth={20}
+      innerClassName="items-center justify-between gap-2.5 w-full"
+      fadeWidth={16}
     >
       {
         categoryStr && (
@@ -106,7 +107,7 @@ const titleMorph = postTitleMorphName(slug);
           </a>
         )
       }
-      <div class="text-muted-foreground flex shrink-0 items-center gap-3 text-xs">
+      <div class="text-muted-foreground flex shrink-0 items-center gap-2 text-xs">
         {
           date ? (
             <p class="flex-center gap-1 whitespace-nowrap">
@@ -157,6 +158,19 @@ const titleMorph = postTitleMorphName(slug);
             </Badge>
           )
         }
+        <BookmarkToggleButton
+          variant="subtle"
+          slug={slug}
+          title={title}
+          url={href}
+          locale={locale}
+          category={categoryStr || undefined}
+          description={postDescription || undefined}
+          cover={finalCover}
+          publishedAt={date ? formatLocalizedDate(date, locale) : undefined}
+          readingTime={readingTime}
+          className="shrink-0"
+        />
       </div>
     </div>
     <p

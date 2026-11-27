@@ -1,0 +1,97 @@
+---
+/**
+ * BookmarkToggleButton — Zero-React-island static bookmark button for article cards & compact rows.
+ *
+ * Synchronized globally by `src/lib/bookmark-buttons.ts` against the `$savedArticles` Nanostore
+ * so card lists stay ultra-lightweight while offering instant bookmark toggles and accessible state.
+ */
+
+import { cn } from '@lib/utils';
+import { t } from '@/i18n';
+
+interface Props {
+  slug: string;
+  title: string;
+  url: string;
+  locale: string;
+  category?: string;
+  description?: string;
+  cover?: string;
+  publishedAt?: string;
+  readingTime?: string;
+  variant?: 'overlay' | 'subtle';
+  className?: string;
+}
+
+const {
+  slug,
+  title,
+  url,
+  locale,
+  category,
+  description,
+  cover,
+  publishedAt,
+  readingTime,
+  variant = 'subtle',
+  className,
+} = Astro.props;
+
+const labelSave = t(locale, 'bookmark.saveArticle');
+const labelRemove = t(locale, 'bookmark.removeArticle');
+const toastSaved = t(locale, 'bookmark.toastSaved');
+const toastRemoved = t(locale, 'bookmark.toastRemoved');
+const toastStorageError = t(locale, 'bookmark.storageUnavailable');
+---
+
+<button
+  type="button"
+  data-bookmark-btn
+  data-bookmark-variant={variant}
+  data-saved="false"
+  data-bookmark-slug={slug}
+  data-bookmark-title={title}
+  data-bookmark-url={url}
+  data-bookmark-locale={locale}
+  data-bookmark-category={category}
+  data-bookmark-description={description}
+  data-bookmark-cover={cover}
+  data-bookmark-date={publishedAt}
+  data-bookmark-reading-time={readingTime}
+  data-label-save={labelSave}
+  data-label-remove={labelRemove}
+  data-toast-saved={toastSaved}
+  data-toast-removed={toastRemoved}
+  data-toast-storage-error={toastStorageError}
+  aria-pressed="false"
+  aria-label={labelSave}
+  title={labelSave}
+  class={cn(
+    'bookmark-card-btn inline-flex items-center justify-center rounded-lg border transition-[background-color,border-color,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 active:scale-95',
+    variant === 'overlay'
+      ? 'size-8 border-white/25 bg-[rgb(16_19_24/0.46)] text-white/90 backdrop-blur-xs hover:border-white/50 hover:bg-[rgb(16_19_24/0.68)] hover:text-white'
+      : 'size-7.5 border-border/75 bg-card/85 text-muted-foreground hover:border-primary/45 hover:bg-primary/8 hover:text-primary',
+    className,
+  )}
+>
+  <svg
+    class="bookmark-icon-outline size-3.5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M5 4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18l-7-4-7 4V4Z" />
+  </svg>
+  <svg
+    class="bookmark-icon-filled hidden size-3.5"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M5 4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18l-7-4-7 4V4Z" />
+  </svg>
+</button>

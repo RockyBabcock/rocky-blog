@@ -6,6 +6,7 @@ import HomeSider from '@components/layout/HomeSider.astro';
 import FocusModeToggle from '@components/post/FocusModeToggle';
 import PostPagination from '@components/post/PostPagination.astro';
 import PostShareActions from '@components/post/PostShareActions';
+import SaveArticleButton from '@components/post/SaveArticleButton';
 import SeriesContextBanner from '@components/post/SeriesContextBanner.astro';
 import SummaryPanel from '@components/post/SummaryPanel';
 import Cover from '@components/ui/cover/Cover.astro';
@@ -40,10 +41,11 @@ import {
 import { getPostSourceFilename, getPostSourcePath, isPostSourcePublic } from '@lib/content/post-source';
 import { getAdjacentSeriesPosts, getEnabledSeries, getSeriesPosts } from '@lib/content/series';
 import { toPostRef } from '@lib/content/transforms';
-import { formatForSeo } from '@lib/date';
+import { formatForSeo, formatLocalizedDate } from '@lib/date';
 import { encodeSlug } from '@lib/route';
 import { getOgImageUrl } from '@lib/seo/og-image';
 import { Icon } from 'astro-icon/components';
+import readingTime from 'reading-time';
 import PostMarkdownActions from '@/components/post/PostMarkdownActions';
 import { defaultLocale, getLocaleLabel, localizedPath, t } from '@/i18n';
 import { postRoute } from '../_shared/routes';
@@ -134,11 +136,14 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd({
   siteUrl: Astro.site,
 });
 
-const postSourcePath = getPostSourcePath(localizedPath(`/post/${encodeSlug(postSlug)}`, locale));
+const currentPostUrl = localizedPath(`/post/${encodeSlug(postSlug)}`, locale);
+const postSourcePath = getPostSourcePath(currentPostUrl);
 const localEditors = buildLocalEditorLinks(import.meta.env.DEV, devConfig, postRelativePath);
 const summaryText = post.data.description?.trim() || null;
 const isEncryptedPost = Boolean(post.data.password);
 const seoDate = formatForSeo(date);
+const publishedDateLabel = formatLocalizedDate(date, locale);
+const readStats = readingTime(post.body ?? '');
 ---
 
 <Layout
@@ -163,14 +168,22 @@ const seoDate = formatForSeo(date);
       data-reading-post
       data-post-slug={postSlug}
       data-post-title={title}
+      data-post-url={currentPostUrl}
       data-post-locale={locale}
       data-post-category={primaryCategoryLabel}
+      data-post-description={finalDescription}
+      data-post-cover={post.data.cover}
+      data-post-date={publishedDateLabel}
+      data-post-reading-time={readStats.text}
       data-post-encrypted={isEncryptedPost ? 'true' : 'false'}
       data-available-locales={availableLocales.join(',')}
       class={`editorial-paper-surface shadow-box bg-gradient-start flex min-w-0 w-full max-w-full flex-col gap-2 overflow-x-clip ${CONTENT_PADDING.standard}`}
     >
       <!-- Breadcrumb Navigation & Reading Toolbar -->
-      <nav class="border-border/65 text-muted-foreground mb-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b pb-3 text-sm">
+      <nav
+        aria-label={t(locale, 'breadcrumb.home')}
+        class="article-reading-toolbar border-border/65 text-muted-foreground mb-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b pb-3 text-sm"
+      >
         <div class="flex min-w-0 flex-wrap items-center gap-1.5">
           <div class="flex items-center gap-1">
             <!-- Home Icon and Link -->
@@ -196,6 +209,18 @@ const seoDate = formatForSeo(date);
           }
         </div>
         <div class="flex flex-wrap items-center gap-1.5">
+          <SaveArticleButton
+            client:idle
+            slug={postSlug}
+            title={title}
+            url={currentPostUrl}
+            locale={locale}
+            category={primaryCategoryLabel || undefined}
+            description={finalDescription}
+            cover={post.data.cover}
+            publishedAt={publishedDateLabel}
+            readingTime={readStats.text}
+          />
           <FocusModeToggle client:idle locale={locale} />
           <PostShareActions client:idle locale={locale} title={title} description={finalDescription} />
           {

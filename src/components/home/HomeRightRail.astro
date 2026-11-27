@@ -32,32 +32,33 @@ interface Props {
 
 const { posts, locale } = Astro.props;
 
-// Primary enabled series info for progress tracker
+// Collect all enabled series with real posts so each series tracks independent progress
 const enabledSeries = getEnabledSeries();
-let primarySeriesInfo: RailSeriesInfo | null = null;
-if (enabledSeries.length > 0) {
-  const firstSeries = enabledSeries[0];
-  const seriesPosts = await getPostsBySeriesSlug(firstSeries.slug, locale);
-  if (seriesPosts.length > 0) {
-    const items: SeriesRouteItem[] = [...seriesPosts].reverse().map((post) => ({
-      slug: getPostSlug(post),
-      title: post.data.title,
-      href: localizedPath(
-        routeBuilder(Routes.Post, { slug: getPostSlug(post), link: post.data.link, title: post.data.title }),
-        locale,
-      ),
-    }));
-    primarySeriesInfo = {
-      slug: firstSeries.slug,
-      title:
-        translateSeriesField(firstSeries.slug, 'label', firstSeries.label, locale) ||
-        translateSeriesField(firstSeries.slug, 'fullName', firstSeries.fullName, locale) ||
-        firstSeries.slug,
-      href: localizedPath(`/${firstSeries.slug}`, locale),
-      items,
-    };
-  }
-}
+const seriesList: RailSeriesInfo[] = (
+  await Promise.all(
+    enabledSeries.map(async (series) => {
+      const seriesPosts = await getPostsBySeriesSlug(series.slug, locale);
+      if (seriesPosts.length === 0) return null;
+      const items: SeriesRouteItem[] = [...seriesPosts].reverse().map((post) => ({
+        slug: getPostSlug(post),
+        title: post.data.title,
+        href: localizedPath(
+          routeBuilder(Routes.Post, { slug: getPostSlug(post), link: post.data.link, title: post.data.title }),
+          locale,
+        ),
+      }));
+      return {
+        slug: series.slug,
+        title:
+          translateSeriesField(series.slug, 'label', series.label, locale) ||
+          translateSeriesField(series.slug, 'fullName', series.fullName, locale) ||
+          series.slug,
+        href: localizedPath(`/${series.slug}`, locale),
+        items,
+      };
+    }),
+  )
+).filter((item): item is RailSeriesInfo => item !== null);
 
 // Top root categories with real counts
 const { categories, countMap } = await getCategoryList(locale);
@@ -78,7 +79,7 @@ const archivesHref = localizedPath('/archives', locale);
 ---
 
 <div class="flex flex-col gap-3.5" data-home-right-rail>
-  <RightRailWidgets client:idle locale={locale} primarySeries={primarySeriesInfo} />
+  <RightRailWidgets client:idle locale={locale} seriesList={seriesList} />
 
   {topCategories.length > 0 && (
     <section class="rail-card" aria-label={t(locale, 'home.railTopicsSummary')}>

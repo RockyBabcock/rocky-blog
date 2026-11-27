@@ -9,6 +9,7 @@
 
 import EditorialKicker from '@components/common/EditorialKicker.astro';
 import ResponsiveImage from '@components/common/ResponsiveImage.astro';
+import BookmarkToggleButton from '@components/post/BookmarkToggleButton.astro';
 import { Routes } from '@constants/router';
 import { defaultCoverList } from '@constants/site-config';
 import { buildCategoryPath, getCategoryArr, translateCategoryName } from '@lib/content';
@@ -85,6 +86,20 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
             />
           </a>
           <div class="featured-lead-scrim" />
+          <div class="absolute top-3.5 right-3.5 z-20">
+            <BookmarkToggleButton
+              variant="overlay"
+              slug={leadPost.slug}
+              title={leadPost.title}
+              url={leadMeta.href}
+              locale={locale}
+              category={leadMeta.categoryLabel || undefined}
+              description={leadPost.description}
+              cover={leadMeta.cover}
+              publishedAt={formatLocalizedDate(leadPost.date, locale)}
+              readingTime={leadPost.readingTime}
+            />
+          </div>
 
           <div class="relative z-10 flex flex-col gap-2.5 p-6 text-white md:p-4">
             <div class="flex flex-wrap items-center gap-2 text-xs text-white/85">
@@ -185,13 +200,28 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
                     }
                   >
                     <div class="flex flex-col gap-1.5">
-                      <div class="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
-                        {meta.categoryLabel && (
-                          <a href={meta.categoryLink} class="text-primary hover:text-blue font-medium transition-colors">
-                            {meta.categoryLabel}
-                          </a>
-                        )}
-                        <span class="tabular-nums">{formatLocalizedDate(post.date, locale)}</span>
+                      <div class="flex items-center justify-between gap-2">
+                        <div class="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
+                          {meta.categoryLabel && (
+                            <a href={meta.categoryLink} class="text-primary hover:text-blue font-medium transition-colors">
+                              {meta.categoryLabel}
+                            </a>
+                          )}
+                          <span class="tabular-nums">{formatLocalizedDate(post.date, locale)}</span>
+                        </div>
+                        <BookmarkToggleButton
+                          variant="subtle"
+                          slug={post.slug}
+                          title={post.title}
+                          url={meta.href}
+                          locale={locale}
+                          category={meta.categoryLabel || undefined}
+                          description={post.description}
+                          cover={meta.cover}
+                          publishedAt={formatLocalizedDate(post.date, locale)}
+                          readingTime={post.readingTime}
+                          className="shrink-0"
+                        />
                       </div>
                       <a href={meta.href} class="outline-none">
                         <h3

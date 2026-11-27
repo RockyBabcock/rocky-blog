@@ -16,11 +16,21 @@ interface Props {
 }
 const { post, locale, showCategory = true, showTags = false, id, filterKey } = Astro.props;
 const isoDate = displayDate.date(post.data.date);
+const sortDate = new Date(post.data.date).toISOString();
 const shortDate = formatLocalizedMonthDay(post.data.date, locale);
 const category = getPostLastCategory(post);
+const categoryLabel = category.name ? translateCategoryName(category.name, locale) : '';
 const tags = showTags ? (post.data.tags ?? []).slice(0, 3) : [];
+const searchText = [post.data.title, categoryLabel, ...(post.data.tags ?? []), isoDate].filter(Boolean).join(' ').toLowerCase();
 ---
-<li class:list={['post-row', showTags && 'post-row-timeline']} id={id} tabindex={id ? -1 : undefined} data-filter-key={filterKey}>
+<li
+  class:list={['post-row', showTags && 'post-row-timeline']}
+  id={id}
+  tabindex={id ? -1 : undefined}
+  data-filter-key={filterKey}
+  data-search-text={searchText}
+  data-sort-date={sortDate}
+>
   <time datetime={isoDate}>{shortDate}</time>
   <div class="post-row-body">
     <a class="post-row-title" href={localizedPath(`/post/${encodeSlug(getPostSlug(post))}`, locale)}>{post.data.title}</a>

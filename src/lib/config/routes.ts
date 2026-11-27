@@ -13,6 +13,7 @@ export enum Routes {
   Tags = '/tags',
   Post = '/post',
   Archives = '/archives',
+  Shelf = '/shelf',
 }
 
 /**

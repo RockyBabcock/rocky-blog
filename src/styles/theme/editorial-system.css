@@ -353,6 +353,34 @@
   background: hsl(var(--celestial) / 0.65);
 }
 
+/* Editorial prose blockquotes & horizontal rules */
+.custom-content blockquote {
+  border: 1px solid hsl(var(--primary) / 0.14);
+  border-inline-start: 2.5px solid hsl(var(--primary) / 0.58);
+}
+
+.custom-content hr {
+  position: relative;
+  height: 1px;
+  border: 0;
+  margin-block: 2.25rem;
+  background: linear-gradient(90deg, transparent, hsl(var(--border)) 18%, hsl(var(--border)) 82%, transparent);
+  overflow: visible;
+}
+
+.custom-content hr::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: hsl(var(--primary) / 0.55);
+  box-shadow: 0 0 0 4px hsl(var(--card));
+}
+
 /* Editorial prose tables — crisp stationery rules & tabular numbers */
 .custom-content table {
   border-collapse: separate;
@@ -361,6 +389,15 @@
   border-radius: 0.5rem;
   overflow: hidden;
   font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 767px) {
+  .custom-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .custom-content table thead th {
@@ -393,6 +430,32 @@
 
 .custom-content .code-block-wrapper:hover {
   border-color: hsl(var(--primary) / 0.35);
+}
+
+/* Static card bookmark toggles synchronized by src/lib/bookmark-buttons.ts */
+.bookmark-card-btn[data-saved="true"] .bookmark-icon-outline {
+  display: none;
+}
+
+.bookmark-card-btn[data-saved="true"] .bookmark-icon-filled {
+  display: block;
+}
+
+.bookmark-card-btn[data-saved="true"] {
+  border-color: hsl(var(--primary) / 0.45);
+  background: hsl(var(--primary) / 0.12);
+  color: hsl(var(--primary));
+}
+
+.bookmark-card-btn[data-bookmark-variant="overlay"][data-saved="true"] {
+  border-color: rgb(255 255 255 / 0.45);
+  background: hsl(347 44% 44% / 0.92);
+  color: #fff;
+}
+
+.bookmark-card-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* End-of-article colophon rule */

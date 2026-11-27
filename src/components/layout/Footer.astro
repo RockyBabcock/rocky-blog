@@ -18,6 +18,7 @@ const stats = await getSiteStats();
 const currentYear = new Date().getFullYear();
 const startYear = siteConfig?.startYear ?? currentYear;
 const archivesHref = localizedPath('/archives', locale);
+const shelfHref = localizedPath('/shelf', locale);
 const aboutHref = localizedPath('/about', locale);
 ---
 
@@ -71,6 +72,11 @@ const aboutHref = localizedPath('/about', locale);
 
     <!-- Quick Utility Links (real routes & working back-to-top) -->
     <div class="flex flex-wrap items-center justify-center gap-1.5">
+      <a href={shelfHref} class="footer-quick-link">
+        <Icon name="ri:bookmark-3-line" class="size-3.5" aria-hidden="true" />
+        <span>{t(locale, 'nav.shelf')}</span>
+      </a>
+      <span class="text-border/80 text-xs" aria-hidden="true">·</span>
       <a href={archivesHref} class="footer-quick-link">
         <Icon name="ri:archive-2-line" class="size-3.5" aria-hidden="true" />
         <span>{t(locale, 'nav.archives')}</span>

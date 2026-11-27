@@ -135,20 +135,12 @@ const timelineSectionNum = nextSectionNum();
         />
       </section>
 
-      {hasSeriesSection && (
-        <div class="editorial-rule" aria-hidden="true">
-          <span class="editorial-rule-line" />
-          <BotanicalMarks variant="divider-celestial" />
-          <span class="editorial-rule-line" />
-        </div>
-      )}
-
-      {/* 3. Series & Weekly Showcase */}
+      {/* 3. Series & Weekly Showcase (clean whitespace transition from Latest Writing) */}
       {hasSeriesSection && <SeriesShowcase locale={locale} sectionNumber={seriesSectionNum} />}
 
       <div class="editorial-rule" aria-hidden="true">
         <span class="editorial-rule-line" />
-        <BotanicalMarks variant="divider-sakura" />
+        <BotanicalMarks variant="divider-celestial" />
         <span class="editorial-rule-line" />
       </div>
 
@@ -156,8 +148,6 @@ const timelineSectionNum = nextSectionNum();
       <ExploreTopics posts={allPosts} locale={locale} sectionNumber={topicsSectionNum} />
 
       <div class="editorial-rule" aria-hidden="true">
-        <span class="editorial-rule-line" />
-        <BotanicalMarks variant="divider-celestial" />
         <span class="editorial-rule-line" />
       </div>
 

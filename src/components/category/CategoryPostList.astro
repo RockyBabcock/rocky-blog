@@ -1,4 +1,5 @@
 ---
+import CollectionToolbar from '@components/common/CollectionToolbar.astro';
 import PageIntro from '@components/common/PageIntro.astro';
 import PostYears from '@components/common/PostYears.astro';
 import { siteConfig } from '@constants/site-config';
@@ -35,14 +36,25 @@ const breadcrumbs = [
   })),
 ];
 ---
-<div class="index-surface shadow-box" data-category-filter-root>
+<div class="index-surface shadow-box" data-category-filter-root data-collection-filter-root>
   <PageIntro stats={[{ value: posts.length, label: t(locale, 'index.posts') }]} breadcrumbs={breadcrumbs} description={categoryDescription}>
     {category?.children?.length && <div class="index-tabs" slot="tools" role="group" aria-label={t(locale, 'category.filter')}>
       <button type="button" data-category-filter="" aria-pressed="true">{t(locale, 'tag.all')}<sup>{posts.length}</sup></button>
       {category.children.map((child) => <button type="button" data-category-filter={child.name} aria-pressed="false">{translateCategoryName(child.name, locale)}<sup>{postsInCategoryPath(allPosts, [...path, child.name]).length}</sup></button>)}
     </div>}
   </PageIntro>
+  <CollectionToolbar total={posts.length} locale={locale} />
   <PostYears posts={posts} locale={locale} showCategory={Boolean(category?.children?.length)} filterKeyOf={childOf} />
+  <div class="empty-state-plate mt-4" data-collection-empty hidden>
+    <p class="text-sm text-muted-foreground">{t(locale, 'browse.noMatches')}</p>
+    <button
+      type="button"
+      data-collection-reset
+      class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/45 hover:text-primary"
+    >
+      {t(locale, 'browse.resetFilter')}
+    </button>
+  </div>
 </div>
 <script>
   import { setupCategoryFilter } from '@lib/category-filter';

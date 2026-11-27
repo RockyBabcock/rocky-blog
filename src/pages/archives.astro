@@ -1,4 +1,5 @@
 ---
+import CollectionToolbar from '@components/common/CollectionToolbar.astro';
 import PageIntro from '@components/common/PageIntro.astro';
 import PostYears from '@components/common/PostYears.astro';
 import HomeSider from '@components/layout/HomeSider.astro';
@@ -31,7 +32,7 @@ const stats = [
   <TwoColumnLayout showPostFooter={false}>
     <Cover compact slot="cover" title={t(locale, 'archives.title')} />
     <HomeSider slot="sider" />
-    <div class="index-surface shadow-box" data-archive>
+    <div class="index-surface shadow-box" data-archive data-collection-filter-root>
       <PageIntro stats={stats} kicker={{ label: 'CHRONICLE', variant: 'ruled' }} />
       {years.length > 0 && <section class="archive-calendar" aria-labelledby="calendar-title">
         <div class="archive-calendar-head">
@@ -59,11 +60,24 @@ const stats = [
           </div>)}
         </div>
       </section>}
+      <CollectionToolbar total={posts.length} locale={locale} />
       <PostYears posts={posts} locale={locale} anchors />
+      <div class="empty-state-plate mt-4" data-collection-empty hidden>
+        <p class="text-sm text-muted-foreground">{t(locale, 'browse.noMatches')}</p>
+        <button
+          type="button"
+          data-collection-reset
+          class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/45 hover:text-primary"
+        >
+          {t(locale, 'browse.resetFilter')}
+        </button>
+      </div>
     </div>
   </TwoColumnLayout>
 </Layout>
 <script>
   import { setupArchiveNavigation } from '@lib/archive-navigation';
+  import { setupCategoryFilter } from '@lib/category-filter';
   setupArchiveNavigation();
+  setupCategoryFilter();
 </script>

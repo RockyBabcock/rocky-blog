@@ -44,26 +44,26 @@ function formatPostCount(count: number): string {
   return formatted;
 }
 ---
-{groups.length ? <div class:list={['post-years', anchors && 'post-years-archive']}>
+{groups.length ? <div class:list={['post-years', anchors && 'post-years-archive']} data-locale={locale}>
   {anchors && groups.length > 1 && (
     <nav class="timeline-year-nav" aria-label={t(locale, 'archives.quickJump')}>
       {groups.map(({ year, posts: yearPosts }) => (
-        <a class="timeline-year-pill" href={`#year-${year}`}>
+        <a class="timeline-year-pill" href={`#year-${year}`} data-year-pill={String(year)}>
           <span>{year}</span>
-          <small>{yearPosts.length}</small>
+          <small data-year-pill-count>{yearPosts.length}</small>
         </a>
       ))}
     </nav>
   )}
-  {groups.map(({ year, posts: yearPosts }) => <section class="motion-reveal" id={anchors ? `year-${year}` : undefined} tabindex={anchors ? -1 : undefined} data-post-year>
+  {groups.map(({ year, posts: yearPosts }) => <section class="motion-reveal" id={anchors ? `year-${year}` : undefined} tabindex={anchors ? -1 : undefined} data-post-year data-sort-year={String(year)}>
     <h2 class="year-rule"><span class="year-rule-mark" aria-hidden="true" /><span>{year}</span><small data-count-template={countTemplate}>{formatPostCount(yearPosts.length)}</small></h2>
     {anchors ? (
       <div class="timeline-months">
         {groupByMonth(yearPosts).map(({ key, month, posts: monthPosts }) => (
-          <div class="timeline-month-group" id={`month-${key}`} tabindex={-1}>
+          <div class="timeline-month-group" id={`month-${key}`} tabindex={-1} data-sort-month={key}>
             <h3 class="timeline-month-heading">
               <span>{formatLocalizedMonthYear(year, month, locale)}</span>
-              <small>{formatPostCount(monthPosts.length)}</small>
+              <small data-count-template={countTemplate}>{formatPostCount(monthPosts.length)}</small>
             </h3>
             <ol class="post-rows timeline-rows">
               {monthPosts.map((post) => (

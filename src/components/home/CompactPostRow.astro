@@ -6,6 +6,7 @@
  */
 
 import ResponsiveImage from '@components/common/ResponsiveImage.astro';
+import BookmarkToggleButton from '@components/post/BookmarkToggleButton.astro';
 import { Routes } from '@constants/router';
 import { defaultCoverList } from '@constants/site-config';
 import { buildCategoryPath, getCategoryArr, translateCategoryName } from '@lib/content';
@@ -92,11 +93,25 @@ const titleMorph = postTitleMorphName(data.slug);
     )}
   </div>
 
-  <a
-    href={href}
-    aria-label={data.title}
-    class="text-muted-foreground/70 group-hover:text-primary flex size-8 shrink-0 items-center justify-center rounded-full transition-all group-hover:translate-x-0.5 md:hidden"
-  >
-    <Icon name="ri:arrow-right-line" class="size-4" aria-hidden="true" />
-  </a>
+  <div class="flex shrink-0 items-center gap-1.5">
+    <BookmarkToggleButton
+      variant="subtle"
+      slug={data.slug}
+      title={data.title}
+      url={href}
+      locale={locale}
+      category={categoryLabel || undefined}
+      description={data.description}
+      cover={cover}
+      publishedAt={formatLocalizedDate(data.date, locale)}
+      readingTime={data.readingTime}
+    />
+    <a
+      href={href}
+      aria-label={data.title}
+      class="text-muted-foreground/70 group-hover:text-primary flex size-8 shrink-0 items-center justify-center rounded-full transition-all group-hover:translate-x-0.5 md:hidden"
+    >
+      <Icon name="ri:arrow-right-line" class="size-4" aria-hidden="true" />
+    </a>
+  </div>
 </article>

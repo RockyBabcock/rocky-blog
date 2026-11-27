@@ -39,6 +39,7 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
 
 <script>
   import { setupArrivalRender } from '@lib/arrival-render';
+  import { setupBookmarkButtons } from '@lib/bookmark-buttons';
   import { setupHeaderContinuity } from '@lib/header-continuity';
   import { setupMorphTransitions } from '@lib/morph-transitions';
   import { setupPostReadingTracker } from '@lib/reading-tracker';
@@ -61,4 +62,5 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
   setupScrollbarActivity();
   setupTouchPrefetch();
   setupPostReadingTracker();
+  setupBookmarkButtons();
 </script>
