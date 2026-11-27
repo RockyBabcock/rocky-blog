@@ -34,7 +34,7 @@ Rocky Blog 以 **Premium Editorial × Contemporary Magazine × Sakura Botanical 
 - 四语 UI（中文、英语、日语、法语）和多语言路由。
 - canonical、Open Graph、hreflang、sitemap、robots 等静态 SEO 能力。
 
-产品明确不提供友链、CMS / 写作室、评论、统计分析、全站音乐播放器、追番、Moments、Docker 部署、RSS、AI 摘要、语义相似推荐、文章自定义音视频播放器、Quiz 或外链 OG 预览卡。完整边界以仓库的 `docs/PRODUCT-SCOPE.md` 为准。
+产品明确不提供友链、CMS / 写作室、评论、统计分析、全站音乐播放器、追番、Moments、Docker 部署、RSS（已从代码中移除）、AI 摘要、语义相似推荐、文章自定义音视频播放器、Quiz 或外链 OG 预览卡。完整边界以仓库的 `docs/PRODUCT-SCOPE.md` 为准。
 
 ## 2. 本地运行
 
