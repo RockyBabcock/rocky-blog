@@ -1,68 +1,88 @@
 ---
-title: Welcome to astro-koharu
+title: Welcome to Rocky Blog
 link: getting-started
 catalog: true
 date: 2024-01-01 00:00:00
-description: Welcome to the astro-koharu blog theme! A modern blog system built on Astro with an elegant interface and rich features.
+description: An introduction to Rocky Blog, a static editorial-style personal blog built with Astro, React, and Tailwind CSS.
 tags:
   - 入门
   - Astro
 categories:
   - 工具
 sticky: true
+translationKey: getting-started
 ---
 
-Welcome to the astro-koharu blog theme!
+Welcome to **Rocky Blog**, a static personal blog focused on writing, reading, and content discovery.
 
-## About This Theme
+## About the project
 
-astro-koharu is a modern blog system built on Astro 7.x, inspired by the Hexo Shoka theme. Key features include:
+Rocky Blog is built with Astro 7, React 19, TypeScript, and Tailwind CSS 4. It uses static generation with selectively hydrated interactions. Its visual direction combines premium editorial layouts, contemporary magazine typography, and restrained sakura, botanical, and celestial details.
 
-- **High Performance** - Static site generation with Astro, lightning-fast loading
-- **Elegant Design** - Anime-inspired aesthetic with pink and blue color scheme
-- **Feature Rich** - Multi-level categories, tags, table of contents, search, and more
-- **Responsive** - Perfect adaptation for desktop and mobile devices
+Core capabilities include:
 
-## Quick Start
+- Homepage editorial sections, articles, categories, tags, archives, and series.
+- Pagefind static search, command palette, local reading history, and continue-reading entry points.
+- Light and dark themes, reader preferences, focus mode, and table of contents.
+- GFM, Shiki, KaTeX, Mermaid, Infographic, and Shoka-style Markdown extensions.
+- Chinese, English, Japanese, and French UI routes.
+- Static SEO metadata and deployment.
 
-### 1. Configure Your Blog
+The project does not include a CMS, comments, analytics, a site-wide music player, RSS subscriptions, AI summaries, or cloud-synced reading history. See the repository's Product Scope for the complete list.
 
-Edit the `config/site.yaml` file:
+## Personal Reading Shelf
 
-```yaml
-site:
-  title: Your Blog Name
-  author: Your Name
-  description: Your blog description
-  # ...more options
+Save articles from supported article cards or article pages, then manage them at `/shelf`. The shelf supports To Read, In Progress, and Completed filters, search, sorting, and grid or list layouts. Saved items and reading history stay in the current browser; they are not synced across devices.
+
+## Quick start
+
+Requirements: Node.js `>=22.20.0` and pnpm `10.28.2`.
+
+```bash
+git clone https://github.com/RockyBabcock/rocky-blog.git
+cd rocky-blog
+pnpm install
+pnpm dev
 ```
 
-### 2. Write Your First Post
+The development server defaults to port 3000. Set `BLOG_PORT` to override it.
 
-Create a Markdown file in the `src/content/blog/` directory:
+## Write your first post
+
+Create a Markdown file under `src/content/blog/`:
 
 ```markdown
 ---
 title: My First Post
-date: 2024-01-01
+description: A short introduction
+date: 2026-11-27
+link: my-first-post
 tags:
-  - Tag1
+  - Astro
 categories:
-  - CategoryName
+  - 笔记
 ---
 
-Post content...
+Your content starts here.
 ```
 
-### 3. Deploy
+The content schema is defined in `src/content.config.ts`. Available fields include `title`, `date`, `description`, `link`, `updated`, `cover`, `tags`, `categories`, `sticky`, `draft`, `catalog`, `tocNumbering`, `math`, `password`, `keywords`, and `translationKey`.
 
-Deploy easily with Vercel:
+## Translations
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cosZone/astro-koharu)
+Chinese is the default locale. Translated posts mirror the default post's relative path under the `en/`, `ja/`, or `fr/` directory. Keep the same `link` and, where useful, the same `translationKey`.
 
-## Learn More
+UI support for four locales does not mean every article has four translations. Missing translations follow the site's fallback behavior.
 
-- Check out the [Markdown Features Demo](/en/post/markdown-features) for all Markdown enhancements
-- Check out the [Usage Guide](/en/post/astro-koharu-guide) for detailed configuration
+## Configuration and deployment
 
-Enjoy blogging!
+Edit `config/site.yaml` to customize site identity, domain, timezone, locale settings, navigation, categories, series, and motion. Content label translations live in `config/i18n-content.yaml`.
+
+Run `pnpm build` to generate `dist/`. Deploy the output to GitHub Pages, Vercel, Netlify, Cloudflare Pages, or another static host. No application server or database is required.
+
+## Learn more
+
+- [Rocky Blog usage guide](/en/post/astro-koharu-guide)
+- [Markdown feature showcase](/en/post/markdown-features)
+- [Archives](/en/archives)
+- [Repository on GitHub](https://github.com/RockyBabcock/rocky-blog)
