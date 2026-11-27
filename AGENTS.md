@@ -1,389 +1,109 @@
-# AGENTS.md
+# AGENTS.md — Rocky Blog Agent Instructions
 
-Guidance for AI coding agents (Claude Code, Codex, etc.) working in this repository. This is the single agent-instructions file; do not add a separate `CLAUDE.md`.
+Repository-level instructions for AI coding agents. Read this file and [docs/PRODUCT-SCOPE.md](./docs/PRODUCT-SCOPE.md) before changing code, content, configuration, or documentation.
 
-## Project Overview
+## 1. Product identity and truth
 
-astro-koharu is an Astro-based blog rebuilt from Hexo, inspired by the Shoka theme. It uses React for interactive components, Tailwind CSS for styling, and maintains compatibility with legacy Hexo blog content.
+This repository is **Rocky Blog**, a static personal blog built with Astro 7, React 19, TypeScript, and Tailwind CSS 4.
 
-## Core Engineering Principles
+When facts conflict, use this order:
+1. The maintainer's latest explicit decision in the active task.
+2. Current source code and configuration for implementation facts.
+3. `docs/PRODUCT-SCOPE.md` for product intent.
+4. Other documentation and historical reports.
 
-### 1. Module-First Principle
-**Every feature must be implemented as a standalone module with clear boundaries.**
-- Logic organized into focused, single-responsibility modules
-- Module structure: `src/lib/` (utilities), `src/hooks/` (React hooks), `src/components/` (UI), `src/store/` (state), `src/constants/` (config)
+Do not treat an old tutorial, screenshot, changelog entry, or performance report as proof that a feature still exists.
 
-### 2. Interface-First Design
-**Modules must expose clear, minimal public APIs.**
-- Use barrel exports (`index.ts`) to define public interfaces
-- Export TypeScript types alongside implementations
-- Document complex functions with JSDoc
+## 2. Preserve these capabilities
 
-### 3. Functional-First Approach
-**Prefer pure functions over stateful classes; manage side effects explicitly.**
-- Write pure functions (same input → same output)
-- Isolate side effects at boundaries
-- Immutable data transformations using es-toolkit
+- Existing homepage modules and editorial hierarchy. Improve composition without deleting or reducing established content modules.
+- Articles, categories, tags, archives, pagination, weekly / series pages, About, and existing navigation.
+- Pagefind static search, command palette, recent / continue reading, local reading history, local saved-article Reading Shelf, collection filters, and series reading progress.
+- Light / dark themes, built-in reader font presets, typography controls, reading progress, focus mode, and table of contents.
+- GFM, Shiki, KaTeX, Mermaid, Infographic, Shoka-style Markdown extensions, encrypted content, image lightbox / zoom, responsive images, and LQIP.
+- Existing page transitions, scroll reveals, Sakura effects, interaction feedback, and reduced-motion support.
+- Chinese, English, Japanese, and French UI / routing support.
+- canonical, Open Graph, hreflang, sitemap, robots, and Pagefind.
 
-### 4. Test-Friendly Architecture
-**Design code to be testable without mocking.**
-- Pure functions are naturally testable
-- Testing priorities: High (lib utilities, data transformations) > Medium (hooks, state) > Low (UI components)
+## 3. Do not reintroduce without an explicit decision
 
-### 5. Simplicity & Anti-Abstraction
-**Resist premature abstraction; three instances before extracting a pattern.**
-- Don't create abstractions for single-use cases
-- Maximum 3 levels of module nesting
+Friends / links, Writing Room, CMS / admin dashboard, global music player or playlist, Bangumi tracker, Moments, Christmas effects, comments, Umami or other analytics, Koharu CLI, Docker deployment, announcements, Tweet / X embeds, CodePen embeds, random or semantic recommendations, local font-file picker, Colophon metadata, AI summaries, embedding-based similarity, custom article audio / video players, LRC lyrics, media playlists, quizzes, and external-link OG preview cards.
 
-### 6. Dependency Hygiene
-**Manage dependencies carefully; avoid circular imports and bloat.**
-- Use dynamic imports for heavy dependencies (>100KB)
-- Conditional bundling for optional features
-- No circular dependencies
+The product has no user accounts, cloud database, cloud bookshelf, or server-side reading-history sync.
 
-## IMPORTANT Guidelines
+RSS is a product non-goal, but legacy source and configuration references remain in the repository baseline. Do not claim RSS code has already been removed, do not add RSS UI, and do not expand RSS support. A complete cleanup must be a dedicated change and preserve canonical, Open Graph, hreflang, sitemap, robots, and Pagefind.
 
-- **Documentation lookup**: Use Context7 MCP server or WebSearch for official docs
-- **Keep AGENTS.md updated**: Ask to update when making architectural changes
-- **Run lint before completion**: `pnpm lint:fix` must pass before completing tasks
-- **Check for dead code**: Run `pnpm knip` periodically
+## 4. Visual direction
 
-## Development Commands
+Use **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestial Details**.
 
-Package manager: **pnpm** (`pnpm@10.28.2`)
+- Prioritize hierarchy, legibility, whitespace, editorial typography, composition, and responsive rhythm.
+- Use petals, botanical lines, stars, constellations, orbit marks, fine rules, micro-labels, and subtle texture as controlled accents.
+- Keep the result mature, polished, expressive, and calm.
+- Avoid anime / manga / kawaii / chibi styling, childish illustration, random neon, excessive glassmorphism, and generic dashboard cards.
+- Reuse existing design tokens and theme variables; do not invent arbitrary local palettes.
+- Do not solve a sparse layout by deleting modules or indiscriminately shrinking information density.
+
+## 5. Locale contract
+
+Supported locales are exactly:
+- `zh` — Chinese, default, no URL prefix.
+- `en` — English, `/en/`.
+- `ja` — Japanese, `/ja/`.
+- `fr` — French, `/fr/`.
+
+Do not add Korean. UI copy changes should update all four dictionaries where applicable. Article translations are content files and may be incomplete; do not label fallback content as translated.
+
+## 6. Architecture
+
+- Astro owns file-based routing, static generation, layouts, and content rendering.
+- React is for interactive islands. Avoid hydrating static content without a user-visible need.
+- Markdown / MDX content lives in `src/content/blog/` and is validated by `src/content.config.ts`.
+- Site configuration is declared in `config/site.yaml` and normalized through `src/lib/config/`.
+- UI locale dictionaries and helpers live in `src/i18n/`.
+- Shared state and browser persistence live in `src/store/` and supporting libraries.
+- Styles and tokens live under `src/styles/` and component styles.
+- Keep dependency flow acyclic and data transformations testable.
+
+Before creating an abstraction, search for an existing equivalent. Search all import sites before renaming or deleting exports. Do not casually change public article slugs.
+
+### Client navigation lifecycle
+
+The site uses Astro client-side navigation. Event listeners, observers, and subscriptions must support route swaps and cleanup. Do not assume a full document reload or register duplicate global listeners after each navigation.
+
+### State and encryption
+
+Reading history, reader preferences, series progress, and saved articles in the Reading Shelf are local browser features, not cloud-synced data. Saved-article state uses the versioned localStorage key `rocky-blog:saved-articles:v1`; reading status is derived from the existing reading-history store.
+
+AES-256-GCM is static / build-time encryption. Ciphertext and public derivation parameters are delivered with the page and can be attacked offline. Never describe it as server authentication, DRM, or private server storage.
+
+## 7. Quality and accessibility
+
+- Preserve semantic HTML, keyboard behavior, visible focus, accessible names, and appropriate ARIA.
+- Test responsive behavior and touch interaction, not desktop alone.
+- Respect `prefers-reduced-motion` and configured motion levels.
+- Avoid layout shift; preserve image aspect ratios and loading behavior.
+- Treat Markdown and external content as untrusted; maintain safe rendering boundaries.
+- Do not add analytics, tracking, or unexpected network requests.
+
+## 8. Commands
+
+Node.js must be `>=22.20.0` and pnpm is `10.28.2`.
 
 ```bash
-# Development
-pnpm dev              # Start dev server
-pnpm build            # Build for production
-pnpm preview          # Preview production build
-pnpm check            # Run Astro type checking
-pnpm test             # Run all node:test suites (see package.json test:* scripts)
-
-# Linting & Code Quality
-pnpm lint             # Run Biome linter and formatter
-pnpm lint:fix         # Auto-fix linting issues
-pnpm knip             # Find unused files/dependencies
-
-# Content Asset Generation
-pnpm generate:lqips        # Generate LQIP image placeholders
-pnpm generate:all          # Generate all content assets (LQIPs)
+pnpm dev
+pnpm check
+pnpm lint
+pnpm test
+pnpm knip
+pnpm build
+pnpm preview
 ```
 
-**Note on Configuration Changes:** After modifying `config/site.yaml`, restart the dev server or rebuild. The YAML configuration is cached during build for performance.
+Use `pnpm lint` for a non-mutating check. `pnpm lint:fix` modifies files and should not be run casually across unrelated files. Browser scripts such as `pnpm test:motion:browser`, `pnpm test:diagram:browser`, and `pnpm test:search:browser` may require Playwright browsers.
 
-**Config normalization:** `src/lib/config/site.ts` is the single YAML parse/assembly point. Each config section has a pure `normalize*(raw)` function in `src/lib/config/` (content, featured-series, motion) owning its default table and validation — add new sections there, with node:test coverage, instead of reading `yamlConfig` ad hoc. `src/constants/site-config.ts` is a thin assembly/compat layer; `src/lib` must not import from `@constants/site-config`.
+Do not delete a file based on a single Knip warning without checking Astro imports, dynamic imports, content discovery, route generation, and runtime registration. In particular, `src/components/home/SeriesShowcaseProgress.tsx` is used by the Astro `SeriesShowcase` island and must not be removed solely because a static entry-point scan reports it.
 
-## Architecture
+## 9. Git discipline
 
-### Tech Stack
-- **Framework**: Astro 7.x with React integration
-- **Styling**: Tailwind CSS 4.x with plugins
-- **Content**: Astro Content Collections (`src/content/blog/`)
-- **i18n**: Custom translation system (`src/i18n/`) with Astro i18n routing
-- **Animations**: Motion (Framer Motion successor)
-- **State**: Nanostores
-- **Search**: Pagefind (static)
-- **Utilities**: es-toolkit, date-fns, sanitize-html
-
-### Project Structure
-```plain
-src/
-├── components/   # React & Astro components
-├── content/blog/ # Markdown/MDX posts (translations under <locale>/ subdirs)
-├── i18n/         # Internationalization (translations, config, utils)
-├── layouts/      # Page layouts
-├── pages/        # File-based routing ([lang]/ mirrors for non-default locales)
-├── lib/          # Utility functions
-├── hooks/        # React hooks
-├── constants/    # Config, router, animations
-├── scripts/      # Build-time scripts
-├── store/        # Global state (nanostores)
-└── types/        # TypeScript types
-```
-
-### Module Organization
-
-**Dependency Flow** (avoid circular dependencies):
-```plain
-pages/ → components/ → hooks/ → lib/ → constants/
-                               ↓
-                             types/
-```
-
-**File Naming**:
-- Barrel exports: `index.ts`
-- Single export: Match filename (`useMediaQuery.ts`)
-- React components: PascalCase (`PostCard.tsx`)
-
-**Module Size Limits**:
-- Max 500 lines per file
-- Max 15 public exports per module
-- Max 10 imports per file
-
-### Path Aliases
-```plain
-@/          → src/
-@lib/*      → src/lib/*
-@hooks/*    → src/hooks/*
-@components/* → src/components/*
-@constants/* → src/constants/*
-```
-
-### Key Concepts
-
-**Content System**: Blog posts in `src/content/blog/` using Astro Content Collections. Hierarchical categories supporting `'工具'` or `['笔记', '前端', 'React']`.
-
-**Featured Series**: Special category-based content series with dedicated pages and homepage highlights. Configured via `featuredSeries` in `config/site.yaml`. Each series requires a unique `slug` (must not conflict with reserved routes) and `categoryName`. Supports multiple series, individual enable/disable, and homepage highlight control. Dynamic routes generated at `[seriesSlug].astro`.
-
-**Theme System**: Dark/light toggle with localStorage, inline check in `<head>` prevents FOUC.
-
-**i18n System**: Two-layer translation architecture with locale-aware routing.
-- **UI strings** (`src/i18n/translations/`): TypeScript dictionaries with `t(locale, key, params?)` function. Keys defined in `zh.ts` (source-of-truth), other locales are partial overrides.
-- **Content strings** (`config/i18n-content.yaml`): YAML-based translations for category names, series fields, featured category labels. Accessed via `getContentCategoryName()` / `getContentSeriesField()` / `getContentFeaturedCategoryField()` (internal to `src/lib/content/categories.ts`).
-- **Routing**: Default locale has no URL prefix; other locales use `/<locale>/` prefix. Static pages in `src/pages/[lang]/` are thin wrappers using `getLocaleStaticPaths()`. Dynamic routes declare their param space once in `src/pages/_shared/routes.ts`; root/mirror pages share it via `localePaths(enumerate)` from `src/pages/_shared/utils.ts`, which injects `locale` into props — pages pass it explicitly to `<Layout locale={...}>`. `assertLocaleMirrorsComplete()` fails the build if a root page lacks its `[lang]/` mirror (exemptions in `MIRROR_EXEMPT`).
-- **React hook**: `useTranslation()` reads from `$locale` nanostore (synced via `astro:page-load` event). Returns `{ t, locale }`.
-- **Content locale**: Posts in `src/content/blog/<locale>/` are detected by slug prefix (`getSlugLocaleInfo()`); `filterPostsByLocale()` provides fallback — non-default locales show translations + untranslated default-locale posts.
-- **Locale config**: `enabled` flag in `config/site.yaml` allows disabling locales without removing content. `isI18nEnabled` controls conditional Astro i18n routing.
-- **`localizedPath(path, locale?)`** defaults to `defaultLocale` — no need for `locale ?? defaultLocale` at call sites.
-- **Do NOT enable Astro `fallback`** in `astro.config.mjs` — it breaks `[seriesSlug].astro` dynamic routes.
-
-**Markdown**: Shiki highlighting, auto-generated heading IDs/links via rehype plugins, GFM support.
-
-**Icon sets**: Bundled icon collections are defined in `BUNDLED_ICON_SETS` in `src/lib/config/icon-sets.ts` (drives `astro-icon` `include`); adding a set requires installing `@iconify-json/<set>` too.
-
-**Post source & actions**: Each public post's raw file (frontmatter included) is emitted at `<post url>.md` (`src/pages/post/[...slug].md.ts` + `[lang]` mirror, param space `postSourceRoute`). `isPostSourcePublic()` in `src/lib/content/post-source.ts` gates both the endpoint and the breadcrumb `PostMarkdownActions` button — posts with `password` or any `:::encrypted` block never expose source. `postActions:` in `config/site.yaml` controls copy and download of public Markdown source.
-
-## Component Patterns
-
-### Component Design Principles
-
-1. **Single Responsibility**: Each component does one thing well
-2. **Props Interface**: Clear, minimal props
-3. **Composition over Configuration**: Use composable components
-
-### UI Components
-- Follow **shadcn/ui patterns** with Radix UI primitives
-- Use **`class-variance-authority` (cva)** for variants
-- Merge Tailwind classes via `cn()` in `src/lib/utils.ts`
-
-### Astro vs React
-
-**Astro components** (`.astro`): Layouts, pages, static content (no JS shipped by default)
-**React components** (`.tsx`): Interactive UI (state, events)
-
-**Client directives**:
-- `client:load` - Critical interactive elements (header, nav, search)
-- `client:idle` - Lower-priority interactions (tooltips, modals)
-- `client:visible` - Below-the-fold components (footer, comments)
-- `client:only="react"` - Skip SSR (framework-specific)
-
-### Astro Script Initialization
-
-Always handle initialization race condition:
-
-```typescript
-// ✅ Good: Initialize immediately if DOM ready
-if (document.readyState !== "loading") init();
-document.addEventListener("astro:page-load", init);
-
-// Cleanup on page swap
-document.addEventListener("astro:before-swap", cleanup);
-```
-
-## Code Style & Quality
-
-### Linting & Formatting
-Biome (line width: 128, single quotes, trailing commas). Tailwind classes must be sorted.
-
-### Frontend Quality Priorities
-1. **User Experience** (Performance, Accessibility, Progressive Enhancement)
-2. **Correctness** (Type safety, Edge cases, Error handling)
-3. **Maintainability** (Clear abstractions, Component reuse)
-4. **Performance** (Bundle size, Runtime optimization)
-5. **Code brevity** (Concise but clear)
-
-### Core Web Vitals Targets
-- LCP < 2.5s
-- FID/INP < 100ms
-- CLS < 0.1
-
-### Error Handling Strategy
-**Layered and context-appropriate:**
-1. **Data Layer** (`src/lib/`): Return `null` or throw typed errors
-2. **React Components**: Use `ErrorBoundary` for component errors
-3. **Async Operations**: Explicit try-catch or `.catch()`
-4. **Validation**: At system boundaries only
-
-### Performance Best Practices
-- Lazy load heavy dependencies (>100KB): `const THREE = await import("three");`
-- Don't prematurely optimize - measure first
-- Use `useMemo()` for expensive computations only
-- Use `useCallback()` only when passing to memoized children
-- Use `useSyncExternalStore` for scroll events (see `useCurrentHeading`)
-- **Avoid large props**: Never pass large data (like `body` content) as props. Pre-compute derived values (e.g., `wordCount`, `readingTime`) instead. Large props get serialized into HTML when passed to client components, causing page bloat.
-
-### Code Reuse Patterns
-1. **Pure Functions** (`src/lib/`): Extract when used 2+ times
-2. **React Hooks** (`src/hooks/`): Extract when pattern repeated 3+ times
-3. **Shared Types** (`src/types/`): Extract when used 3+ times
-
-### State Management Best Practices
-
-**State Lifting**: Place state at nearest common ancestor, avoid over-lifting.
-
-**Derived State**: Prefer `const filtered = posts.filter(...)` over `useEffect` synchronization.
-
-**Immutability**: Always use immutable updates: `setUser(prev => ({ ...prev, name: 'Alice' }))`.
-
-**URL State Management**: Use **nuqs** (https://nuqs.dev/) for shareable state (search, pagination, filters, tabs). Benefits: shareable URLs, bookmarkable, browser navigation, SEO-friendly.
-
-```typescript
-// ✅ Good: URL state for filters
-const [search, setSearch] = useQueryState('q', { defaultValue: '' });
-const [category, setCategory] = useQueryState('category');
-// URL: /posts?q=react&category=tech (shareable!)
-```
-
-For Astro projects, use native `URLSearchParams`:
-```typescript
-const url = new URL(Astro.request.url);
-const search = url.searchParams.get('q') || '';
-```
-
-### React Best Practices
-
-**Avoid useCallback Overuse**: Only use when callback passed to memoized child.
-
-**Fix Circular Dependencies in useEffect**: Use refs for latest state without re-subscribing.
-
-**Avoid useState for Static Values**: Use constants or `useMemo` for computed values.
-
-**Extract Custom Hooks**: When `useState` + `useRef` + `useEffect` pattern repeats 2+ times.
-
-**Scroll Events**: Use `useSyncExternalStore` instead of `useState` + `useEffect`.
-
-**Media Queries**: Use existing hooks: `useIsMobile()`, `useMediaQuery()` from `@hooks/useMediaQuery`.
-
-**Animations**: Use Motion's `useReducedMotion()` for animation components.
-
-**SSR Hydration**: Never use `suppressHydrationWarning`. Use `useIsMounted()` hook for client-only values.
-
-```typescript
-// ✅ Good: Avoid hydration mismatch
-const isMounted = useIsMounted();
-const isActive = useStore(panelOpen);
-<div className={cn({ 'opacity-100': isMounted && isActive })} />
-```
-
-## Testing Strategy
-
-**Test business logic rigorously; test UI pragmatically.**
-
-**High Priority**: Content utilities, data transformations, build scripts
-**Medium Priority**: Complex React hooks, state management
-**Low Priority**: UI components (manual testing preferred)
-
-```typescript
-// Example: Pure function test
-describe("getCategoryLinks", () => {
-  it("returns all links recursively", () => {
-    const category = {
-      name: "笔记",
-      link: "/category/notes",
-      children: [
-        { name: "前端", link: "/category/notes/front-end", children: [] }
-      ]
-    };
-    expect(getCategoryLinks(category)).toEqual(["/category/notes/front-end"]);
-  });
-});
-```
-
-## Development Checklist
-
-### Before Starting
-- [ ] Understand requirement clearly
-- [ ] Check existing code for similar patterns
-- [ ] Verify no circular dependencies
-
-### During Implementation
-- [ ] Follow Module-First Principle
-- [ ] Write pure functions where possible
-- [ ] Use TypeScript strictly (no `any`)
-- [ ] Extract shared logic after third use
-- [ ] Handle errors appropriately
-- [ ] Use existing hooks (`useMediaQuery`, `useIsMounted`, etc.)
-
-### Component Development
-- [ ] Choose Astro vs React appropriately
-- [ ] Use correct client directive
-- [ ] Follow composition patterns
-- [ ] Wrap interactive sections in `ErrorBoundary`
-- [ ] Handle SSR hydration properly
-
-### Before Committing
-- [ ] **Run linter**: `pnpm lint:fix` ✅ Required
-- [ ] Run type checker: `pnpm check`
-- [ ] Run affected tests: `pnpm test` or the matching `pnpm test:*` script
-- [ ] Check for unused code: `pnpm knip`
-- [ ] Verify build succeeds: `pnpm build`
-
-## Commit & Pull Request Guidelines
-
-- Short imperative subjects with Conventional Commit prefixes (`feat:`, `fix:`, `chore:` ……); keep each commit focused and include generated assets the change requires.
-- PRs explain the user-visible effect, list validation commands, link related issues, and include screenshots or recordings for visual changes. Call out configuration, migration, performance, or i18n impact explicitly.
-- This is a public repo: keep secrets from `.env` out, and use neutral/fictional content in tests, fixtures, screenshots and sample posts.
-
-## Common Code Smells
-
-**Component-Level**:
-- Oversized components (> 300 lines)
-- Props drilling beyond 3 levels → use Context
-- Overuse of useEffect → use derived state
-
-**State Management**:
-- Duplicate state → single source of truth
-- Missing URL state for shareable filters → use nuqs
-
-**Performance**:
-- Unnecessary re-renders → missing memo when needed
-- Premature optimization → measure first
-- Large dependencies not lazy-loaded (> 100KB)
-
-## Common Pitfalls
-
-### 1. Circular Dependencies
-Extract shared logic to separate file instead of importing between peer modules.
-
-### 2. Hydration Mismatches
-Use `useIsMounted()` for client-only values, never `suppressHydrationWarning`.
-
-### 3. Overuse of useEffect
-Prefer derived values: `const fullName = \`${first} ${last}\``instead of`useEffect` synchronization.
-
-### 4. Over-abstraction
-Inline until pattern appears 3 times. Avoid unnecessary abstractions.
-
-### 5. Tight Coupling to Framework
-Keep business logic pure, framework calls at boundaries.
-
-## Resources
-
-### Documentation
-- [Astro Docs](https://docs.astro.build/)
-- [React Docs](https://react.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Motion](https://motion.dev/)
-- [Nanostores](https://github.com/nanostores/nanostores)
-
-### Tools
-- [Biome](https://biomejs.dev/) - Linter and formatter
-- [Pagefind](https://pagefind.app/) - Static search
-- [es-toolkit](https://es-toolkit.slash.page/) - Utility library
-
-### Internal References
-- Core utilities: `src/lib/content/`, `src/lib/utils.ts`
-- Reusable hooks: `src/hooks/`
-- Animation presets: `src/constants/anim/`
-- Site configuration: `src/constants/site-config.ts`
+The default branch is `main`. Use a focused branch and PR for routine contributions unless the maintainer explicitly authorizes a direct commit to `main`. Before a direct update, inspect the latest branch head and use an expected-head guard. Never overwrite concurrent commits.
