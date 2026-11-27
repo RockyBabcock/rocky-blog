@@ -3,59 +3,86 @@ title: Bienvenue sur Rocky Blog
 link: getting-started
 catalog: true
 date: 2024-01-01 00:00:00
-description: Bienvenue sur ce blog construit avec Astro, React et Tailwind CSS, alliant performance statique, design soigné et support multilingue.
+description: Découvrez Rocky Blog, un blog personnel statique conçu avec Astro, React et Tailwind CSS.
 tags:
   - 入门
   - Astro
 categories:
   - 工具
 sticky: true
+translationKey: getting-started
 ---
 
-Bienvenue sur ce blog moderne construit avec Astro !
+Bienvenue sur **Rocky Blog**, un blog personnel statique consacré à l'écriture, à la lecture et à la découverte de contenus.
 
-## À propos de ce site
+## À propos du projet
 
-Ce blog repose sur Astro 7, React et Tailwind CSS, avec une architecture statique légère et rapide. Il inclut notamment :
+Rocky Blog repose sur Astro 7, React 19, TypeScript et Tailwind CSS 4. La génération statique constitue la base du site ; seules les interactions nécessaires sont hydratées côté client. Sa direction artistique associe une mise en page éditoriale soignée, une typographie de magazine contemporain et des détails discrets inspirés des sakura, de la botanique et du ciel étoilé.
 
-- **Haute performance** — Génération statique avec Astro et chargement optimisé des polices et images
-- **Expérience de lecture soignée** — Table des matières dynamique, mode lecture concentrée et réglages typographiques
-- **Multilingue natif** — Navigation en chinois, anglais, japonais et français avec bascule fluide
-- **Recherche plein texte** — Recherche locale rapide avec filtres par catégorie, étiquette et langue
+Les principales fonctionnalités comprennent :
+
+- Les sections éditoriales de l'accueil, les articles, catégories, étiquettes, archives et séries.
+- La recherche statique Pagefind, la palette de commandes et l'historique de lecture local.
+- Les thèmes clair et sombre, les préférences de lecture, le mode concentration et la table des matières.
+- GFM, Shiki, KaTeX, Mermaid, Infographic et les extensions Markdown de style Shoka.
+- Une interface en chinois, anglais, japonais et français.
+- Les métadonnées SEO et le déploiement statique.
+
+Le produit ne fournit pas de CMS, de commentaires, d'analytics, de lecteur musical global, de flux RSS, de résumés IA ni de synchronisation cloud de l'historique. Consultez le document Product Scope du dépôt pour la liste complète.
+
+## Bibliothèque de lecture personnelle
+
+Enregistrez des articles depuis les cartes ou les pages compatibles, puis gérez-les sur `/shelf`. La bibliothèque propose les filtres « À lire », « En cours » et « Terminés », ainsi que la recherche, le tri et les vues en grille ou en liste. Les favoris et l'historique restent dans le navigateur actuel : ils ne sont pas synchronisés entre appareils.
 
 ## Démarrage rapide
 
-### 1. Configurer le site
+Prérequis : Node.js `>=22.20.0` et pnpm `10.28.2`.
 
-Modifiez le fichier `config/site.yaml` pour personnaliser le titre, l'auteur, les catégories et les langues :
-
-```yaml
-site:
-  title: Mon Blog
-  author: Rocky
-  description: Notes techniques et réflexions
+```bash
+git clone https://github.com/RockyBabcock/rocky-blog.git
+cd rocky-blog
+pnpm install
+pnpm dev
 ```
 
-### 2. Rédiger un article
+Le serveur de développement utilise le port 3000 par défaut. Définissez `BLOG_PORT` pour le modifier.
 
-Ajoutez un fichier Markdown dans `src/content/blog/` (ou dans `src/content/blog/fr/` pour une version française) :
+## Rédiger un premier article
+
+Créez un fichier Markdown dans `src/content/blog/` :
 
 ```markdown
 ---
 title: Mon premier article
-date: 2024-01-01
+description: Une courte introduction
+date: 2026-11-27
+link: mon-premier-article
 tags:
   - Astro
 categories:
-  - 工具
+  - 笔记
 ---
 
-Contenu de l'article...
+Votre texte commence ici.
 ```
+
+Le schéma de contenu est défini dans `src/content.config.ts`. Les champs disponibles comprennent notamment `title`, `date`, `description`, `link`, `updated`, `cover`, `tags`, `categories`, `sticky`, `draft`, `catalog`, `tocNumbering`, `math`, `password`, `keywords` et `translationKey`.
+
+## Traductions
+
+Le chinois est la langue par défaut. Les traductions reproduisent le chemin relatif de l'article sous les dossiers `en/`, `ja/` ou `fr/`. Conservez le même `link` et, si nécessaire, le même `translationKey`.
+
+L'interface prend en charge quatre langues, mais chaque article ne dispose pas nécessairement de quatre traductions. Le site applique son mécanisme de repli lorsqu'une traduction est absente.
+
+## Configuration et déploiement
+
+Modifiez `config/site.yaml` pour personnaliser l'identité du site, le domaine, le fuseau horaire, les langues, la navigation, les catégories, les séries et les animations. Les traductions des libellés de contenu se trouvent dans `config/i18n-content.yaml`.
+
+Exécutez `pnpm build` pour générer `dist/`. Déployez ce répertoire sur GitHub Pages, Vercel, Netlify, Cloudflare Pages ou tout autre hébergement statique. Aucun serveur applicatif ni base de données n'est nécessaire.
 
 ## Pour aller plus loin
 
-- Découvrez la [démonstration des fonctionnalités Markdown](/fr/post/markdown-features)
-- Parcourez les [archives et la chronologie](/fr/archives)
-
-Bonne lecture !
+- [Guide d'utilisation de Rocky Blog](/fr/post/astro-koharu-guide)
+- [Démonstration Markdown](/fr/post/markdown-features)
+- [Archives](/fr/archives)
+- [Dépôt GitHub](https://github.com/RockyBabcock/rocky-blog)
