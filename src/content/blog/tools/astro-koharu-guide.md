@@ -34,7 +34,7 @@ Rocky Blog 以 **Premium Editorial × Contemporary Magazine × Sakura Botanical 
 - 四语 UI（中文、英语、日语、法语）和多语言路由。
 - canonical、Open Graph、hreflang、sitemap、robots 等静态 SEO 能力。
 
-产品明确不提供友链、CMS / 写作室、评论、统计分析、全站音乐播放器、追番、Moments、Docker 部署、RSS（已从代码中移除）、AI 摘要、语义相似推荐、文章自定义音视频播放器、Quiz 或外链 OG 预览卡。完整边界以仓库的 `docs/PRODUCT-SCOPE.md` 为准。
+维护者已明确移除友链、CMS / 写作室、评论、统计分析、全站音乐播放器 / 播放列表、追番、Moments、AI 摘要和 embedding 语义相似推荐；RSS 也已从代码中移除。周刊 / 系列、KaTeX、Mermaid、Infographic 与静态加密已有实现，应保持当前可用。Docker、公告、Quiz / 练习、文章音视频嵌入、Koharu CLI 和季节性装饰等仍属待评估或未获批准的新能力，不应由 Agent 擅自建设或删除现有功能。完整决策分类以仓库的 `docs/PRODUCT-SCOPE.md` 和 `docs/PROJECT-STATUS.md` 为准。
 
 ## 2. 本地运行
 
@@ -293,7 +293,7 @@ Astro 将生成静态站点到 `dist/`。可部署到 GitHub Pages、Vercel、Ne
 ## 10. 维护原则
 
 - 以当前源码和配置为准，旧版 astro-koharu 教程不能代替当前实现。
-- 不新增产品范围中列为非目标的 CMS、评论、analytics、RSS、音乐播放器或推荐系统。
+- 不新增产品范围中列为已确认移除的 CMS、评论、analytics、RSS、音乐播放器或语义相似推荐。
 - 不删除已有首页模块或用户能力来换取视觉简化。
 - 更改 UI 时同步维护中文、英语、日语和法语文案。
 - 详细的设计、架构和功能边界见仓库的 `docs/` 文档。
