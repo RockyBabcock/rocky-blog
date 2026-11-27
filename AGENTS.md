@@ -1,6 +1,6 @@
 # AGENTS.md — Rocky Blog Agent Instructions
 
-Repository-level instructions for AI coding agents. Read this file and [docs/PRODUCT-SCOPE.md](./docs/PRODUCT-SCOPE.md) before changing code, content, configuration, or documentation.
+Repository-level instructions for AI coding agents. Read this file, [docs/PRODUCT-SCOPE.md](./docs/PRODUCT-SCOPE.md), and [docs/PROJECT-STATUS.md](./docs/PROJECT-STATUS.md) before changing code, content, configuration, or documentation.
 
 ## 1. Product identity and truth
 
@@ -43,6 +43,9 @@ Use **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestia
 - Avoid anime / manga / kawaii / chibi styling, childish illustration, random neon, excessive glassmorphism, and generic dashboard cards.
 - Reuse existing design tokens and theme variables; do not invent arbitrary local palettes.
 - Do not solve a sparse layout by deleting modules or indiscriminately shrinking information density.
+- The maintainer has explicitly identified sparse, visually under-expressive pages as an ongoing improvement target. Improve section-specific composition and intentional detail (eyebrows, numbering, fine rules, borders, editorial grids, timelines, botanical / celestial motifs, controlled texture and interaction feedback) while preserving legibility.
+- Never create whitespace by hiding sections, removing entries, reducing copy, or weakening existing modules. Do not fill space with arbitrary cards, shadows, gradients, particles, or decorative noise.
+- Check desktop / mobile, light / dark, keyboard focus, and reduced-motion before calling a visual task complete.
 
 ## 5. Locale contract
 
@@ -104,6 +107,17 @@ Use `pnpm lint` for a non-mutating check. `pnpm lint:fix` modifies files and sho
 
 Do not delete a file based on a single Knip warning without checking Astro imports, dynamic imports, content discovery, route generation, and runtime registration. In particular, `src/components/home/SeriesShowcaseProgress.tsx` is used by the Astro `SeriesShowcase` island and must not be removed solely because a static entry-point scan reports it.
 
-## 9. Git discipline
+## 9. Task execution and documentation protocol
+
+1. For substantial work, state a short plan and acceptance criteria before editing. Inspect the current branch head and relevant source; do not treat remembered context or historical documentation as current implementation evidence.
+2. Read the relevant architecture chapter before changing routing, content, state, themes, motion, Markdown, or SEO.
+3. Search for existing implementations and all import / registration / route entry points before adding, renaming, or deleting code.
+4. Keep changes scoped. Do not perform broad formatting, dependency replacement, module removal, or unrelated refactors as a side effect of a focused task.
+5. After a product decision changes, update `docs/PRODUCT-SCOPE.md` first and synchronize the relevant READMEs, user instructions, architecture docs, and Skills.
+6. Update `docs/PROJECT-STATUS.md` only when a verified implementation, decision, blocker, or milestone changes. Record evidence; do not invent percentages, owners, ETAs, or a roadmap.
+7. Before reporting completion, state modified files, commands actually run, results, unverified areas, deployment evidence when applicable, and the resulting commit.
+8. `CHANGELOG.md` currently contains inherited upstream `astro-koharu` history. It is not a current Rocky Blog feature list or project status source. Do not infer enabled features from its historical entries.
+
+## 10. Git discipline
 
 The default branch is `main`. Use a focused branch and PR for routine contributions unless the maintainer explicitly authorizes a direct commit to `main`. Before a direct update, inspect the latest branch head and use an expected-head guard. Never overwrite concurrent commits.
