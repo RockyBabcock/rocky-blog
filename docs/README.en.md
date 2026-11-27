@@ -80,7 +80,7 @@ Run `pnpm build` to generate `dist/`. Deploy that directory to GitHub Pages, Ver
 - [Architecture Overview](./overview/00-overview.md)
 - [Internationalization and SEO](./overview/11-i18n-and-seo.md)
 - [Contributing](../CONTRIBUTING.md)
-- [AI Agent Guidelines](../AGENTS.md)
+- [AI Agent Guidelines](../AGENTS.md) — shared rules also linked by [Gemini](../GEMINI.md), [Claude Code](../CLAUDE.md), and [GitHub Copilot](../.github/copilot-instructions.md).
 
 ## License
 
