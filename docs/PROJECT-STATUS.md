@@ -174,7 +174,7 @@ Agent 必须区分“维护者明确删除”“当前代码已有”“当前�
 
 ### 开始任务前
 
-1. 读取仓库根目录的 `AGENTS.md`。
+1. 根据所使用的工具读取入口文件：通用 Agent 读取 `AGENTS.md`；Gemini 读取 `GEMINI.md`；Claude Code 读取 `CLAUDE.md`；GitHub Copilot 读取 `.github/copilot-instructions.md`。这些入口统一指向同一套仓库规范，不得各自维护互相冲突的产品规则。
 2. 读取本文和 [PRODUCT-SCOPE.md](./PRODUCT-SCOPE.md)。
 3. 根据任务继续阅读相应架构文档；例如内容任务阅读 `02-content-system.md`，路由 / 语言任务阅读 `03-routing.md` 与 `11-i18n-and-seo.md`，视觉任务阅读 `05-ui-components.md`、`07-theme-system.md`、`08-animation-system.md` 和 `09-styling.md`。
 4. 检查当前分支、HEAD、相关实现和测试；不要只依赖历史聊天、旧截图或旧提交。
