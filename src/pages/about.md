@@ -13,10 +13,9 @@ description: "关于 Rocky Blog"
 ### 站点说明
 
 - 仓库地址：[RockyBabcock/rocky-blog](https://github.com/RockyBabcock/rocky-blog)
-- 基于 [Astro](https://astro.build/)、React 与 Tailwind CSS 构建，视觉与主题基于 [astro-koharu](https://github.com/cosZone/astro-koharu)（AGPL-3.0）演进而来。
-- 支持多语言浏览（中文 / English / 日本語 / Français）、全文搜索与阅读偏好设置。
+- 基于 [Astro](https://astro.build/)、React 与 Tailwind CSS 构建；部分设计与实现参考了 [astro-koharu](https://github.com/cosZone/astro-koharu)（AGPL-3.0）。
+- 支持中文、英语、日语和法语界面，以及全文搜索与本地阅读偏好设置。
 
-### 订阅与联系
+### 联系
 
 - GitHub：[RockyBabcock](https://github.com/RockyBabcock)
-- RSS 订阅：[/rss.xml](/rss.xml)
