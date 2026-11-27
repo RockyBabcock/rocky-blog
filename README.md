@@ -6,7 +6,7 @@ Rocky Blog 是一个以内容阅读与长期写作为中心的静态个人博客
 
 > 本仓库是 Rocky Blog 的独立项目。它参考并继承了部分上游实现与设计思路，但产品范围、内容、配置和后续维护以本仓库为准。
 
-[快速开始](./GETTING-STARTED.md) · [产品范围](./docs/PRODUCT-SCOPE.md) · [架构文档](./docs/overview/00-overview.md) · [完整使用指南](./src/content/blog/tools/astro-koharu-guide.md)
+[快速开始](./GETTING-STARTED.md) · [产品范围](./docs/PRODUCT-SCOPE.md) · [项目状态与 Agent 交接](./docs/PROJECT-STATUS.md) · [架构文档](./docs/overview/00-overview.md) · [完整使用指南](./src/content/blog/tools/astro-koharu-guide.md)
 
 ## 产品概览
 
@@ -102,7 +102,7 @@ categories:
 
 | 文档 | 内容 |
 | --- | --- |
-| [产品范围](./docs/PRODUCT-SCOPE.md) | 保留功能、非目标、设计方向与安全边界 |
+| [产品范围](./docs/PRODUCT-SCOPE.md) | 保留功能、非目标、设计方向与安全边界 |\n| [项目状态与 Agent 交接](./docs/PROJECT-STATUS.md) | 维护者需求、当前实现状态、验证基线和 Agent 工作流程 |
 | [快速开始](./GETTING-STARTED.md) | 安装、配置、写作、翻译与部署 |
 | [完整使用指南](./src/content/blog/tools/astro-koharu-guide.md) | 面向站点维护者的操作手册 |
 | [架构总览](./docs/overview/00-overview.md) | 代码结构与系统边界 |
