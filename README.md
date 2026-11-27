@@ -109,7 +109,7 @@ categories:
 | [架构总览](./docs/overview/00-overview.md) | 代码结构与系统边界 |
 | [国际化与 SEO](./docs/overview/11-i18n-and-seo.md) | 四种语言、路由、hreflang 与索引 |
 | [贡献指南](./CONTRIBUTING.md) | 分支、检查与提交约定 |
-| [AI Agent 约定](./AGENTS.md) | 自动化开发必须遵守的规则 |
+| [AI Agent 约定](./AGENTS.md) | 通用规范；Gemini、Claude Code 与 GitHub Copilot 使用各自入口文件统一指向该规范 |
 
 ## 许可与来源
 
