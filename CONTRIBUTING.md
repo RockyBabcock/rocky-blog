@@ -49,6 +49,6 @@ PR 应说明变更目的、用户可见影响、修改范围、实际检查结�
 
 产品决策改变时，先更新产品范围，再同步 README、配置说明、用户指南、各语言文档和测试。`docs/performance/` 中带日期的报告属于历史记录；保留原始数据与日期，不要把历史路由当作当前功能清单。
 
-## 历史残留
+## 产品清理边界
 
-RSS 已被决定不纳入产品范围，但当前代码仍有旧实现残留。不要继续扩展 RSS，也不要在普通功能 PR 中随手删除相关代码。完整清理应作为独立变更，并确认 sitemap、robots、canonical、Open Graph、hreflang 和 Pagefind 不受影响。
+RSS 已从当前代码中完整移除。不要重新引入订阅路由、RSS 依赖、RSS metadata 或配置项。canonical、Open Graph、hreflang、sitemap、robots 与 Pagefind 属于独立能力，必须保持正常。
