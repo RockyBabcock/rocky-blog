@@ -1,231 +1,132 @@
-# 快速开始
+# 快速开始与站点维护
 
-欢迎使用 Rocky Blog（基于 astro-koharu 主题定制）！本文档将帮助你在 5 分钟内启动博客。
+本文说明如何运行和维护 Rocky Blog。产品范围以 [PRODUCT-SCOPE.md](./docs/PRODUCT-SCOPE.md) 为准，字段定义以 `src/content.config.ts` 为准。
 
-## 1. 环境准备
+## 环境
 
-确保你的电脑已安装：
-
-- **Node.js** 与 **pnpm**，版本要求见 [README](./README.md#本地启动)
-
-如果没有安装 pnpm，运行：
-
-```bash
-npm install -g pnpm
-```
-
-## 2. 三步启动
-
-### 第一步：获取代码
+- Node.js：`>=22.20.0`
+- pnpm：`10.28.2`
 
 ```bash
 git clone https://github.com/RockyBabcock/rocky-blog.git
 cd rocky-blog
-```
-
-### 第二步：安装依赖
-
-```bash
 pnpm install
-```
-
-### 第三步：启动开发服务器
-
-```bash
 pnpm dev
 ```
 
-打开浏览器访问 http://localhost:3000 即可看到博客！
+开发服务默认端口为 3000，可通过 `BLOG_PORT` 环境变量修改。
 
-## 3. 配置你的博客
+## 站点配置
 
-### 基本信息
-
-编辑 `config/site.yaml`：
+编辑 `config/site.yaml`。修改后重启开发服务器或重新构建。
 
 ```yaml
 site:
-  title: 你的博客名称              # 网站标题
-  alternate: myblog               # 英文短名，用于 logo
-  subtitle: 你的副标题            # 副标题
-  name: 你的名字                  # 作者名
-  description: 博客简介            # 一句话介绍
-  author: 你的名字                # 文章作者
-  url: https://your-domain.com/   # 部署后的域名
-  defaultOgImage: /img/avatar.webp # 默认 Open Graph 图片
-  startYear: 2024                 # 建站年份
-  avatar: /img/avatar.webp        # 头像路径
-  showLogo: true                  # 是否显示 logo
-  keywords:                       # SEO 关键词
-    - 博客
-    - 技术
-```
+  title: Rocky Blog
+  author: Rocky
+  description: 技术笔记与生活随笔
+  url: https://your-domain.example
+  timezone: Asia/Shanghai
 
-### 替换头像
-
-将你的头像图片替换到 `public/img/avatar.webp`
-
-### 社交链接
-
-在 `config/site.yaml` 中配置社交媒体链接：
-
-```yaml
-social:
-  github:
-    url: https://github.com/your-username
-    icon: ri:github-fill
-    color: '#191717'
-  email:
-    url: mailto:your@email.com
-    icon: ri:mail-line
-    color: '#55acd5'
-  rss:
-    url: /rss.xml
-    icon: ri:rss-line
-    color: '#ff6600'
-  # 添加更多社交链接...
-```
-
-## 4. 写第一篇文章
-
-在 `src/content/blog/` 目录下创建 Markdown 文件。
-
-### 基础模板
-
-```markdown
----
-title: 我的第一篇文章
-date: 2024-01-01 12:00:00
-tags:
-  - 标签1
-  - 标签2
-categories:
-  - 分类名
-cover: /img/cover/1.webp
----
-
-文章正文内容...
-```
-
-### Frontmatter 字段说明
-
-| 字段          | 必填 | 说明                            |
-| ------------- | ---- | ------------------------------- |
-| `title`       | ✅   | 文章标题                        |
-| `date`        | ✅   | 发布日期                        |
-| `tags`        | ❌   | 标签列表                        |
-| `categories`  | ❌   | 分类，支持嵌套如 `[笔记, 前端]` |
-| `cover`       | ❌   | 封面图片路径                    |
-| `description` | ❌   | 文章摘要                        |
-| `sticky`      | ❌   | 设为 `true` 置顶文章            |
-| `draft`       | ❌   | 设为 `true` 标记为草稿          |
-
-### 分类使用
-
-单层分类：
-
-```yaml
-categories:
-  - 随笔
-```
-
-嵌套分类：
-
-```yaml
-categories:
-  - [笔记, 前端]
-```
-
-## 5. 部署上线
-
-### 静态托管平台部署
-
-将仓库连接至 GitHub Pages、Vercel、Netlify 或 Cloudflare Pages，构建命令设为 `pnpm build`，输出目录设为 `dist` 即可自动部署。
-
-### 自定义域名
-
-1. 在 Vercel 项目设置中添加域名
-2. 按照提示配置 DNS
-3. 更新 `config/site.yaml` 中的 `site.url` 字段
-
-### 静态部署
-
-运行 `pnpm build` 生成 `dist/` 目录，可直接部署至 Vercel、Netlify、Cloudflare Pages 或任意静态托管平台。
-
-## 6. 进阶功能
-
-### 周刊/系列文章
-
-在 `config/site.yaml` 中配置 `featuredSeries`：
-
-```yaml
-featuredSeries:
-  categoryName: 周刊
-  label: 我的周刊
-  fullName: 我的技术周刊
-  description: 每周技术分享
-  cover: /img/weekly_header.webp
-  enabled: true
-  links:
-    github: https://github.com/your-username/your-repo
-    rss: /rss.xml
-```
-
-然后在 `src/content/blog/` 目录创建周刊文章。
-
-### 多语言支持（i18n）
-
-博客内置多语言支持。在 `config/site.yaml` 中配置：
-
-```yaml
 i18n:
-  defaultLocale: zh        # 默认语言（URL 无前缀）
+  defaultLocale: zh
   locales:
     - code: zh
       label: 中文
     - code: en
       label: English
+    - code: ja
+      label: 日本語
+    - code: fr
+      label: Français
 ```
 
-配置后，博客会自动生成带语言前缀的页面（如 `/en/post/xxx`），导航栏和移动端抽屉中会出现语言切换器。
+分类映射、精选分类、系列、导航、内容增强、动效与 SEO 机器人策略也位于该配置文件。分类和系列翻译在 `config/i18n-content.yaml`。
 
-**添加翻译文章**：将翻译文章放在 `src/content/blog/<locale>/` 目录下，保持与默认语言相同的路径结构：
+## 新建文章
 
-```plain
-src/content/blog/
-├── tools/getting-started.md        # 默认语言 (zh)
-└── en/tools/getting-started.md     # 英文翻译
-```
+在 `src/content/blog/` 下创建 Markdown 文件：
 
-没有对应翻译的文章会自动回退显示默认语言内容，并标注提示。
-
-更多详细配置（内容翻译、添加新语言等）请参考 [完整使用指南的多语言配置章节](./src/content/blog/tools/astro-koharu-guide.md#多语言支持i18n)。
-
-### 内容生成（可选）
-
-使用内置脚本生成 LQIP 图片占位符：
-
-```bash
-pnpm generate:lqips        # 生成 LQIP 图片占位符，提升加载体验
-```
-
-## 常用命令
-
-| 命令                        | 说明                               |
-| --------------------------- | ---------------------------------- |
-| `pnpm dev`                  | 启动开发服务器                     |
-| `pnpm build`                | 构建生产版本                       |
-| `pnpm preview`              | 预览生产构建                       |
-| `pnpm check`                | Astro 类型检查                     |
-| `pnpm test`                 | 运行单元测试                       |
-| `pnpm lint`                 | Biome 代码检查                     |
-| `pnpm generate:lqips`       | 生成 LQIP 图片占位符               |
-
-## 获取帮助
-
-- 📖 [详细使用指南](./src/content/blog/tools/astro-koharu-guide.md)
-- ⭐ [GitHub 仓库](https://github.com/RockyBabcock/rocky-blog)
-
+```markdown
+---
+title: 我的第一篇文章
+description: 文章简介
+date: 2026-11-27 10:00:00
+link: hello-rocky-blog
+cover: /img/cover/1.webp
+tags:
+  - Astro
+categories:
+  - [笔记, 前端]
+sticky: false
+draft: false
+catalog: true
+tocNumbering: true
+math: true
+keywords:
+  - Rocky Blog
+translationKey: hello-rocky-blog
 ---
 
-祝你搭建愉快！
+正文从这里开始。
+```
+
+当前 schema 还支持 `updated`、`subtitle`、`password` 等字段。完整定义见 `src/content.config.ts`。日期按 `site.timezone` 解析。修改既有文章 slug 前请检查历史链接。
+
+## 多语言文章
+
+支持的 UI 语言为中文（默认）、英语、日语和法语。默认内容放在根目录，译文镜像相同相对路径：
+
+```text
+src/content/blog/tools/example.md
+src/content/blog/en/tools/example.md
+src/content/blog/ja/tools/example.md
+src/content/blog/fr/tools/example.md
+```
+
+可通过一致的 `link` 和 `translationKey` 关联译文。UI 字典、路由和 SEO 规则见 [国际化与 SEO](./docs/overview/11-i18n-and-seo.md)。并非每篇文章都有所有语言的译文；缺少时按实现回退默认语言。
+
+## 命令
+
+| 命令 | 用途 |
+| --- | --- |
+| `pnpm dev` | 开发服务器 |
+| `pnpm check` | Astro / TypeScript 检查 |
+| `pnpm lint` | Biome 检查 |
+| `pnpm test` | 核心测试套件 |
+| `pnpm knip` | 未使用文件和依赖检查 |
+| `pnpm build` | 生成静态站点 |
+| `pnpm preview` | 预览生产构建 |
+| `pnpm generate:lqips` | 生成图片占位资源 |
+
+专项浏览器测试使用 `package.json` 中的 `test:*:browser` 脚本，需要对应 Playwright 浏览器环境。`pnpm lint:fix` 会改写文件，不是只读检查。
+
+## 构建和发布
+
+```bash
+pnpm build
+pnpm preview
+```
+
+部署生成的 `dist/` 到 GitHub Pages、Vercel、Netlify、Cloudflare Pages 或任意静态托管服务。不需要应用服务器、数据库或 Docker。
+
+上线前确认 `site.url`、头像和 OG 图片路径、语言路由、canonical、hreflang、sitemap、robots 与 Pagefind 搜索。
+
+## Reading Shelf 与集合筛选
+
+文章页、文章卡片和支持的位置提供收藏操作。访问 `/shelf`（英语、日语和法语页面分别为 `/en/shelf`、`/ja/shelf`、`/fr/shelf`）管理收藏文章。书架支持待读 / 阅读中 / 已完成筛选、关键词搜索、排序和网格 / 列表视图。归档和分类文章列表也提供当前集合内搜索 / 排序工具栏。
+
+收藏记录仅保存在当前浏览器，不会上传到服务端。状态由已有阅读历史推导，不建立重复的进度记录。
+
+## 本地数据与加密
+
+阅读历史、读者设置、系列进度和 Reading Shelf 收藏均保存在浏览器本地，不跨设备同步。Reading Shelf 使用版本化存储，最多保留 120 条文章元数据；清除浏览器站点数据可能清除这些记录。
+
+AES-256-GCM 是构建期静态加密。密文及公开派生参数会随页面交付，读者可以离线猜测密码；它不是服务器鉴权、DRM 或私有文件存储。不要用它保护高敏感信息。
+
+## 参考
+
+- [产品范围](./docs/PRODUCT-SCOPE.md)
+- [架构文档](./docs/overview/00-overview.md)
+- [完整使用指南](./src/content/blog/tools/astro-koharu-guide.md)
+- [贡献指南](./CONTRIBUTING.md)
