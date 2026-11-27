@@ -71,10 +71,10 @@ export default function FocusModeToggle({ locale }: FocusModeToggleProps) {
         title={isMounted ? label : undefined}
         data-focus-toggle
         className={cn(
-          'focus-visible:ring-primary/50 flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-sm transition-colors duration-200 outline-none focus-visible:ring-2',
+          'focus-visible:ring-primary/50 flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-sm transition-[background-color,border-color,transform] duration-200 outline-none focus-visible:ring-2 active:scale-95',
           isFocusMode
-            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-            : 'bg-primary/10 text-primary hover:bg-primary/20',
+            ? 'bg-primary border-primary text-primary-foreground hover:bg-primary/90'
+            : 'bg-primary/10 border-primary/18 text-primary hover:border-primary/35 hover:bg-primary/18',
         )}
       >
         <Icon

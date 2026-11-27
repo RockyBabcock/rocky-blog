@@ -6,6 +6,7 @@
  * so zero duplicate data structures are created.
  */
 
+import EditorialKicker from '@components/common/EditorialKicker.astro';
 import { Routes } from '@constants/router';
 import { siteTimezone } from '@lib/config/site';
 import { getPostLastCategory, getPostSlug, translateCategoryName } from '@lib/content';
@@ -35,12 +36,7 @@ const archivesHref = localizedPath('/archives', locale);
     <section aria-labelledby="home-timeline-heading" class="flex flex-col gap-4" data-home-timeline>
       <div class="editorial-section-head">
         <div class="editorial-section-title-group">
-          <div class="editorial-kicker" aria-hidden="true">
-            <span class="editorial-kicker-num">{sectionNumber}</span>
-            <span class="editorial-kicker-rule" />
-            <span>ARCHIVE</span>
-            <span class="editorial-kicker-petal" />
-          </div>
+          <EditorialKicker label="ARCHIVE" number={sectionNumber} variant="orbital" />
           <h2 id="home-timeline-heading" class="editorial-section-title">
             <Icon name="ri:calendar-schedule-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
             <span>{t(locale, 'home.timelineSection')}</span>
@@ -63,6 +59,7 @@ const archivesHref = localizedPath('/archives', locale);
               >
                 <span class="editorial-kicker-petal" aria-hidden="true" />
                 <span>{group.year}</span>
+                <span class="celestial-star celestial-star-sm opacity-75" aria-hidden="true" />
               </a>
               <span class="text-muted-foreground text-xs tabular-nums">
                 {t(locale, 'post.yearPosts', { count: group.totalInYear })}

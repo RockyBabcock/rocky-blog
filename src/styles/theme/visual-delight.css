@@ -430,7 +430,10 @@
   transition: opacity 280ms var(--ease-out-quart);
 }
 
-.ambient-glow-surface > :not(.corner-petal-watermark):not(.card-sheen-layer) {
+.ambient-glow-surface
+  > :not(.corner-petal-watermark):not(.card-sheen-layer):not(.celestial-ornament):not(.inner-hairline-frame):not(
+    .category-index-tag
+  ) {
   position: relative;
   z-index: 1;
 }

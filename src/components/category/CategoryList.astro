@@ -19,7 +19,10 @@ const href = (path: string[]) => localizedPath(buildCategoryPath(path), locale);
 const name = (category: Category) => translateCategoryName(category.name, locale);
 ---
 <div class="index-surface shadow-box" style={{ '--petal-mask': PETAL_MASK }}>
-  <PageIntro stats={[{ value: totalCount, label: t(locale, 'index.categories') }, { value: posts.length, label: t(locale, 'index.posts') }]} />
+  <PageIntro
+    kicker={{ label: 'INDEX', variant: 'geometric' }}
+    stats={[{ value: totalCount, label: t(locale, 'index.categories') }, { value: posts.length, label: t(locale, 'index.posts') }]}
+  />
   <ol class="category-toc">
     {categories.map((category) => <li class="motion-reveal">
       <a class="category-toc-head" href={href([category.name])}>

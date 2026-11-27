@@ -91,8 +91,8 @@ export default function PostShareActions({ locale, title, description }: PostSha
             aria-label={t('share.title')}
             title={isMounted ? t('share.title') : undefined}
             className={cn(
-              'bg-primary/10 text-primary hover:bg-primary/20 data-[state=open]:bg-primary/20',
-              'focus-visible:ring-primary/50 flex items-center gap-1 rounded-full px-2.5 py-1 text-sm transition-colors duration-200 outline-none focus-visible:ring-2',
+              'bg-primary/10 text-primary border-primary/18 hover:border-primary/35 hover:bg-primary/18 data-[state=open]:bg-primary/20',
+              'focus-visible:ring-primary/50 flex items-center gap-1 rounded-full border px-2.5 py-1 text-sm transition-[background-color,border-color,transform] duration-200 outline-none focus-visible:ring-2 active:scale-95',
             )}
           >
             <Icon

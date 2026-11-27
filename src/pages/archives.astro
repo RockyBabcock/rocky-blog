@@ -33,10 +33,13 @@ const stats = [
     <Cover compact slot="cover" title={t(locale, 'archives.title')} />
     <HomeSider slot="sider" />
     <div class="index-surface shadow-box" data-archive>
-      <PageIntro stats={stats} />
+      <PageIntro stats={stats} kicker={{ label: 'CHRONICLE', variant: 'orbital' }} />
       {years.length > 0 && <section class="archive-calendar" aria-labelledby="calendar-title" style={{ '--petal-mask': PETAL_MASK }}>
         <div class="archive-calendar-head">
-          <h2 id="calendar-title">{t(locale, 'archives.calendar')}</h2>
+          <h2 id="calendar-title" class="inline-flex items-center gap-2">
+            <span class="celestial-star celestial-star-sm" aria-hidden="true" />
+            <span>{t(locale, 'archives.calendar')}</span>
+          </h2>
           <div class="archive-calendar-legend" aria-hidden="true">
             {t(locale, 'archives.legendFew')}
             {[0, 1, 2, 3, 4].map((tier) => <span class="archive-month-cell" data-tier={tier}></span>)}

@@ -55,7 +55,7 @@ const categoryPosts: CategoryWithPosts[] = (
 
 <div class="grid w-full grid-cols-2 gap-4 md:grid-cols-1">
   {
-    categoryPosts.map((category) => {
+    categoryPosts.map((category, idx) => {
       const parentCategory = category?.parentCategory;
       const parentCategoryLink = parentCategory
         ? localizedPath(Routes.Categories + '/' + (category?.link.split('/').slice(0, -1).join('/') ?? ''), locale)
@@ -67,9 +67,10 @@ const categoryPosts: CategoryWithPosts[] = (
       const fallbackLabel = translateCategoryName(category?.label ?? categoryInfo?.name ?? '', locale);
       const displayName = translateFeaturedCategoryField(category.link, 'label', fallbackLabel, locale) || fallbackLabel;
       const displayDesc = translateFeaturedCategoryField(category.link, 'description', category.description, locale);
+      const indexLabel = String(idx + 1).padStart(2, '0');
       return (
         <FlippedCard className="motion-reveal h-52">
-          <div slot="front" class="relative flex h-full flex-col justify-end overflow-hidden rounded-xl p-5 text-left">
+          <div slot="front" class="group relative flex h-full flex-col justify-end overflow-hidden rounded-xl p-5 text-left">
             <img
               style={getLqipStyle(category.image)}
               src={category.image}
@@ -79,12 +80,18 @@ const categoryPosts: CategoryWithPosts[] = (
               class="absolute inset-0 -z-10 h-full w-full rounded-xl object-cover"
             />
             <div class="absolute inset-0 -z-10 rounded-xl bg-linear-to-t from-black/78 via-black/35 to-black/15" />
+            <div class="inner-hairline-frame" aria-hidden="true" />
+            <div class="card-sheen-layer" aria-hidden="true" />
+            <span class="absolute top-3.5 left-4 z-10 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold tracking-[0.14em] text-white/75 tabular-nums" aria-hidden="true">
+              <span class="celestial-star celestial-star-sm celestial-star-light" />
+              {indexLabel}
+            </span>
             {parentCategory?.name ? (
-              <span class="absolute top-3 right-3 rounded-md bg-black/45 px-2 py-0.5 text-xs font-medium text-white/90 backdrop-blur-xs">
+              <span class="absolute top-3 right-3 z-10 rounded-md bg-black/45 px-2 py-0.5 text-xs font-medium text-white/90 backdrop-blur-xs">
                 {translateCategoryName(parentCategory.name, locale)}
               </span>
             ) : null}
-            <div class="flex flex-col gap-1">
+            <div class="relative z-10 flex flex-col gap-1">
               <h3 class="text-xl font-bold tracking-wide text-white">{displayName}</h3>
               {displayDesc && <p class="line-clamp-1 text-xs text-white/80">{displayDesc}</p>}
               <p class="mt-1 flex items-center gap-1.5 text-xs font-medium text-white/85 tabular-nums">
@@ -94,6 +101,9 @@ const categoryPosts: CategoryWithPosts[] = (
             </div>
           </div>
           <div slot="back" class="bg-card border-border/80 relative flex h-full flex-col rounded-xl border px-5 pt-15 pb-4 text-left">
+            <span class="category-index-tag" aria-hidden="true">
+              {indexLabel}
+            </span>
             <div
               class={cn(
                 'from-gradient-shoka-button-start to-gradient-shoka-button-end absolute top-3.5 -left-3 grid h-8 max-w-[calc(100%+1.5rem)] place-items-center rounded-r-md bg-linear-to-l px-4',

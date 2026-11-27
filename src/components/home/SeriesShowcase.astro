@@ -5,6 +5,7 @@
  * and hydrated local reading progress (`SeriesShowcaseProgress`).
  */
 
+import EditorialKicker from '@components/common/EditorialKicker.astro';
 import ResponsiveImage from '@components/common/ResponsiveImage.astro';
 import { Routes } from '@constants/router';
 import { defaultCoverList } from '@constants/site-config';
@@ -79,12 +80,7 @@ const seriesCards = (
     <section aria-labelledby="home-series-heading" class="flex flex-col gap-4" data-home-series>
       <div class="editorial-section-head">
         <div class="editorial-section-title-group">
-          <div class="editorial-kicker" aria-hidden="true">
-            <span class="editorial-kicker-num">{sectionNumber}</span>
-            <span class="editorial-kicker-rule" />
-            <span>SERIES</span>
-            <span class="editorial-kicker-petal" />
-          </div>
+          <EditorialKicker label="SERIES" number={sectionNumber} variant="constellation" />
           <h2 id="home-series-heading" class="editorial-section-title">
             <Icon name="ri:book-open-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
             <span>{t(locale, 'home.seriesSection')}</span>
@@ -141,7 +137,7 @@ const seriesCards = (
                   <span class="text-primary font-medium">{t(locale, 'series.latestIssue')}</span>
                   <span class="text-foreground truncate font-medium">{series.latestPostTitle}</span>
                 </div>
-                <span class="text-muted-foreground shrink-0 tabular-nums">{series.latestPostDate}</span>
+                <span class="editorial-date-stamp shrink-0">{series.latestPostDate}</span>
               </a>
 
               <SeriesShowcaseProgress

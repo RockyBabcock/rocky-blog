@@ -249,11 +249,13 @@
 .toc-wash {
   right: 0;
   border-radius: 0.5rem;
-  background: hsl(var(--primary) / 0.08);
+  background: linear-gradient(to right, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.04));
+  box-shadow: inset 2px 0 0 hsl(var(--primary) / 0.48);
 }
 
 .dark .toc-wash {
-  background: hsl(var(--primary) / 0.12);
+  background: linear-gradient(to right, hsl(var(--primary) / 0.16), hsl(var(--primary) / 0.06));
+  box-shadow: inset 2px 0 0 hsl(var(--primary) / 0.6);
 }
 
 .toc-petal {

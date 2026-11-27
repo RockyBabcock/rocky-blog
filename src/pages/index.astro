@@ -1,4 +1,5 @@
 ---
+import EditorialKicker from '@components/common/EditorialKicker.astro';
 import EditorialTimeline from '@components/home/EditorialTimeline.astro';
 import ExploreTopics from '@components/home/ExploreTopics.astro';
 import FeaturedShowcase from '@components/home/FeaturedShowcase.astro';
@@ -107,12 +108,7 @@ const timelineSectionNum = nextSectionNum();
       <section aria-labelledby="home-latest-heading" class="flex flex-col gap-4" data-home-latest>
         <div class="editorial-section-head">
           <div class="editorial-section-title-group">
-            <div class="editorial-kicker" aria-hidden="true">
-              <span class="editorial-kicker-num">{latestSectionNum}</span>
-              <span class="editorial-kicker-rule" />
-              <span>WRITING</span>
-              <span class="editorial-kicker-petal" />
-            </div>
+            <EditorialKicker label="WRITING" number={latestSectionNum} variant="magazine" />
             <h2 id="home-latest-heading" class="editorial-section-title">
               <Icon name="ri:quill-pen-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
               <span>{t(locale, 'post.latestPosts')}</span>
@@ -145,8 +141,12 @@ const timelineSectionNum = nextSectionNum();
       {/* 3. Series & Weekly Showcase */}
       {hasSeriesSection && <SeriesShowcase locale={locale} sectionNumber={seriesSectionNum} />}
 
-      <div class="editorial-ornament-divider" aria-hidden="true">
-        <span class="editorial-ornament-petal" />
+      <div class="editorial-ornament-divider" data-variant="celestial" aria-hidden="true">
+        <span class="celestial-divider-cluster">
+          <span class="celestial-divider-dot" />
+          <span class="celestial-star" />
+          <span class="celestial-divider-dot" />
+        </span>
       </div>
 
       {/* 4. Explore Topics (Categories & Weighted Popular Tags) */}

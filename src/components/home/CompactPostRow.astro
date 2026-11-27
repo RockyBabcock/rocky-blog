@@ -54,13 +54,16 @@ const titleMorph = postTitleMorphName(data.slug);
   </a>
 
   <div class="flex min-w-0 flex-1 flex-col gap-1">
-    <div class="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs">
+    <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
       {categoryLabel && (
         <a href={categoryLink} class="text-primary hover:text-blue font-medium transition-colors">
           {categoryLabel}
         </a>
       )}
-      <span class="text-muted-foreground tabular-nums">{formatLocalizedDate(data.date, locale)}</span>
+      {categoryLabel && (
+        <span class="text-border/90 select-none" aria-hidden="true">·</span>
+      )}
+      <span class="text-muted-foreground font-mono text-[11px] tabular-nums">{formatLocalizedDate(data.date, locale)}</span>
       <span class="text-muted-foreground inline-flex items-center gap-1 tabular-nums md:hidden">
         <Icon name="fa6-solid:clock" class="size-3" aria-hidden="true" />
         {data.readingTime}

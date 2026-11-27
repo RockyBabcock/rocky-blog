@@ -7,6 +7,7 @@
  * homepage reads like a curated editorial magazine rather than a flat list.
  */
 
+import EditorialKicker from '@components/common/EditorialKicker.astro';
 import ResponsiveImage from '@components/common/ResponsiveImage.astro';
 import { Routes } from '@constants/router';
 import { defaultCoverList } from '@constants/site-config';
@@ -56,12 +57,7 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
     <section aria-labelledby="home-featured-heading" class="flex flex-col gap-4" data-home-featured>
       <div class="editorial-section-head">
         <div class="editorial-section-title-group">
-          <div class="editorial-kicker" aria-hidden="true">
-            <span class="editorial-kicker-num">{sectionNumber}</span>
-            <span class="editorial-kicker-rule" />
-            <span>FEATURED</span>
-            <span class="editorial-kicker-petal" />
-          </div>
+          <EditorialKicker label="FEATURED" number={sectionNumber} variant="sakura-star" />
           <h2 id="home-featured-heading" class="editorial-section-title">
             <Icon name="ri:sparkling-2-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
             <span>{t(locale, 'home.featuredSection')}</span>
@@ -88,6 +84,7 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
               class="h-full w-full object-cover"
             />
           </a>
+          <div class="inner-hairline-frame" aria-hidden="true" />
           <div class="card-sheen-layer" aria-hidden="true" />
           <div class="featured-lead-scrim" />
 
@@ -129,8 +126,8 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
             )}
 
             <div class="mt-1 flex flex-wrap items-center justify-between gap-3 pt-1 text-xs text-white/80">
-              <div class="flex flex-wrap items-center gap-3 tabular-nums">
-                <span class="inline-flex items-center gap-1">
+              <div class="flex flex-wrap items-center gap-2.5 tabular-nums">
+                <span class="editorial-date-stamp editorial-date-stamp-light">
                   <Icon name="fa6-solid:calendar-days" class="size-3" aria-hidden="true" />
                   {formatLocalizedDate(leadPost.date, locale)}
                 </span>

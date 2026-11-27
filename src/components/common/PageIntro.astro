@@ -1,15 +1,22 @@
 ---
+import EditorialKicker, { type EditorialKickerVariant } from '@components/common/EditorialKicker.astro';
 import { cn } from '@lib/utils';
 
 interface Props {
   stats: { value: string | number; label: string; labelFirst?: boolean }[];
   breadcrumbs?: { label: string; href?: string }[];
   description?: string;
+  kicker?: { label: string; variant?: EditorialKickerVariant };
   className?: string;
 }
-const { stats, breadcrumbs = [], description, className } = Astro.props;
+const { stats, breadcrumbs = [], description, kicker, className } = Astro.props;
 ---
 <header class={cn('page-intro', className)}>
+  {kicker && (
+    <div class="w-full">
+      <EditorialKicker label={kicker.label} variant={kicker.variant ?? 'orbital'} className="mb-0" />
+    </div>
+  )}
   {breadcrumbs.length > 0 && <nav class="page-crumbs" aria-label={breadcrumbs[0].label}>
     {breadcrumbs.map((crumb) => crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span aria-current="page">{crumb.label}</span>)}
   </nav>}

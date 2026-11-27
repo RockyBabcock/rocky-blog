@@ -4,6 +4,7 @@
  * with a clean typographically weighted Popular Tags cloud (zero pill-spam).
  */
 
+import EditorialKicker from '@components/common/EditorialKicker.astro';
 import CategoryCards from '@components/post/CategoryCards.astro';
 import { siteConfig } from '@constants/site-config';
 import { buildTagPath, getAllTags } from '@lib/content';
@@ -28,12 +29,7 @@ const hasFeaturedCategories = Boolean(siteConfig?.featuredCategories?.length);
     <section aria-labelledby="home-topics-heading" class="flex flex-col gap-5" data-home-topics>
       <div class="editorial-section-head">
         <div class="editorial-section-title-group">
-          <div class="editorial-kicker" aria-hidden="true">
-            <span class="editorial-kicker-num">{sectionNumber}</span>
-            <span class="editorial-kicker-rule" />
-            <span>EXPLORE</span>
-            <span class="editorial-kicker-petal" />
-          </div>
+          <EditorialKicker label="EXPLORE" number={sectionNumber} variant="geometric" />
           <h2 id="home-topics-heading" class="editorial-section-title">
             <Icon name="ri:compass-3-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
             <span>{t(locale, 'home.exploreTopics')}</span>
