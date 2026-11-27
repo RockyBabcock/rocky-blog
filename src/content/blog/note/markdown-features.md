@@ -3,7 +3,7 @@ title: Markdown 增强功能演示
 link: markdown-features
 catalog: true
 date: 2024-01-02 00:00:00
-description: 展示 astro-koharu 支持的所有 Markdown 增强功能，包括代码高亮、Mermaid 图表、GFM 表格、Shoka 兼容语法等。
+description: 展示 Rocky Blog 当前 Markdown 管线支持的主要增强功能，包括代码高亮、Mermaid 图表、GFM 表格、Shoka 兼容语法等。
 tags:
   - Markdown
   - 教程
@@ -11,15 +11,15 @@ categories:
   - 笔记
 ---
 
-本文展示 astro-koharu 支持的所有 Markdown 增强功能。
+本文展示 Rocky Blog 当前 Markdown 管线支持的主要 Markdown 增强功能。
 
 ## 外部链接示例
 
 支持标准 Markdown 链接和 GFM 自动链接，外部链接会自动在新窗口打开。
 
-### 社交与演示链接
+### 外部链接（普通超链接，不是嵌入组件）
 
-下面是一条 Twitter / X 链接，以普通超链接形式展示：
+以下 Twitter / X 与 CodePen 地址仅用于演示普通 Markdown 超链接。它们不会渲染为社交内容卡片、推文组件或 CodePen 嵌入：
 
 [Vercel Tweet on Twitter](https://twitter.com/vercel_dev/status/1997059920936775706)
 
@@ -41,7 +41,7 @@ https://react-tweet.vercel.app/
 
 https://zhuanlan.zhihu.com/p/1900483903984243480
 
-### CodePen 链接示例
+### CodePen 普通外链示例
 
 [CodePen Demo](https://codepen.io/botteu/pen/YPKBrJX/)
 
@@ -55,7 +55,7 @@ https://zhuanlan.zhihu.com/p/1900483903984243480
 function greet(name) {
   console.log(`Hello, ${name}!`);
   return {
-    message: "Welcome to astro-koharu",
+    message: "Welcome to Rocky Blog",
     timestamp: Date.now(),
   };
 }
@@ -121,7 +121,7 @@ echo "Server is running at http://localhost:4321"
 
 ## 任务列表
 
-- [x] 安装 astro-koharu
+- [x] 安装 Rocky Blog
 - [x] 配置站点信息
 - [ ] 写第一篇文章
 - [ ] 部署到 Vercel
@@ -146,11 +146,11 @@ flowchart LR
 sequenceDiagram
     participant U as 用户
     participant B as 浏览器
-    participant S as 服务器
+    participant C as 静态托管/CDN
 
     U->>B: 访问博客
-    B->>S: 请求页面
-    S-->>B: 返回 HTML
+    B->>C: 请求静态页面
+    C-->>B: 返回 HTML 与资源
     B-->>U: 渲染页面
 ```
 
@@ -170,13 +170,13 @@ pie title 博客内容分布
 - _斜体文本_
 - ~~删除线~~
 - `行内代码`
-- [链接文本](https://github.com/cosZone/astro-koharu)
+- [Rocky Blog 源码](https://github.com/RockyBabcock/rocky-blog)
 
 ## 引用
 
 > 这是一段引用文本。
 >
-> astro-koharu 让博客搭建变得简单而优雅。
+> Rocky Blog 使用静态生成与按需交互，让写作和阅读保持轻量。
 
 ## 标题层级
 
@@ -235,7 +235,7 @@ pie title 博客内容分布
 
 ## 加密内容块
 
-使用 `:::encrypted{password="密码"}` 语法创建加密区块。内容在构建时使用 AES-256-GCM 真正加密，密码不会出现在最终 HTML 中，有效防止搜索引擎和爬虫收录敏感内容。
+使用 `:::encrypted{password="密码"}` 语法创建加密区块。内容在构建时使用 AES-256-GCM 加密，明文不会直接作为静态页面正文交付，可减少搜索引擎直接索引明文的机会；这不等于服务端鉴权或防止离线猜测密码。
 
 加密块内的 Markdown 会获得与普通内容完全相同的渲染处理（Shiki 代码高亮、KaTeX 公式等），解密后直接展示。
 
@@ -267,4 +267,4 @@ print("Hello from encrypted block!")
 
 ## 总结
 
-以上展示了 astro-koharu 支持的主要 Markdown 功能。更多功能请参考 [使用指南](/post/astro-koharu-guide)。
+以上展示了 Rocky Blog 当前支持的主要 Markdown 功能。更多功能请参考 [Rocky Blog 使用指南](/post/astro-koharu-guide)。
