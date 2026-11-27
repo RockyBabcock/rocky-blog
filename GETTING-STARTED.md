@@ -108,7 +108,7 @@ pnpm build
 pnpm preview
 ```
 
-部署生成的 `dist/` 到 GitHub Pages、Vercel、Netlify、Cloudflare Pages 或任意静态托管服务。不需要应用服务器、数据库或 Docker。Vercel 可自动识别 Astro 静态构建；不要添加指向不存在的 `api/` 文件的 Serverless Function 配置。
+部署生成的 `dist/` 到 GitHub Pages、Vercel、Netlify、Cloudflare Pages 或任意静态托管服务。当前静态部署流程不需要应用服务器、数据库或 Docker；Docker / Docker Compose 是否作为额外交付方式支持仍待维护者决策。Vercel 可自动识别 Astro 静态构建；不要添加指向不存在的 `api/` 文件的 Serverless Function 配置。
 
 上线前确认 `site.url`、头像和 OG 图片路径、语言路由、canonical、hreflang、sitemap、robots 与 Pagefind 搜索。
 
