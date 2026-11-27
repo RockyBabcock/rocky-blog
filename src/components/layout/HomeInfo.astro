@@ -1,4 +1,5 @@
 ---
+import BotanicalMarks from '@components/common/BotanicalMarks.astro';
 import ResponsiveImage from '@components/common/ResponsiveImage.astro';
 import type { Router } from '@constants/router';
 import { RESERVED_ROUTES } from '@constants/router';
@@ -39,8 +40,9 @@ const stats = [
 ---
 
 <div class="home-info" data-variant={isDrawer ? 'drawer' : 'sider'} data-home-info-container>
-  <div class="home-profile" data-home-profile>
-    <div class="home-identity">
+  <div class="home-profile editorial-watermark-host" data-home-profile>
+    {!isDrawer && <BotanicalMarks variant="watermark-branch" />}
+    <div class="home-identity relative z-10">
       <div
         class="home-avatar"
         style={getLqipStyle(avatar)}

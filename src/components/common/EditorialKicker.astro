@@ -32,6 +32,7 @@ const { label, number, variant = 'numbered', className = '' } = Astro.props;
   {variant === 'ruled' && (
     <>
       <span class="editorial-kicker-rule" />
+      <span class="editorial-kicker-diamond" />
       {number && <span class="editorial-kicker-num">{number}</span>}
       <span>{label}</span>
     </>

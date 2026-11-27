@@ -1,83 +1,89 @@
 @layer base {
   :root {
-    /* Contemporary Editorial × Swiss-Inspired Light Palette
-       Warm architectural paper foundations + controlled slate-steel accent (#536B82). */
-    --background: 45 18% 95%; /* #F4F3EF */
-    --foreground: 216 11% 18%; /* #292D33 */
+    /* Premium Editorial × Sakura Atmosphere × Celestial Details — Light Palette
+       Warm archival linen & cream foundations, graphite ink, muted botanical rose primary,
+       and dusty celestial slate secondary accent. */
+    --background: 40 22% 95%; /* #F6F4F0 */
+    --foreground: 300 4% 15%; /* #272527 */
 
-    --card: 45 33% 98%; /* #FBFAF7 */
-    --card-foreground: 216 11% 18%;
+    --card: 42 36% 98%; /* #FCFBF8 */
+    --card-foreground: 300 4% 15%;
 
     --popover: 0 0% 100%; /* #FFFFFF */
-    --popover-foreground: 216 11% 18%;
+    --popover-foreground: 300 4% 15%;
 
-    --primary: 209 22% 42%; /* #536B82 */
-    --primary-foreground: 45 33% 98%;
+    --primary: 347 40% 48%; /* #AC495F — Muted botanical rose (WCAG AA >= 5.1:1 on cream) */
+    --primary-foreground: 42 40% 99%;
 
-    --secondary: 42 14% 91%;
-    --secondary-foreground: 216 11% 20%;
+    --celestial: 209 22% 43%; /* #556E86 — Dusty twilight slate-blue */
 
-    --muted: 42 13% 92%;
-    --muted-foreground: 210 10% 42%; /* WCAG AA >= 4.9:1 on paper & card */
+    --secondary: 38 16% 91%;
+    --secondary-foreground: 300 4% 18%;
 
-    --accent: 209 18% 92%;
-    --accent-foreground: 209 24% 30%;
+    --muted: 38 15% 92%;
+    --muted-foreground: 280 4% 40%; /* #67626A — WCAG AA >= 5.2:1 on paper & card */
 
-    --destructive: 0 68% 48%;
+    --accent: 347 26% 94%;
+    --accent-foreground: 347 38% 36%;
+
+    --destructive: 0 64% 48%;
     --destructive-foreground: 0 0% 98%;
 
-    --success: 152 46% 36%;
+    --success: 152 42% 36%;
     --success-foreground: 0 0% 98%;
 
-    --warning: 36 80% 44%;
-    --warning-foreground: 216 11% 15%;
+    --warning: 36 76% 44%;
+    --warning-foreground: 300 4% 15%;
 
-    --border: 42 16% 87%; /* #E4E1DA */
-    --input: 42 15% 84%;
-    --ring: 209 22% 42%;
+    --border: 35 18% 87%; /* #E5DFD7 */
+    --input: 35 16% 84%;
+    --ring: 347 40% 48%;
 
-    --badge-primary: 210 26% 34%;
+    --badge-primary: 347 42% 42%;
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Contemporary Editorial Dark Palette
-       Deep architectural charcoal + muted slate-mist accent (#91A8BF). */
-    --background: 218 14% 11%; /* #181B20 */
-    --foreground: 80 7% 91%; /* #E8E9E6 */
+    /* Premium Editorial × Sakura Atmosphere × Celestial Details — Dark Palette
+       Deep nocturnal charcoal surfaces, warm alabaster ink, soft sakura-mist rose primary,
+       and pale celestial slate secondary accent. */
+    --background: 230 12% 10%; /* #17181D */
+    --foreground: 40 14% 91%; /* #ECEAE4 */
 
-    --card: 213 15% 15%; /* #20252B */
-    --card-foreground: 80 7% 91%;
+    --card: 228 13% 14%; /* #1F2128 */
+    --card-foreground: 40 14% 91%;
 
-    --popover: 217 13% 19%; /* #2B3038 */
-    --popover-foreground: 80 7% 91%;
+    --popover: 226 13% 18%; /* #282B34 */
+    --popover-foreground: 40 14% 91%;
 
-    --primary: 210 27% 66%; /* #91A8BF */
-    --primary-foreground: 218 16% 10%;
+    --primary: 347 52% 74%; /* #DF99A9 — Soft sakura-mist rose (WCAG AAA on dark card) */
+    --primary-foreground: 230 16% 10%;
 
-    --secondary: 215 13% 20%;
-    --secondary-foreground: 80 7% 91%;
+    --celestial: 210 29% 68%; /* #94ACC4 — Pale celestial slate */
 
-    --muted: 215 13% 19%;
-    --muted-foreground: 212 8% 66%; /* #A3A9B0 */
+    --secondary: 228 12% 20%;
+    --secondary-foreground: 40 14% 91%;
 
-    --accent: 213 18% 22%;
-    --accent-foreground: 210 27% 78%;
+    --muted: 228 12% 19%;
+    --muted-foreground: 224 8% 66%; /* #A1A5B0 */
 
-    --destructive: 0 62% 58%;
+    --accent: 347 22% 21%;
+    --accent-foreground: 347 52% 80%;
+
+    --destructive: 0 60% 58%;
     --destructive-foreground: 0 0% 98%;
 
-    --success: 152 42% 52%;
-    --success-foreground: 218 16% 10%;
+    --success: 152 40% 52%;
+    --success-foreground: 230 16% 10%;
 
-    --warning: 38 78% 58%;
-    --warning-foreground: 218 16% 10%;
+    --warning: 38 74% 58%;
+    --warning-foreground: 230 16% 10%;
 
-    --border: 212 12% 24%; /* #363D45 */
-    --input: 212 12% 26%;
-    --ring: 210 27% 66%;
+    --border: 227 12% 23%; /* #343742 */
+    --input: 227 12% 26%;
+    --ring: 347 52% 74%;
 
-    --badge-primary: 210 27% 68%;
+    --badge-primary: 347 52% 74%;
     --radius: 0.5rem;
   }
 }

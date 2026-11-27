@@ -42,11 +42,11 @@ export const colors = {
     foreground: 'hsl(var(--warning-foreground))',
   },
 
-  // Editorial accent tokens (slate-steel)
+  // Editorial sakura-rose accent tokens (muted botanical rose)
   shoka: {
-    DEFAULT: '#536B82',
-    light: '#91A8BF',
-    dark: '#3F556B',
+    DEFAULT: '#AC495F',
+    light: '#DF99A9',
+    dark: '#8F3B4F',
   },
 
   // Theme toggle colors
@@ -419,8 +419,8 @@ export const zIndex = {
  * Multi-color arrays for gradients and backgrounds.
  */
 export const gridBackground = {
-  light: ['#536b82', '#91a8bf', '#d5dde5', '#f4f3ef', '#e4e1da', '#c8c3b8'],
-  dark: ['#20252b', '#2b3038', '#536b82', '#e8e9e6', '#181b20', '#2b3038'],
+  light: ['#ac495f', '#556e86', '#dfbcc4', '#f6f4f0', '#e5dfd7', '#c9d4df'],
+  dark: ['#1f2128', '#282b34', '#ac495f', '#eceae4', '#17181d', '#556e86'],
 } as const;
 
 /**

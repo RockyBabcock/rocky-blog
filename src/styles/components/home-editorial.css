@@ -412,8 +412,8 @@
 }
 
 .hero-action-btn[data-primary="true"] {
-  border-color: rgb(255 255 255 / 0.38);
-  background: hsl(var(--primary) / 0.88);
+  border-color: rgb(255 255 255 / 0.36);
+  background: hsl(347 42% 45% / 0.92);
 }
 
 @media (hover: hover) {
@@ -424,7 +424,7 @@
   }
 
   .hero-action-btn[data-primary="true"]:hover {
-    background: hsl(var(--primary));
+    background: hsl(347 44% 40% / 0.98);
   }
 }
 

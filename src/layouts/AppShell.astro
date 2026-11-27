@@ -25,7 +25,7 @@ const { post, siderType, isPostPage, articleTools = true } = Astro.props;
 
 <div class="page-ambient-canvas flex min-h-screen flex-col text-black dark:text-white">
   <Header isPostPage={isPostPage} tocNumbering={post?.data.tocNumbering ?? true} />
-  <main class="relative flex grow flex-col gap-4">
+  <main class="relative z-[1] flex grow flex-col gap-4">
     {(<slot />)}
   </main>
   <FloatingGroup client:only="react" />

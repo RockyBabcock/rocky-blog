@@ -1,4 +1,5 @@
 ---
+import BotanicalMarks from '@components/common/BotanicalMarks.astro';
 import { siteConfig } from '@constants/site-config';
 import { translateSeriesField } from '@lib/content';
 import { getPostSlug } from '@lib/content/locale';
@@ -13,6 +14,7 @@ import type { BlogPost } from 'types/blog';
 import { MAX_WIDTH } from '@/constants/layout';
 import { getLocaleFromUrl, localizedPath, t } from '@/i18n';
 import HeroImage from './HeroImage.astro';
+import SakuraPetals from './SakuraPetals.astro';
 import WaveSvg from './wave';
 
 export interface CoverProps {
@@ -59,9 +61,11 @@ const primarySeriesHref = primarySeries ? localizedPath(`/${primarySeries.slug}`
   ]}
 >
   <div class="cover-scrim absolute inset-0 h-full"></div>
+  {!compact && <BotanicalMarks variant="hero-celestial" />}
+  {!compact && <SakuraPetals />}
   <div
     class:list={[
-      'cover-copy absolute inset-0 flex flex-col items-center justify-center px-5 text-white',
+      'cover-copy absolute inset-0 z-[3] flex flex-col items-center justify-center px-5 text-white',
       compact ? 'bottom-[4svh]' : 'bottom-[7svh]',
     ]}
   >

@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import BotanicalMarks from '@components/common/BotanicalMarks.astro';
 import CustomContent from '@components/common/CustomContent.astro';
 import HomeSider from '@components/layout/HomeSider.astro';
 import FocusModeToggle from '@components/post/FocusModeToggle';
@@ -270,9 +271,8 @@ const seoDate = formatForSeo(date);
         </article>
         <div class="article-end-colophon" aria-hidden="true">
           <span class="article-end-colophon-mark">
-            <span class="article-end-colophon-square" />
+            <BotanicalMarks variant="divider-sakura" />
             <span>END</span>
-            <span class="article-end-colophon-square" />
           </span>
         </div>
         <PostPagination prevPost={prevPost} nextPost={nextPost} locale={locale} />

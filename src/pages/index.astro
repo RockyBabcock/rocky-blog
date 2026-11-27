@@ -1,4 +1,5 @@
 ---
+import BotanicalMarks from '@components/common/BotanicalMarks.astro';
 import EditorialKicker from '@components/common/EditorialKicker.astro';
 import EditorialTimeline from '@components/home/EditorialTimeline.astro';
 import ExploreTopics from '@components/home/ExploreTopics.astro';
@@ -101,7 +102,7 @@ const timelineSectionNum = nextSectionNum();
       {hasFeaturedSection && (
         <div class="editorial-rule" aria-hidden="true">
           <span class="editorial-rule-line" />
-          <span class="editorial-rule-mark" />
+          <BotanicalMarks variant="divider-sakura" />
           <span class="editorial-rule-line" />
         </div>
       )}
@@ -137,7 +138,7 @@ const timelineSectionNum = nextSectionNum();
       {hasSeriesSection && (
         <div class="editorial-rule" aria-hidden="true">
           <span class="editorial-rule-line" />
-          <span class="editorial-rule-mark" />
+          <BotanicalMarks variant="divider-celestial" />
           <span class="editorial-rule-line" />
         </div>
       )}
@@ -147,7 +148,7 @@ const timelineSectionNum = nextSectionNum();
 
       <div class="editorial-rule" aria-hidden="true">
         <span class="editorial-rule-line" />
-        <span class="editorial-rule-mark" />
+        <BotanicalMarks variant="divider-sakura" />
         <span class="editorial-rule-line" />
       </div>
 
@@ -156,7 +157,7 @@ const timelineSectionNum = nextSectionNum();
 
       <div class="editorial-rule" aria-hidden="true">
         <span class="editorial-rule-line" />
-        <span class="editorial-rule-mark" />
+        <BotanicalMarks variant="divider-celestial" />
         <span class="editorial-rule-line" />
       </div>
 
