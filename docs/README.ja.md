@@ -80,7 +80,7 @@ pnpm dev
 - [アーキテクチャ概要](./overview/00-overview.md)
 - [国際化と SEO](./overview/11-i18n-and-seo.md)
 - [コントリビューション](../CONTRIBUTING.md)
-- [AI Agent 向けガイド](../AGENTS.md)
+- [AI Agent 向けガイド](../AGENTS.md) — [Gemini](../GEMINI.md)、[Claude Code](../CLAUDE.md)、[GitHub Copilot](../.github/copilot-instructions.md) からも共通ルールを参照します。
 
 ## ライセンス
 
