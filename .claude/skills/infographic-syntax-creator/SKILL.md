@@ -9,6 +9,16 @@ description: Generate AntV Infographic syntax outputs. Use when asked to turn us
 
 Generate AntV Infographic syntax output from user content, following the rules in `references/prompt.md`.
 
+## Rocky Blog integration contract
+
+This skill is the preferred workflow for an infographic that will be embedded in a Rocky Blog Markdown article. The current implementation uses a fenced `infographic` block and the existing `@antv/infographic` renderer in `src/components/markdown/InfographicToolbar.tsx`.
+
+- Generate syntax only; do not create custom Item / Structure components, a local template registry, a playground, or a new renderer.
+- Do not add CDN scripts or runtime infrastructure to the blog.
+- Use a template supported by the installed package and current renderer; do not assume every upstream template is available.
+- Use only user-provided or verifiable numeric data. When data is illustrative, label it clearly as simulated / demonstration data; otherwise omit values.
+- For a standalone HTML / SVG artifact, use the separate `infographic-creator` workflow instead.
+
 ## Workflow
 
 1. Read `references/prompt.md` for syntax rules, templates, and output constraints.
