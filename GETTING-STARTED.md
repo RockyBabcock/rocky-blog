@@ -130,3 +130,4 @@ AES-256-GCM 是构建期静态加密。密文及公开派生参数会随页面�
 - [架构文档](./docs/overview/00-overview.md)
 - [完整使用指南](./src/content/blog/tools/astro-koharu-guide.md)
 - [贡献指南](./CONTRIBUTING.md)
+- [项目状态与 Agent 交接](./docs/PROJECT-STATUS.md)
