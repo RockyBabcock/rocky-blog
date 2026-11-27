@@ -65,7 +65,7 @@ Rocky Blog 是一个以内容创作、阅读和发现为中心的个人静态博
 - canonical、Open Graph、hreflang、sitemap、robots 与 Pagefind 索引。
 - 通过 YAML 和 Markdown 配置，不引入运行时数据库。
 
-## 3.1 内容生产与发布流程
+### 3.1 内容生产与发布流程
 
 Markdown 是主要内容交付形式。维护者可以使用 MuseAI 或其他写作工具辅助生成文章，再将校验后的 `.md` 文件加入 `src/content/blog/`。文章必须符合 `src/content.config.ts` 的 frontmatter schema、目录结构、分类映射、稳定 slug 和翻译关联规则。
 
