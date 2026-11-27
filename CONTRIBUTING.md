@@ -4,7 +4,7 @@
 
 ## 开始之前
 
-1. 阅读 [README](./README.md)、[快速开始](./GETTING-STARTED.md) 和 [AGENTS.md](./AGENTS.md)。
+1. 阅读 [README](./README.md)、[快速开始](./GETTING-STARTED.md)、[AGENTS.md](./AGENTS.md)、[产品范围](./docs/PRODUCT-SCOPE.md) 和 [项目状态](./docs/PROJECT-STATUS.md)。
 2. 检查现有 issue / PR，避免重复工作。
 3. 确认提案属于保留范围；改变明确非目标需要维护者重新决策。
 
