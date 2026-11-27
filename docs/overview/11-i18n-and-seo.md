@@ -49,7 +49,7 @@ HeadMeta / 页面布局集中处理：
 
 Astro sitemap 和 robots.txt 集成负责静态站点索引与爬虫策略。更新域名、语言路由和页面生成规则时，检查 sitemap 与 robots 输出。
 
-RSS 与 sitemap 是不同功能。RSS 已列为产品非目标，但旧 RSS 实现尚有残留；清理 RSS 时必须保留 sitemap、robots 和所有 SEO metadata。
+RSS 与 sitemap 是不同功能。RSS 已列为产品非目标，并已从当前代码中完整移除；sitemap、robots、canonical、Open Graph、hreflang 与 Twitter metadata 是独立能力，必须继续保留。
 
 ## Pagefind
 
