@@ -45,6 +45,6 @@ Rocky Blog 使用 Astro 文件路由。页面文件位于 `src/pages/`；内容�
 
 页面元信息在 layout / HeadMeta 层集中输出。canonical、Open Graph、Twitter metadata、hreflang 和 x-default 必须一致。Sitemap 与 robots 由构建集成生成。
 
-## RSS 历史残留
+## RSS 已移除
 
-RSS 不属于目标产品，但当前代码基线仍包含旧 RSS 路由、helper 和配置引用。不要将其描述为受支持功能。后续专门清理时，需要删除旧路由镜像例外和所有 RSS 导航引用，同时保留 sitemap、robots、canonical、Open Graph、hreflang 与 Pagefind。
+默认语言与多语言 RSS 路由、RSS XSL 路由和语言镜像例外已从当前代码中删除。不要重新增加 RSS 页面。Sitemap、robots、canonical、Open Graph、hreflang 与 Pagefind 是独立功能，继续保留。
