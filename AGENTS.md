@@ -31,7 +31,7 @@ Friends / links, Writing Room, CMS / admin dashboard, global music player or pla
 
 The product has no user accounts, cloud database, cloud bookshelf, or server-side reading-history sync.
 
-RSS is a product non-goal, but legacy source and configuration references remain in the repository baseline. Do not claim RSS code has already been removed, do not add RSS UI, and do not expand RSS support. A complete cleanup must be a dedicated change and preserve canonical, Open Graph, hreflang, sitemap, robots, and Pagefind.
+RSS is a product non-goal and has been removed from the current codebase, including feed routes, locale mirrors, XSL/helper files, styles, package dependency, configuration hooks, and autodiscovery metadata. Do not reintroduce RSS UI, routes, dependencies, or subscription configuration. Preserve canonical, Open Graph, hreflang, sitemap, robots, and Pagefind.
 
 ## 4. Visual direction
 
