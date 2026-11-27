@@ -3,7 +3,7 @@ title: 一篇 Markdown 在构建时经过了什么
 link: markdown-pipeline
 catalog: true
 date: 2026-05-11 20:05:00
-description: 从 frontmatter 校验到 remark、rehype 插件，再到 Shiki 高亮和加密，用几张 Mermaid 图把 astro-koharu 处理一篇文章的顺序画清楚。
+description: 从 frontmatter 校验到 remark、rehype 插件，再到 Shiki 高亮和加密，用几张 Mermaid 图说明 Rocky Blog 处理一篇文章的顺序。
 cover: /img/cover/18.webp
 tags:
   - Astro
@@ -68,13 +68,15 @@ rehype 处理 HTML 语法树（hast）：
 代码块由 Shiki 在构建时高亮，所以页面上不需要加载任何高亮脚本。`title`、`mark`、`command` 这些元信息由一个 Shiki transformer 解析：
 
 ```js title="example.js" mark:2
-const site = 'astro-koharu';
+const site = 'Rocky Blog';
 console.log(`Hello from ${site}`);
 ```
 
 Mermaid 代码块被排除在 Shiki 之外，交给 Mermaid 单独渲染，本文的几张图就是这样来的。
 
 ## 小结
+
+> 本文的插件顺序图和插件数量示意仅用于解释处理阶段；实际启用插件会受 `config/site.yaml` 中的功能开关影响，权威实现以当前 `astro.config.mjs` 为准。
 
 ```mermaid
 pie title 一篇文章的处理阶段（按插件数量粗略划分）
