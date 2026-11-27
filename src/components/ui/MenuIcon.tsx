@@ -71,7 +71,11 @@ const MenuIcon = ({ className, id, locale }: MenuIconProps) => {
 
   return (
     <LazyMotionProvider>
-      <div className={cn('flex-center', className)} id={id} style={{ viewTransitionName: 'home-menu-icon' }}>
+      <div
+        className={cn('flex items-center justify-center', className)}
+        id={id}
+        style={{ viewTransitionName: 'home-menu-icon' }}
+      >
         <button
           className="flex-center text-shoka size-10 cursor-pointer rounded-full bg-white/20 select-none"
           onClick={toggleDrawer}

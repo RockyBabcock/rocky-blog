@@ -210,8 +210,8 @@ export const uiStrings: UIStrings = {
   'settings.motionLevel.lively': 'Vif',
   'settings.motionLevel.subtle': 'Subtil',
   'settings.motionLevel.reduced': 'Réduit',
-  'settings.motionLevel.livelyHint': 'Apparitions, transitions et pétales de sakura activés',
-  'settings.motionLevel.subtleHint': 'Transitions essentielles, sans pétales ni effets de défilement',
+  'settings.motionLevel.livelyHint': 'Apparitions, transitions et révélations au défilement activées',
+  'settings.motionLevel.subtleHint': 'Transitions essentielles uniquement, sans révélations au défilement',
   'settings.motionLevel.reducedHint': 'Uniquement les retours d’interaction essentiels',
   'settings.motionLevel.systemReduced': 'Votre système préfère les animations réduites',
   'settings.wave': 'Vagues de couverture',
@@ -235,7 +235,7 @@ export const uiStrings: UIStrings = {
   'notFound.description': 'La page recherchée n’existe pas',
   'notFound.backHome': 'Retour à l’accueil',
   'notFound.browseArchives': 'Parcourir les archives',
-  'notFound.message': 'Miaou ? Cette page a disparu~',
+  'notFound.message': 'La page que vous recherchez est introuvable ou a été déplacée.',
 
   // ── Category Stats ────────────────────────────────────────
   'category.subCategoryCount': '{count} sous-catégories',

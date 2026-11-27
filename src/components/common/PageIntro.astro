@@ -14,7 +14,7 @@ const { stats, breadcrumbs = [], description, kicker, className } = Astro.props;
 <header class={cn('page-intro', className)}>
   {kicker && (
     <div class="w-full">
-      <EditorialKicker label={kicker.label} variant={kicker.variant ?? 'orbital'} className="mb-0" />
+      <EditorialKicker label={kicker.label} variant={kicker.variant ?? 'ruled'} className="mb-0" />
     </div>
   )}
   {breadcrumbs.length > 0 && <nav class="page-crumbs" aria-label={breadcrumbs[0].label}>

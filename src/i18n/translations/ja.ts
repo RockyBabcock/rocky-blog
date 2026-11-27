@@ -210,8 +210,8 @@ export const uiStrings: UIStrings = {
   'settings.motionLevel.lively': 'いきいき',
   'settings.motionLevel.subtle': 'ひかえめ',
   'settings.motionLevel.reduced': '減らす',
-  'settings.motionLevel.livelyHint': '入場演出・スクロール表示・桜エフェクトをすべて有効に',
-  'settings.motionLevel.subtleHint': '入場と遷移のみ。本文の表示演出と桜は無効',
+  'settings.motionLevel.livelyHint': '入場演出・スクロール表示・ページ遷移を有効に',
+  'settings.motionLevel.subtleHint': '入場とページ遷移のみ。本文のスクロール演出は無効',
   'settings.motionLevel.reducedHint': '必要な操作フィードバックのみ',
   'settings.motionLevel.systemReduced': 'システムで「視差効果を減らす」が有効なため、常に「減らす」として扱います',
   'settings.wave': 'カバーの波',
@@ -235,7 +235,7 @@ export const uiStrings: UIStrings = {
   'notFound.description': 'お探しのページは見つかりません',
   'notFound.backHome': 'ホームに戻る',
   'notFound.browseArchives': 'アーカイブを参照',
-  'notFound.message': 'んにゃー? ページは食べられちゃったよ〜',
+  'notFound.message': 'お探しのページは存在しないか、移動した可能性があります。',
 
   // ── カテゴリーの統計 ────────────────────────────────────────
   'category.subCategoryCount': '{count}件のサブカテゴリー',

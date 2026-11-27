@@ -312,7 +312,7 @@ export default function SearchDialogContent() {
             {isOpen && (
               <>
                 <m.div
-                  className="fixed inset-0 z-54 bg-[rgb(18_10_26/0.52)] backdrop-blur-[3px]"
+                  className="fixed inset-0 z-54 bg-[rgb(14_17_22/0.52)] backdrop-blur-[3px]"
                   initial={shouldReduceMotion ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{
@@ -336,7 +336,7 @@ export default function SearchDialogContent() {
                     aria-label={t('search.dialogTitle')}
                     onKeyDown={handleKeyDown}
                     data-search-dialog
-                    className="modal-sakura-shell bg-gradient-start text-foreground ring-primary/18 relative flex max-h-[82dvh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl shadow-[0_2rem_4rem_-1.5rem_rgb(233_84_107/0.35),0_0.75rem_1.5rem_-0.75rem_rgb(20_10_28/0.3)] ring-1"
+                    className="modal-editorial-shell bg-popover text-foreground border-border relative flex max-h-[82dvh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border shadow-[0_24px_48px_-16px_rgb(15_20_28/0.24)]"
                     initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98, y: -12 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={
@@ -552,19 +552,21 @@ export default function SearchDialogContent() {
                       {status === 'ready' && !hasQueryOrFilter && (
                         <div className="empty-state-plate text-muted-foreground mx-1 my-3 text-sm">
                           <svg
-                            width="46"
-                            height="46"
-                            viewBox="0 0 48 48"
+                            width="40"
+                            height="40"
+                            viewBox="0 0 44 44"
                             fill="none"
                             className="text-primary/65"
                             aria-hidden="true"
                           >
-                            <circle cx="21" cy="21" r="12.5" stroke="currentColor" strokeWidth="1.5" />
-                            <path d="M30.5 30.5 39 39" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+                            <circle cx="20" cy="20" r="11.5" stroke="currentColor" strokeWidth="1.5" />
+                            <path d="M29 29 37 37" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
                             <path
-                              d="M21 26.8c-2.6-1.7-4.5-4.7-4.1-7.5.4-2.1 2-3.4 3.4-3.1l.7 1.3.7-1.3c1.4-.3 3 1 3.4 3.1.4 2.8-1.5 5.8-4.1 7.5Z"
-                              fill="currentColor"
-                              fillOpacity="0.26"
+                              d="M16 20h8M20 16v8"
+                              stroke="currentColor"
+                              strokeWidth="1.35"
+                              strokeLinecap="round"
+                              strokeOpacity="0.5"
                             />
                           </svg>
                           <p className="max-w-sm leading-relaxed">{t('search.emptyPrompt')}</p>
@@ -658,9 +660,7 @@ export default function SearchDialogContent() {
                                   }}
                                   className={cn(
                                     'block rounded-xl border border-transparent px-3.5 py-2.5 transition-all',
-                                    active
-                                      ? 'bg-primary/10 border-primary/28 shadow-[0_0.4rem_1.2rem_-0.8rem_rgb(233_84_107/0.45)]'
-                                      : 'hover:bg-foreground/[0.04]',
+                                    active ? 'bg-primary/10 border-primary/30' : 'hover:bg-foreground/[0.04]',
                                   )}
                                 >
                                   <div className="flex items-center justify-between gap-2">

@@ -209,8 +209,8 @@ export const uiStrings = {
   'settings.motionLevel.lively': '灵动',
   'settings.motionLevel.subtle': '克制',
   'settings.motionLevel.reduced': '减弱',
-  'settings.motionLevel.livelyHint': '入场编排、滚动浮现与樱花特效全开',
-  'settings.motionLevel.subtleHint': '保留入场与过渡，关闭正文浮现和樱花特效',
+  'settings.motionLevel.livelyHint': '入场编排、滚动浮现与页面过渡全开',
+  'settings.motionLevel.subtleHint': '保留入场与页面过渡，关闭正文滚动浮现',
   'settings.motionLevel.reducedHint': '只保留必要的交互反馈',
   'settings.motionLevel.systemReduced': '系统已开启「减少动态效果」，将始终按「减弱」处理',
   'settings.wave': '封面海浪',
@@ -234,7 +234,7 @@ export const uiStrings = {
   'notFound.description': '你访问的页面不存在',
   'notFound.backHome': '返回首页',
   'notFound.browseArchives': '浏览归档',
-  'notFound.message': '喵？页面被吃掉了~',
+  'notFound.message': '抱歉，你访问的页面不存在或已被移动。',
 
   // ── Category Stats ────────────────────────────────────────
   'category.subCategoryCount': '{count} 个子分类',

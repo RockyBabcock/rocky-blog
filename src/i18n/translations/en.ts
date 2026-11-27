@@ -210,8 +210,8 @@ export const uiStrings: UIStrings = {
   'settings.motionLevel.lively': 'Lively',
   'settings.motionLevel.subtle': 'Subtle',
   'settings.motionLevel.reduced': 'Reduced',
-  'settings.motionLevel.livelyHint': 'Entrances, scroll reveals and sakura effects',
-  'settings.motionLevel.subtleHint': 'Entrances and transitions only, no reveals or petals',
+  'settings.motionLevel.livelyHint': 'Entrances, scroll reveals and page transitions',
+  'settings.motionLevel.subtleHint': 'Entrances and transitions only, no scroll reveals',
   'settings.motionLevel.reducedHint': 'Only essential interaction feedback',
   'settings.motionLevel.systemReduced': 'Your system asks for reduced motion, so motion stays reduced',
   'settings.wave': 'Cover waves',
@@ -235,7 +235,7 @@ export const uiStrings: UIStrings = {
   'notFound.description': 'The page you are looking for does not exist',
   'notFound.backHome': 'Back to Home',
   'notFound.browseArchives': 'Browse Archives',
-  'notFound.message': 'Meow? The page was eaten~',
+  'notFound.message': 'The page you are looking for does not exist or has been moved.',
 
   // ── Category Stats ────────────────────────────────────────
   'category.subCategoryCount': '{count} subcategories',

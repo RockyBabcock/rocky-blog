@@ -2,7 +2,6 @@
 import PageIntro from '@components/common/PageIntro.astro';
 import { buildCategoryPath, type Category, translateCategoryName } from '@lib/content';
 import { postsInCategoryPath } from '@lib/content/index-categories';
-import { PETAL_MASK } from '@lib/sakura/petal';
 import type { BlogPost } from 'types/blog';
 import { localizedPath, t } from '@/i18n';
 
@@ -18,9 +17,9 @@ const count = (path: string[]) => postsInCategoryPath(catalogPosts, path).length
 const href = (path: string[]) => localizedPath(buildCategoryPath(path), locale);
 const name = (category: Category) => translateCategoryName(category.name, locale);
 ---
-<div class="index-surface shadow-box" style={{ '--petal-mask': PETAL_MASK }}>
+<div class="index-surface shadow-box">
   <PageIntro
-    kicker={{ label: 'INDEX', variant: 'geometric' }}
+    kicker={{ label: 'INDEX', variant: 'ruled' }}
     stats={[{ value: totalCount, label: t(locale, 'index.categories') }, { value: posts.length, label: t(locale, 'index.posts') }]}
   />
   <ol class="category-toc">

@@ -63,8 +63,8 @@ const titleMorph = postTitleMorphName(slug);
 
 <div
   class={cn(
-    'group text-card-foreground shadow-card border-border/65 hover:border-primary/35 relative flex rounded-xl border bg-white md:flex-col dark:bg-card dark:border-white/8 dark:hover:border-primary/40',
-    'post-item-card ambient-glow-surface motion-reveal',
+    'group text-card-foreground shadow-card border-border hover:border-primary/40 relative flex rounded-xl border bg-card md:flex-col',
+    'post-item-card motion-reveal',
   )}
 >
   <a
@@ -80,7 +80,6 @@ const titleMorph = postTitleMorphName(slug);
     )}
   >
     <ResponsiveImage src={finalCover} maxWidth={800} sizes="(max-width: 767px) calc(100vw - 48px), (max-width: 992px) 40vw, 400px" loading="lazy" decoding="async" alt="" class="h-full w-full cursor-pointer object-cover" />
-    <div class="card-sheen-layer" aria-hidden="true" />
   </a>
   <div
     class={cn(
@@ -205,11 +204,11 @@ const titleMorph = postTitleMorphName(slug);
       <Button
         tabIndex={-1}
         className={cn(
-          'post-item-more bg-gradient-shoka-button rounded-2xl transition-[translate,box-shadow] duration-500 ease-out-expo md:h-7 md:px-2 md:py-1 md:text-xs',
+          'post-item-more bg-primary text-primary-foreground hover:bg-primary/92 rounded-xl transition-[translate,box-shadow,background-color] duration-250 ease-out-quart md:h-7 md:px-2 md:py-1 md:text-xs',
           leftClip
-            ? 'rounded-se-none rounded-es-none group-hover:translate-x-1'
-            : 'rounded-ss-none rounded-ee-none group-hover:-translate-x-1',
-          'md:rounded-ss-2xl md:rounded-se-none md:rounded-ee-2xl md:rounded-es-none md:group-hover:translate-x-1',
+            ? 'rounded-se-none rounded-es-none group-hover:translate-x-0.5'
+            : 'rounded-ss-none rounded-ee-none group-hover:-translate-x-0.5',
+          'md:rounded-ss-xl md:rounded-se-none md:rounded-ee-xl md:rounded-es-none md:group-hover:translate-x-0.5',
         )}
       >
         more...
@@ -244,25 +243,24 @@ const titleMorph = postTitleMorphName(slug);
 
   @media (hover: hover) {
     .post-item-card:hover {
-      transform: translateY(-0.25rem);
+      transform: translateY(-2px);
       box-shadow:
-        0 1.25rem 2.5rem -1.25rem rgb(233 84 107 / 0.4),
-        0 0.5rem 1.25rem -0.75rem rgb(90 97 105 / 0.22);
+        0 14px 28px -18px rgb(20 26 34 / 0.16),
+        0 4px 10px -6px rgb(20 26 34 / 0.08);
     }
 
     :global(.dark) .post-item-card:hover {
       box-shadow:
-        0 1.25rem 2.75rem -1.25rem rgb(240 123 145 / 0.32),
-        0 0.5rem 1.5rem -0.75rem rgb(0 0 0 / 0.5);
+        0 16px 32px -16px rgb(0 0 0 / 0.48),
+        0 4px 12px -6px rgb(0 0 0 / 0.32);
     }
 
     .post-item-card:hover .post-item-cover img {
-      scale: 1.06;
-      filter: saturate(1.08);
+      scale: 1.03;
     }
 
     .post-item-card:hover .post-item-more {
-      box-shadow: 0 0.4rem 1.1rem -0.3rem rgb(233 84 107 / 0.6);
+      box-shadow: 0 4px 12px -4px rgb(20 26 34 / 0.25);
     }
   }
 

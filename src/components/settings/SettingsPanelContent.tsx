@@ -228,7 +228,7 @@ export default function SettingsPanelContent() {
                 transition: panelTransition(false),
               }}
             >
-              <div className="modal-sakura-shell border-primary/18 bg-popover text-popover-foreground flex h-[calc(100dvh-6rem)] max-h-96 flex-col overflow-hidden rounded-2xl border p-4 shadow-xl">
+              <div className="modal-editorial-shell border-border bg-popover text-popover-foreground flex h-[calc(100dvh-6rem)] max-h-96 flex-col overflow-hidden rounded-xl border p-4 shadow-xl">
                 {/* Header */}
                 <div className="mb-3 flex items-center justify-between">
                   <h2 className="flex items-center gap-1.5 text-sm font-semibold">

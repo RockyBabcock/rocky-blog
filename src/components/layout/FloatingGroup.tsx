@@ -219,14 +219,14 @@ export default function FloatingGroup() {
           {showProgress && <ProgressRing springy={!reduced} />}
           <AnimatePresence mode="popLayout" initial={false}>
             <m.span
-              key={isExpanded ? 'close' : 'magic'}
+              key={isExpanded ? 'close' : 'menu'}
               className="flex-center"
               initial={reduced ? false : { opacity: 0, transform: 'rotate(-90deg) scale(0.5)' }}
               animate={{ opacity: 1, transform: 'rotate(0deg) scale(1)' }}
               exit={reduced ? { opacity: 0 } : { opacity: 0, transform: 'rotate(90deg) scale(0.5)' }}
               transition={reduced ? { duration: 0 } : animation.spring.press}
             >
-              <Icon icon={isExpanded ? 'ri:close-large-fill' : 'ri:magic-fill'} className="size-4" />
+              <Icon icon={isExpanded ? 'ri:close-large-fill' : 'ri:apps-2-line'} className="size-4" />
             </m.span>
           </AnimatePresence>
         </FloatingButton>

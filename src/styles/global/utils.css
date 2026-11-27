@@ -8,17 +8,23 @@
   @apply flex flex-col items-center justify-center;
 }
 @utility shadow-card {
-  box-shadow: var(--box-bg-shadow) 0px 5px 15px;
+  box-shadow:
+    0 1px 2px rgba(24, 27, 32, 0.04),
+    0 10px 24px -18px rgba(24, 27, 32, 0.14);
 }
 @utility shadow-card-darker {
-  box-shadow: 0 0 2rem var(--box-bg-shadow);
+  box-shadow:
+    0 2px 4px rgba(24, 27, 32, 0.06),
+    0 14px 30px -18px rgba(24, 27, 32, 0.2);
 }
 @utility shadow-box {
-  box-shadow: var(--box-bg-shadow) 0px 50px 50px -50px;
+  box-shadow:
+    0 1px 2px rgba(24, 27, 32, 0.04),
+    0 8px 24px -16px rgba(24, 27, 32, 0.14);
   @apply md:shadow-none;
 }
 @utility shadow-text {
-  text-shadow: 0 0.2rem 0.3rem rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 10px rgba(15, 19, 24, 0.48);
 }
 @utility with-background {
   &#site-header {

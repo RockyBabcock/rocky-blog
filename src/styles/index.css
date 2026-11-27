@@ -1,5 +1,9 @@
 @layer motion-defaults;
 
+@import "tailwindcss";
+
+@import "./global/reset.css";
+@import "./global/utils.css";
 @import "./theme/shadcn.css";
 @import "./theme/index.css";
 @import "./theme/theme-transition.css";
@@ -27,7 +31,8 @@
 @import "./components/post.css";
 @import "./components/toc.css";
 @import "./components/home-editorial.css";
-@import "./theme/visual-delight.css";
-@import "./theme/editorial-celestial.css";
+@import "./theme/editorial-system.css";
 @import "./theme/focus-mode.css";
 @import "./components/lqip.css";
+
+@config "../../tailwind.config.mjs";

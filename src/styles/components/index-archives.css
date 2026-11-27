@@ -82,7 +82,7 @@
 .archive-month-cell[data-tier="4"] {
   --month-color: hsl(var(--primary));
 }
-/* Peak months bloom: the cell keeps its footprint and a white petal settles on it. */
+/* Peak months carry a clean geometric square indicator. */
 .archive-calendar-grid .archive-month-cell[data-tier="4"] {
   position: relative;
 }
@@ -90,11 +90,11 @@
   content: "";
   position: absolute;
   inset: 50% auto auto 50%;
-  width: 10px;
-  height: 12px;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
   background: hsl(var(--primary-foreground) / 0.9);
-  mask: var(--petal-mask) center / contain no-repeat;
-  transform: translate(-50%, -50%) rotate(-18deg);
+  transform: translate(-50%, -50%);
 }
 a.archive-month-cell {
   transition: transform 160ms var(--ease-out-quart, ease-out);
@@ -122,8 +122,8 @@ a.archive-month-cell:focus-visible {
     aspect-ratio: 1;
   }
   .archive-calendar-grid .archive-month-cell[data-tier="4"]::after {
-    width: 8px;
-    height: 10px;
+    width: 4px;
+    height: 4px;
   }
   .calendar-full-year {
     display: none;

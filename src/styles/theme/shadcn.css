@@ -1,72 +1,83 @@
-/* shadCN theme - https://ui.shadcn.com/themes */
 @layer base {
   :root {
-    /* Neutrals lean toward the sakura hue so greys and the pink accent read as one palette. */
-    --background: 0 12% 99%;
-    --foreground: 340 10% 18%;
+    /* Contemporary Editorial × Swiss-Inspired Light Palette
+       Warm architectural paper foundations + controlled slate-steel accent (#536B82). */
+    --background: 45 18% 95%; /* #F4F3EF */
+    --foreground: 216 11% 18%; /* #292D33 */
 
-    --card: 0 12% 99%;
-    --card-foreground: 340 12% 12%;
+    --card: 45 33% 98%; /* #FBFAF7 */
+    --card-foreground: 216 11% 18%;
 
-    --popover: 0 12% 99%;
-    --popover-foreground: 340 12% 12%;
+    --popover: 0 0% 100%; /* #FFFFFF */
+    --popover-foreground: 216 11% 18%;
 
-    --primary: 351 77% 62%;
-    --primary-foreground: 355.7 100% 97.3%;
+    --primary: 209 22% 42%; /* #536B82 */
+    --primary-foreground: 45 33% 98%;
 
-    --secondary: 340 22% 95.5%;
-    --secondary-foreground: 340 12% 12%;
+    --secondary: 42 14% 91%;
+    --secondary-foreground: 216 11% 20%;
 
-    --muted: 340 22% 95.5%;
-    --muted-foreground: 340 6% 36%;
+    --muted: 42 13% 92%;
+    --muted-foreground: 210 10% 42%; /* WCAG AA >= 4.9:1 on paper & card */
 
-    --accent: 340 30% 94.5%;
-    --accent-foreground: 340 12% 12%;
+    --accent: 209 18% 92%;
+    --accent-foreground: 209 24% 30%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 68% 48%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 340 16% 90%;
-    --input: 340 16% 90%;
-    --ring: 346.8 77.2% 49.8%;
+    --success: 152 46% 36%;
+    --success-foreground: 0 0% 98%;
 
-    --badge-primary: 351 49% 50%;
+    --warning: 36 80% 44%;
+    --warning-foreground: 216 11% 15%;
 
-    --radius: 0.75rem;
+    --border: 42 16% 87%; /* #E4E1DA */
+    --input: 42 15% 84%;
+    --ring: 209 22% 42%;
+
+    --badge-primary: 210 26% 34%;
+    --radius: 0.5rem;
   }
 
   .dark {
-    /* Night sakura: plum-indigo neutrals under an unchanged pink accent; text is kept below pure white to cut glare. */
-    --background: 256 18% 13%;
-    --foreground: 300 14% 93%;
+    /* Contemporary Editorial Dark Palette
+       Deep architectural charcoal + muted slate-mist accent (#91A8BF). */
+    --background: 218 14% 11%; /* #181B20 */
+    --foreground: 80 7% 91%; /* #E8E9E6 */
 
-    --card: 256 18% 15%;
-    --card-foreground: 300 14% 93%;
+    --card: 213 15% 15%; /* #20252B */
+    --card-foreground: 80 7% 91%;
 
-    --popover: 257 20% 16%;
-    --popover-foreground: 300 14% 93%;
+    --popover: 217 13% 19%; /* #2B3038 */
+    --popover-foreground: 80 7% 91%;
 
-    --primary: 350 77% 70%;
-    --primary-foreground: 355.7 100% 97.3%;
+    --primary: 210 27% 66%; /* #91A8BF */
+    --primary-foreground: 218 16% 10%;
 
-    --secondary: 258 16% 21%;
-    --secondary-foreground: 300 14% 96%;
+    --secondary: 215 13% 20%;
+    --secondary-foreground: 80 7% 91%;
 
-    --muted: 258 16% 21%;
-    --muted-foreground: 262 10% 68%;
+    --muted: 215 13% 19%;
+    --muted-foreground: 212 8% 66%; /* #A3A9B0 */
 
-    --accent: 258 18% 23%;
-    --accent-foreground: 300 14% 96%;
+    --accent: 213 18% 22%;
+    --accent-foreground: 210 27% 78%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
+    --destructive: 0 62% 58%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 258 14% 25%;
-    --input: 258 14% 25%;
-    --ring: 346.8 77.2% 49.8%;
+    --success: 152 42% 52%;
+    --success-foreground: 218 16% 10%;
 
-    --badge-primary: 350 77% 70%;
+    --warning: 38 78% 58%;
+    --warning-foreground: 218 16% 10%;
 
-    --radius: 0.75rem;
+    --border: 212 12% 24%; /* #363D45 */
+    --input: 212 12% 26%;
+    --ring: 210 27% 66%;
+
+    --badge-primary: 210 27% 68%;
+    --radius: 0.5rem;
   }
 }

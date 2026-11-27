@@ -95,7 +95,7 @@ export const SETTINGS_REGISTRY: SettingItem[] = [
     section: 'general',
     type: 'segmented',
     i18nKey: 'settings.motionLevel',
-    icon: 'ri:sparkling-line',
+    icon: 'ri:speed-up-line',
     options: [
       { value: 'lively', i18nKey: 'settings.motionLevel.lively' },
       { value: 'subtle', i18nKey: 'settings.motionLevel.subtle' },

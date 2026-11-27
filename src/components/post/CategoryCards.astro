@@ -79,15 +79,12 @@ const categoryPosts: CategoryWithPosts[] = (
               decoding="async"
               class="absolute inset-0 -z-10 h-full w-full rounded-xl object-cover"
             />
-            <div class="absolute inset-0 -z-10 rounded-xl bg-linear-to-t from-black/78 via-black/35 to-black/15" />
-            <div class="inner-hairline-frame" aria-hidden="true" />
-            <div class="card-sheen-layer" aria-hidden="true" />
-            <span class="absolute top-3.5 left-4 z-10 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold tracking-[0.14em] text-white/75 tabular-nums" aria-hidden="true">
-              <span class="celestial-star celestial-star-sm celestial-star-light" />
+            <div class="absolute inset-0 -z-10 rounded-xl bg-linear-to-t from-black/78 via-black/38 to-black/15" />
+            <span class="absolute top-3.5 left-4 z-10 inline-flex items-center font-mono text-[11px] font-semibold tracking-[0.14em] text-white/80 tabular-nums" aria-hidden="true">
               {indexLabel}
             </span>
             {parentCategory?.name ? (
-              <span class="absolute top-3 right-3 z-10 rounded-md bg-black/45 px-2 py-0.5 text-xs font-medium text-white/90 backdrop-blur-xs">
+              <span class="absolute top-3 right-3 z-10 rounded-md bg-black/50 px-2 py-0.5 text-xs font-medium text-white/90 backdrop-blur-xs">
                 {translateCategoryName(parentCategory.name, locale)}
               </span>
             ) : null}
@@ -100,18 +97,12 @@ const categoryPosts: CategoryWithPosts[] = (
               </p>
             </div>
           </div>
-          <div slot="back" class="bg-card border-border/80 relative flex h-full flex-col rounded-xl border px-5 pt-15 pb-4 text-left">
+          <div slot="back" class="bg-card border-border relative flex h-full flex-col rounded-xl border px-5 pt-13 pb-4 text-left">
             <span class="category-index-tag" aria-hidden="true">
               {indexLabel}
             </span>
-            <div
-              class={cn(
-                'from-gradient-shoka-button-start to-gradient-shoka-button-end absolute top-3.5 -left-3 grid h-8 max-w-[calc(100%+1.5rem)] place-items-center rounded-r-md bg-linear-to-l px-4',
-                "after:absolute after:top-full after:-left-3 after:h-0 after:w-0 after:border-t-0 after:border-r-12 after:border-b-12 after:border-l-12 after:border-transparent after:content-['']",
-                'after:border-r-gradient-shoka-button-end',
-              )}
-            >
-              <a class="hover:animate-vertical-shake block text-sm font-semibold text-white" href={categoryLink}>
+            <div class="border-border absolute top-0 right-0 left-0 flex h-10 items-center border-b px-5">
+              <a class="text-foreground hover:text-primary truncate text-sm font-semibold transition-colors" href={categoryLink}>
                 {displayName}
               </a>
             </div>
@@ -156,7 +147,7 @@ const categoryPosts: CategoryWithPosts[] = (
             <a href={categoryLink} aria-label={displayName} class="absolute right-0 bottom-0">
               <Button
                 className={cn(
-                  'bg-gradient-shoka-button h-8 rounded-xl rounded-se-none rounded-es-none px-3 text-xs transition-all hover:translate-x-0.5 hover:translate-y-0.5',
+                  'bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-xl rounded-se-none rounded-es-none px-3 text-xs transition-colors',
                 )}
               >
                 {t(locale, 'series.viewAll')}

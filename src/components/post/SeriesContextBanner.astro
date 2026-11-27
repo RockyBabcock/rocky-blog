@@ -25,11 +25,10 @@ const postHref = (post: PostRef) => localizedPath(routeBuilder(Routes.Post, post
 ---
 
 <aside
-  class="corner-brackets corner-petal-mark bg-primary/5 border-primary/15 mt-1 mb-2 flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm"
+  class="bg-primary/5 border-border mt-1 mb-2 flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm"
   aria-label={t(locale, 'series.partOfSeries')}
   data-series-context
 >
-  <span class="corner-petal-watermark -right-2 -bottom-2 size-9 opacity-60" aria-hidden="true" />
   <div class="flex min-w-0 items-center gap-2.5">
     <span class="bg-primary/15 text-primary flex size-7 shrink-0 items-center justify-center rounded-lg">
       <Icon name="ri:book-2-line" class="size-4" aria-hidden="true" />

@@ -5,7 +5,6 @@ import { getSiteStats } from '@lib/stats';
 import { cn } from '@lib/utils';
 import { Icon } from 'astro-icon/components';
 import { getLocaleFromUrl, localizedPath, t } from '@/i18n';
-import SakuraSVG from '../svg/SakuraSvg';
 
 interface Props {
   className?: string;
@@ -21,34 +20,26 @@ const archivesHref = localizedPath('/archives', locale);
 const aboutHref = localizedPath('/about', locale);
 ---
 
-<footer class={cn('footer-colophon corner-petal-mark mt-auto pt-6 pb-7', className)}>
-  <svg class="celestial-footer-arc" viewBox="0 0 176 104" fill="none" aria-hidden="true">
-    <path d="M8 94C36 42 94 16 168 24" stroke="currentColor" stroke-width="0.9" stroke-dasharray="3 4" />
-    <path d="M28 74L72 44L122 52" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.7" />
-    <circle cx="28" cy="74" r="1.8" fill="currentColor" />
-    <path d="M72 38L73.4 42.6L78 44L73.4 45.4L72 50L70.6 45.4L66 44L70.6 42.6Z" fill="currentColor" />
-    <circle cx="122" cy="52" r="1.5" fill="currentColor" fill-opacity="0.8" />
-  </svg>
-  <span class="corner-petal-watermark right-6 bottom-3 size-14 opacity-45 md:hidden" aria-hidden="true" />
-  <div class={cn('relative z-10 mx-auto flex flex-col items-center gap-3.5 px-6 md:px-3 md:pb-10', MAX_WIDTH.content)}>
-    <!-- Ornamental Colophon Divider -->
-    <div class="editorial-ornament-divider max-w-md" aria-hidden="true">
-      <span class="celestial-star celestial-star-sm opacity-75" />
-      <span class="editorial-ornament-petal" />
-      <span class="celestial-star celestial-star-sm opacity-75" />
+<footer class={cn('footer-colophon mt-auto pt-7 pb-8', className)}>
+  <div class={cn('relative z-10 mx-auto flex flex-col items-center gap-4 px-6 md:px-3 md:pb-10', MAX_WIDTH.content)}>
+    <!-- Editorial Colophon Rule -->
+    <div class="editorial-rule max-w-md" aria-hidden="true">
+      <span class="editorial-rule-line" />
+      <span class="editorial-rule-mark" />
+      <span class="editorial-rule-line" />
     </div>
 
     <!-- Brand Signature Lockup -->
     {siteConfig?.title && (
-      <div class="flex flex-col items-center gap-0.5 text-center">
+      <div class="flex flex-col items-center gap-1 text-center">
         <a
           href={localizedPath('/', locale)}
-          class="font-chill-round text-foreground/85 hover:text-primary text-sm font-semibold tracking-[0.14em] transition-colors"
+          class="text-foreground/90 hover:text-primary text-sm font-semibold tracking-[0.14em] uppercase transition-colors"
         >
           {siteConfig.title}
         </a>
         {siteConfig?.subtitle && (
-          <p class="text-muted-foreground/80 max-w-md text-xs tracking-wide">{siteConfig.subtitle}</p>
+          <p class="text-muted-foreground max-w-md text-xs tracking-wide">{siteConfig.subtitle}</p>
         )}
       </div>
     )}
@@ -101,23 +92,23 @@ const aboutHref = localizedPath('/about', locale);
     </div>
 
     <!-- Copyright -->
-    <div class="text-muted-foreground flex items-center gap-0.5 text-sm">
-      <span class="opacity-75">©</span>
-      <span class="font-medium opacity-75">{startYear}</span>
+    <div class="text-muted-foreground flex items-center gap-1.5 text-xs">
+      <span>©</span>
+      <span class="font-medium tabular-nums">{startYear}</span>
       {
         startYear !== currentYear && (
           <>
-            <span class="opacity-50">-</span>
-            <span class="font-medium opacity-75" itemprop="copyrightYear">
+            <span class="opacity-50">–</span>
+            <span class="font-medium tabular-nums" itemprop="copyrightYear">
               {currentYear}
             </span>
           </>
         )
       }
-      <SakuraSVG className="mx-1 size-5 animate-spin text-[#FFC0CB] duration-10000" />
-      <span class="author font-medium opacity-75" itemprop="copyrightHolder">
+      <span class="opacity-45" aria-hidden="true">·</span>
+      <span class="author font-medium" itemprop="copyrightHolder">
         {siteConfig.name}
-        {siteConfig?.alternate ? `@${siteConfig.alternate}` : ''}
+        {siteConfig?.alternate ? ` (@${siteConfig.alternate})` : ''}
       </span>
     </div>
 
@@ -176,6 +167,32 @@ const aboutHref = localizedPath('/about', locale);
 </script>
 
 <style>
+  .footer-stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .footer-quick-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: hsl(var(--muted-foreground));
+    transition:
+      color 160ms var(--ease-out-quart),
+      background-color 160ms var(--ease-out-quart);
+  }
+
+  .footer-quick-link:hover {
+    color: hsl(var(--primary));
+    background-color: hsl(var(--muted) / 0.7);
+  }
+
   .footer-link {
     opacity: 0.75;
     position: relative;

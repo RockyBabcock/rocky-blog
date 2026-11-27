@@ -1,0 +1,362 @@
+/*
+ * Contemporary Editorial × Swiss-Inspired Visual System (Pass 02)
+ *
+ * Single consolidated design-system layer replacing prior floral/celestial stylesheets.
+ * Principles:
+ *   1. Calm architectural paper & charcoal foundations — zero colored glow pools or decorative motes
+ *   2. Swiss typographic indexing — crisp kickers, tabular numerals, deliberate hairline rules
+ *   3. Restrained editorial framing — subtle crop marks on select focal surfaces only
+ *   4. Calm, purposeful micro-interactions (160–240ms) respecting reduced-motion preferences
+ */
+
+:root {
+  --ed-rule: hsl(var(--border));
+  --ed-rule-strong: hsl(var(--foreground) / 0.14);
+  --ed-accent-rule: hsl(var(--primary) / 0.35);
+  --ed-crop-stroke: hsl(var(--foreground) / 0.18);
+  --ed-crop-stroke-hover: hsl(var(--primary) / 0.55);
+  --ed-dot-color: hsl(var(--foreground) / 0.055);
+  --ed-surface-shadow: 0 1px 2px rgba(24, 27, 32, 0.04), 0 8px 24px -18px rgba(24, 27, 32, 0.12);
+  --ed-surface-shadow-hover: 0 2px 4px rgba(24, 27, 32, 0.05), 0 14px 28px -18px rgba(24, 27, 32, 0.16);
+}
+
+.dark {
+  --ed-rule: hsl(var(--border));
+  --ed-rule-strong: hsl(var(--foreground) / 0.16);
+  --ed-accent-rule: hsl(var(--primary) / 0.42);
+  --ed-crop-stroke: hsl(var(--foreground) / 0.22);
+  --ed-crop-stroke-hover: hsl(var(--primary) / 0.6);
+  --ed-dot-color: hsl(var(--foreground) / 0.06);
+  --ed-surface-shadow: 0 1px 2px rgba(0, 0, 0, 0.24), 0 10px 28px -18px rgba(0, 0, 0, 0.48);
+  --ed-surface-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.3), 0 16px 32px -18px rgba(0, 0, 0, 0.58);
+}
+
+/* ── 1. Architectural Page Foundation ──────────────────────────────────────────── */
+
+.page-ambient-canvas {
+  position: relative;
+  background-color: hsl(var(--background));
+}
+
+/* Ultra-fine architectural drafting dot grid for selected index/timeline insets */
+.editorial-grid-surface {
+  background-image: radial-gradient(circle, var(--ed-dot-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ── 2. Swiss-Editorial Section Kickers (3 disciplined variants) ───────────────── */
+
+.editorial-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-editorial-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: hsl(var(--muted-foreground));
+  user-select: none;
+}
+
+.editorial-kicker-num {
+  color: hsl(var(--primary));
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.editorial-kicker-sep {
+  color: hsl(var(--border));
+  font-weight: 400;
+}
+
+.editorial-kicker-bar {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1px;
+  background: hsl(var(--primary) / 0.55);
+  flex-shrink: 0;
+}
+
+.editorial-kicker-dot {
+  display: inline-block;
+  width: 0.3125rem;
+  height: 0.3125rem;
+  border-radius: 1px;
+  background: hsl(var(--primary));
+  flex-shrink: 0;
+}
+
+/* ── 3. Architectural Section Rules & Editorial Surfaces ───────────────────────── */
+
+.editorial-rule {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-block: 0.25rem;
+}
+
+.editorial-rule-line {
+  flex: 1;
+  height: 1px;
+  background: var(--ed-rule);
+}
+
+.editorial-rule-mark {
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: hsl(var(--primary) / 0.45);
+  flex-shrink: 0;
+}
+
+/* Select focal frame: subtle 10px architectural crop marks at opposite corners */
+.editorial-crop-frame {
+  position: relative;
+}
+
+.editorial-crop-frame::before,
+.editorial-crop-frame::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  transition: border-color 180ms var(--ease-out-quart);
+}
+
+.editorial-crop-frame::before {
+  top: 8px;
+  left: 8px;
+  border-top: 1px solid var(--ed-crop-stroke);
+  border-left: 1px solid var(--ed-crop-stroke);
+}
+
+.editorial-crop-frame::after {
+  right: 8px;
+  bottom: 8px;
+  border-right: 1px solid var(--ed-crop-stroke);
+  border-bottom: 1px solid var(--ed-crop-stroke);
+}
+
+@media (hover: hover) {
+  .editorial-crop-frame:hover::before,
+  .editorial-crop-frame:hover::after {
+    border-color: var(--ed-crop-stroke-hover);
+  }
+}
+
+/* Refined tabular date stamp */
+.editorial-date-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.4375rem;
+  border-radius: 0.25rem;
+  font-family: var(--font-editorial-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--muted) / 0.85);
+  border: 1px solid hsl(var(--border) / 0.9);
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+/* Compact editorial row left accent hairline on hover */
+.compact-editorial-row {
+  position: relative;
+}
+
+.compact-editorial-row::after {
+  content: "";
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  left: 0;
+  width: 2px;
+  border-radius: 1px;
+  background: hsl(var(--primary));
+  opacity: 0;
+  transform: scaleY(0.5);
+  transition:
+    opacity 180ms var(--ease-out-quart),
+    transform 180ms var(--ease-out-quart);
+}
+
+@media (hover: hover) {
+  .compact-editorial-row:hover::after {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* ── 4. Article Reading Surfaces & Typographic Accents ─────────────────────────── */
+
+.custom-content h2 {
+  position: relative;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.custom-content h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 2.25rem;
+  height: 1.5px;
+  background: hsl(var(--primary));
+}
+
+.custom-content h3 {
+  position: relative;
+  padding-left: 0.75rem;
+}
+
+.custom-content h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.26em;
+  bottom: 0.26em;
+  width: 2px;
+  border-radius: 1px;
+  background: hsl(var(--primary) / 0.6);
+}
+
+/* Editorial prose tables — crisp stationery rules & tabular numbers */
+.custom-content table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-content table thead th {
+  background: hsl(var(--muted) / 0.85);
+  border-bottom: 1px solid hsl(var(--border));
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: hsl(var(--foreground));
+}
+
+.custom-content table tbody tr {
+  transition: background-color 150ms var(--ease-out-quart);
+}
+
+.custom-content table tbody tr:hover {
+  background: hsl(var(--muted) / 0.45);
+}
+
+/* Code blocks — clean architectural framing without heavy glow */
+.custom-content .code-block-wrapper {
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 2px 8px -6px rgba(24, 27, 32, 0.08);
+  transition: border-color 180ms var(--ease-out-quart);
+}
+
+.dark .custom-content .code-block-wrapper {
+  box-shadow: 0 4px 14px -10px rgba(0, 0, 0, 0.45);
+}
+
+.custom-content .code-block-wrapper:hover {
+  border-color: hsl(var(--primary) / 0.35);
+}
+
+/* End-of-article colophon rule */
+.article-end-colophon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: hsl(var(--muted-foreground));
+  user-select: none;
+}
+
+.article-end-colophon::before,
+.article-end-colophon::after {
+  content: "";
+  width: min(7rem, 22%);
+  height: 1px;
+  background: hsl(var(--border));
+}
+
+.article-end-colophon-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-editorial-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+.article-end-colophon-square {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  background: hsl(var(--primary) / 0.7);
+}
+
+/* ── 5. Modals, Empty States & Timeline Nodes ──────────────────────────────────── */
+
+.modal-editorial-shell {
+  background-color: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+  box-shadow:
+    0 20px 44px -16px rgba(24, 27, 32, 0.24),
+    0 4px 12px -4px rgba(24, 27, 32, 0.1);
+}
+
+.dark .modal-editorial-shell {
+  box-shadow:
+    0 24px 52px -16px rgba(0, 0, 0, 0.62),
+    0 4px 14px -4px rgba(0, 0, 0, 0.36);
+}
+
+.empty-state-plate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 2rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px dashed hsl(var(--border));
+  background: hsl(var(--muted) / 0.35);
+  text-align: center;
+}
+
+.timeline-editorial-node {
+  box-shadow: 0 0 0 3px hsl(var(--card));
+  transition:
+    background-color 180ms var(--ease-out-quart),
+    border-color 180ms var(--ease-out-quart);
+}
+
+.group:hover .timeline-editorial-node {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editorial-crop-frame::before,
+  .editorial-crop-frame::after,
+  .compact-editorial-row::after,
+  .timeline-editorial-node {
+    transition: none;
+  }
+}

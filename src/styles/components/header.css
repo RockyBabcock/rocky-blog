@@ -127,42 +127,27 @@ html.theme-transition .header-content {
     inset-inline: max(-1.25rem, calc(1rem - var(--header-gutter)));
     z-index: -1;
     view-transition-name: site-header-capsule;
-    border: 1px solid hsl(var(--primary) / 0.16);
+    border: 1px solid hsl(var(--border));
     border-radius: 9999px;
-    background: color-mix(in oklab, var(--gradient-bg-start) 78%, transparent);
+    background: hsl(var(--card) / 0.9);
     box-shadow:
-      0 0.75rem 2rem -1rem rgb(233 84 107 / 0.3),
-      0 0.25rem 0.75rem -0.5rem rgb(40 20 40 / 0.12);
+      0 10px 26px -14px rgba(24, 27, 32, 0.18),
+      0 2px 6px -2px rgba(24, 27, 32, 0.08);
     opacity: 0;
-    scale: 0.96 0.85;
+    scale: 0.97 0.9;
     pointer-events: none;
     transition:
-      opacity 320ms var(--ease-out-quart),
-      scale 560ms var(--ease-out-expo),
-      backdrop-filter 320ms var(--ease-out-quart);
-  }
-
-  .header-capsule::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    inset-inline: 18%;
-    height: 1px;
-    border-radius: 9999px;
-    background: linear-gradient(to right, transparent, hsl(var(--primary) / 0.42), transparent);
-    opacity: 0.85;
-    pointer-events: none;
+      opacity 220ms var(--ease-out-quart),
+      scale 340ms var(--ease-out-expo),
+      backdrop-filter 220ms var(--ease-out-quart);
   }
 
   .dark .header-capsule {
-    border-color: hsl(var(--primary) / 0.22);
+    border-color: hsl(var(--border));
+    background: hsl(var(--card) / 0.92);
     box-shadow:
-      0 0.75rem 2rem -1rem rgb(0 0 0 / 0.65),
-      inset 0 1px 0 rgb(255 255 255 / 0.04);
-  }
-
-  .dark .header-capsule::after {
-    background: linear-gradient(to right, transparent, hsl(var(--primary) / 0.5), transparent);
+      0 12px 28px -12px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
   #site-header.with-background {
@@ -207,48 +192,43 @@ html.theme-transition .header-content {
 
 @media (992px >= width) {
   #site-header.with-background {
-    border-bottom-color: transparent;
-    box-shadow: 0 0.5rem 1.5rem -1rem rgb(233 84 107 / 0.4);
+    border-bottom: 1px solid hsl(var(--border));
+    box-shadow: 0 6px 18px -12px rgba(24, 27, 32, 0.16);
   }
 
   #site-header.with-background::before {
-    opacity: 0.92;
+    opacity: 0.96;
   }
 }
 
 .site-logo img {
-  transition:
-    scale 420ms var(--ease-out-expo),
-    rotate 420ms var(--ease-out-expo);
+  transition: opacity 180ms var(--ease-out-quart);
 }
 
 @media (hover: hover) {
   .site-logo:hover img {
-    scale: 1.06;
-    rotate: -3deg;
+    opacity: 0.85;
   }
 }
 
 /*
-  Portaled header menus are cut from the capsule's glass, a little denser so they stay legible over
-  the cover. One highlight glides between their items like the nav pill (NavMenu): it rests on the
-  current page and follows the pointer or keyboard focus.
+  Portaled header menus use clean elevated surface framing with crisp border and subtle blur.
 */
 .nav-popover {
-  border: 1px solid hsl(var(--primary) / 0.16);
-  border-radius: 1rem;
-  background: color-mix(in oklab, var(--gradient-bg-start) 86%, transparent);
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.75rem;
+  background: hsl(var(--popover) / 0.96);
   box-shadow:
-    0 0.75rem 2rem -1rem rgb(233 84 107 / 0.3),
-    0 0.25rem 0.75rem -0.5rem rgb(40 20 40 / 0.12);
-  backdrop-filter: blur(16px) saturate(1.5);
+    0 14px 32px -14px rgba(24, 27, 32, 0.2),
+    0 2px 6px -2px rgba(24, 27, 32, 0.08);
+  backdrop-filter: blur(12px);
 }
 
 .dark .nav-popover {
-  border-color: hsl(var(--primary) / 0.22);
+  border-color: hsl(var(--border));
   box-shadow:
-    0 0.75rem 2rem -1rem rgb(0 0 0 / 0.65),
-    inset 0 1px 0 rgb(255 255 255 / 0.04);
+    0 16px 36px -12px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .nav-dropdown {

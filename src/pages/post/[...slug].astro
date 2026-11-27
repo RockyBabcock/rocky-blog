@@ -268,10 +268,12 @@ const seoDate = formatForSeo(date);
           )}
           <CustomContent Content={Content} />
         </article>
-        <div class="article-end-ornament" aria-hidden="true">
-          <span class="celestial-star celestial-star-sm opacity-80" />
-          <span class="editorial-ornament-petal" />
-          <span class="celestial-star celestial-star-sm opacity-80" />
+        <div class="article-end-colophon" aria-hidden="true">
+          <span class="article-end-colophon-mark">
+            <span class="article-end-colophon-square" />
+            <span>END</span>
+            <span class="article-end-colophon-square" />
+          </span>
         </div>
         <PostPagination prevPost={prevPost} nextPost={nextPost} locale={locale} />
       </div>

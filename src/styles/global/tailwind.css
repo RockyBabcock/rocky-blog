@@ -1,38 +1,36 @@
-@import "./reset.css";
-@import "tailwindcss" source("../../");
-@import "./utils.css";
-@source "../../../config";
-@config "../../../tailwind.config.mjs";
-
-@font-face {
-  font-family: "Bear Days";
-  src: url("/fonts/bear-days.woff2") format("woff2");
-  font-display: swap;
-}
-
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+/* Global base styles */
 @layer base {
   * {
     @apply border-border;
   }
-  button {
-    @apply cursor-pointer;
+
+  html {
+    --font-editorial-sans:
+      -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC",
+      "Microsoft YaHei", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-editorial-display:
+      -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC",
+      "Microsoft YaHei", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-editorial-mono:
+      "JetBrains Mono", "SFMono-Regular", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-family: var(--font-editorial-sans);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Japanese locale: use Gen Jyuu Gothic P for clean kanji/kana proportion */
+  html:lang(ja) {
+    --font-editorial-sans:
+      "Gen Jyuu Gothic P", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    --font-editorial-display:
+      "Gen Jyuu Gothic P", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    font-family: var(--font-editorial-sans);
   }
 
   body {
-    overscroll-behavior-y: none;
-    /* Darken only the footer zone: a percentage would tint the sider beside long articles off the paper's colour. */
-    background: linear-gradient(to top, var(--gradient-bg-end) 0, var(--gradient-bg-start) 48rem) no-repeat bottom;
-    scroll-behavior: smooth;
-    letter-spacing: 0.02em;
-    color: hsl(var(--foreground));
+    @apply bg-background text-foreground;
   }
 
   h1,
@@ -41,95 +39,175 @@
   h4,
   h5,
   h6 {
-    font-family: "寒蝉全圆体", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    letter-spacing: 0.02em;
+    font-family: var(--font-editorial-display);
+    letter-spacing: -0.015em;
   }
 
-  ::selection {
-    background: hsl(var(--primary) / 0.25);
+  h1 {
+    @apply text-4xl font-bold;
   }
 
-  /* Japanese pages: use Gen Jyuu Gothic P for correct JIS glyphs (fix #113) */
-  :lang(ja) {
-    font-family: "Gen Jyuu Gothic P", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  h2 {
+    @apply text-3xl font-bold;
   }
 
-  :lang(ja) :is(h1, h2, h3, h4, h5, h6) {
-    font-family: "Gen Jyuu Gothic P", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  h3 {
+    @apply text-2xl font-semibold;
   }
 
-  html {
-    scrollbar-gutter: stable;
-    /* Darken only the footer zone: a percentage would tint the sider beside long articles off the paper's colour. */
-    background: linear-gradient(to top, var(--gradient-bg-end) 0, var(--gradient-bg-start) 48rem) no-repeat bottom;
-    overflow: auto;
+  h4 {
+    @apply text-xl font-semibold;
   }
 
-  @media (992px >= width) {
-    html {
-      scrollbar-gutter: auto;
-    }
+  h5 {
+    @apply text-lg font-medium;
   }
 
-  /* After preflight, whose :-moz-focusring { outline: auto } would otherwise win in Firefox. */
-  :focus-visible {
-    outline: 2px solid hsl(var(--primary));
-    outline-offset: 2px;
+  h6 {
+    @apply text-base font-medium;
+  }
+
+  p {
+    @apply text-base leading-relaxed;
+  }
+
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .clip-path-post-img-left {
+    clip-path: polygon(0 0, 94% 0%, 100% 100%, 0% 100%);
+  }
+
+  .clip-path-post-img-right {
+    clip-path: polygon(0 0%, 100% 0%, 100% 100%, 6% 100%);
+  }
+
+  .logo-text {
+    font-family: var(--font-editorial-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: currentColor;
+    text-shadow: none;
+    line-height: 1;
+  }
+
+  .kbd {
+    @apply bg-muted border-border inline-flex items-center justify-center rounded border px-1.5 py-0.5 font-mono text-xs font-medium;
+  }
+
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  .text-muted {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .bg-gradient-start {
+    background-color: var(--gradient-bg-start);
+  }
+
+  .bg-gradient-end {
+    background-color: var(--gradient-bg-end);
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-[1.02];
+  }
+
+  .transition-theme {
+    @apply transition-colors duration-200;
+  }
+
+  /* Custom scrollbar utilities */
+  .scrollbar-thin {
+    scrollbar-width: thin;
   }
 
   .scrollbar-hidden {
     scrollbar-width: none;
     -ms-overflow-style: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Smooth scroll container */
+  .scroll-smooth {
+    scroll-behavior: smooth;
   }
 }
 
-/* utils */
-@layer components {
-  #site-header {
-    @apply relative translate-y-0 text-white transition-transform duration-300;
-
-    /* Pseudo-element for gradient background with opacity transition */
-    &::before {
-      content: "";
-      @apply pointer-events-none absolute inset-0 -z-1 bg-gradient-header opacity-0 transition-opacity duration-300 ease-out;
-    }
-
-    button,
-    a {
-      @apply shadow-text;
-      &::after {
-        transition-duration: 400ms;
-        @apply bg-white;
-      }
-    }
-    .nav-dropdown a {
-      text-shadow: none;
-    }
-  }
-  .clip-path-post-img-left {
-    clip-path: polygon(0 0, 92% 0%, 100% 100%, 0% 100%);
-  }
-  .clip-path-post-img-right {
-    clip-path: polygon(0 0%, 100% 0%, 100% 100%, 8% 100%);
-  }
-  .logo-text {
-    font-size: 2rem;
-    text-shadow:
-      3px 4px 2px #060000,
-      -1px -1px 0px #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    line-height: 0.95;
-    text-align: center;
-    font-family: "Bear Days", sans-serif;
-    font-weight: 700;
-    color: #e9546b;
-  }
+/* Hover link underline animation */
+.hover-link {
+  position: relative;
 }
 
-.dark .logo-text {
-  color: #ed788c;
+.hover-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: hsl(var(--primary));
+  transition: width 200ms var(--ease-out-quart);
+}
+
+.hover-link:hover::after {
+  width: 100%;
+}
+
+/* Shoka button style — refined slate action surface */
+.btn-shoka {
+  background: var(--gradient-shoka-button);
+  color: hsl(var(--primary-foreground));
+  transition:
+    transform 180ms var(--ease-out-quart),
+    box-shadow 180ms var(--ease-out-quart),
+    opacity 180ms var(--ease-out-quart);
+}
+
+.btn-shoka:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -10px rgba(24, 27, 32, 0.35);
+}
+
+/* Glass morphism utility */
+.glass {
+  background: hsl(var(--card) / 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dark .glass {
+  background: hsl(var(--card) / 0.88);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition:
+    transform 200ms var(--ease-out-quart),
+    box-shadow 200ms var(--ease-out-quart),
+    border-color 200ms var(--ease-out-quart);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 2px 4px rgba(24, 27, 32, 0.05),
+    0 14px 28px -18px rgba(24, 27, 32, 0.16);
 }

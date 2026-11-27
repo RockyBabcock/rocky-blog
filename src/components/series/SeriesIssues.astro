@@ -1,12 +1,10 @@
 ---
-import SakuraSVG from '@components/svg/SakuraSvg';
 import { Routes } from '@constants/router';
 import { siteTimezone } from '@lib/config/site';
 import { groupPostsByYear } from '@lib/content/index-groups';
 import { parseIssueTitle } from '@lib/content/series-issue';
 import { displayDate, formatLocalizedDate, formatLocalizedMonthDay } from '@lib/date';
 import { routeBuilder } from '@lib/route';
-import { PETAL_MASK } from '@lib/sakura/petal';
 import { Icon } from 'astro-icon/components';
 import { localizedPath, t } from '@/i18n';
 import type { PostCardData } from '@/types/blog';
@@ -33,9 +31,8 @@ const issues = posts.map((post) => {
 const [latest, ...rest] = issues;
 const years = groupPostsByYear(rest, siteTimezone);
 ---
-{latest ? <div class="series-issues" style={{ '--petal-mask': PETAL_MASK }}>
+{latest ? <div class="series-issues">
   <article class="issue-latest motion-rise" style="--i: 0" data-series-issue-slug={latest.post.slug}>
-    <SakuraSVG className="issue-latest-bloom" />
     <p class="issue-latest-label">
       <span>{t(locale, 'series.latestIssue')}</span>
       <time datetime={latest.date}>{latest.localizedDate}</time>
@@ -58,10 +55,10 @@ const years = groupPostsByYear(rest, siteTimezone);
   </article>
 
   {years.map(({ year, posts: yearIssues }) => <section class="motion-reveal">
-    <h2 class="year-rule"><SakuraSVG className="year-rule-bloom" /><span>{year}</span><small>{yearIssues.length} {t(locale, 'series.issues')}</small></h2>
+    <h2 class="year-rule"><span class="year-rule-mark" aria-hidden="true" /><span>{year}</span><small>{yearIssues.length} {t(locale, 'series.issues')}</small></h2>
     <ol class="issue-rows">
       {yearIssues.map((issue) => <li class="issue-row" data-series-issue-slug={issue.post.slug}>
-        <span class="issue-no" aria-hidden="true">{issue.number ?? <SakuraSVG className="issue-no-bloom" />}</span>
+        <span class="issue-no" aria-hidden="true">{issue.number ?? <span class="issue-no-mark" />}</span>
         <h3 class="issue-title">
           <a class="issue-link" href={issue.href} aria-label={issue.post.title} title={issue.post.description}>{issue.headline}</a>
         </h3>

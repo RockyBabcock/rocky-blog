@@ -148,7 +148,7 @@ function SummaryPanel({ summary, typingSpeed = 25, className, locale }: SummaryP
     <ErrorBoundary FallbackComponent={InlineErrorFallback}>
       <div
         className={cn(
-          'ambient-glow-surface border-primary/18 bg-primary/[0.03] dark:bg-card/85 hover:border-primary/35 overflow-hidden rounded-xl border transition-colors',
+          'border-border bg-card hover:border-primary/40 overflow-hidden rounded-xl border transition-colors',
           className,
         )}
       >
@@ -157,17 +157,16 @@ function SummaryPanel({ summary, typingSpeed = 25, className, locale }: SummaryP
           type="button"
           onClick={handleToggle}
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between px-4 py-3 transition-colors duration-250',
-            'hover:bg-primary/[0.06]',
-            isExpanded && 'border-primary/12 border-b',
+            'flex w-full cursor-pointer items-center justify-between px-4 py-3 transition-colors duration-200',
+            'hover:bg-muted/60',
+            isExpanded && 'border-border border-b',
           )}
           aria-expanded={isExpanded}
           aria-controls="summary-panel-content"
         >
-          <div className="text-foreground/85 flex items-center gap-2 text-sm font-medium">
+          <div className="text-foreground/90 flex items-center gap-2 text-sm font-medium">
             <Icon icon="ri:book-2-fill" className="text-primary size-4" />
             <span>{label}</span>
-            <span className="editorial-kicker-petal opacity-75" aria-hidden="true" />
           </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"

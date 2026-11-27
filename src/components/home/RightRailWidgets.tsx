@@ -57,7 +57,7 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
   return (
     <div className="flex flex-col gap-3.5">
       {/* 1. Quick Search & Command Launcher */}
-      <section className="rail-card ambient-glow-surface" aria-label={t('common.search')}>
+      <section className="rail-card" aria-label={t('common.search')}>
         <button
           type="button"
           onClick={() => openModal('search')}
@@ -83,7 +83,7 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
       </section>
 
       {/* 2. Continue Reading (Real Local History or Calm Honest Empty State) */}
-      <section className="rail-card ambient-glow-surface" aria-label={t('history.title')} data-rail-reading-history>
+      <section className="rail-card" aria-label={t('history.title')} data-rail-reading-history>
         <div className="rail-card-title">
           <span className="inline-flex items-center gap-1.5">
             <Icon icon="ri:history-line" className="text-primary size-4 shrink-0" aria-hidden="true" />
@@ -150,18 +150,14 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
           </ul>
         ) : (
           <div className="empty-state-plate !gap-2 !px-3 !py-3.5 text-xs">
-            <svg width="34" height="34" viewBox="0 0 36 36" fill="none" className="text-primary/65" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 36 36" fill="none" className="text-primary/65" aria-hidden="true">
               <path
                 d="M11 7.5A2.5 2.5 0 0 1 13.5 5h9A2.5 2.5 0 0 1 25 7.5v22l-7-4.5-7 4.5v-22Z"
                 stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinejoin="round"
               />
-              <path
-                d="M18 19.5c-2.1-1.4-3.7-3.8-3.3-6.1.3-1.7 1.6-2.8 2.8-2.5l.5 1.1.5-1.1c1.2-.3 2.5.8 2.8 2.5.4 2.3-1.2 4.7-3.3 6.1Z"
-                fill="currentColor"
-                fillOpacity="0.28"
-              />
+              <path d="M15 12h6M15 16h6" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeOpacity="0.6" />
             </svg>
             <p className="text-muted-foreground leading-relaxed">{t('home.railHistoryEmptyHint')}</p>
             <a href="#home-content" className="text-primary inline-flex w-fit items-center gap-1 font-medium hover:underline">
@@ -174,7 +170,7 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
 
       {/* 3. Active Series Progress */}
       {primarySeries && seriesSummary && (
-        <section className="rail-card ambient-glow-surface" aria-label={t('series.progressTitle')}>
+        <section className="rail-card" aria-label={t('series.progressTitle')}>
           <div className="rail-card-title">
             <span className="inline-flex min-w-0 items-center gap-1.5">
               <Icon icon="ri:book-2-line" className="text-primary size-4 shrink-0" aria-hidden="true" />
@@ -185,7 +181,7 @@ export default function RightRailWidgets({ locale, primarySeries }: RightRailWid
 
           <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full" aria-hidden="true">
             <div
-              className="bg-gradient-shoka-button h-full rounded-full transition-[width] duration-300"
+              className="bg-primary h-full rounded-full transition-[width] duration-300"
               style={{ width: `${seriesSummary.percent}%` }}
             />
           </div>

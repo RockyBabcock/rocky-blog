@@ -14,11 +14,9 @@
   inset-block: 0.25rem;
   left: 0;
   z-index: -1;
-  border-radius: 0.5rem;
-  background-image: var(--gradient-shoka-button);
-  box-shadow:
-    0 6px 16px -8px rgb(233 84 107 / 0.55),
-    0 2px 6px -3px rgb(40 20 40 / 0.12);
+  border-radius: 0.375rem;
+  background: hsl(var(--primary));
+  box-shadow: 0 2px 8px -3px rgba(24, 27, 32, 0.24);
   pointer-events: none;
 }
 

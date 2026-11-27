@@ -36,7 +36,7 @@ const archivesHref = localizedPath('/archives', locale);
     <section aria-labelledby="home-timeline-heading" class="flex flex-col gap-4" data-home-timeline>
       <div class="editorial-section-head">
         <div class="editorial-section-title-group">
-          <EditorialKicker label="ARCHIVE" number={sectionNumber} variant="orbital" />
+          <EditorialKicker label="ARCHIVE" number={sectionNumber} variant="numbered" />
           <h2 id="home-timeline-heading" class="editorial-section-title">
             <Icon name="ri:calendar-schedule-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
             <span>{t(locale, 'home.timelineSection')}</span>
@@ -49,7 +49,7 @@ const archivesHref = localizedPath('/archives', locale);
         </a>
       </div>
 
-      <div class="decorative-dot-surface border-border/70 bg-card/70 flex flex-col gap-5 rounded-xl border p-5 md:p-4">
+      <div class="border-border bg-card flex flex-col gap-5 rounded-xl border p-5 md:p-4">
         {timelinePreview.map((group) => (
           <div class="flex flex-col gap-2">
             <div class="flex items-baseline justify-between gap-2">
@@ -57,9 +57,8 @@ const archivesHref = localizedPath('/archives', locale);
                 href={`${archivesHref}#year-${group.year}`}
                 class="text-foreground hover:text-primary inline-flex items-center gap-2 font-mono text-lg font-bold tracking-tight transition-colors tabular-nums"
               >
-                <span class="editorial-kicker-petal" aria-hidden="true" />
+                <span class="timeline-editorial-node" aria-hidden="true" />
                 <span>{group.year}</span>
-                <span class="celestial-star celestial-star-sm opacity-75" aria-hidden="true" />
               </a>
               <span class="text-muted-foreground text-xs tabular-nums">
                 {t(locale, 'post.yearPosts', { count: group.totalInYear })}

@@ -1,8 +1,8 @@
 /* ==========================================================================
  * Editorial Homepage & 3-Column Adaptive Layout
  *
- * Preserves Rocky Blog's signature sakura palette, silk-thread dividers,
- * light/dark surface pairing, and smooth header-following sticky behavior.
+ * Contemporary Editorial × Swiss-Inspired structure: crisp hairlines,
+ * restrained elevation, disciplined proportions, and smooth sticky rails.
  * ========================================================================== */
 
 /* ── Desktop Right Utility Rail (shown >= 1280px, clean reflow below) ── */
@@ -155,13 +155,14 @@
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  border-radius: 1rem;
-  border: 1px solid hsl(var(--border) / 0.65);
+  border-radius: 0.75rem;
+  border: 1px solid hsl(var(--border));
   background: hsl(var(--card));
-  box-shadow: 0 0.75rem 2rem -1.25rem rgb(20 10 28 / 0.18);
+  box-shadow: var(--ed-surface-shadow);
   transition:
-    transform var(--dur-slow) var(--ease-out-quart),
-    box-shadow var(--dur-slow) var(--ease-out-quart);
+    transform 220ms var(--ease-out-quart),
+    box-shadow 220ms var(--ease-out-quart),
+    border-color 220ms var(--ease-out-quart);
 }
 
 @media (max-width: 768px) {
@@ -173,24 +174,23 @@
 .featured-lead-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgb(18 11 26 / 0.9) 0%, rgb(18 11 26 / 0.56) 44%, rgb(18 11 26 / 0.16) 100%);
+  background: linear-gradient(to top, rgb(14 17 22 / 0.92) 0%, rgb(14 17 22 / 0.54) 46%, rgb(14 17 22 / 0.12) 100%);
   pointer-events: none;
 }
 
 .featured-lead-card img {
-  transition: scale 800ms var(--ease-out-expo);
+  transition: scale 450ms var(--ease-out-quart);
 }
 
 @media (hover: hover) {
   .featured-lead-card:hover {
-    transform: translateY(-0.2rem);
-    box-shadow:
-      0 1.25rem 2.5rem -1.25rem rgb(233 84 107 / 0.35),
-      0 0.5rem 1.25rem -0.75rem rgb(20 10 28 / 0.2);
+    transform: translateY(-2px);
+    border-color: hsl(var(--primary) / 0.45);
+    box-shadow: var(--ed-surface-shadow-hover);
   }
 
   .featured-lead-card:hover img {
-    scale: 1.045;
+    scale: 1.03;
   }
 }
 
@@ -206,14 +206,15 @@
   align-items: stretch;
   gap: 0.875rem;
   overflow: hidden;
-  border-radius: 0.875rem;
-  border: 1px solid hsl(var(--border) / 0.75);
+  border-radius: 0.75rem;
+  border: 1px solid hsl(var(--border));
   background: hsl(var(--card));
   padding: 0.75rem;
+  box-shadow: var(--ed-surface-shadow);
   transition:
-    border-color 220ms var(--ease-out-quart),
-    transform 260ms var(--ease-out-quart),
-    box-shadow 260ms var(--ease-out-quart);
+    border-color 180ms var(--ease-out-quart),
+    transform 200ms var(--ease-out-quart),
+    box-shadow 200ms var(--ease-out-quart);
 }
 
 .featured-sub-card[data-layout="vertical"] {
@@ -224,9 +225,9 @@
 
 @media (hover: hover) {
   .featured-sub-card:hover {
-    border-color: hsl(var(--primary) / 0.35);
-    transform: translateY(-0.125rem);
-    box-shadow: 0 0.75rem 1.5rem -1rem rgb(233 84 107 / 0.25);
+    border-color: hsl(var(--primary) / 0.45);
+    transform: translateY(-1px);
+    box-shadow: var(--ed-surface-shadow-hover);
   }
 }
 
@@ -263,16 +264,16 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  border: 1px solid hsl(var(--border) / 0.72);
-  border-radius: 0.9375rem;
-  background: hsl(var(--card) / 0.88);
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.75rem;
+  background: hsl(var(--card));
   padding: 0.9375rem 1rem;
-  box-shadow: 0 0.35rem 1.25rem -0.9rem rgb(20 10 28 / 0.12);
+  box-shadow: var(--ed-surface-shadow);
 }
 
 .dark .rail-card {
-  background: hsl(var(--card) / 0.82);
-  border-color: hsl(var(--border) / 0.85);
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
 }
 
 .rail-card-title {
@@ -394,32 +395,36 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  border: 1px solid rgb(255 255 255 / 0.3);
-  border-radius: 9999px;
-  background: rgb(22 12 28 / 0.26);
+  border: 1px solid rgb(255 255 255 / 0.28);
+  border-radius: 0.5rem;
+  background: rgb(16 19 24 / 0.42);
   padding: 0.45rem 0.95rem;
   color: #fff;
   font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   backdrop-filter: blur(8px);
-  text-shadow: 0 1px 2px rgb(16 8 20 / 0.4);
+  text-shadow: 0 1px 2px rgb(12 15 20 / 0.45);
   transition:
-    background-color 200ms var(--ease-out-quart),
-    border-color 200ms var(--ease-out-quart),
-    transform 200ms var(--ease-out-quart);
+    background-color 180ms var(--ease-out-quart),
+    border-color 180ms var(--ease-out-quart),
+    transform 180ms var(--ease-out-quart);
 }
 
 .hero-action-btn[data-primary="true"] {
-  border-color: rgb(255 255 255 / 0.45);
-  background: color-mix(in oklab, hsl(var(--primary)) 72%, rgb(20 10 24 / 0.3));
+  border-color: rgb(255 255 255 / 0.38);
+  background: hsl(var(--primary) / 0.88);
 }
 
 @media (hover: hover) {
   .hero-action-btn:hover {
-    border-color: rgb(255 255 255 / 0.65);
-    background: color-mix(in oklab, hsl(var(--primary)) 58%, rgb(20 10 24 / 0.35));
+    border-color: rgb(255 255 255 / 0.62);
+    background: rgb(16 19 24 / 0.65);
     transform: translateY(-1px);
+  }
+
+  .hero-action-btn[data-primary="true"]:hover {
+    background: hsl(var(--primary));
   }
 }
 

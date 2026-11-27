@@ -250,8 +250,8 @@ content:
 # -----------------------------------------------------------------------------
 motion:
   level: lively
-  heroPetals: true
-  clickBurst: true
+  heroPetals: false
+  clickBurst: false
 
 # =============================================================================
 # Post Actions

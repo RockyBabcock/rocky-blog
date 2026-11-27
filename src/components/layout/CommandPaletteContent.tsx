@@ -263,7 +263,7 @@ export default function CommandPaletteContent() {
             {isOpen && (
               <>
                 <m.div
-                  className="fixed inset-0 z-54 bg-[rgb(18_10_26/0.52)] backdrop-blur-[3px]"
+                  className="fixed inset-0 z-54 bg-[rgb(14_17_22/0.52)] backdrop-blur-[3px]"
                   initial={shouldReduceMotion ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, transition: { duration: shouldReduceMotion ? 0 : 0.16 } }}
@@ -284,7 +284,7 @@ export default function CommandPaletteContent() {
                     aria-label={t('command.title')}
                     onKeyDown={handleKeyDown}
                     data-command-palette
-                    className="bg-gradient-start text-foreground ring-primary/15 flex max-h-[78dvh] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-[0_2rem_4rem_-1.5rem_rgb(233_84_107/0.35),0_0.75rem_1.5rem_-0.75rem_rgb(20_10_28/0.3)] ring-1"
+                    className="modal-editorial-shell bg-popover text-foreground border-border flex max-h-[78dvh] w-full max-w-xl flex-col overflow-hidden rounded-xl border shadow-[0_24px_48px_-16px_rgb(15_20_28/0.24)]"
                     initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.98, y: -10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={

@@ -99,8 +99,10 @@ const timelineSectionNum = nextSectionNum();
       {hasFeaturedSection && <FeaturedShowcase posts={stickyPosts} locale={locale} sectionNumber={featuredSectionNum} />}
 
       {hasFeaturedSection && (
-        <div class="editorial-ornament-divider" aria-hidden="true">
-          <span class="editorial-ornament-petal" />
+        <div class="editorial-rule" aria-hidden="true">
+          <span class="editorial-rule-line" />
+          <span class="editorial-rule-mark" />
+          <span class="editorial-rule-line" />
         </div>
       )}
 
@@ -108,7 +110,7 @@ const timelineSectionNum = nextSectionNum();
       <section aria-labelledby="home-latest-heading" class="flex flex-col gap-4" data-home-latest>
         <div class="editorial-section-head">
           <div class="editorial-section-title-group">
-            <EditorialKicker label="WRITING" number={latestSectionNum} variant="magazine" />
+            <EditorialKicker label="WRITING" number={latestSectionNum} variant="numbered" />
             <h2 id="home-latest-heading" class="editorial-section-title">
               <Icon name="ri:quill-pen-line" class="text-primary size-5 shrink-0" aria-hidden="true" />
               <span>{t(locale, 'post.latestPosts')}</span>
@@ -133,27 +135,29 @@ const timelineSectionNum = nextSectionNum();
       </section>
 
       {hasSeriesSection && (
-        <div class="editorial-ornament-divider" data-variant="dots" aria-hidden="true">
-          <span class="editorial-ornament-diamond" />
+        <div class="editorial-rule" aria-hidden="true">
+          <span class="editorial-rule-line" />
+          <span class="editorial-rule-mark" />
+          <span class="editorial-rule-line" />
         </div>
       )}
 
       {/* 3. Series & Weekly Showcase */}
       {hasSeriesSection && <SeriesShowcase locale={locale} sectionNumber={seriesSectionNum} />}
 
-      <div class="editorial-ornament-divider" data-variant="celestial" aria-hidden="true">
-        <span class="celestial-divider-cluster">
-          <span class="celestial-divider-dot" />
-          <span class="celestial-star" />
-          <span class="celestial-divider-dot" />
-        </span>
+      <div class="editorial-rule" aria-hidden="true">
+        <span class="editorial-rule-line" />
+        <span class="editorial-rule-mark" />
+        <span class="editorial-rule-line" />
       </div>
 
       {/* 4. Explore Topics (Categories & Weighted Popular Tags) */}
       <ExploreTopics posts={allPosts} locale={locale} sectionNumber={topicsSectionNum} />
 
-      <div class="editorial-ornament-divider" data-variant="dots" aria-hidden="true">
-        <span class="editorial-ornament-diamond" />
+      <div class="editorial-rule" aria-hidden="true">
+        <span class="editorial-rule-line" />
+        <span class="editorial-rule-mark" />
+        <span class="editorial-rule-line" />
       </div>
 
       {/* 5. Editorial Timeline */}

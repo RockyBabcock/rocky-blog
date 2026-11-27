@@ -11,7 +11,7 @@ import { useStore } from '@nanostores/react';
 import { $readingHistory, initReadingHistory } from '@store/reading-history';
 import { useEffect, useMemo } from 'react';
 
-interface SeriesShowcaseProgressProps {
+export interface SeriesShowcaseProgressProps {
   locale: string;
   items: SeriesRouteItem[];
   seriesHref: string;
@@ -41,7 +41,7 @@ export default function SeriesShowcaseProgress({ locale, items, seriesHref }: Se
       </div>
       <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full" aria-hidden="true">
         <div
-          className="bg-gradient-shoka-button h-full rounded-full transition-[width] duration-300"
+          className="bg-primary h-full rounded-full transition-[width] duration-300"
           style={{ width: `${summary.percent}%` }}
         />
       </div>

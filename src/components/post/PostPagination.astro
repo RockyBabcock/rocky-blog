@@ -22,7 +22,7 @@ const href = (post: PostRef) => localizedPath(routeBuilder(Routes.Post, post), l
   (prevPost || nextPost) && (
     <nav class="post-pagination" aria-label={`${t(locale, 'post.prevPost')} / ${t(locale, 'post.nextPost')}`}>
       {prevPost ? (
-        <a href={href(prevPost)} class="post-pagination-card ambient-glow-surface" data-dir="prev" rel="prev">
+        <a href={href(prevPost)} class="post-pagination-card" data-dir="prev" rel="prev">
           <span class="post-pagination-label">
             <Icon name="ri:arrow-left-s-line" class="post-pagination-arrow" />
             {t(locale, 'post.prevPost')}
@@ -31,12 +31,11 @@ const href = (post: PostRef) => localizedPath(routeBuilder(Routes.Post, post), l
         </a>
       ) : (
         <div class="post-pagination-boundary md:hidden" data-dir="prev" aria-hidden="true">
-          <span class="editorial-kicker-petal opacity-50" />
           <span>—</span>
         </div>
       )}
       {nextPost ? (
-        <a href={href(nextPost)} class="post-pagination-card ambient-glow-surface" data-dir="next" rel="next">
+        <a href={href(nextPost)} class="post-pagination-card" data-dir="next" rel="next">
           <span class="post-pagination-label">
             {t(locale, 'post.nextPost')}
             <Icon name="ri:arrow-right-s-line" class="post-pagination-arrow" />
@@ -45,7 +44,6 @@ const href = (post: PostRef) => localizedPath(routeBuilder(Routes.Post, post), l
         </a>
       ) : (
         <div class="post-pagination-boundary md:hidden" data-dir="next" aria-hidden="true">
-          <span class="editorial-kicker-petal opacity-50" />
           <span>—</span>
         </div>
       )}
