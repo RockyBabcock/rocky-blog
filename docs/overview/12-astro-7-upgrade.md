@@ -61,4 +61,4 @@ pnpm preview
 
 ## 历史配置清理
 
-旧文档中关于 Umami、Docker、CMS、评论、RSS 和上游 CLI 的配置说明不代表当前产品功能。不要在本文件重新引入这些服务。RSS 的代码残留状态见 [产品范围](../PRODUCT-SCOPE.md)。
+旧文档中关于 Umami、Docker、CMS、评论、RSS 和上游 CLI 的配置说明不代表当前产品功能。RSS 已从当前代码中移除；不要重新引入。
