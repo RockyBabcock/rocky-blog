@@ -1,52 +1,64 @@
-# Astro 7 升级说明
+# 12 — Astro 7 运行环境与构建说明
 
-astro-koharu 使用 Astro 7、Vite 8 和 Rolldown，同时继续以纯静态构建作为默认交付方式。
-本次升级不启用 koharu-suite、Live Collections、动态路由或 Node adapter。
+本文记录当前 Rocky Blog 的运行基线和日常验证方式，不是 Docker 部署指南，也不是上游 astro-koharu 的迁移说明。
 
-## 用户需要知道的变化
+## 版本基线
 
-- Node.js 最低版本提高到 `22.20.0`，pnpm 固定为 `10.28.2`。
-- `astro-pagefind` 2 使用 Pagefind Component UI；搜索入口、三语界面和键盘导航保持可用。
-- Umami tracker 改由本地 Astro 组件输出，不再依赖只声明支持到 Astro 6 的第三方 integration。
-- Markdown 继续显式使用 Unified processor，HTML compression 继续开启。
-- `pnpm build` 的输出仍是可交给 nginx 或任意静态文件服务器的 `dist/`。
+以仓库锁文件和 package manifest 为准。当前主要版本声明：
 
-## 升级步骤
+- Astro：`7.1.3`
+- React：`19.2.x`
+- Tailwind CSS：`4.3.x`
+- Vite：`8.1.x`
+- Node.js：`>=22.20.0`
+- pnpm：`10.28.2`
+
+依赖升级需要一起检查 Astro integration、Vite plugin、Markdown pipeline、Pagefind、React islands 和静态输出。
+
+## 开发
 
 ```bash
 pnpm install --frozen-lockfile
+pnpm dev
+```
+
+## 验证与构建
+
+```bash
 pnpm lint
 pnpm check
+pnpm test
 pnpm build
+pnpm preview
 ```
 
-如果使用 Docker，继续运行原有命令：
+- `pnpm lint` 使用 Biome。
+- `pnpm check` 运行 Astro 检查。
+- `pnpm test` 执行核心 node:test 套件。
+- 浏览器专项测试单独执行，要求 Playwright 浏览器环境。
+- `pnpm build` 生成静态站点和 Pagefind 索引。
+- `pnpm preview` 用于本地检查生产产物。
 
-```bash
-pnpm docker:up
-```
+## 构建输出
 
-Bundle analysis 仍按需启用，报告会写入已忽略的 `.sonda/` 目录：
+默认输出为 `dist/`，由静态托管服务提供。运行站点不需要 Node adapter、长期运行的 Node server、Docker、容器编排或数据库。
 
-```bash
-ANALYZE=true pnpm build
-```
+## 环境变量与端口
 
-`config/site.yaml` 的内容、Umami 字段和静态部署入口不需要迁移。历史文章也没有数据迁移。
+开发服务器默认使用 3000 端口，可通过 `BLOG_PORT` 覆盖。其他环境变量和具体 Vite / Astro 行为以当前配置文件为准；不要在文档中臆造部署密钥或服务端配置。
 
-## 验证重点
+## 依赖升级检查点
 
-- 首页、文章、Pagefind 搜索与三语路由；
-- Markdown 扩展、Mermaid、Shiki 和加密内容；
-- Tailwind、YAML、SVGR、自定义 Vite plugin 与 Sonda analysis mode；
-- 浅色/暗色、桌面/移动布局；
-- static Docker build 和 nginx health check。
+升级核心依赖时至少验证：
 
-## 回滚
+- 首页、文章页、系列、分类、标签和归档路由。
+- 四种语言的路由镜像与翻译回退。
+- Pagefind 搜索。
+- GFM、Shiki、KaTeX、Mermaid、Infographic 和加密内容。
+- 浅色 / 深色主题、移动端抽屉、目录、阅读设置和 reduced-motion。
+- sitemap、robots、canonical、Open Graph 与 hreflang。
+- 静态输出目录和部署平台行为。
 
-本次升级没有数据库、内容或配置格式迁移。若上线后出现回归，revert Astro 7 升级 PR 的 squash
-merge commit，并按旧 lockfile 重新执行 `pnpm install --frozen-lockfile` 和静态构建即可。
+## 历史配置清理
 
-不要只降级 `astro` 而保留 Vite 8、`@astrojs/react` 6 或 `astro-pagefind` 2；这些依赖作为一组升级和回滚。
-
-参考：[Astro 7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/)。
+旧文档中关于 Umami、Docker、CMS、评论、RSS 和上游 CLI 的配置说明不代表当前产品功能。不要在本文件重新引入这些服务。RSS 的代码残留状态见 [产品范围](../PRODUCT-SCOPE.md)。
