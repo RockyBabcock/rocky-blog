@@ -97,8 +97,8 @@ data
       desc 支持 GFM、Mermaid、Infographic
       icon mdi/markdown
     - label 智能推荐
-      desc 基于语义相似度的文章推荐
-      icon mdi/brain
+      desc 本地收藏与待读状态管理
+      icon mdi:bookmark-multiple
 ```
 
 ### 水平箭头列表
@@ -390,7 +390,7 @@ data
 
 ## 图表类模板 (chart-\*)
 
-适合展示统计数据、数值对比等。
+适合展示统计数据、数值对比等。下文中的月份发布数量、访问来源比例等数值仅为**模拟示例数据**，不代表 Rocky Blog 的真实流量、统计分析或运营数据。当前产品没有接入访问统计服务。
 
 ### 柱状图
 
@@ -528,7 +528,7 @@ data
 
 ### 圆形图标关系
 
-使用 `relation-circle-icon-badge` 展示关系网络：
+使用 `relation-circle-icon-badge` 展示关系网络。以下企业名称、指标与数值均为**虚构的语法演示数据**，不代表真实企业或财务表现：
 
 ```infographic
 infographic relation-circle-circular-progress
