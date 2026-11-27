@@ -97,13 +97,11 @@ Rocky Blog 是一个以内容创作、阅读和发现为中心的个人静态博
 
 此外，产品不提供用户账号、云数据库、服务端阅读历史同步或跨设备云书架 / 收藏同步。当前的 Reading Shelf 是浏览器本地书架，不是云端书架。
 
-## 6. RSS 状态：产品已决定不保留，代码清理尚未完成
+## 6. RSS 状态：已从产品与代码中移除
 
-RSS 不属于 Rocky Blog 的目标产品功能。不要在 README、UI、配置示例或用户指南中把 RSS 写成受支持功能，也不要建议用户配置 RSS。
+RSS 已明确列为产品非目标，并已从当前代码中清理：RSS 构建路由、语言镜像、XSL 样式路由、helper、样式资源、依赖、配置入口和自动发现 metadata 均不再保留。不要重新添加 RSS UI、路由、依赖或订阅配置。
 
-**重要：当前仓库仍有历史 RSS 实现残留。** 在本次文档重写所依据的 `main` 基线中，仍能看到 RSS 页面、样式、工具、依赖、HeadMeta 自动发现、配置字段或链接等代码 / 配置引用。因此，不能声称 RSS 已经从代码中删除。本轮只统一文档并移除已核对的可见 About 页面 RSS 链接；完整 RSS 代码清理应作为独立代码变更执行，并检查构建、路由镜像、保留路由和 SEO。
-
-清理 RSS 时必须保留：canonical、Open Graph、Twitter metadata、hreflang、sitemap、robots 与 Pagefind。这些功能与 RSS 无关，不得一并删除。
+RSS 清理不影响其他 SEO 与索引能力。canonical、Open Graph、Twitter metadata、hreflang、sitemap、robots 与 Pagefind 均应继续保留。
 
 ## 7. 数据与安全边界
 
