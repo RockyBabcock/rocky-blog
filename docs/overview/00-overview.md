@@ -4,7 +4,7 @@
 
 Rocky Blog 是一个静态优先的个人博客，围绕内容呈现、文章阅读、系列组织、站内搜索和多语言访问构建。它不是包含账号、数据库和后台管理系统的在线出版平台。
 
-产品目标、视觉原则和非目标见 [PRODUCT-SCOPE.md](../PRODUCT-SCOPE.md)。本文说明当前代码结构。
+产品目标、视觉原则和非目标见 [PRODUCT-SCOPE.md](../PRODUCT-SCOPE.md)；当前实现、维护者优先级、验证证据和 Agent 交接规则见 [PROJECT-STATUS.md](../PROJECT-STATUS.md)。本文说明当前代码结构。
 
 ## 技术基线
 
