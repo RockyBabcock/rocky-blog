@@ -43,6 +43,10 @@ pnpm preview
 
 默认输出为 `dist/`，由静态托管服务提供。运行站点不需要 Node adapter、长期运行的 Node server、Docker、容器编排或数据库。
 
+### Vercel 静态部署
+
+当前 Astro 配置使用 `output: 'static'`，项目不包含 Vercel Serverless Function。Vercel 应自动识别 Astro 并部署静态构建产物；不要在 `vercel.json` 中保留指向不存在的 `api/` 文件的 `functions` glob。只有仓库确实添加并维护相应 API Function 后，才为其配置运行时选项。
+
 ## 环境变量与端口
 
 开发服务器默认使用 3000 端口，可通过 `BLOG_PORT` 覆盖。其他环境变量和具体 Vite / Astro 行为以当前配置文件为准；不要在文档中臆造部署密钥或服务端配置。
