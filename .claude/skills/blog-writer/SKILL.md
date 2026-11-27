@@ -9,6 +9,7 @@ description: 按 Rocky Blog 当前内容规范创建或规划 Markdown / MDX 文
 
 开始前阅读：
 - `docs/PRODUCT-SCOPE.md`
+- `docs/PROJECT-STATUS.md`
 - `GETTING-STARTED.md`
 - `src/content.config.ts`
 - `config/site.yaml`
@@ -221,18 +222,26 @@ UI 字典由 `src/i18n/` 管理，分类与系列显示文案在 `config/i18n-co
 
 ## 7. 产品边界
 
-不得在新文章、示例或配置说明中把以下功能描述为当前产品功能：
+### 已确认移除：不可作为当前能力或重新引入
 
 - CMS / 浏览器内写作室 / 文章管理后台。
 - 评论、友链、Moments、追番。
-- 全站音乐播放器、文章音视频播放器、LRC 歌词和播放列表。
+- 全站音乐播放器、播放列表。
 - Umami 或其他访问分析。
-- RSS 订阅（已从当前代码中移除，不得重新引入）。
-- AI 摘要、embedding / 语义相似推荐、随机推荐。
-- Quiz 测验、Tweet / X、CodePen 嵌入、外链 OG 预览。
-- Docker 部署或 Koharu CLI。
+- RSS 订阅（已从当前代码中移除）。
+- AI 摘要、embedding / 向量索引与语义相似推荐。
 
-阅读历史、读者设置、系列进度和 Reading Shelf 收藏是浏览器本地功能，不提供账号、云数据库或跨设备同步。
+### 当前未实现或仍待维护者决策：不得擅自建设
+
+- 公告模块、Quiz / 交互式练习、随机推荐。
+- 文章音视频嵌入、自定义播放器、LRC 歌词或文章媒体播放列表。
+- Tweet / X、CodePen 嵌入和外链 OG 预览卡片。
+- Docker 部署、Koharu CLI、圣诞 / 季节性主题效果。
+- 本地字体文件扫描与任意字体上传、Colophon 元数据系统。
+
+普通文章仍可包含外部链接或以文字形式介绍媒体 / 测验；这不代表网站提供媒体播放器、嵌入式社交组件或 Quiz 产品模块。具体决策状态以 `docs/PRODUCT-SCOPE.md` 和 `docs/PROJECT-STATUS.md` 为准。
+
+阅读历史、读者设置、系列进度和 Reading Shelf 收藏是浏览器本地功能，不提供账号、云数据库或跨设备同步。现有周刊 / 系列、KaTeX、Mermaid、Infographic 与静态加密能力必须保持可用，未来扩展或移除前先取得维护者决策。
 
 ## 8. 最后检查
 
