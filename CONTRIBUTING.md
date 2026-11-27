@@ -1,37 +1,54 @@
 # 贡献指南
 
-感谢你参与 astro-koharu。功能问题与建议可以提交到 [Issues](https://github.com/cosZone/astro-koharu/issues)。
+感谢你为 Rocky Blog 提交修复、文档或改进。贡献内容应符合 [产品范围](./docs/PRODUCT-SCOPE.md)，并以当前代码为准；不要从过期教程中恢复已决定移除的功能。
 
-## 开始开发
+## 开始之前
 
-先按 [README](./README.md#本地启动)安装依赖。开发约定见 [AGENTS.md](./AGENTS.md)，架构说明见 [docs/overview](./docs/overview/00-overview.md)。
+1. 阅读 [README](./README.md)、[快速开始](./GETTING-STARTED.md) 和 [AGENTS.md](./AGENTS.md)。
+2. 检查现有 issue / PR，避免重复工作。
+3. 确认提案属于保留范围；改变明确非目标需要维护者重新决策。
 
-新改动使用独立 feature 分支，PR 以 `dev` 为 base。提交信息使用聚焦的 Conventional Commit 标题，例如 `docs: clarify writing room setup`。
+默认分支是 `main`。常规贡献请从最新 `main` 创建短期分支，并以 `main` 为 PR base。未经维护者明确要求，不要直接推送到 `main`。
 
-## 验证与 PR
+## 变更原则
 
-按改动范围执行相关检查：
+- **静态优先：** 默认在构建阶段完成工作，不引入不必要的后端、数据库、账号或云服务。
+- **保持边界：** Astro 负责路由与静态内容；React 只用于确实需要客户端交互的 islands。
+- **保留既有模块：** 优化或扩展时，不要无故删除内容模块或降低信息量。
+- **一致的国际化：** UI 文案同步维护中文、英语、日语、法语；不要新增韩语。
+- **视觉系统统一：** 复用 tokens、排版和间距体系；避免动漫 / kawaii 风格、无目的玻璃拟态和随机色值。
+- **可访问性：** 支持键盘、焦点、合适语义结构、减少动态效果和移动端触控。
+- **安全边界：** 不把构建期加密称作服务器鉴权；不把 localStorage 称作云同步。
+
+## 本地检查
+
+按改动范围执行检查。运行时代码变更应尽可能运行：
 
 ```bash
-pnpm lint:fix
+pnpm lint
 pnpm check
 pnpm test
-pnpm knip
 pnpm build
 ```
 
-可以用 `package.json` 中对应的 `test:*` 命令运行受影响的测试。文档改动检查 Markdown、相对链接、锚点和命令是否与当前实现一致；无需为纯文档变更启动应用构建。
+涉及依赖或入口时可补充运行 `pnpm knip`。浏览器专项测试包括 `pnpm test:motion:browser`、`pnpm test:diagram:browser`、`pnpm test:search:browser`，这些测试需要相应 Playwright 浏览器环境。
 
-PR 说明用户可见的变化、实际运行的检查和剩余验证缺口。涉及界面的改动附桌面与手机截图或录屏；涉及配置、迁移、性能或 i18n 时说明影响。公开示例与截图使用虚构内容，不提交 `.env` 或私有博客数据。
+文档-only 改动至少检查 Markdown 结构、相对链接、命令、文件路径和功能描述。修改文章时还要检查 frontmatter schema 和内容 lint。不要声称执行过未运行的检查；在 PR 描述中列出实际命令和结果。
 
-## 构建缓存
+## 提交与 PR
 
-`.cache/og-data.json` 有意提交到 Git，缓存链接嵌入抓取的 OG 元数据（标题、描述、图片等）。Vercel、Netlify 等构建可以复用缓存，减少外部请求。不要将它加入 `.gitignore`，也不要把无关缓存变化混入 PR。
+建议使用 Conventional Commit 风格：
 
-`.cache/` 下其他文件（如 transformers 模型缓存）仍被忽略。链接嵌入的配置与缓存细节见[链接嵌入指南](./docs/features/link-embedding.md)。
+- `docs: align product documentation`
+- `fix: preserve reading history on route change`
+- `feat: refine article reading controls`
 
-## README 与截图
+PR 应说明变更目的、用户可见影响、修改范围、实际检查结果、未覆盖的验证和潜在风险。涉及 UI 时附桌面与移动端截图。不要提交密钥、个人访问令牌、私有内容或无关构建产物。
 
-中、英、日 README 保持相同章节顺序与功能表结构，翻译采用各语言自然的表达。新增事实先核对源码与配置；详细操作放进功能指南，再从 README 链接过去。
+## 文档维护
 
-保留现有品牌图、演示与 Star History。新功能概览图的构图、文案和交付要求见[设计说明](./docs/design/readme-visual-brief.md)。
+产品决策改变时，先更新产品范围，再同步 README、配置说明、用户指南、各语言文档和测试。`docs/performance/` 中带日期的报告属于历史记录；保留原始数据与日期，不要把历史路由当作当前功能清单。
+
+## 历史残留
+
+RSS 已被决定不纳入产品范围，但当前代码仍有旧实现残留。不要继续扩展 RSS，也不要在普通功能 PR 中随手删除相关代码。完整清理应作为独立变更，并确认 sitemap、robots、canonical、Open Graph、hreflang 和 Pagefind 不受影响。
