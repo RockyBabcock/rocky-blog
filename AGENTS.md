@@ -25,13 +25,32 @@ Do not treat an old tutorial, screenshot, changelog entry, or performance report
 - Chinese, English, Japanese, and French UI / routing support.
 - canonical, Open Graph, hreflang, sitemap, robots, and Pagefind.
 
-## 3. Do not reintroduce without an explicit decision
+## 3. Confirmed removals and pending decisions
 
-Friends / links, Writing Room, CMS / admin dashboard, global music player or playlist, Bangumi tracker, Moments, Christmas effects, comments, Umami or other analytics, Koharu CLI, Docker deployment, announcements, Tweet / X embeds, CodePen embeds, random or semantic recommendations, local font-file picker, Colophon metadata, AI summaries, embedding-based similarity, custom article audio / video players, LRC lyrics, media playlists, quizzes, and external-link OG preview cards.
+### Confirmed removals — do not reintroduce
 
-The product has no user accounts, cloud database, cloud bookshelf, or server-side reading-history sync.
+- Friends / friend links.
+- Writing Room, browser-based editor, CMS / admin dashboard, and article-management console.
+- Site-wide music player and playlists.
+- Bangumi tracker.
+- Moments.
+- Comments.
+- Umami or other analytics / visitor-behavior tracking.
+- AI article summaries.
+- Embedding / vector-index semantic-similarity recommendations.
 
-RSS is a product non-goal and has been removed from the current codebase, including feed routes, locale mirrors, XSL/helper files, styles, package dependency, configuration hooks, and autodiscovery metadata. Do not reintroduce RSS UI, routes, dependencies, or subscription configuration. Preserve canonical, Open Graph, hreflang, sitemap, robots, and Pagefind.
+RSS is also fully removed from the product and current codebase, including feed routes, locale mirrors, XSL/helper files, styles, package dependency, configuration hooks, and autodiscovery metadata. Do not reintroduce RSS UI, routes, dependencies, or subscription configuration. Preserve canonical, Open Graph, hreflang, sitemap, robots, and Pagefind.
+
+### Pending decisions — do not implement or delete on your own
+
+See [docs/PROJECT-STATUS.md](./docs/PROJECT-STATUS.md) and [docs/PRODUCT-SCOPE.md](./docs/PRODUCT-SCOPE.md) for the decision matrix. In particular:
+
+- Weekly / series pages exist today. Keep current routes, homepage modules, and progress behavior; future direction is pending. Do not remove them.
+- KaTeX, Mermaid, Infographic, and full / partial AES-256-GCM static encryption exist today. Preserve current behavior; removal, replacement, or major expansion requires a maintainer decision.
+- Announcements, Quiz / interactive exercises, native media embeds, custom audio / video players, LRC, Koharu CLI, Docker, seasonal / Christmas effects, random recommendations, Tweet / X, CodePen, external OG preview cards, Colophon, and local font-file picker are not approved as new work. Do not implement these unless the maintainer explicitly approves a defined scope.
+- The project has no user accounts, cloud database, cloud bookshelf, or server-side reading-history sync.
+
+**Important:** “not currently implemented”, “pending decision”, and “confirmed removed” are different states. Never describe a pending item as a maintainer-confirmed deletion. Never remove an existing capability just because its future priority is pending.
 
 ## 4. Visual direction
 
