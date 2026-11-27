@@ -245,6 +245,6 @@ UI 字典由 `src/i18n/` 管理，分类与系列显示文案在 `config/i18n-co
 5. 检查代码示例、命令、链接和数据是否真实。
 6. 运行相关内容检查；必要时运行 `pnpm lint`、`pnpm check` 和 `pnpm build`。
 7. 不要声称运行过未执行的验证。
-8. 如需信息图，使用仓库的 infographic skills；不要为了插图而编造统计数据。
+8. 博客文章需要嵌入信息图时，使用 `infographic-syntax-creator` 生成当前 Markdown 管线支持的 AntV Infographic syntax，并按文章写作规范放入 Markdown；不要调用标记为不适用的旧 Item / Structure / Template skills，也不要为了插图而编造统计数据。若用户要求独立 HTML / SVG 信息图文件，再按独立文件工作流处理，不要把该流程混入站点正文管线。
 
 保持文章本身可读、准确和有用。视觉组件是辅助，不应取代内容质量。
