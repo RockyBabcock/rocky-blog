@@ -1,68 +1,88 @@
 ---
-title: astro-koharu へようこそ
+title: Rocky Blog へようこそ
 link: getting-started
 catalog: true
 date: 2024-01-01 00:00:00
-description: astro-koharu ブログテーマへようこそ！Astro で構築されたモダンなブログシステムで、エレガントなインターフェースと豊富な機能を備えています。
+description: Astro、React、Tailwind CSS で構築した静的な個人ブログ Rocky Blog の紹介です。
 tags:
   - 入门
   - Astro
 categories:
   - 工具
 sticky: true
+translationKey: getting-started
 ---
 
-astro-koharu ブログテーマへようこそ！
+**Rocky Blog** へようこそ。文章を書くこと、読むこと、コンテンツを見つけることを中心にした静的な個人ブログです。
 
-## このテーマについて
+## プロジェクトについて
 
-astro-koharu は Astro 7.x をベースにしたモダンなブログシステムで、Hexo の Shoka テーマにインスピレーションを受けています。主な特徴：
+Rocky Blog は Astro 7、React 19、TypeScript、Tailwind CSS 4 で構築されています。静的生成を基本とし、必要な操作だけをクライアント側で動かします。デザインは上質なエディトリアルレイアウト、現代的な雑誌のタイポグラフィ、桜・植物・星空をモチーフにした控えめなディテールを組み合わせています。
 
-- **高パフォーマンス** - Astro による静的サイト生成で、超高速な読み込みを実現
-- **エレガントなデザイン** - アニメ風の美学とピンク＆ブルーの配色
-- **豊富な機能** - マルチレベルカテゴリー、タグ、目次、検索など
-- **レスポンシブ** - デスクトップとモバイルに完璧に対応
+主な機能：
+
+- トップページの編集的なコンテンツセクション、記事、カテゴリー、タグ、アーカイブ、シリーズ。
+- Pagefind による静的検索、コマンドパレット、ローカル読書履歴、続きを読む導線。
+- ライト / ダークテーマ、読書設定、集中モード、目次。
+- GFM、Shiki、KaTeX、Mermaid、Infographic、Shoka 形式の Markdown 拡張。
+- 中国語、英語、日本語、フランス語の UI。
+- 静的 SEO metadata と静的ホスティング。
+
+CMS、コメント、アクセス解析、サイト全体の音楽プレーヤー、RSS、AI 要約、読書履歴のクラウド同期は提供しません。詳細はリポジトリの Product Scope を参照してください。
+
+## パーソナル読書棚
+
+対応する記事カードや記事ページから記事を保存し、`/shelf` で管理できます。「未読」「読書中」「読了」の絞り込み、検索、並べ替え、グリッド / リスト表示に対応しています。保存した記事と読書履歴は現在のブラウザー内に保存され、デバイス間では同期されません。
 
 ## クイックスタート
 
-### 1. ブログを設定
+必要な環境：Node.js `>=22.20.0`、pnpm `10.28.2`。
 
-`config/site.yaml` ファイルを編集：
-
-```yaml
-site:
-  title: あなたのブログ名
-  author: あなたの名前
-  description: ブログの説明
-  # ...その他のオプション
+```bash
+git clone https://github.com/RockyBabcock/rocky-blog.git
+cd rocky-blog
+pnpm install
+pnpm dev
 ```
 
-### 2. 最初の投稿を書く
+開発サーバーのデフォルトポートは 3000 です。変更する場合は `BLOG_PORT` を設定してください。
 
-`src/content/blog/` ディレクトリに Markdown ファイルを作成：
+## 最初の記事を書く
+
+`src/content/blog/` に Markdown ファイルを作成します。
 
 ```markdown
 ---
-title: 初めての投稿
-date: 2024-01-01
+title: はじめての記事
+description: 短い紹介文
+date: 2026-11-27
+link: my-first-post
 tags:
-  - タグ1
+  - Astro
 categories:
-  - カテゴリー名
+  - 笔记
 ---
 
-投稿の内容...
+ここから本文を書きます。
 ```
 
-### 3. デプロイ
+コンテンツ schema は `src/content.config.ts` に定義されています。主なフィールドは `title`、`date`、`description`、`link`、`updated`、`cover`、`tags`、`categories`、`sticky`、`draft`、`catalog`、`tocNumbering`、`math`、`password`、`keywords`、`translationKey` です。
 
-Vercel で簡単にデプロイ：
+## 翻訳記事
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cosZone/astro-koharu)
+デフォルト言語は中国語です。翻訳記事はデフォルト記事と同じ相対パスを `en/`、`ja/`、`fr/` の下に作成します。`link` と必要に応じて `translationKey` を揃えてください。
 
-## さらに詳しく
+UI が4言語に対応していても、すべての記事に4つの翻訳があるとは限りません。翻訳がない場合はサイトのフォールバック動作が適用されます。
 
-- [Markdown 機能デモ](/ja/post/markdown-features) ですべての Markdown 拡張機能をチェック
-- [使い方ガイド](/ja/post/astro-koharu-guide) で詳細な設定方法を確認
+## 設定とデプロイ
 
-ブログをお楽しみください！
+`config/site.yaml` でサイト名、ドメイン、タイムゾーン、言語、ナビゲーション、カテゴリー、シリーズ、モーションを設定します。カテゴリーやシリーズの翻訳は `config/i18n-content.yaml` にあります。
+
+`pnpm build` を実行すると `dist/` が生成されます。GitHub Pages、Vercel、Netlify、Cloudflare Pages などの静的ホスティングサービスに配置してください。アプリケーションサーバーやデータベースは必要ありません。
+
+## 詳細情報
+
+- [Rocky Blog 利用ガイド](/ja/post/astro-koharu-guide)
+- [Markdown 機能デモ](/ja/post/markdown-features)
+- [アーカイブ](/ja/archives)
+- [GitHub リポジトリ](https://github.com/RockyBabcock/rocky-blog)
