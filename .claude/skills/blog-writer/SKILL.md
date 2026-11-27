@@ -227,7 +227,7 @@ UI 字典由 `src/i18n/` 管理，分类与系列显示文案在 `config/i18n-co
 - 评论、友链、Moments、追番。
 - 全站音乐播放器、文章音视频播放器、LRC 歌词和播放列表。
 - Umami 或其他访问分析。
-- RSS 订阅（产品已决定不保留；旧代码残留尚待独立清理）。
+- RSS 订阅（已从当前代码中移除，不得重新引入）。
 - AI 摘要、embedding / 语义相似推荐、随机推荐。
 - Quiz 测验、Tweet / X、CodePen 嵌入、外链 OG 预览。
 - Docker 部署或 Koharu CLI。
