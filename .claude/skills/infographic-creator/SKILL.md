@@ -10,6 +10,8 @@ An infographic (Infographic) transforms data, information, and knowledge into pe
 
 This skill is for creating a **standalone infographic artifact** when the user explicitly asks for a separate HTML / SVG deliverable. It is not the default workflow for adding an infographic to an article.
 
+Before modifying repository files, read `AGENTS.md`, `docs/PRODUCT-SCOPE.md`, and `docs/PROJECT-STATUS.md`. This skill does not authorize expanding the blog's runtime architecture or reintroducing a removed product feature.
+
 - For an infographic embedded in a Rocky Blog Markdown article, use `infographic-syntax-creator` and the existing `@antv/infographic` Markdown integration.
 - Do not add a separate runtime script, unpkg CDN dependency, remote asset loader, React item registry, or new UI framework to the blog merely to render one article infographic.
 - Do not create files under nonexistent `src/designs/`, `src/templates/`, or `site/` directories based on inherited skills.
