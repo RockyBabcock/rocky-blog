@@ -104,6 +104,7 @@ categories:
 | --- | --- |
 | [产品范围](./docs/PRODUCT-SCOPE.md) | 保留功能、非目标、设计方向与安全边界 |
 | [项目状态与 Agent 交接](./docs/PROJECT-STATUS.md) | 维护者需求、当前实现状态、验证基线和 Agent 工作流程 |
+| [前端设计实施 Prompt](./docs/FRONTEND-DESIGN-PROMPT.md) | 面向 AI Studio / Gemini / Claude / Copilot 的视觉设计与实施规范 |
 | [快速开始](./GETTING-STARTED.md) | 安装、配置、写作、翻译与部署 |
 | [完整使用指南](./src/content/blog/tools/astro-koharu-guide.md) | 面向站点维护者的操作手册 |
 | [架构总览](./docs/overview/00-overview.md) | 代码结构与系统边界 |
