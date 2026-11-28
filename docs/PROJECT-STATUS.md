@@ -125,6 +125,7 @@ Rocky Blog 是一个以内容创作、阅读和发现为中心的**高视觉表�
 | --- | --- | --- |
 | 文档与 Agent 规则一致性 | **本次审查已完成**；后续随实现变更持续维护 | 产品范围、状态记录、Agent 入口、贡献指南、架构文档和专项 Skill 必须保持一致 |
 | 首页和主要页面的视觉丰富度 | 持续优化目标 | 以真实页面为对象逐模块改进；不得宣称已完成最终视觉验收 |
+| 前端设计执行规范 | 已建立统一 Prompt | 所有 Agent 在视觉任务前读取 `docs/FRONTEND-DESIGN-PROMPT.md`，并按实际组件实施和验证 |
 | 四种语言的 UI 完整性 | 已有四套字典，持续回归 | 新增文案时同步四种语言；文章译文逐篇核实 |
 | 真实浏览器 / 移动端回归 | 需要按变更范围执行 | CI 绿色不等于浏览器专项测试通过 |
 | 规范 URL / 域名 | **需要维护者确认** | `config/site.yaml` 当前 `site.url` 为 `https://rockybabcock.github.io`，GitHub 仓库 Homepage 元数据为 `https://rocky-blog.vercel.app`。两者不同；canonical、sitemap、OG 绝对 URL 会受影响。不要推测哪一个才是最终主域名，也不要自行替换，需由维护者确认 |
@@ -178,7 +179,7 @@ Agent 必须区分“维护者明确删除”“当前代码已有”“当前�
 
 1. 根据所使用的工具选择入口上下文：通用 Agent 使用 `AGENTS.md`；Gemini / Google AI Studio 使用 `GEMINI.md`；Claude Code 使用 `CLAUDE.md`；GitHub Copilot 使用 `.github/copilot-instructions.md`。这些入口都指向同一套仓库规范。若平台不会自动读取对应文件，应在任务开始时主动提供或打开该文件及 `docs/PRODUCT-SCOPE.md`、`docs/PROJECT-STATUS.md`，不得假设平台已经加载。
 2. 读取本文和 [PRODUCT-SCOPE.md](./PRODUCT-SCOPE.md)。
-3. 根据任务继续阅读相应架构文档；例如内容任务阅读 `02-content-system.md`，路由 / 语言任务阅读 `03-routing.md` 与 `11-i18n-and-seo.md`，视觉任务阅读 `05-ui-components.md`、`07-theme-system.md`、`08-animation-system.md` 和 `09-styling.md`。
+3. 根据任务继续阅读相应架构文档；例如内容任务阅读 `02-content-system.md`，路由 / 语言任务阅读 `03-routing.md` 与 `11-i18n-and-seo.md`。所有前端 / 首页 / 样式 / 视觉任务还必须先读 [FRONTEND-DESIGN-PROMPT.md](./FRONTEND-DESIGN-PROMPT.md)，并结合 `05-ui-components.md`、`07-theme-system.md`、`08-animation-system.md` 和 `09-styling.md` 执行。
 4. 检查当前分支、HEAD、相关实现和测试；不要只依赖历史聊天、旧截图或旧提交。
 
 ### 实施任务时
