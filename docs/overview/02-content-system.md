@@ -67,7 +67,7 @@ src/content/blog/
 
 `sticky` 控制文章置顶排序。`draft` 标记草稿，开发预览和生产构建由当前内容选择逻辑决定。`catalog` 控制目录生成；`tocNumbering` 控制目录编号。
 
-文章通过维护 Markdown / MDX 文件并重新构建发布。当前产品不提供 CMS 后台或浏览器内写作室。
+文章由外部 MuseAI 工作流撰写和翻译，再以 Markdown / MDX 文件加入 `src/content/blog/`，经 `src/content.config.ts` 校验后静态构建发布。MuseAI 是仓库指定的唯一内容生产代理；站点不提供 CMS、浏览器写作室、原始 Markdown 源码操作或本地编辑器集成。完整的 Muse 规范、Prompt 与上传检查见 [docs/muse/README.md](../muse/README.md)。
 
 ## 系列 / 周刊
 

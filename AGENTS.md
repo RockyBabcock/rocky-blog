@@ -30,7 +30,7 @@ Do not treat an old tutorial, screenshot, changelog entry, or performance report
 ### Confirmed removals — do not reintroduce
 
 - Friends / friend links.
-- Writing Room, browser-based editor, CMS / admin dashboard, and article-management console.
+- Writing Room, browser-based editor, CMS / admin dashboard, article-management console, and Blog Writer coding-agent Skill (MuseAI is the sole authoring agent).
 - Site-wide music player and playlists.
 - Bangumi tracker.
 - Moments.
@@ -38,6 +38,7 @@ Do not treat an old tutorial, screenshot, changelog entry, or performance report
 - Umami or other analytics / visitor-behavior tracking.
 - AI article summaries.
 - Embedding / vector-index semantic-similarity recommendations.
+- Raw Markdown source copy / download actions, public `.md` source routes, and local editor deep links (VS Code / Cursor / Zed). These are authoring conveniences, not reader features.
 
 RSS is also fully removed from the product and current codebase, including feed routes, locale mirrors, XSL/helper files, styles, package dependency, configuration hooks, and autodiscovery metadata. Do not reintroduce RSS UI, routes, dependencies, or subscription configuration. Preserve canonical, Open Graph, hreflang, sitemap, robots, and Pagefind.
 
@@ -76,6 +77,16 @@ Supported locales are exactly:
 - `fr` — French, `/fr/`.
 
 Do not add Korean. UI copy changes should update all four dictionaries where applicable. Article translations are content files and may be incomplete; do not label fallback content as translated.
+
+## MuseAI content workflow
+
+MuseAI is the maintainer-designated and sole article authoring / translation agent. It operates outside this website repository; it is not a site runtime dependency or a CMS.
+
+- For content schema, article paths, locale mirrors, supported Markdown syntax, editorial rules, upload checks, and prompts, read [`docs/muse/README.md`](./docs/muse/README.md) and its linked specifications.
+- The canonical authoring output is complete Markdown / MDX files plus any real media assets. The site validates and renders those files; it does not author, edit, or manage them through a browser UI.
+- Do not reintroduce the deleted Blog Writer Skill, local editor launch links, raw Markdown copy / download UI, `.md` source routes, or CMS-like authoring utilities.
+- Coding agents may validate or repair content only when the maintainer explicitly asks. Keep code changes to the content schema / renderer separate from content authoring; never invent frontmatter fields or categories to accommodate a generated article.
+- If content conventions change, update `docs/muse/`, `src/content.config.ts` / configuration as necessary, and the related architecture documentation together.
 
 ## 6. Architecture
 

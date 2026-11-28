@@ -12,13 +12,11 @@ import { DEFAULT_TIMEZONE, isValidTimezone } from '../timezone';
 import { normalizeContentConfig } from './content';
 import { enabledFeaturedSeriesSlugs, normalizeFeaturedSeries } from './featured-series';
 import { normalizeMotionConfig } from './motion';
-import { normalizePostActionsConfig } from './post-actions';
 import { RESERVED_ROUTES } from './reserved-routes';
 import {
   buildSeoConfig,
   type IcpConfig,
   normalizeDefaultCoverList,
-  normalizeDevConfig,
   normalizeI18nConfig,
   normalizeIcpConfig,
   normalizeNavigation,
@@ -26,7 +24,6 @@ import {
   type SeoSummaryConfig,
 } from './site-sections';
 import type {
-  DevConfig,
   I18nConfig,
   ResolvedContentConfig,
   ResolvedMotionConfig,
@@ -63,8 +60,6 @@ export const contentConfig: ResolvedContentConfig = normalizeContentConfig(yamlC
 
 /** Default motion level and sakura effect switches with field-level defaults applied. */
 export const motionConfig: ResolvedMotionConfig = normalizeMotionConfig(yamlConfig.motion);
-
-export const postActionsConfig = normalizePostActionsConfig(yamlConfig.postActions);
 
 /**
  * Site timezone in IANA format.
@@ -108,4 +103,3 @@ export const defaultCoverList: string[] = normalizeDefaultCoverList(yamlConfig.d
 
 export const routers: RouterItem[] = normalizeNavigation(yamlConfig.navigation);
 
-export const devConfig: DevConfig = normalizeDevConfig(yamlConfig.dev);

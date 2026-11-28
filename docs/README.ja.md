@@ -2,7 +2,7 @@
 
 **言語：** [中文](../README.md) · [English](./README.en.md) · **日本語**
 
-Rocky Blog は、文章の執筆・読書・コンテンツの発見を中心にした静的な個人ブログです。**Astro 7、React 19、TypeScript、Tailwind CSS 4** を採用し、静的生成を基本として必要な箇所だけをインタラクティブにしています。デザイン方針は **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestial Details**。編集的なタイポグラフィと明確な情報階層を軸に、桜・植物・星空のモチーフを控えめに取り入れます。
+Rocky Blog は、外部の MuseAI ワークフローが作成する記事を読むことと、コンテンツを発見することを中心にした静的な個人ブログです。**Astro 7、React 19、TypeScript、Tailwind CSS 4** を採用し、静的生成を基本として必要な箇所だけをインタラクティブにしています。デザイン方針は **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestial Details**。編集的なタイポグラフィと明確な情報階層を軸に、桜・植物・星空のモチーフを控えめに取り入れます。
 
 このリポジトリは Rocky Blog として独立して保守されています。上流プロジェクトの説明ではなく、本リポジトリの実装と製品範囲を基準にしてください。
 
@@ -64,18 +64,21 @@ pnpm dev
 | `pnpm knip` | 未使用ファイル・依存関係の検出 |
 | `pnpm generate:lqips` | 低品質画像プレースホルダーの生成 |
 
-## 記事と設定
+## MuseAI コンテンツの取り込み
 
-記事は `src/content/blog/` に Markdown で作成します。デフォルトは中国語で、英語・日本語・フランス語の翻訳はそれぞれ `en/`、`ja/`、`fr/` の下に配置します。
+Rocky Blog の記事は外部の MuseAI ワークフローで作成・翻訳します。このリポジトリには CMS、ブラウザー内エディター、記事管理画面、ローカルエディター連携はありません。Muse は検証済みの Markdown / MDX ファイルと実在する画像などのリソースを納品し、サイト側で schema 検証と静的生成を行います。
 
-サイト名、作者、言語、ナビゲーション、シリーズ、テーマ、モーションは `config/site.yaml` で設定します。カテゴリーやシリーズの翻訳は `config/i18n-content.yaml`、記事のスキーマは `src/content.config.ts` が定義します。
+まず [Muse コンテンツ規約](./muse/README.md) を確認してください。Frontmatter schema、実際のディレクトリとカテゴリー対応、4言語の配置、対応 Markdown 構文、編集基準、アップロードチェックリスト、新規記事・翻訳・レビュー用 Prompt をまとめています。
 
-`pnpm build` で生成される `dist/` を GitHub Pages、Vercel、Netlify、Cloudflare Pages などの静的ホスティングサービスに配置してください。アプリケーションサーバーやデータベースは不要です。
+コンテンツのルートは `src/content/blog/` です。中国語の原稿はカテゴリー別ディレクトリに置き、翻訳は同じ相対パスを `en/`、`ja/`、`fr/` の下に複製します。サイト名、言語、ナビゲーション、シリーズ、テーマ、モーションは `config/site.yaml` で設定します。
+
+`pnpm build` で `dist/` を生成し、静的ホスティングサービスに公開します。アプリケーションサーバーやデータベースは不要です。
 
 ## ドキュメント
 
 - [製品範囲](./PRODUCT-SCOPE.md)
 - [フロントエンドデザイン実装 Prompt](./FRONTEND-DESIGN-PROMPT.md)
+- [Muse コンテンツ規約](./muse/README.md)
 - [プロジェクト状況と Agent 引き継ぎ](./PROJECT-STATUS.md)
 - [クイックスタート](../GETTING-STARTED.md)
 - [アーキテクチャ概要](./overview/00-overview.md)

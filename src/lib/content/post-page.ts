@@ -1,34 +1,15 @@
 /**
  * Pure helper functions for post detail page metadata, SEO structured data,
- * breadcrumb generation, and dev-only local editor deep links.
+ * math detection, breadcrumb generation, and SEO structured data.
  *
  * Kept free of `astro:content` and YAML imports for direct `node:test` coverage.
  */
 
-import type { DevConfig } from '@lib/config/types';
-import { getLocalEditorHref } from './post-source';
-
-const BLOG_CONTENT_ROOT = 'src/content/blog/';
 const LATEX_MATH_PATTERN = /\$|\\\(|\\\[/;
 
 export interface BreadcrumbItem {
   name: string;
   link: string;
-}
-
-export interface LocalEditorLink {
-  id: string;
-  name: string;
-  icon: string;
-  href: string;
-}
-
-/**
- * Extract the path of a blog post relative to `src/content/blog/`.
- */
-export function getPostRelativePath(filePath?: string): string | undefined {
-  const normalized = filePath?.replaceAll('\\', '/');
-  return normalized?.startsWith(BLOG_CONTENT_ROOT) ? normalized.slice(BLOG_CONTENT_ROOT.length) : undefined;
 }
 
 /**
@@ -140,19 +121,4 @@ export function buildBreadcrumbJsonLd(params: {
     '@type': 'BreadcrumbList',
     itemListElement: items,
   };
-}
-
-/**
- * Build local IDE deep links in development mode only.
- */
-export function buildLocalEditorLinks(isDev: boolean, devConfig: DevConfig, postRelativePath?: string): LocalEditorLink[] {
-  if (!isDev || !devConfig.localProjectPath || !postRelativePath) {
-    return [];
-  }
-  return devConfig.editors.map(({ id, name, icon, urlTemplate }) => ({
-    id,
-    name,
-    icon,
-    href: getLocalEditorHref({ urlTemplate }, devConfig, postRelativePath),
-  }));
 }

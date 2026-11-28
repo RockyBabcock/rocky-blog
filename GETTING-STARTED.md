@@ -43,35 +43,28 @@ i18n:
 
 分类映射、精选分类、系列、导航、内容增强、动效与 SEO 机器人策略也位于该配置文件。分类和系列翻译在 `config/i18n-content.yaml`。
 
-## 新建文章
+## MuseAI 内容上传
 
-在 `src/content/blog/` 下创建 Markdown 文件：
+Rocky Blog 的文章由外部 MuseAI 工作流统一撰写、翻译和修订。仓库没有 CMS、浏览器写作室或在线文章编辑后台；不要将普通的 Markdown 文件维护理解为站内写作功能。
 
-```markdown
----
-title: 我的第一篇文章
-description: 文章简介
-date: 2026-11-27 10:00:00
-link: hello-rocky-blog
-cover: /img/cover/1.webp
-tags:
-  - Astro
-categories:
-  - [笔记, 前端]
-sticky: false
-draft: false
-catalog: true
-tocNumbering: true
-math: true
-keywords:
-  - Rocky Blog
-translationKey: hello-rocky-blog
----
+开始前先阅读 [Muse 内容生产规范](./docs/muse/README.md)。核心文件：
 
-正文从这里开始。
+- `docs/muse/CONTENT-SCHEMA.md`：与 `src/content.config.ts` 对齐的 frontmatter 字段和模板。
+- `docs/muse/CONTENT-STRUCTURE.md`：现有分类、目录位置、slug、资源和多语言镜像。
+- `docs/muse/MARKDOWN-SPEC.md`：当前可用的 GFM、Shiki、KaTeX、Mermaid、Infographic 与 Shoka 语法。
+- `docs/muse/EDITORIAL-STANDARDS.md`：事实核查、引用、结构和语言质量。
+- `docs/muse/UPLOAD-CHECKLIST.md`：上传与构建验收。
+- `docs/muse/prompts/`：新文章、翻译、审核修订三类可复制 Prompt。
+
+中文主稿放入 `src/content/blog/<category-path>/<slug>.md`。译文镜像同一相对路径到 `en/`、`ja/`、`fr/`。上传 Markdown 和真实图片资源后，从仓库根目录运行：
+
+```bash
+pnpm lint-md
+pnpm check
+pnpm build
 ```
 
-当前 schema 还支持 `updated`、`subtitle`、`password` 等字段。完整定义见 `src/content.config.ts`。日期按 `site.timezone` 解析。修改既有文章 slug 前请检查历史链接。
+schema 以 `src/content.config.ts` 为准，分类映射以 `config/site.yaml` 为准。不要自行增加字段、分类或语言目录。
 
 ## 多语言文章
 
@@ -132,3 +125,4 @@ AES-256-GCM 是构建期静态加密。密文及公开派生参数会随页面�
 - [贡献指南](./CONTRIBUTING.md)
 - [项目状态与 Agent 交接](./docs/PROJECT-STATUS.md)
 - [前端设计实施 Prompt](./docs/FRONTEND-DESIGN-PROMPT.md)
+- [Muse 内容规范](./docs/muse/README.md)

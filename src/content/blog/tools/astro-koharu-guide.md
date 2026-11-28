@@ -115,13 +115,13 @@ i18n:
 
 ### 内容处理与动效
 
-`content` 配置控制 Shoka 语法、数学公式与代码块等能力；`motion` 配置默认动效强度及樱花特效；`postActions` 控制公开 Markdown 的复制 / 下载操作。系统启用 prefers-reduced-motion 时必须优先降低动效。
+`content` 配置控制 Shoka 语法、数学公式与代码块等能力；`motion` 配置默认动效强度及樱花特效。文章内容由外部 MuseAI 工作流提供，仓库不提供原始 Markdown 复制 / 下载工具或本地编辑器快捷入口。系统启用 prefers-reduced-motion 时必须优先降低动效。
 
 不要照搬旧配置文件中的 RSS、Umami、评论或 CMS 样例。这些都不属于当前产品目标。
 
 ## 4. 创建和维护文章
 
-在 `src/content/blog/` 下新建 Markdown / MDX 文件。
+Rocky Blog 的文章由外部 MuseAI 工作流统一撰写、翻译和修订。Muse 应先阅读 [Muse 内容生产规范](https://github.com/RockyBabcock/rocky-blog/tree/main/docs/muse)，并按其中的 Schema、目录、分类、语言镜像、Markdown 语法和上传检查规则交付完整文件。仓库只负责验证和静态渲染，不包含 CMS、浏览器写作室或文章管理后台。
 
 ```markdown
 ---

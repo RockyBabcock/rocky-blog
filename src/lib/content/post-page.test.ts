@@ -2,22 +2,11 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
   buildBreadcrumbJsonLd,
-  buildLocalEditorLinks,
   buildPostBreadcrumbs,
   buildPostJsonLd,
   buildPostKeywords,
-  getPostRelativePath,
   hasMathSyntax,
 } from './post-page';
-
-describe('getPostRelativePath', () => {
-  it('strips src/content/blog/ prefix and normalizes Windows separators', () => {
-    assert.equal(getPostRelativePath('src/content/blog/note/demo.md'), 'note/demo.md');
-    assert.equal(getPostRelativePath('src\\content\\blog\\en\\guide.mdx'), 'en/guide.mdx');
-    assert.equal(getPostRelativePath('other/path.md'), undefined);
-    assert.equal(getPostRelativePath(undefined), undefined);
-  });
-});
 
 describe('hasMathSyntax', () => {
   it('respects global enableMath, frontmatter opt-in/opt-out, and LaTeX delimiters', () => {
@@ -98,29 +87,5 @@ describe('JSON-LD builders', () => {
     assert.equal(ld.itemListElement[0].item, 'https://example.com/en/');
     assert.equal(ld.itemListElement[1].item, 'https://example.com/en/categories/note');
     assert.equal('item' in ld.itemListElement[2], false);
-  });
-});
-
-describe('buildLocalEditorLinks', () => {
-  const devConfig = {
-    localProjectPath: '/Users/dev/blog',
-    contentRelativePath: 'src/content/blog',
-    editors: [{ id: 'vscode', name: 'VS Code', icon: 'ri:code-line', urlTemplate: 'vscode://file/{path}' }],
-  };
-
-  it('returns empty array outside dev mode or without relative path', () => {
-    assert.deepEqual(buildLocalEditorLinks(false, devConfig, 'hello.md'), []);
-    assert.deepEqual(buildLocalEditorLinks(true, devConfig, undefined), []);
-  });
-
-  it('builds editor deep links in dev mode', () => {
-    assert.deepEqual(buildLocalEditorLinks(true, devConfig, 'note/demo.md'), [
-      {
-        id: 'vscode',
-        name: 'VS Code',
-        icon: 'ri:code-line',
-        href: 'vscode://file//Users/dev/blog/src/content/blog/note/demo.md',
-      },
-    ]);
   });
 });

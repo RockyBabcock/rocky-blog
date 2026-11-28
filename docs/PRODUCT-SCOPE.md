@@ -65,19 +65,23 @@ Rocky Blog 是一个以内容创作、阅读和发现为中心的个人静态博
 - canonical、Open Graph、hreflang、sitemap、robots 与 Pagefind 索引。
 - 通过 YAML 和 Markdown 配置，不引入运行时数据库。
 
-### 3.1 内容生产与发布流程
+### 3.1 MuseAI 内容生产与发布流程
 
-Markdown 是主要内容交付形式。维护者可以使用 MuseAI 或其他写作工具辅助生成文章，再将校验后的 `.md` 文件加入 `src/content/blog/`。文章必须符合 `src/content.config.ts` 的 frontmatter schema、目录结构、分类映射、稳定 slug 和翻译关联规则。
+**MuseAI 是 Rocky Blog 唯一指定的文章撰写、翻译与内容生产代理。** 文章由 Muse 在站点仓库之外完成；Rocky Blog 仓库只接收已经生成的 Markdown / MDX 和真实媒体资源，并负责 schema 校验、静态生成和部署。
 
-内容生产工具不属于网站运行时架构：MuseAI 不是 Rocky Blog 的 CMS、后端 API 或在线写作室。默认发布流程为：
+仓库不提供、也不需要站内写作功能，包括 CMS、浏览器写作室、文章管理后台、本地编辑器快捷打开、公开 Markdown 源码复制 / 下载按钮及其源文件 API 路由。Muse 不属于网站运行时依赖，不连接生产站点，不作为 CMS、后端服务或管理界面。
 
-1. 通过 MuseAI 或其他编辑工具生成 / 编辑 Markdown。
-2. 校验必填 frontmatter、日期、分类、标签、封面路径、链接和文件位置。
-3. 如有译文，按相同相对路径放入 `en/`、`ja/`、`fr/`，并核对 `link` / `translationKey`。
-4. 运行适用的内容检查和静态构建。
-5. 将仓库中的 Markdown 与代码一起提交，并部署生成的静态产物。
+标准流程如下：
 
-不要为了适配单篇文章或生成工具而使用 schema 不支持的字段；不要伪造代码运行结果、数据、来源或翻译完成状态。
+1. Muse 阅读仓库中的 `docs/muse/` 规范，确认当前 schema、分类、语言与 Markdown 语法。
+2. Muse 生成中文主稿，并按维护者要求生成 `en/`、`ja/`、`fr/` 镜像译文；需要图片时同时交付真实资源文件。
+3. 按 [Muse 内容规范](./muse/README.md) 校验 frontmatter、路径、分类映射、稳定 slug、翻译关联、链接和媒体资源。
+4. 将 Markdown 与实际存在的媒体文件上传到仓库，运行内容检查和静态构建。
+5. 将校验通过的提交部署为静态站点。
+
+代码 Agent 可以按维护者要求检查、修复内容格式或维护内容系统，但不得重新创建站内写作产品、替代 Muse 的内容生产流程或引入独立博客写作后台。
+
+不得为了适配单篇文章或生成工具而使用 schema 不支持的字段；不得伪造代码运行结果、数据、来源、图片资源或翻译完成状态。
 
 ## 4. 语言策略
 

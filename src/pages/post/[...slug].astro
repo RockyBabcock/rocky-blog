@@ -13,10 +13,9 @@ import Cover from '@components/ui/cover/Cover.astro';
 import { defaultContentConfig } from '@constants/content-config';
 import { HomeSiderType } from '@constants/enum';
 import { CONTENT_PADDING } from '@constants/layout';
-import { devConfig, siteConfig } from '@constants/site-config';
+import { siteConfig } from '@constants/site-config';
 import Layout from '@layouts/Layout.astro';
 import TwoColumnLayout from '@layouts/TwoColumnLayout.astro';
-import { postActionsConfig } from '@lib/config/site';
 import {
   buildCategoryPath,
   getCategoryArr,
@@ -31,14 +30,11 @@ import {
 } from '@lib/content';
 import {
   buildBreadcrumbJsonLd,
-  buildLocalEditorLinks,
   buildPostBreadcrumbs,
   buildPostJsonLd,
   buildPostKeywords,
-  getPostRelativePath,
   hasMathSyntax,
 } from '@lib/content/post-page';
-import { getPostSourceFilename, getPostSourcePath, isPostSourcePublic } from '@lib/content/post-source';
 import { getAdjacentSeriesPosts, getEnabledSeries, getSeriesPosts } from '@lib/content/series';
 import { toPostRef } from '@lib/content/transforms';
 import { formatForSeo, formatLocalizedDate } from '@lib/date';
@@ -46,7 +42,6 @@ import { encodeSlug } from '@lib/route';
 import { getOgImageUrl } from '@lib/seo/og-image';
 import { Icon } from 'astro-icon/components';
 import readingTime from 'reading-time';
-import PostMarkdownActions from '@/components/post/PostMarkdownActions';
 import { defaultLocale, getLocaleLabel, localizedPath, t } from '@/i18n';
 import { postRoute } from '../_shared/routes';
 
@@ -64,7 +59,6 @@ const post =
   (await getPostById(postId, locale)) ?? (locale !== defaultLocale ? await getPostById(postId, defaultLocale) : undefined);
 if (!post) throw new Error(`Post not found: ${postId}`);
 
-const postRelativePath = getPostRelativePath(post.filePath);
 const originalLocale = getPostLocale(post);
 const isFallback = originalLocale !== locale;
 const availableLocales = await getPostAvailableLocales(post);
@@ -137,8 +131,6 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd({
 });
 
 const currentPostUrl = localizedPath(`/post/${encodeSlug(postSlug)}`, locale);
-const postSourcePath = getPostSourcePath(currentPostUrl);
-const localEditors = buildLocalEditorLinks(import.meta.env.DEV, devConfig, postRelativePath);
 const summaryText = post.data.description?.trim() || null;
 const isEncryptedPost = Boolean(post.data.password);
 const seoDate = formatForSeo(date);
@@ -223,19 +215,6 @@ const readStats = readingTime(post.body ?? '');
           />
           <FocusModeToggle client:idle locale={locale} />
           <PostShareActions client:idle locale={locale} title={title} description={finalDescription} />
-          {
-            isPostSourcePublic(post.data, post.body, import.meta.env.PROD) && (
-              <PostMarkdownActions
-                client:idle
-                locale={locale}
-                sourcePath={postSourcePath}
-                filename={getPostSourceFilename(postSlug)}
-                copy={postActionsConfig.copyMarkdown}
-                download={postActionsConfig.downloadMarkdown}
-                localEditors={localEditors}
-              />
-            )
-          }
         </div>
       </nav>
       <div class="mx-auto flex w-full max-w-[min(100%,var(--reader-measure,78ch))] flex-col gap-3">

@@ -2,7 +2,7 @@
 
 **Language:** [中文](../README.md) · **English** · [日本語](./README.ja.md)
 
-Rocky Blog is a static personal blog focused on writing, reading, and thoughtful content discovery. It is built with **Astro 7, React 19, TypeScript, and Tailwind CSS 4**, using static generation with selectively hydrated interactions. Its visual direction is **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestial Details**: editorial typography and clear hierarchy first, with restrained sakura, botanical, and celestial accents.
+Rocky Blog is a static personal blog focused on reading and content discovery; article authoring and translation are handled by the external MuseAI workflow. It is built with **Astro 7, React 19, TypeScript, and Tailwind CSS 4**, using static generation with selectively hydrated interactions. Its visual direction is **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestial Details**: editorial typography and clear hierarchy first, with restrained sakura, botanical, and celestial accents.
 
 This repository is maintained as Rocky Blog. Upstream code and design references do not override the product scope or implementation in this repository.
 
@@ -64,18 +64,21 @@ The development server defaults to port 3000. Set `BLOG_PORT` to override it.
 | `pnpm knip` | Find unused files and dependencies |
 | `pnpm generate:lqips` | Generate low-quality image placeholders |
 
-## Writing and configuration
+## MuseAI content intake
 
-Create Markdown files under `src/content/blog/`. Chinese is the default locale; translations for non-default locales live under `en/`, `ja/`, or `fr/`.
+All Rocky Blog articles are authored and translated through the external MuseAI workflow. This repository does not include a CMS, browser-based writing room, article-management dashboard, or local-editor integration. Muse delivers validated Markdown / MDX files and any real media assets; the site schema validates and statically renders them.
 
-Customize site identity, locale settings, navigation, series, theme, and motion in `config/site.yaml`. Category and series translations are managed in `config/i18n-content.yaml`; the content schema is defined in `src/content.config.ts`.
+Start with the [Muse content workflow](./muse/README.md), which links to the frontmatter schema, real directory and category mapping, locale mirrors, supported Markdown syntax, editorial standards, upload checklist, and reusable prompts for new articles, translations, and reviews.
 
-Run `pnpm build` to generate `dist/`. Deploy that directory to GitHub Pages, Vercel, Netlify, Cloudflare Pages, or another static host. No application server or database is required.
+The content root is `src/content/blog/`. Chinese source articles live under the category folders; translations mirror each relative path under `en/`, `ja/`, or `fr/`. Site identity, locales, navigation, series, theme, and motion remain configured in `config/site.yaml`.
+
+Run `pnpm build` to generate `dist/` and deploy it to a static host. No application server or database is required.
 
 ## Documentation
 
 - [Product Scope](./PRODUCT-SCOPE.md)
 - [Frontend Design & Implementation Prompt](./FRONTEND-DESIGN-PROMPT.md)
+- [Muse Content Workflow](./muse/README.md)
 - [Project Status and Agent Handoff](./PROJECT-STATUS.md)
 - [Getting Started](../GETTING-STARTED.md)
 - [Architecture Overview](./overview/00-overview.md)

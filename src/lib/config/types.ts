@@ -193,36 +193,6 @@ export interface SeoConfig {
 }
 
 // =============================================================================
-// Dev Tools Configuration (Dev Only - Local Editor Integration)
-// =============================================================================
-
-/**
- * Configuration for a single editor
- */
-export interface EditorConfig {
-  /** Unique identifier for the editor */
-  id: string;
-  /** Display name */
-  name: string;
-  /** Iconify icon identifier (e.g., 'devicon-plain:vscode') */
-  icon: string;
-  /** URL template with placeholder: {path} for file absolute path */
-  urlTemplate: string;
-}
-
-/**
- * Development tools configuration from site.yaml
- */
-export interface DevConfig {
-  /** Absolute path to the local project directory */
-  localProjectPath: string;
-  /** Relative path from project root to content directory (default: 'src/content/blog') */
-  contentRelativePath: string;
-  /** List of configured editors */
-  editors: EditorConfig[];
-}
-
-// =============================================================================
 // i18n Configuration
 // =============================================================================
 
@@ -256,14 +226,10 @@ export interface SiteYamlConfig {
   content?: ContentConfig;
   /** Motion intensity default and decorative sakura effects. */
   motion?: MotionConfig;
-  /** Markdown copy / download actions on post pages. */
-  postActions?: unknown;
   navigation?: RouterItem[];
   /** SEO configuration for robots.txt and meta tags */
   seo?: SeoConfig;
   categoryMap?: Record<string, string>; // TODO: i18n, now use eg: { '随笔': 'life' }
-  /** Development tools configuration (dev only) */
-  dev?: DevConfig;
   /** Internationalization configuration */
   i18n?: I18nConfig;
 }

@@ -6,7 +6,6 @@
  */
 
 import { PAGINATION } from '@constants/layout';
-import { postActionsConfig } from '@lib/config/site';
 import {
   getCategoryLinks,
   getCategoryList,
@@ -18,7 +17,6 @@ import {
   normalizeTag,
 } from '@lib/content';
 import { categoryAtPath } from '@lib/content/index-categories';
-import { isPostSourceEnabled, isPostSourcePublic } from '@lib/content/post-source';
 import { localePaths } from './utils';
 
 /** Tags can contain `/`, which is not usable as a single route segment. */
@@ -27,17 +25,6 @@ const toTagParam = (tag: string) => normalizeTag(tag).replace(/\//g, '-');
 export const postRoute = localePaths(async ({ locale }) => {
   const posts = await getSortedPosts(locale);
   return posts.map((post) => ({ params: { slug: getPostSlug(post) }, props: { postId: post.id } }));
-});
-
-/** Same param space as `postRoute`, minus posts with encrypted content (and drafts in production). */
-export const postSourceRoute = localePaths(async ({ locale }) => {
-  if (!isPostSourceEnabled(postActionsConfig)) return [];
-  const posts = await getSortedPosts(locale);
-  return posts.flatMap((post) =>
-    post.filePath && isPostSourcePublic(post.data, post.body, import.meta.env.PROD)
-      ? [{ params: { slug: getPostSlug(post) }, props: { filePath: post.filePath } }]
-      : [],
-  );
 });
 
 export const tagRoute = localePaths(async ({ locale }) => {

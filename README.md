@@ -2,7 +2,7 @@
 
 **语言：** **中文** · [English](./docs/README.en.md) · [日本語](./docs/README.ja.md)
 
-Rocky Blog 是一个以内容阅读与长期写作为中心的静态个人博客。项目基于 **Astro 7、React 19、TypeScript 与 Tailwind CSS 4**，采用静态构建和按需交互的架构；视觉方向为 **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestial Details**，以清晰的编辑式排版为基础，用克制的樱花、植物与星象细节建立识别度。
+Rocky Blog 是一个以内容阅读与发现为中心的静态个人博客，文章由外部 MuseAI 工作流统一撰写和翻译。项目基于 **Astro 7、React 19、TypeScript 与 Tailwind CSS 4**，采用静态构建和按需交互的架构；视觉方向为 **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestial Details**，以清晰的编辑式排版为基础，用克制的樱花、植物与星象细节建立识别度。
 
 > 本仓库是 Rocky Blog 的独立项目。它参考并继承了部分上游实现与设计思路，但产品范围、内容、配置和后续维护以本仓库为准。
 
@@ -68,26 +68,13 @@ pnpm dev
 | `pnpm knip` | 检查未使用文件与依赖 |
 | `pnpm generate:lqips` | 生成图片低质量占位资源 |
 
-## 内容写作
+## MuseAI 内容接入
 
-在 `src/content/blog/` 中创建 Markdown 文件。默认语言为中文，非默认语言的译文放在对应语言目录中。
+Rocky Blog 的文章全部由外部 MuseAI 工作流撰写和翻译。仓库不包含 CMS、浏览器写作室、文章管理后台或本地编辑器集成；文章以经过校验的 Markdown / MDX 文件进入内容集合。
 
-```markdown
----
-title: 我的第一篇文章
-date: 2026-11-27
-link: hello-rocky-blog
-description: 文章简介
-tags:
-  - 随笔
-categories:
-  - 随笔
----
+Muse 应先遵循 [Muse 内容生产规范](./docs/muse/README.md)，其中包含 frontmatter schema、目录与分类映射、中文 / 英语 / 日语 / 法语路径约定、当前支持的 Markdown 语法、编辑标准、上传检查清单，以及新文章 / 翻译 / 审核修订 Prompt。
 
-从这里开始写作。
-```
-
-开发环境运行 `pnpm dev` 后，可以通过文章路由预览内容。Frontmatter 的完整字段、系列和翻译规则见[快速开始](./GETTING-STARTED.md)与[内容系统文档](./docs/overview/02-content-system.md)。
+内容根目录为 `src/content/blog/`。中文文件放在分类目录下，译文镜像到 `en/`、`ja/` 或 `fr/`。Muse 上传后，由仓库的内容 schema 校验并通过静态构建发布。不要手工添加 schema 未定义的 frontmatter 字段。
 
 ## 配置与部署
 
@@ -105,7 +92,8 @@ categories:
 | [产品范围](./docs/PRODUCT-SCOPE.md) | 保留功能、非目标、设计方向与安全边界 |
 | [项目状态与 Agent 交接](./docs/PROJECT-STATUS.md) | 维护者需求、当前实现状态、验证基线和 Agent 工作流程 |
 | [前端设计实施 Prompt](./docs/FRONTEND-DESIGN-PROMPT.md) | 面向 AI Studio / Gemini / Claude / Copilot 的视觉设计与实施规范 |
-| [快速开始](./GETTING-STARTED.md) | 安装、配置、写作、翻译与部署 |
+| [Muse 内容规范](./docs/muse/README.md) | Muse 文章生成、Markdown schema、目录结构、翻译、上传与 Prompt |
+| [快速开始](./GETTING-STARTED.md) | 安装、配置、Muse 内容接入与部署 |
 | [完整使用指南](./src/content/blog/tools/astro-koharu-guide.md) | 面向站点维护者的操作手册 |
 | [架构总览](./docs/overview/00-overview.md) | 代码结构与系统边界 |
 | [国际化与 SEO](./docs/overview/11-i18n-and-seo.md) | 四种语言、路由、hreflang 与索引 |

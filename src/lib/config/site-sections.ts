@@ -1,6 +1,6 @@
 /**
  * Pure structural normalizers and validators for `config/site.yaml` sections
- * (social links, ICP filing, default covers, navigation, dev tools, i18n, SEO metadata).
+ * (social links, ICP filing, default covers, navigation, i18n, SEO metadata).
  *
  * Uses pure TypeScript checks (zero runtime schema library overhead) so misconfigured
  * YAML entries produce clear warnings and safe fallbacks instead of runtime crashes.
@@ -8,8 +8,6 @@
 
 import { DEFAULT_ROUTERS } from './routes';
 import type {
-  DevConfig,
-  EditorConfig,
   I18nConfig,
   LocaleConfig,
   ResolvedSiteConfig,
@@ -184,61 +182,6 @@ export function normalizeNavigation(raw: unknown, warn: ConfigWarn = console.war
     return DEFAULT_ROUTERS;
   }
   return normalized;
-}
-
-export function normalizeDevConfig(raw: unknown, warn: ConfigWarn = console.warn): DevConfig {
-  if (raw == null) {
-    return {
-      localProjectPath: '',
-      contentRelativePath: 'src/content/blog',
-      editors: [],
-    };
-  }
-  if (!isRecord(raw)) {
-    warn('[config] dev: expected an object, using defaults');
-    return {
-      localProjectPath: '',
-      contentRelativePath: 'src/content/blog',
-      editors: [],
-    };
-  }
-
-  const localProjectPath = typeof raw.localProjectPath === 'string' ? raw.localProjectPath.trim() : '';
-  const contentRelativePath = readNonEmptyString(raw.contentRelativePath) ?? 'src/content/blog';
-
-  const editors: EditorConfig[] = [];
-  if (raw.editors !== undefined) {
-    if (!Array.isArray(raw.editors)) {
-      warn('[config] dev.editors: expected an array, ignoring');
-    } else {
-      for (let i = 0; i < raw.editors.length; i++) {
-        const entry = raw.editors[i];
-        if (!isRecord(entry)) {
-          warn(`[config] dev.editors[${i}]: expected an object, skipping`);
-          continue;
-        }
-        const id = readNonEmptyString(entry.id);
-        const name = readNonEmptyString(entry.name);
-        const icon = readNonEmptyString(entry.icon);
-        const urlTemplate = readNonEmptyString(entry.urlTemplate);
-        if (!id || !name || !icon || !urlTemplate) {
-          warn(`[config] dev.editors[${i}]: missing required id/name/icon/urlTemplate, skipping`);
-          continue;
-        }
-        if (!urlTemplate.includes('{path}')) {
-          warn(`[config] dev.editors[${i}] ("${id}"): urlTemplate must contain "{path}", skipping`);
-          continue;
-        }
-        editors.push({ id, name, icon, urlTemplate });
-      }
-    }
-  }
-
-  return {
-    localProjectPath,
-    contentRelativePath,
-    editors,
-  };
 }
 
 export function normalizeI18nConfig(raw: unknown, warn: ConfigWarn = console.warn): I18nConfig {

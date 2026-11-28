@@ -5,7 +5,6 @@ import {
   BUILT_IN_COVERS,
   buildSeoConfig,
   normalizeDefaultCoverList,
-  normalizeDevConfig,
   normalizeI18nConfig,
   normalizeIcpConfig,
   normalizeNavigation,
@@ -86,33 +85,6 @@ describe('site-sections normalizers', () => {
     const { warnings, warn } = createWarnCollector();
     assert.deepEqual(normalizeNavigation([{ name: 'Broken' }], warn), DEFAULT_ROUTERS);
     assert.equal(warnings.length, 2);
-  });
-
-  it('validates devConfig editors including required {path} placeholder', () => {
-    const { warnings, warn } = createWarnCollector();
-    assert.deepEqual(normalizeDevConfig(undefined, warn), {
-      localProjectPath: '',
-      contentRelativePath: 'src/content/blog',
-      editors: [],
-    });
-    assert.deepEqual(
-      normalizeDevConfig(
-        {
-          localProjectPath: ' /tmp/blog ',
-          editors: [
-            { id: 'vscode', name: 'VS Code', icon: 'ri:code-line', urlTemplate: 'vscode://file/{path}' },
-            { id: 'broken', name: 'Broken', icon: 'ri:bug-line', urlTemplate: 'broken://no-placeholder' },
-          ],
-        },
-        warn,
-      ),
-      {
-        localProjectPath: '/tmp/blog',
-        contentRelativePath: 'src/content/blog',
-        editors: [{ id: 'vscode', name: 'VS Code', icon: 'ri:code-line', urlTemplate: 'vscode://file/{path}' }],
-      },
-    );
-    assert.equal(warnings.length, 1);
   });
 
   it('validates i18nConfig locales, deduplicates codes, and checks defaultLocale', () => {

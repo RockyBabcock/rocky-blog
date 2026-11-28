@@ -10,7 +10,6 @@ export {
   configuredSeriesSlugs,
   contentConfig,
   defaultCoverList,
-  devConfig,
   enabledSeriesSlugs,
   i18nConfig,
   icpConfig,

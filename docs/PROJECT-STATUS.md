@@ -6,7 +6,7 @@
 
 ## 1. 项目是什么
 
-Rocky Blog 是一个以内容创作、阅读和发现为中心的**高视觉表现力静态个人博客**。它应当同时具备：
+Rocky Blog 是一个由外部 MuseAI 提供文章内容、以阅读和发现为中心的**高视觉表现力静态个人博客**。它应当同时具备：
 
 - **内容质量：** 文章、主题、分类、标签、周刊与系列内容组织清晰，适合长期积累。
 - **阅读体验：** 排版、导航、搜索、目录、阅读进度、收藏和响应式阅读体验完整。
@@ -55,14 +55,17 @@ Rocky Blog 是一个以内容创作、阅读和发现为中心的**高视觉表�
 - 不为了增加“功能数量”引入重复入口、无必要的后台服务或复杂依赖。
 - 优先保证静态生成、首屏性能、可访问性和长期维护成本。
 
-### 2.4 Markdown 是主要内容交付形式
+### 2.4 MuseAI 是唯一文章生产者，Markdown 是唯一内容交付源
 
-- 文章以仓库中的 Markdown 文件作为内容源，主要路径为 `src/content/blog/`。
-- 维护者可以使用 MuseAI 或其他写作工具辅助生成文章，再将经过校验的 `.md` 文件加入仓库。
-- 内容必须遵守 `src/content.config.ts` 的 frontmatter schema、目录结构、分类映射、稳定 slug 和翻译关联规则；不要为了迁就生成内容而擅自增加 schema 不支持的字段。
-- 内容生成工具不是网站运行时依赖。MuseAI 不应被理解为 Rocky Blog 的 CMS、后端服务或在线写作后台。
-- 文章发布流程是：生成 / 编辑 Markdown → 校验 frontmatter、文件路径、分类、链接和语言镜像 → 提交仓库 → 运行检查和静态构建 → 部署静态产物。
-- 不要编造代码执行结果、项目经验、数据、引用或翻译完成状态。
+- Rocky Blog 的文章撰写、翻译和修订统一由站点仓库之外的 MuseAI 工作流完成。
+- Muse 输出完整 Markdown / MDX 文件和确实存在的媒体资源；网站只负责内容 schema 校验、文章渲染、静态构建与部署。
+- 文章主要路径为 `src/content/blog/`，必须遵守 `src/content.config.ts` frontmatter schema、当前分类映射、稳定 slug 和语言镜像规则。
+- 内容工作流、字段说明、目录、Markdown 语法、质量标准、上传检查和可复制 Prompt 统一维护于 [`docs/muse/README.md`](./muse/README.md)。
+- Muse 是外部内容生产者，不是 Rocky Blog 的 CMS、后台、在线编辑器或网站运行时依赖。
+- 仓库不保留浏览器写作室、文章管理、本地编辑器快捷打开、公开 Markdown 源码复制 / 下载 UI 或原始文件 API 路由。
+- 标准流程：Muse 生成 Markdown 与资源 → 校验 frontmatter / 路径 / 分类 / slug / 翻译 / 链接 → 上传仓库 → 运行内容检查与静态构建 → 部署静态产物。
+- 代码 Agent 仅在维护者明确要求时校验或修复内容格式；不得替代 Muse、另建写作工具或擅自扩展 schema。
+- 不要编造代码执行结果、项目经验、数据、引用、媒体资源或翻译完成状态。
 
 ### 2.5 多语言范围固定为四种
 
@@ -141,7 +144,7 @@ Agent 必须区分“维护者明确删除”“当前代码已有”“当前�
 
 ### 6.1 已确认移除
 
-维护者已明确决定不再建设：友链 / 朋友链接系统、写作室 / 浏览器内编辑器、CMS 管理后台与文章管理、全站音乐播放器 / 播放列表、Bangumi 追番、Moments、评论系统、Umami 等访问分析、AI 文章摘要，以及基于 embedding / 向量索引的语义相似推荐。RSS 也已从当前产品和代码中移除，见 [PRODUCT-SCOPE.md](./PRODUCT-SCOPE.md) 第 6 节。
+维护者已明确决定不再建设：友链 / 朋友链接系统、写作室 / 浏览器内编辑器、CMS 管理后台与文章管理、文章页原始 Markdown 复制 / 下载、本地编辑器快捷打开及公开 `.md` 源码 API、Blog Writer coding-agent Skill（文章由 MuseAI 统一生产）、全站音乐播放器 / 播放列表、Bangumi 追番、Moments、评论系统、Umami 等访问分析、AI 文章摘要，以及基于 embedding / 向量索引的语义相似推荐。RSS 也已从当前产品和代码中移除，见 [PRODUCT-SCOPE.md](./PRODUCT-SCOPE.md) 第 6 节。
 
 不要用改名、轻量版或替代实现方式重新引入这些功能。
 
@@ -179,7 +182,7 @@ Agent 必须区分“维护者明确删除”“当前代码已有”“当前�
 
 1. 根据所使用的工具选择入口上下文：通用 Agent 使用 `AGENTS.md`；Gemini / Google AI Studio 使用 `GEMINI.md`；Claude Code 使用 `CLAUDE.md`；GitHub Copilot 使用 `.github/copilot-instructions.md`。这些入口都指向同一套仓库规范。若平台不会自动读取对应文件，应在任务开始时主动提供或打开该文件及 `docs/PRODUCT-SCOPE.md`、`docs/PROJECT-STATUS.md`，不得假设平台已经加载。
 2. 读取本文和 [PRODUCT-SCOPE.md](./PRODUCT-SCOPE.md)。
-3. 根据任务继续阅读相应架构文档；例如内容任务阅读 `02-content-system.md`，路由 / 语言任务阅读 `03-routing.md` 与 `11-i18n-and-seo.md`。所有前端 / 首页 / 样式 / 视觉任务还必须先读 [FRONTEND-DESIGN-PROMPT.md](./FRONTEND-DESIGN-PROMPT.md)，并结合 `05-ui-components.md`、`07-theme-system.md`、`08-animation-system.md` 和 `09-styling.md` 执行。 Claude Code 的前端任务同时加载 `.claude/skills/frontend-designer/SKILL.md`。
+3. 根据任务继续阅读相应架构文档；例如内容系统任务阅读 `02-content-system.md`，Muse 内容交付 / 校验任务先读 [`docs/muse/README.md`](./muse/README.md)，路由 / 语言任务阅读 `03-routing.md` 与 `11-i18n-and-seo.md`。所有前端 / 首页 / 样式 / 视觉任务还必须先读 [FRONTEND-DESIGN-PROMPT.md](./FRONTEND-DESIGN-PROMPT.md)，并结合 `05-ui-components.md`、`07-theme-system.md`、`08-animation-system.md` 和 `09-styling.md` 执行。 Claude Code 的前端任务同时加载 `.claude/skills/frontend-designer/SKILL.md`。
 4. 检查当前分支、HEAD、相关实现和测试；不要只依赖历史聊天、旧截图或旧提交。
 
 ### 实施任务时
@@ -197,7 +200,7 @@ Agent 必须区分“维护者明确删除”“当前代码已有”“当前�
 
 - 产品决策变化：先更新 `docs/PRODUCT-SCOPE.md`，再同步 README、Agent 规则、用户指南和相关架构说明。
 - 架构变化：更新对应 `docs/overview/` 章节。
-- 写作或配置流程变化：更新 `GETTING-STARTED.md` 与 Blog Writer Skill。
+- Muse 内容交付流程变化：更新 `docs/muse/` 及其入口文档；不要恢复已删除的 Blog Writer Skill。
 - 状态只有在实现、检查或部署结果实际发生变化时才更新本文；记录日期、commit、验证命令和证据。
 - 不要把“计划做”“代码已写”“本地验证通过”“CI 通过”“已部署”混成同一个状态。
 
