@@ -15,11 +15,9 @@ import { isValidTimezone } from '../timezone';
 import { normalizeContentConfig } from './content';
 import { normalizeFeaturedSeries } from './featured-series';
 import { normalizeMotionConfig } from './motion';
-import { normalizePostActionsConfig } from './post-actions';
 import { RESERVED_ROUTES } from './reserved-routes';
 import {
   normalizeDefaultCoverList,
-  normalizeDevConfig,
   normalizeI18nConfig,
   normalizeIcpConfig,
   normalizeNavigation,
@@ -82,9 +80,6 @@ describe('config/site.yaml consistency', () => {
     const motion = normalizeMotionConfig(rawYaml.motion);
     assert.ok(['lively', 'subtle', 'reduced'].includes(motion.level));
 
-    const postActions = normalizePostActionsConfig(rawYaml.postActions);
-    assert.equal(typeof postActions.copyMarkdown, 'boolean');
-
     const social = normalizeSocialConfig(rawYaml.social, warn);
     assert.ok(Object.keys(social).length > 0);
 
@@ -94,7 +89,6 @@ describe('config/site.yaml consistency', () => {
     assert.equal(new Set(navPaths).size, navPaths.length, `Duplicate navigation paths found: ${navPaths.join(', ')}`);
 
     normalizeDefaultCoverList(rawYaml.defaultCoverList, warn);
-    normalizeDevConfig(rawYaml.dev, warn);
     normalizeIcpConfig(rawYaml.site.icp);
 
     const series = normalizeFeaturedSeries(rawYaml.featuredSeries, {
