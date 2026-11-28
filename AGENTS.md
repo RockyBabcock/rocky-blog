@@ -65,6 +65,7 @@ Use **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestia
 - The maintainer has explicitly identified sparse, visually under-expressive pages as an ongoing improvement target. Improve section-specific composition and intentional detail (eyebrows, numbering, fine rules, borders, editorial grids, timelines, botanical / celestial motifs, controlled texture and interaction feedback) while preserving legibility.
 - Never create whitespace by hiding sections, removing entries, reducing copy, or weakening existing modules. Do not fill space with arbitrary cards, shadows, gradients, particles, or decorative noise.
 - Check desktop / mobile, light / dark, keyboard focus, and reduced-motion before calling a visual task complete.
+- For every frontend / UI / visual-design task, read `docs/FRONTEND-DESIGN-PROMPT.md` before implementation and follow its audit → plan → implement → verify → report workflow and definition of done.
 
 ## 5. Locale contract
 
@@ -130,12 +131,13 @@ Do not delete a file based on a single Knip warning without checking Astro impor
 
 1. For substantial work, state a short plan and acceptance criteria before editing. Inspect the current branch head and relevant source; do not treat remembered context or historical documentation as current implementation evidence.
 2. Read the relevant architecture chapter before changing routing, content, state, themes, motion, Markdown, or SEO.
-3. Search for existing implementations and all import / registration / route entry points before adding, renaming, or deleting code.
-4. Keep changes scoped. Do not perform broad formatting, dependency replacement, module removal, or unrelated refactors as a side effect of a focused task.
-5. After a product decision changes, update `docs/PRODUCT-SCOPE.md` first and synchronize the relevant READMEs, user instructions, architecture docs, and Skills.
-6. Update `docs/PROJECT-STATUS.md` only when a verified implementation, decision, blocker, or milestone changes. Record evidence; do not invent percentages, owners, ETAs, or a roadmap.
-7. Before reporting completion, state modified files, commands actually run, results, unverified areas, deployment evidence when applicable, and the resulting commit.
-8. `CHANGELOG.md` currently contains inherited upstream `astro-koharu` history. It is not a current Rocky Blog feature list or project status source. Do not infer enabled features from its historical entries.
+3. For frontend, homepage, layout, styling, or visual-design work, also read `docs/FRONTEND-DESIGN-PROMPT.md`; treat it as the required implementation and acceptance checklist.
+4. Search for existing implementations and all import / registration / route entry points before adding, renaming, or deleting code.
+5. Keep changes scoped. Do not perform broad formatting, dependency replacement, module removal, or unrelated refactors as a side effect of a focused task.
+6. After a product decision changes, update `docs/PRODUCT-SCOPE.md` first and synchronize the relevant READMEs, user instructions, architecture docs, and Skills.
+7. Update `docs/PROJECT-STATUS.md` only when a verified implementation, decision, blocker, or milestone changes. Record evidence; do not invent percentages, owners, ETAs, or a roadmap.
+8. Before reporting completion, state modified files, commands actually run, results, unverified areas, deployment evidence when applicable, and the resulting commit.
+9. `CHANGELOG.md` currently contains inherited upstream `astro-koharu` history. It is not a current Rocky Blog feature list or project status source. Do not infer enabled features from its historical entries.
 
 ## 10. Git discipline
 
