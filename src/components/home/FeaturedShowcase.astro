@@ -102,21 +102,21 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
           </div>
 
           <div class="relative z-10 flex flex-col gap-2.5 p-6 text-white md:p-4">
-            <div class="flex flex-wrap items-center gap-2 text-xs text-white/85">
-              <span class="bg-primary/92 text-primary-foreground inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-medium">
+            <div class="flex flex-wrap items-center gap-2 text-xs text-white/90">
+              <span class="inline-flex items-center gap-1.5 rounded bg-primary/90 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-wider text-primary-foreground uppercase">
                 <Icon name="ri:pushpin-2-fill" class="size-3" aria-hidden="true" />
                 {t(locale, 'post.pinned')}
               </span>
               {leadMeta.categoryLabel && (
                 <a
                   href={leadMeta.categoryLink}
-                  class="hover:text-primary-foreground inline-flex items-center gap-1 rounded-md bg-white/15 px-2 py-0.5 backdrop-blur-xs transition-colors hover:bg-white/25"
+                  class="inline-flex items-center gap-1 rounded border border-white/22 bg-black/30 px-2 py-0.5 font-medium text-white/92 backdrop-blur-xs transition-colors hover:border-white/45 hover:bg-black/45"
                 >
                   {leadMeta.categoryLabel}
                 </a>
               )}
               {leadMeta.isFallback && (
-                <span class="inline-flex items-center gap-1 rounded-md bg-amber-500/25 px-2 py-0.5 text-amber-100">
+                <span class="inline-flex items-center gap-1 rounded border border-amber-300/30 bg-amber-500/25 px-2 py-0.5 text-amber-100">
                   <Icon name="ri:translate-2" class="size-3" aria-hidden="true" />
                   {getLocaleLabel(leadPost.postLocale ?? defaultLocale)}
                 </span>
@@ -135,10 +135,10 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
             </a>
 
             {leadPost.description && (
-              <p class="line-clamp-2 text-sm leading-relaxed text-white/80 md:text-xs">{leadPost.description}</p>
+              <p class="line-clamp-2 text-sm leading-relaxed text-white/82 md:text-xs">{leadPost.description}</p>
             )}
 
-            <div class="mt-1 flex flex-wrap items-center justify-between gap-3 pt-1 text-xs text-white/80">
+            <div class="mt-1 flex flex-wrap items-center justify-between gap-3 border-t border-white/18 pt-3 text-xs text-white/85">
               <div class="flex flex-wrap items-center gap-2.5 tabular-nums">
                 <span class="editorial-date-stamp editorial-date-stamp-light">
                   <Icon name="fa6-solid:calendar-days" class="size-3" aria-hidden="true" />
@@ -178,8 +178,8 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
                     style={meta.lqip.style}
                     class={
                       isSingleSecondary
-                        ? `relative h-44 w-full shrink-0 overflow-hidden md:h-40 ${meta.lqip.class}`
-                        : `relative w-28 shrink-0 overflow-hidden rounded-lg md:w-24 ${meta.lqip.class}`
+                        ? `relative h-44 w-full shrink-0 overflow-hidden border-b border-border/60 md:h-40 ${meta.lqip.class}`
+                        : `relative w-28 shrink-0 overflow-hidden rounded-lg ring-1 ring-inset ring-black/8 dark:ring-white/10 md:w-24 ${meta.lqip.class}`
                     }
                   >
                     <ResponsiveImage
@@ -195,19 +195,22 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
                   <div
                     class={
                       isSingleSecondary
-                        ? 'flex min-w-0 flex-1 flex-col justify-between gap-2 p-4'
+                        ? 'flex min-w-0 flex-1 flex-col justify-between gap-2.5 p-4'
                         : 'flex min-w-0 flex-1 flex-col justify-between gap-1.5 py-0.5'
                     }
                   >
                     <div class="flex flex-col gap-1.5">
                       <div class="flex items-center justify-between gap-2">
-                        <div class="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
+                        <div class="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs">
                           {meta.categoryLabel && (
                             <a href={meta.categoryLink} class="text-primary hover:text-blue font-medium transition-colors">
                               {meta.categoryLabel}
                             </a>
                           )}
-                          <span class="tabular-nums">{formatLocalizedDate(post.date, locale)}</span>
+                          {meta.categoryLabel && (
+                            <span class="text-muted-foreground/45 select-none" aria-hidden="true">·</span>
+                          )}
+                          <span class="font-mono text-[11px] tabular-nums">{formatLocalizedDate(post.date, locale)}</span>
                         </div>
                         <BookmarkToggleButton
                           variant="subtle"
@@ -243,7 +246,7 @@ const layoutMode = secondaryPosts.length === 0 ? 'single' : secondaryPosts.lengt
                         </p>
                       )}
                     </div>
-                    <div class="text-muted-foreground mt-1 flex items-center justify-between gap-2 text-xs tabular-nums">
+                    <div class="text-muted-foreground border-border/55 mt-1 flex items-center justify-between gap-2 border-t pt-2 text-xs tabular-nums">
                       <span class="inline-flex items-center gap-1">
                         <Icon name="fa6-solid:clock" class="size-3" aria-hidden="true" />
                         {post.readingTime}

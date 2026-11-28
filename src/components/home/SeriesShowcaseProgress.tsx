@@ -32,14 +32,14 @@ export default function SeriesShowcaseProgress({ locale, items, seriesHref }: Se
   const ctaLabel = summary.hasStarted ? t('series.continueReading') : t('series.startReading');
 
   return (
-    <div className="mt-auto flex flex-col gap-2.5 pt-2">
+    <div className="border-border/55 mt-auto flex flex-col gap-2.5 border-t pt-3">
       <div className="flex items-center justify-between gap-2 text-xs">
         <span className="text-muted-foreground tabular-nums">
           {t('series.completedCount', { read: summary.completedCount, total: summary.total })}
         </span>
-        <span className="text-primary font-semibold tabular-nums">{summary.percent}%</span>
+        <span className="text-primary font-mono text-[11px] font-semibold tabular-nums">{summary.percent}%</span>
       </div>
-      <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full" aria-hidden="true">
+      <div className="bg-muted h-1 w-full overflow-hidden rounded-full" aria-hidden="true">
         <div
           className="bg-primary h-full rounded-full transition-[width] duration-300"
           style={{ width: `${summary.percent}%` }}
@@ -48,7 +48,7 @@ export default function SeriesShowcaseProgress({ locale, items, seriesHref }: Se
       <div className="mt-0.5 flex flex-wrap items-center justify-between gap-2">
         <a
           href={ctaHref}
-          className="bg-primary/12 text-primary hover:bg-primary/20 inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
+          className="border-primary/25 bg-primary/10 text-primary hover:border-primary/45 hover:bg-primary/16 inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors"
         >
           <Icon icon="ri:play-circle-line" className="size-3.5" aria-hidden="true" />
           <span>{ctaLabel}</span>

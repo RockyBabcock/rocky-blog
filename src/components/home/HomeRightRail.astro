@@ -81,57 +81,61 @@ const archivesHref = localizedPath('/archives', locale);
 <div class="flex flex-col gap-3.5" data-home-right-rail>
   <RightRailWidgets client:idle locale={locale} seriesList={seriesList} />
 
-  {topCategories.length > 0 && (
-    <section class="rail-card" aria-label={t(locale, 'home.railTopicsSummary')}>
-      <div class="rail-card-title">
-        <span class="inline-flex items-center gap-1.5">
-          <Icon name="ri:folder-3-line" class="text-primary size-4 shrink-0" aria-hidden="true" />
-          <span>{t(locale, 'home.railTopicsSummary')}</span>
-        </span>
-        <a href={localizedPath('/categories', locale)} class="text-muted-foreground hover:text-primary text-[11px] font-normal transition-colors">
-          {t(locale, 'series.viewAll')}
-        </a>
-      </div>
-      <ul class="flex flex-col gap-1">
-        {topCategories.map((cat) => (
-          <li>
-            <a
-              href={cat.href}
-              class="text-foreground/85 hover:bg-primary/8 hover:text-primary flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors"
-            >
-              <span class="truncate font-medium">{cat.label}</span>
-              <span class="text-muted-foreground font-mono text-[11px] tabular-nums">{cat.count}</span>
+  {(topCategories.length > 0 || yearGroups.length > 0) && (
+    <div class="rail-panel">
+      {topCategories.length > 0 && (
+        <section class="rail-section" aria-label={t(locale, 'home.railTopicsSummary')}>
+          <div class="rail-card-title">
+            <span class="inline-flex items-center gap-1.5">
+              <Icon name="ri:folder-3-line" class="text-primary size-4 shrink-0" aria-hidden="true" />
+              <span>{t(locale, 'home.railTopicsSummary')}</span>
+            </span>
+            <a href={localizedPath('/categories', locale)} class="text-muted-foreground hover:text-primary text-[11px] font-normal transition-colors">
+              {t(locale, 'series.viewAll')}
             </a>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )}
+          </div>
+          <ul class="flex flex-col gap-0.5">
+            {topCategories.map((cat) => (
+              <li>
+                <a
+                  href={cat.href}
+                  class="text-foreground/85 hover:bg-primary/8 hover:text-primary flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-xs transition-colors"
+                >
+                  <span class="truncate font-medium">{cat.label}</span>
+                  <span class="text-muted-foreground font-mono text-[11px] tabular-nums">{cat.count}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
-  {yearGroups.length > 0 && (
-    <section class="rail-card" aria-label={t(locale, 'home.railArchiveSummary')}>
-      <div class="rail-card-title">
-        <span class="inline-flex items-center gap-1.5">
-          <Icon name="ri:archive-2-line" class="text-primary size-4 shrink-0" aria-hidden="true" />
-          <span>{t(locale, 'home.railArchiveSummary')}</span>
-        </span>
-        <a href={archivesHref} class="text-muted-foreground hover:text-primary text-[11px] font-normal transition-colors">
-          {t(locale, 'series.viewAll')}
-        </a>
-      </div>
-      <ul class="flex flex-col gap-1">
-        {yearGroups.map((group) => (
-          <li>
-            <a
-              href={`${archivesHref}#year-${group.year}`}
-              class="text-foreground/85 hover:bg-primary/8 hover:text-primary flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors tabular-nums"
-            >
-              <span class="font-mono font-medium">{group.year}</span>
-              <span class="text-muted-foreground text-[11px]">{t(locale, 'post.yearPosts', { count: group.posts.length })}</span>
+      {yearGroups.length > 0 && (
+        <section class="rail-section" aria-label={t(locale, 'home.railArchiveSummary')}>
+          <div class="rail-card-title">
+            <span class="inline-flex items-center gap-1.5">
+              <Icon name="ri:archive-2-line" class="text-primary size-4 shrink-0" aria-hidden="true" />
+              <span>{t(locale, 'home.railArchiveSummary')}</span>
+            </span>
+            <a href={archivesHref} class="text-muted-foreground hover:text-primary text-[11px] font-normal transition-colors">
+              {t(locale, 'series.viewAll')}
             </a>
-          </li>
-        ))}
-      </ul>
-    </section>
+          </div>
+          <ul class="flex flex-col gap-0.5">
+            {yearGroups.map((group) => (
+              <li>
+                <a
+                  href={`${archivesHref}#year-${group.year}`}
+                  class="text-foreground/85 hover:bg-primary/8 hover:text-primary flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-xs transition-colors tabular-nums"
+                >
+                  <span class="font-mono font-medium">{group.year}</span>
+                  <span class="text-muted-foreground font-mono text-[11px]">{t(locale, 'post.yearPosts', { count: group.posts.length })}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
   )}
 </div>

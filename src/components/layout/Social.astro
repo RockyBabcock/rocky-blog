@@ -17,7 +17,7 @@ const columns = Math.ceil(links.length / rows);
       return (
         <div>
           <a
-            class="social-link flex-center group relative isolate size-9 overflow-hidden rounded-xl transition-colors duration-300"
+            class="social-link flex-center group border-border/65 bg-background/55 hover:border-transparent relative isolate size-9 overflow-hidden rounded-lg border transition-colors duration-300"
             style={color ? `--link-color: ${color}` : ''}
             data-platform={key}
             href={url}
@@ -26,9 +26,9 @@ const columns = Math.ceil(links.length / rows);
             data-tooltip-placement="top"
             aria-label={capitalize(key)}
             target="_blank"
-           >
-            <Icon name={icon} class="inline-block size-5" />
-            <span class="absolute inset-0 -z-10 -translate-x-full translate-y-full rounded-xl transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
+          >
+            <Icon name={icon} class="inline-block size-4.5" />
+            <span class="absolute inset-0 -z-10 -translate-x-full translate-y-full rounded-lg transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
           </a>
         </div>
       );

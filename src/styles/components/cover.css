@@ -8,15 +8,27 @@
 .cover-scrim {
   --scrim: 16 19 24;
   background:
-    radial-gradient(ellipse 68% 54% at 50% 45%, rgb(var(--scrim) / 0.42), transparent 74%),
-    linear-gradient(to bottom, rgb(var(--scrim) / 0.44), rgb(var(--scrim) / 0.06) 28%, rgb(var(--scrim) / 0.24) 100%);
+    radial-gradient(ellipse 58% 48% at 50% 46%, rgb(var(--scrim) / 0.56), rgb(var(--scrim) / 0.16) 58%, transparent 80%),
+    linear-gradient(
+      to bottom,
+      rgb(var(--scrim) / 0.48) 0%,
+      rgb(var(--scrim) / 0.1) 30%,
+      rgb(var(--scrim) / 0.16) 72%,
+      rgb(var(--scrim) / 0.34) 100%
+    );
 }
 
 .dark .cover-scrim {
   --scrim: 12 15 20;
   background:
-    radial-gradient(ellipse 68% 54% at 50% 45%, rgb(var(--scrim) / 0.5), transparent 74%),
-    linear-gradient(to bottom, rgb(var(--scrim) / 0.52), rgb(var(--scrim) / 0.14) 28%, rgb(var(--scrim) / 0.38) 100%);
+    radial-gradient(ellipse 60% 50% at 50% 46%, rgb(var(--scrim) / 0.62), rgb(var(--scrim) / 0.22) 58%, transparent 82%),
+    linear-gradient(
+      to bottom,
+      rgb(var(--scrim) / 0.56) 0%,
+      rgb(var(--scrim) / 0.18) 30%,
+      rgb(var(--scrim) / 0.24) 72%,
+      rgb(var(--scrim) / 0.46) 100%
+    );
 }
 
 .cover-copy {
@@ -28,8 +40,8 @@
 
 .cover-copy :is(h1, h2) {
   text-shadow:
-    0 2px 12px rgb(12 15 20 / 0.48),
-    0 1px 2px rgb(12 15 20 / 0.4);
+    0 3px 18px rgb(12 15 20 / 0.55),
+    0 1px 3px rgb(12 15 20 / 0.45);
 }
 
 @media screen and (prefers-reduced-motion: no-preference) {

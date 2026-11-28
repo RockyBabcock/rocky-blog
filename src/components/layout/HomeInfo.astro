@@ -56,6 +56,7 @@ const stats = [
       </div>
       <div class="home-identity-text">
         <p class="home-name">{siteConfig?.name}</p>
+        {!isDrawer && siteConfig?.alternate && <p class="home-handle">@{siteConfig.alternate}</p>}
         {description && <p class="home-description" title={siteConfig.description}>{description}</p>}
         <Social />
       </div>

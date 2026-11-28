@@ -1,5 +1,10 @@
 .archive-calendar {
   margin-bottom: 2.25rem;
+  padding: 1.125rem 1.25rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.875rem;
+  background: hsl(var(--card));
+  box-shadow: var(--ed-surface-shadow);
 }
 .archive-calendar-head {
   display: flex;
@@ -7,11 +12,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 1rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.875rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid hsl(var(--border) / 0.75);
 }
 .archive-calendar-head h2 {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
 }
 .archive-calendar-legend {
   display: flex;

@@ -1,13 +1,17 @@
 .tag-filter input {
-  width: 14rem;
+  width: 15rem;
   max-width: 100%;
-  height: 2.25rem;
+  height: 2.375rem;
   padding: 0 0.875rem;
   border: 1px solid hsl(var(--border));
-  border-radius: 999px;
-  background: hsl(var(--muted));
+  border-radius: 0.625rem;
+  background: hsl(var(--card));
   color: hsl(var(--foreground));
   font-size: 0.875rem;
+  transition: border-color 180ms var(--ease-out-quart);
+}
+.tag-filter input:hover {
+  border-color: hsl(var(--primary) / 0.45);
 }
 .tag-filter input::placeholder {
   color: hsl(var(--muted-foreground));

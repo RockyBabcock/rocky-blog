@@ -91,13 +91,13 @@ const seriesCards = (
 
       <div class={seriesCards.length === 1 ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-2 gap-4 md:grid-cols-1'}>
         {seriesCards.map((series) => (
-          <article class="editorial-crop-frame editorial-watermark-host border-border bg-card hover:border-primary/40 group relative flex overflow-hidden rounded-xl border transition-colors duration-200 md:flex-col">
+          <article class="editorial-crop-frame editorial-watermark-host border-border bg-card hover:border-primary/45 group relative flex overflow-hidden rounded-[0.875rem] border shadow-[var(--ed-surface-shadow)] transition-[border-color,box-shadow] duration-200 hover:shadow-[var(--ed-surface-shadow-hover)] md:flex-col">
             <a
               href={series.seriesHref}
               tabindex="-1"
               aria-hidden="true"
               style={series.lqip.style}
-              class={`relative z-10 min-h-44 w-2/5 shrink-0 overflow-hidden md:h-40 md:w-full ${series.lqip.class}`}
+              class={`border-border/60 relative z-10 min-h-48 w-2/5 shrink-0 overflow-hidden border-r md:h-42 md:min-h-0 md:w-full md:border-r-0 md:border-b ${series.lqip.class}`}
             >
               <ResponsiveImage
                 src={series.cover}
@@ -108,8 +108,8 @@ const seriesCards = (
                 alt=""
                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
-              <div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/15 to-transparent" />
-              <div class="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-md bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-xs tabular-nums">
+              <div class="absolute inset-0 bg-linear-to-t from-black/62 via-black/18 to-transparent" />
+              <div class="absolute bottom-3 left-3 flex items-center gap-1.5 rounded border border-white/22 bg-black/52 px-2.5 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-xs tabular-nums">
                 <Icon name={series.icon} class="size-3.5" aria-hidden="true" />
                 <span>{t(locale, 'series.postCount', { count: series.issueCount })}</span>
               </div>
@@ -117,10 +117,10 @@ const seriesCards = (
 
             <BotanicalMarks variant="watermark-branch" />
 
-            <div class="relative z-10 flex min-w-0 flex-1 flex-col gap-2.5 p-5 md:p-4">
+            <div class="relative z-10 flex min-w-0 flex-1 flex-col gap-3 p-5 md:p-4">
               <div class="flex flex-col gap-1">
                 <a href={series.seriesHref} class="outline-none">
-                  <h3 class="text-foreground group-hover:text-primary line-clamp-1 text-lg font-bold transition-colors">
+                  <h3 class="text-foreground group-hover:text-primary line-clamp-1 text-lg font-bold tracking-tight transition-colors">
                     {series.title}
                   </h3>
                 </a>
@@ -131,10 +131,10 @@ const seriesCards = (
 
               <a
                 href={series.latestHref}
-                class="bg-foreground/[0.035] border-border/60 hover:border-primary/30 flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-xs transition-colors"
+                class="bg-background/65 border-border/75 hover:border-primary/40 flex items-center justify-between gap-2.5 rounded-lg border border-l-2 border-l-primary/70 px-3 py-2 text-xs transition-colors"
               >
                 <div class="flex min-w-0 flex-col gap-0.5">
-                  <span class="text-primary font-medium">{t(locale, 'series.latestIssue')}</span>
+                  <span class="text-primary font-mono text-[10px] font-semibold tracking-wider uppercase">{t(locale, 'series.latestIssue')}</span>
                   <span class="text-foreground truncate font-medium">{series.latestPostTitle}</span>
                 </div>
                 <span class="editorial-date-stamp shrink-0">{series.latestPostDate}</span>

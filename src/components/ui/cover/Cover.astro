@@ -62,6 +62,7 @@ const primarySeriesHref = primarySeries ? localizedPath(`/${primarySeries.slug}`
 >
   <div class="cover-scrim absolute inset-0 h-full"></div>
   {!compact && <BotanicalMarks variant="hero-celestial" />}
+  {!compact && <div class="hero-editorial-frame" aria-hidden="true" />}
   {!compact && <SakuraPetals />}
   <div
     class:list={[
@@ -135,13 +136,15 @@ const primarySeriesHref = primarySeries ? localizedPath(`/${primarySeries.slug}`
         </>
       ) : (
         <>
-          <p class="motion-rise shadow-text font-mono text-xs tracking-[0.26em] uppercase opacity-85 md:text-[11px]">
-            {siteConfig?.alternate}
-          </p>
-          <h1 class="motion-rise shadow-text mt-2.5 text-5.5xl/[1.12] font-bold tracking-[0.04em] md:text-3xl/[1.18]" style="--i: 1">
+          {siteConfig?.alternate && (
+            <p class="motion-rise hero-eyebrow shadow-text">
+              {siteConfig.alternate}
+            </p>
+          )}
+          <h1 class="motion-rise shadow-text mt-2.5 text-5.5xl/[1.12] font-bold tracking-[0.05em] md:text-3xl/[1.18]" style="--i: 1">
             {siteConfig?.title}
           </h1>
-          <p class="motion-rise shadow-text mt-3.5 max-w-xl text-center text-sm tracking-[0.1em] opacity-90 md:mt-2.5 md:text-xs md:tracking-[0.06em]" style="--i: 2">
+          <p class="motion-rise shadow-text mt-3.5 max-w-xl text-center text-sm tracking-[0.09em] text-white/92 md:mt-2.5 md:text-xs md:tracking-[0.05em]" style="--i: 2">
             {siteConfig?.subtitle}
           </p>
           <div class="motion-rise hero-quick-actions" style="--i: 3">

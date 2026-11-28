@@ -35,13 +35,13 @@ const lqip = getLqipProps(cover);
 const titleMorph = postTitleMorphName(data.slug);
 ---
 
-<article class="compact-post-row group">
+<article class="compact-post-row compact-editorial-row group">
   <a
     href={href}
     tabindex="-1"
     aria-hidden="true"
     style={lqip.style}
-    class={`relative h-16 w-24 shrink-0 overflow-hidden rounded-lg md:h-14 md:w-20 ${lqip.class}`}
+    class={`relative h-16 w-24 shrink-0 overflow-hidden rounded-lg ring-1 ring-inset ring-black/8 dark:ring-white/10 md:h-14 md:w-20 ${lqip.class}`}
   >
     <ResponsiveImage
       src={cover}

@@ -49,18 +49,19 @@ const archivesHref = localizedPath('/archives', locale);
         </a>
       </div>
 
-      <div class="border-border bg-card flex flex-col gap-5 rounded-xl border p-5 md:p-4">
+      <div class="border-border bg-card flex flex-col gap-5 rounded-[0.875rem] border p-5 shadow-[var(--ed-surface-shadow)] md:p-4">
         {timelinePreview.map((group) => (
-          <div class="flex flex-col gap-2">
-            <div class="flex items-baseline justify-between gap-2">
+          <div class="flex flex-col gap-2.5">
+            <div class="flex items-center gap-3">
               <a
                 href={`${archivesHref}#year-${group.year}`}
-                class="text-foreground hover:text-primary inline-flex items-center gap-2 font-mono text-lg font-bold tracking-tight transition-colors tabular-nums"
+                class="text-foreground hover:text-primary inline-flex shrink-0 items-center gap-2 font-mono text-base font-bold tracking-tight transition-colors tabular-nums"
               >
                 <span class="timeline-editorial-node" aria-hidden="true" />
                 <span>{group.year}</span>
               </a>
-              <span class="text-muted-foreground text-xs tabular-nums">
+              <span class="bg-border/75 h-px flex-1" aria-hidden="true" />
+              <span class="text-muted-foreground shrink-0 font-mono text-[11px] tabular-nums">
                 {t(locale, 'post.yearPosts', { count: group.totalInYear })}
               </span>
             </div>
@@ -89,7 +90,7 @@ const archivesHref = localizedPath('/archives', locale);
                       </span>
                     </div>
                     {catLabel && (
-                      <span class="text-muted-foreground shrink-0 text-xs md:hidden">{catLabel}</span>
+                      <span class="text-muted-foreground/85 shrink-0 text-xs md:hidden">{catLabel}</span>
                     )}
                   </a>
                 );

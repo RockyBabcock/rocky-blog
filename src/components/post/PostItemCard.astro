@@ -1,9 +1,14 @@
 ---
-// 导入所需的库和类型
+/**
+ * PostItemCard — Contemporary Editorial horizontal article card.
+ *
+ * Replaces dated diagonal clip-paths and overhanging English "more..." corners with a
+ * clean 42%/58% framed composition, crisp typographic metadata, 2-line titles, subdued
+ * tag links, and localized inline read-more footer.
+ */
 import ResponsiveImage from '@components/common/ResponsiveImage.astro';
 import BookmarkToggleButton from '@components/post/BookmarkToggleButton.astro';
 import { Badge } from '@components/ui/badge';
-import { Button } from '@components/ui/button';
 import { ScrollableRow } from '@components/ui/ScrollableRow';
 import { Routes } from '@constants/router';
 import { defaultCoverList } from '@constants/site-config';
@@ -21,7 +26,7 @@ export interface PostItemCardProps {
   data: PostCardData;
   leftClip?: boolean;
   randomCover: string;
-  isUniformPosition?: boolean; // 是否统一图片位置（非交替模式）
+  isUniformPosition?: boolean;
 }
 
 const { randomCover, data, leftClip = true, isUniformPosition = false } = Astro.props as PostItemCardProps;
@@ -38,34 +43,15 @@ const categoryArr = getCategoryArr(categories?.[0]);
 const categoryLink = localizedPath(buildCategoryPath(categoryArr), locale);
 const categoryStr = categoryArr?.length ? translateCategoryName(categoryArr[categoryArr.length - 1], locale) : '';
 
-// 直接使用 description（已在 PostCardData 中计算好）
 const postDescription = description ?? '';
-
-// 获取 LQIP 样式用于图片占位符
 const lqipProps = getLqipProps(finalCover);
-
-// Stagger padding amounts for uniform position mode (following diagonal edge)
-// Only applied when images are on left, where the diagonal faces the content
-const staggerAmounts = ['pl-0', 'pl-2', 'pl-4', 'pl-6'] as const;
-
-/**
- * Get stagger padding class for a content row
- * @param rowIndex - The row index (0-3)
- * @returns Tailwind padding class or empty string
- */
-function getStaggerPadding(rowIndex: number): string {
-  // Only apply stagger for left image position (diagonal faces content)
-  if (!isUniformPosition || !leftClip) return '';
-  return staggerAmounts[rowIndex];
-}
-
 const titleMorph = postTitleMorphName(slug);
+const imageOnLeft = isUniformPosition ? true : leftClip;
 ---
 
-<div
+<article
   class={cn(
-    'group text-card-foreground shadow-card border-border hover:border-primary/40 relative flex rounded-xl border bg-card md:flex-col',
-    'post-item-card motion-reveal',
+    'post-item-card motion-reveal group text-card-foreground border-border hover:border-primary/45 relative flex overflow-hidden rounded-[0.875rem] border bg-card md:flex-col',
   )}
 >
   <a
@@ -74,90 +60,65 @@ const titleMorph = postTitleMorphName(slug);
     aria-hidden="true"
     style={lqipProps.style}
     class={cn(
-      'post-item-cover md:clip-path-none relative h-46.5 max-h-46.5 w-[calc(50%-2rem)] overflow-hidden md:w-auto',
-      leftClip ? 'rounded-s-lg clip-path-post-img-left order-1' : 'rounded-e-lg clip-path-post-img-right order-2',
-      'md:clip-path-none md:order-0',
+      'post-item-cover relative min-h-48 w-[42%] shrink-0 overflow-hidden md:h-46 md:min-h-0 md:w-full',
+      imageOnLeft ? 'order-1 border-r border-border/60 md:border-r-0 md:border-b' : 'order-2 border-l border-border/60 md:border-l-0 md:border-b',
+      'md:order-0',
       lqipProps.class,
     )}
   >
-    <ResponsiveImage src={finalCover} maxWidth={800} sizes="(max-width: 767px) calc(100vw - 48px), (max-width: 992px) 40vw, 400px" loading="lazy" decoding="async" alt="" class="h-full w-full cursor-pointer object-cover" />
+    <ResponsiveImage
+      src={finalCover}
+      maxWidth={800}
+      sizes="(max-width: 767px) calc(100vw - 32px), (max-width: 992px) 42vw, 360px"
+      loading="lazy"
+      decoding="async"
+      alt=""
+      class="h-full w-full cursor-pointer object-cover"
+    />
+    <span class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/6 dark:ring-white/8" aria-hidden="true" />
   </a>
+
   <div
     class={cn(
-      'flex flex-col gap-2 pb-2 md:pb-4 pt-4 md:pt-1',
-      'px-4 md:px-4',
-      // Reduce margin on the side adjacent to image diagonal when uniform left position
-      isUniformPosition && leftClip && '-ml-3',
-      'w-[calc(50%+2rem)] md:w-full',
-      leftClip ? 'order-2' : 'order-1',
+      'flex min-w-0 flex-1 flex-col justify-between gap-2.5 p-5 md:p-4',
+      imageOnLeft ? 'order-2' : 'order-1',
       'md:order-0',
     )}
   >
-    <ScrollableRow
-      client:visible
-      className={cn('w-full', getStaggerPadding(0), 'md:pl-0 md:pr-0')}
-      innerClassName="items-center justify-between gap-2.5 w-full"
-      fadeWidth={16}
-    >
-      {
-        categoryStr && (
-          <a href={categoryLink} class="flex-center hover:text-blue text-muted-foreground shrink-0 text-xs whitespace-nowrap transition duration-300">
-            <Icon name="gg:flag" />
-            {categoryStr}
-          </a>
-        )
-      }
-      <div class="text-muted-foreground flex shrink-0 items-center gap-2 text-xs">
-        {
-          date ? (
-            <p class="flex-center gap-1 whitespace-nowrap">
-              <Icon name="fa6-solid:calendar-days" />
+    <div class="flex flex-col gap-2">
+      {/* Unboxed editorial metadata row + bookmark */}
+      <div class="flex items-start justify-between gap-2">
+        <div class="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs">
+          {categoryStr && (
+            <a
+              href={categoryLink}
+              class="text-primary hover:text-blue shrink-0 font-medium whitespace-nowrap transition-colors"
+            >
+              {categoryStr}
+            </a>
+          )}
+          {categoryStr && date && (
+            <span class="text-muted-foreground/45 select-none" aria-hidden="true">·</span>
+          )}
+          {date && (
+            <time datetime={date.toISOString()} class="font-mono text-[11px] whitespace-nowrap tabular-nums">
               {formatLocalizedDate(date, locale)}
-            </p>
-          ) : null
-        }
-        <p class="flex-center gap-1 whitespace-nowrap">
-          <Icon name="fa6-solid:pen-nib" />
-          {t(locale, 'post.wordCount', { count: wordCount })}
-        </p>
-        <button
-          class="flex-center gap-1 whitespace-nowrap md:hidden"
-          title={t(locale, 'post.readingTimeTooltip', { time: readingTime })}
-          data-tooltip-placement="top"
-        >
-          <Icon name="fa6-solid:clock" />
-          {readingTime}
-        </button>
-      </div>
-    </ScrollableRow>
-    <div class={cn('mt-1 flex flex-col space-y-1.5 p-0', getStaggerPadding(1), 'md:pl-0 md:pr-0')}>
-      <div class="flex items-center gap-2">
-        <a href={href} class="min-w-0 flex-1 outline-none">
-          <h2
-            class="text-primary hover:text-blue line-clamp-1 w-fit max-w-full truncate text-xl font-bold transition-colors duration-300"
-            transition:name={titleMorph}
-            transition:animate="initial"
-            data-morph={titleMorph}
+            </time>
+          )}
+          <span class="text-muted-foreground/45 select-none md:hidden" aria-hidden="true">·</span>
+          <span class="whitespace-nowrap tabular-nums md:hidden">
+            {t(locale, 'post.wordCount', { count: wordCount })}
+          </span>
+          <span class="text-muted-foreground/45 select-none md:hidden" aria-hidden="true">·</span>
+          <span
+            class="inline-flex items-center gap-1 whitespace-nowrap tabular-nums md:hidden"
+            title={t(locale, 'post.readingTimeTooltip', { time: readingTime })}
           >
-            {title}
-          </h2>
-        </a>
-        {
-          isDraft && (
-            <Badge className="bg-yellow-700 border border-yellow-600/20 gap-1 text-white shrink-0 hover:bg-yellow-500 whitespace-nowrap transition-colors duration-300 ">
-              <Icon name="fa6-solid:file-pen" class="h-3 w-3" />
-              {t(locale, 'post.draft')}
-            </Badge>
-          )
-        }
-        {
-          isFallback && (
-            <Badge className="border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 gap-1 shrink-0 whitespace-nowrap transition-colors duration-300">
-              <Icon name="ri:translate-2" class="h-3 w-3" />
-              {getLocaleLabel(postLocale ?? defaultLocale)}
-            </Badge>
-          )
-        }
+            <Icon name="fa6-solid:clock" class="size-3 opacity-75" aria-hidden="true" />
+            {readingTime}
+          </span>
+        </div>
+
         <BookmarkToggleButton
           variant="subtle"
           slug={slug}
@@ -172,72 +133,88 @@ const titleMorph = postTitleMorphName(slug);
           className="shrink-0"
         />
       </div>
-    </div>
-    <p
-      class={cn(
-        'text-muted-foreground line-clamp-3 h-15 text-sm md:h-auto md:max-h-15',
-        getStaggerPadding(2),
-        'md:pl-0 md:pr-0',
-      )}
-    >
-      {postDescription}
-    </p>
-    {
-      tags?.length && (
-        <ScrollableRow
-          client:visible
-          className={cn(
-            'pt-1 pb-1',
-            leftClip ? 'mr-18' : 'ml-18',
-            'md:mx-0',
-            getStaggerPadding(3),
-            'md:pl-0 md:pr-0',
-          )}
-          innerClassName="gap-2"
-          fadeWidth={16}
-        >
-          {tags.map((tag: string) => (
-            <a href={localizedPath(buildTagPath(tag), locale)}>
-              <Badge
-                className='hover:text-badge-primary/80 shrink-0 cursor-pointer gap-0.5 border-none px-1 text-xs font-bold whitespace-nowrap transition-colors duration-300 flex'
-                variant="outline"
-              >
-                <Icon name="fa6-solid:tags" /> {tag}
-              </Badge>
-            </a>
-          ))}
-        </ScrollableRow>
-      )
-    }
-    <a
-      href={href}
-      tabindex="-1"
-      aria-hidden="true"
-      class={cn('absolute -bottom-1', leftClip ? '-right-1' : '-left-1', 'md:left-auto md:-right-1')}
-    >
-      <Button
-        tabIndex={-1}
-        className={cn(
-          'post-item-more bg-primary text-primary-foreground hover:bg-primary/92 rounded-xl transition-[translate,box-shadow,background-color] duration-250 ease-out-quart md:h-7 md:px-2 md:py-1 md:text-xs',
-          leftClip
-            ? 'rounded-se-none rounded-es-none group-hover:translate-x-0.5'
-            : 'rounded-ss-none rounded-ee-none group-hover:-translate-x-0.5',
-          'md:rounded-ss-xl md:rounded-se-none md:rounded-ee-xl md:rounded-es-none md:group-hover:translate-x-0.5',
+
+      {/* Article title + optional status badges */}
+      <div class="flex flex-wrap items-center gap-2">
+        <a href={href} class="min-w-0 flex-1 outline-none">
+          <h2
+            class="text-foreground group-hover:text-primary line-clamp-2 text-lg leading-snug font-bold tracking-tight transition-colors duration-200 md:text-base"
+            transition:name={titleMorph}
+            transition:animate="initial"
+            data-morph={titleMorph}
+          >
+            {title}
+          </h2>
+        </a>
+        {isDraft && (
+          <Badge className="shrink-0 gap-1 border border-yellow-600/20 bg-yellow-700 whitespace-nowrap text-white hover:bg-yellow-600">
+            <Icon name="fa6-solid:file-pen" class="h-3 w-3" />
+            {t(locale, 'post.draft')}
+          </Badge>
         )}
+        {isFallback && (
+          <Badge className="shrink-0 gap-1 border-amber-500/30 bg-amber-500/10 whitespace-nowrap text-amber-700 dark:text-amber-400">
+            <Icon name="ri:translate-2" class="h-3 w-3" />
+            {getLocaleLabel(postLocale ?? defaultLocale)}
+          </Badge>
+        )}
+      </div>
+
+      {/* Excerpt */}
+      {postDescription && (
+        <p class="text-muted-foreground line-clamp-2 text-sm leading-relaxed md:text-xs">
+          {postDescription}
+        </p>
+      )}
+    </div>
+
+    {/* Editorial footer hairline: subdued tags + localized read-more link */}
+    <div class="border-border/60 mt-1 flex items-center justify-between gap-3 border-t pt-2.5">
+      <div class="min-w-0 flex-1">
+        {tags?.length ? (
+          <ScrollableRow client:visible className="w-full" innerClassName="gap-2.5 items-center" fadeWidth={14}>
+            {tags.slice(0, 4).map((tag: string) => (
+              <a
+                href={localizedPath(buildTagPath(tag), locale)}
+                class="text-muted-foreground hover:text-primary shrink-0 text-xs whitespace-nowrap transition-colors"
+              >
+                <span class="text-primary/65 mr-0.5">#</span>
+                {tag}
+              </a>
+            ))}
+          </ScrollableRow>
+        ) : (
+          <span class="text-muted-foreground/70 hidden items-center gap-1 text-xs tabular-nums md:inline-flex">
+            <Icon name="fa6-solid:clock" class="size-3" aria-hidden="true" />
+            {readingTime}
+          </span>
+        )}
+      </div>
+
+      <a
+        href={href}
+        class="text-primary hover:text-blue inline-flex shrink-0 items-center gap-1 text-xs font-semibold whitespace-nowrap transition-colors"
       >
-        more...
-      </Button>
-    </a>
+        <span>{t(locale, 'post.readMore')}</span>
+        <Icon
+          name="ri:arrow-right-line"
+          class="post-item-arrow size-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
+          aria-hidden="true"
+        />
+      </a>
+    </div>
   </div>
-</div>
+</article>
 
 <style>
   .post-item-card {
     content-visibility: auto;
-    contain-intrinsic-size: auto 220px;
+    contain-intrinsic-size: auto 216px;
+    box-shadow: var(--ed-surface-shadow);
     transition:
-      transform var(--dur-slow) var(--ease-out-quart),
-      box-shadow var(--dur-slow) var(--ease-out-quart);
+      transform 220ms var(--ease-out-quart),
+      box-shadow 220ms var(--ease-out-quart),
+      border-color 220ms var(--ease-out-quart);
   }
 
   .post-item-card:has(a:focus-visible) {
@@ -245,57 +222,36 @@ const titleMorph = postTitleMorphName(slug);
     outline-offset: 3px;
   }
 
-  .post-item-cover {
-    transition: clip-path 900ms var(--ease-out-expo);
-  }
-
   .post-item-cover img {
-    transition:
-      scale 900ms var(--ease-out-expo),
-      filter 900ms var(--ease-out-expo);
+    transition: scale 520ms var(--ease-out-quart);
   }
 
   @media (hover: hover) {
     .post-item-card:hover {
       transform: translateY(-2px);
-      box-shadow:
-        0 14px 28px -18px rgb(20 26 34 / 0.16),
-        0 4px 10px -6px rgb(20 26 34 / 0.08);
-    }
-
-    :global(.dark) .post-item-card:hover {
-      box-shadow:
-        0 16px 32px -16px rgb(0 0 0 / 0.48),
-        0 4px 12px -6px rgb(0 0 0 / 0.32);
+      box-shadow: var(--ed-surface-shadow-hover);
     }
 
     .post-item-card:hover .post-item-cover img {
-      scale: 1.03;
-    }
-
-    .post-item-card:hover .post-item-more {
-      box-shadow: 0 4px 12px -4px rgb(20 26 34 / 0.25);
+      scale: 1.035;
     }
   }
 
-  /* The diagonal edge opens a little on hover (desktop layout only; mobile stacks the cover). */
-  @media (hover: hover) and (width > 768px) {
-    .post-item-card:hover .clip-path-post-img-left {
-      clip-path: polygon(0 0, 95% 0%, 100% 100%, 0% 100%);
-    }
-
-    .post-item-card:hover .clip-path-post-img-right {
-      clip-path: polygon(0 0%, 100% 0%, 100% 100%, 5% 100%);
-    }
-  }
-
-  :global(html.motion-off) .post-item-card:hover {
+  :global(html:is([data-motion="reduced"], .motion-off)) .post-item-card,
+  :global(html:is([data-motion="reduced"], .motion-off)) .post-item-cover img,
+  :global(html:is([data-motion="reduced"], .motion-off)) .post-item-arrow {
+    transition: none;
     transform: none;
+    scale: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .post-item-card:hover {
+    .post-item-card,
+    .post-item-cover img,
+    .post-item-arrow {
+      transition: none;
       transform: none;
+      scale: none;
     }
   }
 </style>

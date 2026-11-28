@@ -45,9 +45,9 @@ const hasFeaturedCategories = Boolean(siteConfig?.featuredCategories?.length);
       {hasFeaturedCategories && <CategoryCards />}
 
       {weightedTags.length > 0 && (
-        <div class="editorial-grid-surface border-border bg-card flex flex-col gap-3 rounded-xl border p-4">
-          <div class="flex items-center justify-between gap-2">
-            <h3 class="text-foreground flex items-center gap-1.5 text-sm font-semibold">
+        <div class="editorial-grid-surface border-border bg-card flex flex-col gap-3.5 rounded-[0.875rem] border p-5 shadow-[var(--ed-surface-shadow)] md:p-4">
+          <div class="border-border/70 flex items-center justify-between gap-2 border-b pb-2.5">
+            <h3 class="text-foreground flex items-center gap-1.5 text-sm font-semibold tracking-wide">
               <Icon name="ri:hashtag" class="text-primary size-4" aria-hidden="true" />
               <span>{t(locale, 'home.popularTags')}</span>
             </h3>

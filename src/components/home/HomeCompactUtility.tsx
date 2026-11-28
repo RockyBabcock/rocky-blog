@@ -34,7 +34,7 @@ export default function HomeCompactUtility({ locale }: HomeCompactUtilityProps) 
       <button
         type="button"
         onClick={() => openModal('search')}
-        className="border-border bg-card text-muted-foreground hover:border-primary/45 hover:text-foreground flex min-w-0 flex-1 items-center gap-2 rounded-xl border px-3.5 py-2.5 text-left text-xs transition-colors"
+        className="border-border bg-card text-muted-foreground hover:border-primary/45 hover:text-foreground flex min-w-0 flex-1 items-center gap-2 rounded-lg border px-3.5 py-2.5 text-left text-xs shadow-[var(--ed-surface-shadow)] transition-colors"
       >
         <Icon icon="ri:search-line" className="text-primary size-4 shrink-0" aria-hidden="true" />
         <span className="min-w-0 flex-1 truncate">{t('home.railSearchHint')}</span>
@@ -43,7 +43,7 @@ export default function HomeCompactUtility({ locale }: HomeCompactUtilityProps) 
         href={shelfHref}
         aria-label={t('nav.shelf')}
         data-compact-shelf-link
-        className="border-border bg-card text-muted-foreground hover:border-primary/45 hover:text-primary inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-medium transition-colors"
+        className="border-border bg-card text-muted-foreground hover:border-primary/45 hover:text-primary inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-2.5 text-xs font-medium shadow-[var(--ed-surface-shadow)] transition-colors"
       >
         <Icon icon="ri:bookmark-3-line" className="text-primary size-4 shrink-0" aria-hidden="true" />
         <span className="xs:hidden">{t('nav.shelf')}</span>
@@ -57,7 +57,7 @@ export default function HomeCompactUtility({ locale }: HomeCompactUtilityProps) 
         type="button"
         onClick={() => openModal('command')}
         aria-label={t('command.title')}
-        className="border-border bg-card text-muted-foreground hover:border-primary/45 hover:text-primary inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-medium transition-colors"
+        className="border-border bg-card text-muted-foreground hover:border-primary/45 hover:text-primary inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-2.5 text-xs font-medium shadow-[var(--ed-surface-shadow)] transition-colors"
       >
         <Icon icon="ri:command-line" className="size-4 shrink-0" aria-hidden="true" />
         <span className="md:hidden">{t('command.trigger')}</span>

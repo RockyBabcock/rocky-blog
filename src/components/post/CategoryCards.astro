@@ -1,5 +1,4 @@
 ---
-import { Button } from '@components/ui/button';
 import { categoryMap } from '@constants/category';
 import { Routes } from '@constants/router';
 import { siteConfig } from '@constants/site-config';
@@ -15,7 +14,6 @@ import { translateFeaturedCategoryField } from '@lib/content/categories';
 import { toPostRefs } from '@lib/content/transforms';
 import { getLqipStyle } from '@lib/lqip';
 import { routeBuilder } from '@lib/route';
-import { cn } from '@lib/utils';
 import { Icon } from 'astro-icon/components';
 import { getLocaleFromUrl, localizedPath, t } from '@/i18n';
 import type { PostRef } from '@/types/blog';
@@ -70,38 +68,39 @@ const categoryPosts: CategoryWithPosts[] = (
       const indexLabel = String(idx + 1).padStart(2, '0');
       return (
         <FlippedCard className="motion-reveal h-52">
-          <div slot="front" class="group relative flex h-full flex-col justify-end overflow-hidden rounded-xl p-5 text-left">
+          <div slot="front" class="category-front-frame editorial-crop-frame border-border/80 group relative flex h-full flex-col justify-end overflow-hidden rounded-[0.875rem] border p-5 text-left shadow-[var(--ed-surface-shadow)]">
             <img
               style={getLqipStyle(category.image)}
               src={category.image}
               alt=""
               loading="lazy"
               decoding="async"
-              class="absolute inset-0 -z-10 h-full w-full rounded-xl object-cover"
+              class="absolute inset-0 -z-10 h-full w-full rounded-[0.875rem] object-cover"
             />
-            <div class="absolute inset-0 -z-10 rounded-xl bg-linear-to-t from-black/78 via-black/38 to-black/15" />
-            <span class="absolute top-3.5 left-4 z-10 inline-flex items-center font-mono text-[11px] font-semibold tracking-[0.14em] text-white/80 tabular-nums" aria-hidden="true">
-              {indexLabel}
+            <div class="absolute inset-0 -z-10 rounded-[0.875rem] bg-linear-to-t from-black/84 via-black/42 to-black/14" />
+            <span class="absolute top-3.5 left-4 z-10 inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold tracking-[0.14em] text-white/85 tabular-nums" aria-hidden="true">
+              <span>{indexLabel}</span>
+              <span class="h-px w-4 bg-white/40" />
             </span>
             {parentCategory?.name ? (
-              <span class="absolute top-3 right-3 z-10 rounded-md bg-black/50 px-2 py-0.5 text-xs font-medium text-white/90 backdrop-blur-xs">
+              <span class="absolute top-3 right-3 z-10 rounded border border-white/22 bg-black/48 px-2 py-0.5 text-[11px] font-medium text-white/92 backdrop-blur-xs">
                 {translateCategoryName(parentCategory.name, locale)}
               </span>
             ) : null}
             <div class="relative z-10 flex flex-col gap-1">
               <h3 class="text-xl font-bold tracking-wide text-white">{displayName}</h3>
-              {displayDesc && <p class="line-clamp-1 text-xs text-white/80">{displayDesc}</p>}
-              <p class="mt-1 flex items-center gap-1.5 text-xs font-medium text-white/85 tabular-nums">
+              {displayDesc && <p class="line-clamp-1 text-xs text-white/82">{displayDesc}</p>}
+              <p class="mt-1 flex items-center gap-1.5 font-mono text-[11px] font-medium text-white/88 tabular-nums">
                 <Icon name="ri:article-line" class="size-3.5" aria-hidden="true" />
                 <span>{t(locale, 'category.postCount', { count: category.posts.length })}</span>
               </p>
             </div>
           </div>
-          <div slot="back" class="bg-card border-border relative flex h-full flex-col rounded-xl border px-5 pt-13 pb-4 text-left">
+          <div slot="back" class="bg-card border-border relative flex h-full flex-col justify-between rounded-[0.875rem] border px-5 pt-12 pb-3.5 text-left shadow-[var(--ed-surface-shadow)]">
             <span class="category-index-tag" aria-hidden="true">
               {indexLabel}
             </span>
-            <div class="border-border absolute top-0 right-0 left-0 flex h-10 items-center border-b px-5">
+            <div class="border-border/80 absolute top-0 right-0 left-0 flex h-10 items-center border-b px-5 pr-12">
               <a class="text-foreground hover:text-primary truncate text-sm font-semibold transition-colors" href={categoryLink}>
                 {displayName}
               </a>
@@ -126,33 +125,34 @@ const categoryPosts: CategoryWithPosts[] = (
                 </a>
               ))}
             </div>
-            <p class="text-muted-foreground absolute bottom-3.5 left-5 flex items-center text-xs tabular-nums">
-              {parentCategory?.name ? (
-                <a
-                  href={parentCategoryLink}
-                  class="group hover:text-blue mr-1 flex cursor-pointer items-center transition duration-300"
-                >
-                  <Icon name="ri:flag-fill" class="mr-0.5 text-sm" />
-                  <span class="mr-2">{translateCategoryName(parentCategory.name, locale)}</span>
-                </a>
-              ) : null}
-              <Fragment>
-                <Icon name="gg:loadbar-doc" class="mr-0.5 text-sm" />
-                {categoryInfo?.children?.length
-                  ? `${t(locale, 'category.subCategoryCount', { count: categoryInfo.children.length })}, `
-                  : ''}
-                {t(locale, 'category.postCount', { count: category.posts?.length ?? 0 })}
-              </Fragment>
-            </p>
-            <a href={categoryLink} aria-label={displayName} class="absolute right-0 bottom-0">
-              <Button
-                className={cn(
-                  'bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-xl rounded-se-none rounded-es-none px-3 text-xs transition-colors',
-                )}
+            <div class="border-border/65 flex items-center justify-between gap-2 border-t pt-2.5 text-xs">
+              <p class="text-muted-foreground flex min-w-0 items-center truncate tabular-nums">
+                {parentCategory?.name ? (
+                  <a
+                    href={parentCategoryLink}
+                    class="group hover:text-blue mr-1.5 inline-flex shrink-0 cursor-pointer items-center transition duration-300"
+                  >
+                    <Icon name="ri:flag-fill" class="mr-0.5 text-xs" />
+                    <span>{translateCategoryName(parentCategory.name, locale)}</span>
+                  </a>
+                ) : null}
+                <span class="inline-flex items-center truncate">
+                  <Icon name="gg:loadbar-doc" class="mr-1 shrink-0 text-sm" />
+                  {categoryInfo?.children?.length
+                    ? `${t(locale, 'category.subCategoryCount', { count: categoryInfo.children.length })}, `
+                    : ''}
+                  {t(locale, 'category.postCount', { count: category.posts?.length ?? 0 })}
+                </span>
+              </p>
+              <a
+                href={categoryLink}
+                aria-label={displayName}
+                class="text-primary hover:text-blue inline-flex shrink-0 items-center gap-0.5 font-semibold whitespace-nowrap transition-colors"
               >
-                {t(locale, 'series.viewAll')}
-              </Button>
-            </a>
+                <span>{t(locale, 'series.viewAll')}</span>
+                <Icon name="ri:arrow-right-s-line" class="size-3.5" aria-hidden="true" />
+              </a>
+            </div>
           </div>
         </FlippedCard>
       );
