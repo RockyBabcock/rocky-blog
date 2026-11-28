@@ -1,12 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import {
-  buildBreadcrumbJsonLd,
-  buildPostBreadcrumbs,
-  buildPostJsonLd,
-  buildPostKeywords,
-  hasMathSyntax,
-} from './post-page';
+import { buildBreadcrumbJsonLd, buildPostBreadcrumbs, buildPostJsonLd, buildPostKeywords, hasMathSyntax } from './post-page';
 
 describe('hasMathSyntax', () => {
   it('respects global enableMath, frontmatter opt-in/opt-out, and LaTeX delimiters', () => {
