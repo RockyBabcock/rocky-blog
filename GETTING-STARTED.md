@@ -77,7 +77,7 @@ src/content/blog/ja/tools/example.md
 src/content/blog/fr/tools/example.md
 ```
 
-可通过一致的 `link` 和 `translationKey` 关联译文。UI 字典、路由和 SEO 规则见 [国际化与 SEO](./docs/overview/11-i18n-and-seo.md)。并非每篇文章都有所有语言的译文；缺少时按实现回退默认语言。
+可通过一致的 `link` 和 `translationKey` 关联译文。 Muse 的完整翻译交付步骤见 [翻译 Prompt](./docs/muse/prompts/TRANSLATE.md)。UI 字典、路由和 SEO 规则见 [国际化与 SEO](./docs/overview/11-i18n-and-seo.md)。并非每篇文章都有所有语言的译文；缺少时按实现回退默认语言。
 
 ## 命令
 

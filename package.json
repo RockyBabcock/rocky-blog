@@ -14,7 +14,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "lint": "biome check .",
+    "lint": "biome check . --max-diagnostics=100",
     "lint:fix": "biome check --write .",
     "lint:fix:unsafe": "biome check --write --unsafe .",
     "format": "biome format --write .",

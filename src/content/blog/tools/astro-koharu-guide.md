@@ -5,7 +5,7 @@ catalog: true
 date: 2025-12-29 21:55:00
 updated: 2026-11-27 00:00:00
 math: true
-description: Rocky Blog 的内容写作、站点配置、多语言、Markdown、阅读体验与静态部署指南
+description: Rocky Blog 的 MuseAI 内容接入、站点配置、多语言、Markdown、阅读体验与静态部署指南
 tags:
   - Astro
   - 博客
