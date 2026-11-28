@@ -102,4 +102,3 @@ export const seoConfig: SeoSummaryConfig = buildSeoConfig(siteConfig);
 export const defaultCoverList: string[] = normalizeDefaultCoverList(yamlConfig.defaultCoverList);
 
 export const routers: RouterItem[] = normalizeNavigation(yamlConfig.navigation);
-

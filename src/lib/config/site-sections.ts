@@ -7,14 +7,7 @@
  */
 
 import { DEFAULT_ROUTERS } from './routes';
-import type {
-  I18nConfig,
-  LocaleConfig,
-  ResolvedSiteConfig,
-  RouterItem,
-  SiteBasicConfig,
-  SocialConfig,
-} from './types';
+import type { I18nConfig, LocaleConfig, ResolvedSiteConfig, RouterItem, SiteBasicConfig, SocialConfig } from './types';
 
 export interface IcpConfig {
   text: string;
