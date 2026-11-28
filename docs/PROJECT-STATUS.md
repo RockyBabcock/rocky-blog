@@ -179,7 +179,7 @@ Agent 必须区分“维护者明确删除”“当前代码已有”“当前�
 
 1. 根据所使用的工具选择入口上下文：通用 Agent 使用 `AGENTS.md`；Gemini / Google AI Studio 使用 `GEMINI.md`；Claude Code 使用 `CLAUDE.md`；GitHub Copilot 使用 `.github/copilot-instructions.md`。这些入口都指向同一套仓库规范。若平台不会自动读取对应文件，应在任务开始时主动提供或打开该文件及 `docs/PRODUCT-SCOPE.md`、`docs/PROJECT-STATUS.md`，不得假设平台已经加载。
 2. 读取本文和 [PRODUCT-SCOPE.md](./PRODUCT-SCOPE.md)。
-3. 根据任务继续阅读相应架构文档；例如内容任务阅读 `02-content-system.md`，路由 / 语言任务阅读 `03-routing.md` 与 `11-i18n-and-seo.md`。所有前端 / 首页 / 样式 / 视觉任务还必须先读 [FRONTEND-DESIGN-PROMPT.md](./FRONTEND-DESIGN-PROMPT.md)，并结合 `05-ui-components.md`、`07-theme-system.md`、`08-animation-system.md` 和 `09-styling.md` 执行。
+3. 根据任务继续阅读相应架构文档；例如内容任务阅读 `02-content-system.md`，路由 / 语言任务阅读 `03-routing.md` 与 `11-i18n-and-seo.md`。所有前端 / 首页 / 样式 / 视觉任务还必须先读 [FRONTEND-DESIGN-PROMPT.md](./FRONTEND-DESIGN-PROMPT.md)，并结合 `05-ui-components.md`、`07-theme-system.md`、`08-animation-system.md` 和 `09-styling.md` 执行。 Claude Code 的前端任务同时加载 `.claude/skills/frontend-designer/SKILL.md`。
 4. 检查当前分支、HEAD、相关实现和测试；不要只依赖历史聊天、旧截图或旧提交。
 
 ### 实施任务时
