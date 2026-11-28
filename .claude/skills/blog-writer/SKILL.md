@@ -8,6 +8,7 @@ description: 按 Rocky Blog 当前内容规范创建或规划 Markdown / MDX 文
 按照仓库当前实现为 Rocky Blog 创建 Markdown / MDX 内容。不要将旧 astro-koharu 教程、旧 Hexo 配置或历史 CMS 工作流当作当前项目规范。
 
 开始前阅读：
+- `AGENTS.md` — 仓库级工作规范与内容安全边界
 - `docs/PRODUCT-SCOPE.md`
 - `docs/PROJECT-STATUS.md`
 - `GETTING-STARTED.md`
