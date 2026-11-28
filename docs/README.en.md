@@ -78,6 +78,7 @@ Run `pnpm build` to generate `dist/` and deploy it to a static host. No applicat
 
 - [Product Scope](./PRODUCT-SCOPE.md)
 - [Frontend Design & Implementation Prompt](./FRONTEND-DESIGN-PROMPT.md)
+- [Editorial Design References & Rocky Adaptation](./design/EDITORIAL-REFERENCE-AND-ADAPTATION.md)
 - [Muse Content Workflow](./muse/README.md)
 - [Project Status and Agent Handoff](./PROJECT-STATUS.md)
 - [Getting Started](../GETTING-STARTED.md)

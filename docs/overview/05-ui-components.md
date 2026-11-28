@@ -41,7 +41,7 @@
 
 ## 视觉设计原则
 
-具体的视觉方向、首页模块验收标准、响应式 / 无障碍要求和实施流程见 [前端设计实施 Prompt](../FRONTEND-DESIGN-PROMPT.md)。任何视觉优化均不得删除现有页面模块或削弱已有交互。
+具体的视觉方向、首页模块验收标准、响应式 / 无障碍要求和实施流程见 [前端设计实施 Prompt](../FRONTEND-DESIGN-PROMPT.md)。任何视觉优化均不得删除现有页面模块或削弱已有交互。 外部优秀博客与出版物的参考研究、以及如何映射到 Rocky 自身风格，见 [Editorial Design Reference & Rocky Blog Adaptation Guide](../design/EDITORIAL-REFERENCE-AND-ADAPTATION.md)。
 
 - 先建立主次关系，再添加装饰细节。
 - 使用标题、眉题、编号、时间、分类标签、细线、缩进、背景层次和留白塑造编辑式节奏。

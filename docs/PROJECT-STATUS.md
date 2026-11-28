@@ -1,7 +1,7 @@
 # Rocky Blog — 项目需求、状态与 Agent 交接
 
-> **最后核对日期：** 2026-11-27  
-> **核对基线：** `main`，`aa65fff8dabd6915b42585d05f8e0d91aceba8f4`  
+> **最后核对日期：** 2026-11-28  
+> **核对基线：** `main`，`3a88077f923c4d28b1420ac139c3c07c7d0314ad`  
 > 本文记录可从当前仓库、CI 和部署状态核实的事实，以及维护者已经明确的产品要求。它不是虚构的进度百分比，也不代替代码验证。后续提交可能改变状态；每次交付都应重新核对。
 
 ## 1. 项目是什么
@@ -111,12 +111,14 @@ Rocky Blog 是一个由外部 MuseAI 提供文章内容、以阅读和发现为�
 
 ## 4. 已确认的验证状态
 
-**当前已验证基线：** `main`，commit `c8f43b4bcd6aba1b99b7def9cd4b5240dc9f865c`（2026-11-27）。
+**当前已验证代码基线：** `main`，commit `3a88077f923c4d28b1420ac139c3c07c7d0314ad`（2026-11-28）。
 
-- GitHub Actions CI：Run `46004445760`，结论为 **success**。
+- GitHub Actions CI：Run `46125825298`，结论为 **success**。
 - 通过步骤：依赖安装、Biome lint、Knip strict、Astro / TypeScript 检查、核心单元测试、生产构建和 Pagefind 索引生成。
-- Vercel commit status：**success**；部署记录 ID 为 `5hCTJyjeEuhteYutZ1Pye4fJ16Wg`。
-- 部署目标：[Vercel deployment](https://vercel.com/rockybabcocks-projects/rocky-blog/5hCTJyjeEuhteYutZ1Pye4fJ16Wg)。
+- Vercel commit status：**success**。
+- 部署目标：[Vercel deployment](https://vercel.com/rockybabcocks-projects/rocky-blog/3LXzNYzKtcFHFTQJxZ9pcdVxj6Ea)。
+
+本次最新代码基线已包含一轮首页视觉细节调整（Featured、Latest Writing、Series、Topics、Timeline、Sidebars、文章卡片和编辑式样式）。后续视觉 Agent 必须先检查这些实际改动，再决定补强点；不得将其当作旧版界面，也不得无依据地整套覆盖。
 
 **验证边界：** 当前 CI workflow 没有自动运行所有 Playwright 浏览器专项脚本。CI 绿色表示上述流水线通过，不代表所有浏览器、设备、语言和视觉回归测试都已完成。需要时应单独运行 `package.json` 中对应的 `test:*:browser` 脚本并记录结果。
 
@@ -128,7 +130,7 @@ Rocky Blog 是一个由外部 MuseAI 提供文章内容、以阅读和发现为�
 | --- | --- | --- |
 | 文档与 Agent 规则一致性 | **本次审查已完成**；后续随实现变更持续维护 | 产品范围、状态记录、Agent 入口、贡献指南、架构文档和专项 Skill 必须保持一致 |
 | 首页和主要页面的视觉丰富度 | 持续优化目标 | 以真实页面为对象逐模块改进；不得宣称已完成最终视觉验收 |
-| 前端设计执行规范 | 已建立统一 Prompt | 所有 Agent 在视觉任务前读取 `docs/FRONTEND-DESIGN-PROMPT.md`，并按实际组件实施和验证 |
+| 前端设计执行规范与参考研究 | 已建立升级版 Prompt 和参考转译指南 | 所有 Agent 在视觉任务前读取 `docs/FRONTEND-DESIGN-PROMPT.md` 与 `docs/design/EDITORIAL-REFERENCE-AND-ADAPTATION.md`；吸收公开博客和出版物的设计原则，转译为 Rocky 风格，不克隆品牌 |
 | 四种语言的 UI 完整性 | 已有四套字典，持续回归 | 新增文案时同步四种语言；文章译文逐篇核实 |
 | 真实浏览器 / 移动端回归 | 需要按变更范围执行 | CI 绿色不等于浏览器专项测试通过 |
 | 规范 URL / 域名 | **需要维护者确认** | `config/site.yaml` 当前 `site.url` 为 `https://rockybabcock.github.io`，GitHub 仓库 Homepage 元数据为 `https://rocky-blog.vercel.app`。两者不同；canonical、sitemap、OG 绝对 URL 会受影响。不要推测哪一个才是最终主域名，也不要自行替换，需由维护者确认 |

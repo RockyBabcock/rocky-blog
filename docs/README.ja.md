@@ -78,6 +78,7 @@ Rocky Blog の記事は外部の MuseAI ワークフローで作成・翻訳し�
 
 - [製品範囲](./PRODUCT-SCOPE.md)
 - [フロントエンドデザイン実装 Prompt](./FRONTEND-DESIGN-PROMPT.md)
+- [Editorial デザイン参考と Rocky のスタイルへの適用](./design/EDITORIAL-REFERENCE-AND-ADAPTATION.md)
 - [Muse コンテンツ規約](./muse/README.md)
 - [プロジェクト状況と Agent 引き継ぎ](./PROJECT-STATUS.md)
 - [クイックスタート](../GETTING-STARTED.md)

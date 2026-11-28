@@ -15,6 +15,7 @@ Read these files before editing:
 2. `docs/PRODUCT-SCOPE.md` — approved product scope, confirmed removals, pending decisions.
 3. `docs/PROJECT-STATUS.md` — current implementation baseline and known decisions.
 4. `docs/FRONTEND-DESIGN-PROMPT.md` — required visual direction, actual homepage modules, implementation workflow, responsive / accessibility requirements, and definition of done.
+5. `docs/design/EDITORIAL-REFERENCE-AND-ADAPTATION.md` — external reference study, design patterns worth borrowing, explicit exclusions, and the translation map into Rocky's design language.
 5. Relevant architecture chapters:
    - `docs/overview/05-ui-components.md`
    - `docs/overview/07-theme-system.md`
@@ -27,7 +28,7 @@ Do not assume the environment has loaded these documents automatically.
 
 **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestial Details**
 
-The maintainer explicitly wants the interface to feel less sparse, more visually expressive, and richer in purposeful detail. Improve editorial rhythm, layout composition, typography, image framing, fine rules, folio numbers, micro labels, botanical marks, constellation details, surfaces, and interaction states.
+The maintainer explicitly wants the interface to feel less sparse, more visually expressive, and richer in purposeful detail. Improve editorial rhythm, layout composition, typography, image framing, fine rules, folio numbers, micro labels, botanical marks, constellation details, surfaces, and interaction states. Use the research guide to understand what AstroPaper, Cactus, Erudite, Fuwari, The New Yorker, The Verge, Stripe Press, A List Apart, and USWDS each contribute; adapt the principle, never clone their visual identity.
 
 Do not turn the site into an anime / kawaii theme, generic SaaS dashboard, repeated card grid, noisy particle background, or excessive glassmorphism.
 

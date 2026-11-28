@@ -66,7 +66,7 @@ Use **Premium Editorial × Contemporary Magazine × Sakura Botanical × Celestia
 - The maintainer has explicitly identified sparse, visually under-expressive pages as an ongoing improvement target. Improve section-specific composition and intentional detail (eyebrows, numbering, fine rules, borders, editorial grids, timelines, botanical / celestial motifs, controlled texture and interaction feedback) while preserving legibility.
 - Never create whitespace by hiding sections, removing entries, reducing copy, or weakening existing modules. Do not fill space with arbitrary cards, shadows, gradients, particles, or decorative noise.
 - Check desktop / mobile, light / dark, keyboard focus, and reduced-motion before calling a visual task complete.
-- For every frontend / UI / visual-design task, read `docs/FRONTEND-DESIGN-PROMPT.md` before implementation and follow its audit → plan → implement → verify → report workflow and definition of done.
+- For every frontend / UI / visual-design task, read `docs/FRONTEND-DESIGN-PROMPT.md` before implementation and follow its audit → plan → implement → verify → report workflow and definition of done. Also read `docs/design/EDITORIAL-REFERENCE-AND-ADAPTATION.md` for the documented open-source / editorial benchmarks and the explicit translation into Rocky's own visual language; do not clone the reference brands.
 
 ## 5. Locale contract
 

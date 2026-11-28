@@ -30,7 +30,7 @@ The site is static-first. Astro owns file-based routing, content rendering, and 
 
 **Do not replace this architecture.** Do not scaffold a new app, migrate frameworks, rebuild the site as a React SPA, or introduce a backend merely to improve the visual layer.
 
-Before changing a page, inspect its current Astro / React components, imported styles, data dependencies, route generation, and responsive behavior.
+Before changing a page, inspect its current Astro / React components, imported styles, data dependencies, route generation, and responsive behavior. Also read the external design reference and adaptation guide before making visual decisions; use its reference-to-Rocky mapping rather than relying on generic inspiration.
 
 ## 2. The maintainer's design brief
 
@@ -63,6 +63,25 @@ The current design must not feel empty, sparse, generic, unfinished, or function
 - A purely decorative design where controls no longer communicate their actions.
 
 Whitespace is a design tool, not a substitute for content. Keep the page breathable, but do not solve sparse areas by simply increasing gaps, shrinking content, or hiding modules.
+
+## 2.1 External design research — principles to adapt, never copy
+
+Before editing, read [`docs/design/EDITORIAL-REFERENCE-AND-ADAPTATION.md`](./design/EDITORIAL-REFERENCE-AND-ADAPTATION.md). It contains the reference study, source links, Rocky-specific translation map, and visual quality checklist.
+
+The benchmark set is deliberate:
+
+- **AstroPaper:** accessible blog information architecture, archives, tags, pagination, breadcrumbs, TOC, and responsive reader controls.
+- **Astro Cactus:** semantic text-first post listing, readable technical content, and clean code presentation.
+- **astro-erudite:** fluid typography / spacing, native CSS design-system discipline, and reader-first long-form ergonomics.
+- **Fuwari:** profile / sidebar / category / post-card grouping only. Explicitly reject its anime illustration style, saturated pastel palette, and kawaii direction.
+- **The New Yorker:** strong lead-story hierarchy, distinct editorial departments, image art direction, and a homepage that feels like a composed publication front page.
+- **The Verge:** separate high-attention story presentation from a dependable latest chronological stream; do not allow featured content to disrupt the Latest Writing order.
+- **Stripe Press:** tactile editorial surfaces, cover art as an object, disciplined typography, and precise metadata.
+- **A List Apart + USWDS:** concise introductions, semantic headings, readable body measure, and long-form line-height discipline.
+
+Translate the principles into Rocky's existing system: archival paper / nocturnal charcoal, botanical rose, celestial slate, editorial mono labels, numbered section kickers, fine rules, restrained crop frames, botanical marks, and constellation details. Do not copy source layouts, branded typography, proprietary imagery, theme colors, logos, assets, or source code.
+
+**The target is not "look like these sites." The target is "use their strongest editorial principles to make Rocky Blog more unmistakably Rocky."**
 
 ## 3. Non-negotiable preservation rules
 
@@ -200,6 +219,25 @@ Improve both desktop and compact utility experiences.
 
 The homepage is the primary visual priority, but improvements must establish reusable rules that also work on:
 
+### Article-page reading quality
+
+Treat article pages as a first-class destination, not a follow-up after the homepage. A large share of visits can begin directly on a post URL.
+
+- Refine the relationship between the article title, description, category, publication / update dates, word count or reading time, and cover.
+- Do not invent bylines, authors, issue numbers, reading progress, captions, credits, or publication metadata that the current schema does not provide.
+- Keep a focused reading column. Use the research guide's body-measure guidance as a starting point (roughly 60–75 Latin characters per line on desktop, then inspect CJK separately) rather than stretching prose across the full page width.
+- Use comfortable long-form leading (approximately 1.5 or the closest current reading token). Preserve clear contrast between H2 / H3 / H4, paragraphs, links, captions, lists, blockquotes, tables, and code.
+- Do not wrap every paragraph or heading in a card. Use margin rhythm, subtle section rules, and typographic hierarchy.
+- Code blocks, tables, Mermaid, Infographic, and images may use the available article width when required, but must never create whole-page horizontal overflow.
+- Preserve the TOC, active heading / scrollspy state, reading progress, focus mode, save / share actions, mobile TOC, encryption, and route lifecycle behavior.
+- Make the end of an article feel intentional using existing navigation and series context. Do not add comments, author management, recommendation products, or social feeds.
+
+### Visual-detail system
+
+Use the reference guide's restrained editorial vocabulary: folio numbers, short section kickers, tabular date stamps, hairline rules, crop marks, small diamonds / stars, a limited botanical watermark, carefully framed images, and subtle paper / ink contrast. Each detail should clarify hierarchy, section identity, or interaction state. Do not place every ornament on every card; decoration is punctuation, not texture noise.
+
+
+
 - Article header, metadata, body, TOC, code blocks, Mermaid / Infographic viewers, encrypted blocks, article actions, and series context.
 - Category and tag index pages and their post lists.
 - Archive pages and timeline / year groups.
@@ -280,7 +318,7 @@ Requirements:
 
 ### Step 1: Audit before editing
 
-Read the canonical product and agent documents. Inspect the homepage and the actual shared components / styles listed above. Identify:
+Read the canonical product and agent documents plus `docs/design/EDITORIAL-REFERENCE-AND-ADAPTATION.md`. Inspect the live output, homepage, article page, and the actual shared components / styles listed above. Identify:
 
 - Which parts already work well and should be preserved.
 - Which sections feel sparse, repetitive, visually weak, or poorly balanced.
@@ -366,7 +404,7 @@ A frontend design task is complete only when:
 
 ## Start instruction
 
-Begin by reading `AGENTS.md`, `docs/PRODUCT-SCOPE.md`, and `docs/PROJECT-STATUS.md`, then inspect `src/pages/index.astro`, its imported homepage components, and the existing editorial styles.
+Begin by reading `AGENTS.md`, `docs/PRODUCT-SCOPE.md`, `docs/PROJECT-STATUS.md`, and `docs/design/EDITORIAL-REFERENCE-AND-ADAPTATION.md`, then inspect `src/pages/index.astro`, a representative article page, its imported components, and the existing editorial styles.
 
 Your first implementation priority is to make the homepage substantially more visually expressive while preserving every module. Improve the hero transition, featured showcase, latest-writing rhythm, series showcase, topic exploration, editorial timeline, and supporting sidebars / utility rails as one coherent editorial system. Then carry the same visual language into shared components and other key pages where the changes naturally apply.
 
