@@ -108,14 +108,16 @@ Rocky Blog 是一个以内容创作、阅读和发现为中心的**高视觉表�
 
 ## 4. 已确认的验证状态
 
-以下是文档核对前、对实现基线 `aa65fff8dabd6915b42585d05f8e0d91aceba8f4` 的最后一次已确认验证。**后续提交必须重新查看对应 commit 的检查状态，不能沿用旧状态声称新提交已验证。**
+**当前已验证基线：** `main`，commit `c8f43b4bcd6aba1b99b7def9cd4b5240dc9f865c`（2026-11-27）。
 
-- GitHub Actions CI：Run `46001321354`，结论为 **success**。
-- 该 CI 运行包括：依赖安装、Biome lint、Knip strict、Astro / TypeScript 检查、单元测试、生产构建及 Pagefind 索引生成。
-- Vercel commit status：**success**；部署记录 ID 为 `9F8i1ZqtqEjbpSNUbbvKqJrZRZzg`。
-- 部署目标：[Vercel deployment](https://vercel.com/rockybabcocks-projects/rocky-blog/9F8i1ZqtqEjbpSNUbbvKqJrZRZzg)。
+- GitHub Actions CI：Run `46004445760`，结论为 **success**。
+- 通过步骤：依赖安装、Biome lint、Knip strict、Astro / TypeScript 检查、核心单元测试、生产构建和 Pagefind 索引生成。
+- Vercel commit status：**success**；部署记录 ID 为 `5hCTJyjeEuhteYutZ1Pye4fJ16Wg`。
+- 部署目标：[Vercel deployment](https://vercel.com/rockybabcocks-projects/rocky-blog/5hCTJyjeEuhteYutZ1Pye4fJ16Wg)。
 
-当前 CI workflow 没有自动运行所有 Playwright 浏览器专项脚本。CI 绿色表示上述流水线通过，不代表所有浏览器、设备、语言和视觉回归测试都已完成。需要时应单独运行 `package.json` 中对应的 `test:*:browser` 脚本并记录结果。
+**验证边界：** 当前 CI workflow 没有自动运行所有 Playwright 浏览器专项脚本。CI 绿色表示上述流水线通过，不代表所有浏览器、设备、语言和视觉回归测试都已完成。需要时应单独运行 `package.json` 中对应的 `test:*:browser` 脚本并记录结果。
+
+**状态更新规则：** 每次后续代码 / 文档提交都必须重新查看该提交的 CI 和 Vercel 状态。不能把此处记录的成功状态直接沿用到更新后的 commit；若未重新核验，应明确标记为 Pending / Not verified。
 
 ## 5. 当前需要持续关注的事项
 
