@@ -75,6 +75,7 @@ pnpm dev
 ## ドキュメント
 
 - [製品範囲](./PRODUCT-SCOPE.md)
+- [フロントエンドデザイン実装 Prompt](./FRONTEND-DESIGN-PROMPT.md)
 - [プロジェクト状況と Agent 引き継ぎ](./PROJECT-STATUS.md)
 - [クイックスタート](../GETTING-STARTED.md)
 - [アーキテクチャ概要](./overview/00-overview.md)
