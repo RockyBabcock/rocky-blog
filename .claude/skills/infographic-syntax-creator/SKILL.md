@@ -11,6 +11,8 @@ Generate AntV Infographic syntax output from user content, following the rules i
 
 ## Rocky Blog integration contract
 
+Before preparing or editing repository content, read `AGENTS.md`, `docs/PRODUCT-SCOPE.md`, `docs/PROJECT-STATUS.md`, and `docs/overview/10-markdown-system.md`. This skill generates syntax for the existing integration; it does not authorize adding a new renderer, server, or feature outside the approved product scope.
+
 This skill is the preferred workflow for an infographic that will be embedded in a Rocky Blog Markdown article. The current implementation uses a fenced `infographic` block and the existing `@antv/infographic` renderer in `src/components/markdown/InfographicToolbar.tsx`.
 
 - Generate syntax only; do not create custom Item / Structure components, a local template registry, a playground, or a new renderer.
