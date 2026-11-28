@@ -75,6 +75,7 @@ Run `pnpm build` to generate `dist/`. Deploy that directory to GitHub Pages, Ver
 ## Documentation
 
 - [Product Scope](./PRODUCT-SCOPE.md)
+- [Frontend Design & Implementation Prompt](./FRONTEND-DESIGN-PROMPT.md)
 - [Project Status and Agent Handoff](./PROJECT-STATUS.md)
 - [Getting Started](../GETTING-STARTED.md)
 - [Architecture Overview](./overview/00-overview.md)
